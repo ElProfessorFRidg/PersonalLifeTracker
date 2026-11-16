@@ -164,7 +164,7 @@
     if (saved) ORDER.forEach(function (id) { on[id] = saved[id] !== undefined ? !!saved[id] : REG[id].def; }); else resetDefaults();
     function persist() { PLT.store.set('fon-on', on); }
     function dependents(id) { return ORDER.filter(function (k) { return on[k] && REG[k].req.indexOf(id) !== -1; }); }
-    function names(ids) { return ids.map(function (i) { return REG[i].name; }); }
+    function names(ids) { return ids.map(function (i) { var n = REG[i].name; return /^[A-ZÉ][a-zéèê]/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n; }); }
     function list(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' et ' + a[a.length - 1]; }
     function short(id) { var s = { employment: 'Emploi', pay: 'Paie', planning_ocr: 'Planning par photo' }; return s[id] || REG[id].name; }
 

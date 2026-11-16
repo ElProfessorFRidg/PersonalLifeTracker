@@ -3729,7 +3729,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         </div>
         <div class="stat-grid ct-stats">
           <div class="stat"><span class="stat-label">Moyenne</span><span class="stat-value">14<small>h</small>15</span></div>
-          <div class="stat"><span class="stat-label">Plus petite, plus grande</span><span class="stat-value">11<small>à</small>18<small>h</small></span></div>
+          <div class="stat"><span class="stat-label">Min et max</span><span class="stat-value">11<small>à</small>18<small>h</small></span></div>
         </div>
         <p class="card-text">Tu as dépassé tes <span class="num">13 h</span> trois semaines sur huit. Si ça devient une habitude, un avenant a peut-être été prévu&nbsp;: à vérifier dans ton contrat.</p>
       </div>
@@ -3796,6 +3796,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     #scr-contrat .ct-lg--plan { border: 1.5px dashed var(--textTertiary); box-sizing: border-box; }
     #scr-contrat .ct-lg--quota { width: 2px; height: 14px; background: var(--textPrimary); }
     #scr-contrat .ct-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #scr-contrat .ct-stats .stat { background: var(--fill); box-shadow: none; }
+    #scr-contrat .ct-hcol b { position: relative; z-index: 1; }
     #scr-contrat .ct-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; align-items: end; }
     #scr-contrat .ct-day { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
     #scr-contrat .ct-bars { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 84px; width: 100%; }
@@ -3810,7 +3812,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     #scr-contrat .ct-hcol b { font: 600 11px/14px var(--font-mono); color: var(--textPrimary); }
     #scr-contrat .ct-hcol i { display: block; width: 70%; height: calc(var(--h) * 1%); min-height: 4px; border-radius: 4px 4px 0 0; background: var(--textTertiary); }
     #scr-contrat .ct-hcol.is-over i { background: var(--work); }
-    #scr-contrat .ct-hline { position: absolute; left: 0; right: 0; bottom: 52%; border-top: 1.5px dashed var(--textPrimary); opacity: .7; z-index: 1; pointer-events: none; }
+    #scr-contrat .ct-hline { position: absolute; left: 0; right: 0; bottom: 52%; border-top: 1.5px dashed var(--textPrimary); opacity: .7; pointer-events: none; }
     #scr-contrat .ct-hweeks { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; margin-top: 4px; text-align: center; font: 500 11px/14px var(--font-mono); color: var(--textSecondary); }
     #scr-contrat .ct-hcap { margin: 6px 0 0; font: var(--t-caption) var(--font-text); color: var(--textSecondary); }
   </style>
@@ -3879,7 +3881,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     </section>
 
     <!-- Novembre, mois en cours -->
-    <div data-when="estimation" id="pa-nov" class="pa-block">
+    <div class="pa-wrap" data-when="estimation">
+    <div id="pa-nov" class="pa-block">
       <section class="section" aria-labelledby="pa-nov-t">
         <div class="section-head">
           <h2 class="section-title" id="pa-nov-t">Novembre, au <span class="num">16</span></h2>
@@ -3937,7 +3940,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     </div>
 
     <!-- Octobre, mois précédent -->
-    <div data-when="estimation" id="pa-oct" class="pa-block" hidden>
+    <div id="pa-oct" class="pa-block" hidden>
       <section class="section" aria-labelledby="pa-oct-t">
         <div class="section-head">
           <h2 class="section-title" id="pa-oct-t">Octobre, mois complet</h2>
@@ -3966,6 +3969,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         </div>
         <p class="section-foot">Tant que t'as pas comparé avec ta fiche, ce montant reste une estimation.</p>
       </section>
+    </div>
+
     </div>
 
     <!-- Historique -->
@@ -4069,6 +4074,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
   </div>
 
   <style>
+    #scr-paie .pa-wrap { display: flex; flex-direction: column; gap: var(--space-l); }
+    #scr-paie .pa-wrap[hidden] { display: none; }
     #scr-paie .pa-block { display: flex; flex-direction: column; gap: var(--space-l); }
     #scr-paie .pa-block[hidden] { display: none; }
     #scr-paie.is-discret .pa-amt { filter: blur(8px); user-select: none; }
@@ -4551,7 +4558,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     if (saved) ORDER.forEach(function (id) { on[id] = saved[id] !== undefined ? !!saved[id] : REG[id].def; }); else resetDefaults();
     function persist() { PLT.store.set('fon-on', on); }
     function dependents(id) { return ORDER.filter(function (k) { return on[k] && REG[k].req.indexOf(id) !== -1; }); }
-    function names(ids) { return ids.map(function (i) { return REG[i].name; }); }
+    function names(ids) { return ids.map(function (i) { var n = REG[i].name; return /^[A-ZÉ][a-zéèê]/.test(n) ? n.charAt(0).toLowerCase() + n.slice(1) : n; }); }
     function list(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' et ' + a[a.length - 1]; }
     function short(id) { var s = { employment: 'Emploi', pay: 'Paie', planning_ocr: 'Planning par photo' }; return s[id] || REG[id].name; }
 

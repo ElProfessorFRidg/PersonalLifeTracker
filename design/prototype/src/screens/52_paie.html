@@ -28,7 +28,8 @@
     </section>
 
     <!-- Novembre, mois en cours -->
-    <div data-when="estimation" id="pa-nov" class="pa-block">
+    <div class="pa-wrap" data-when="estimation">
+    <div id="pa-nov" class="pa-block">
       <section class="section" aria-labelledby="pa-nov-t">
         <div class="section-head">
           <h2 class="section-title" id="pa-nov-t">Novembre, au <span class="num">16</span></h2>
@@ -86,7 +87,7 @@
     </div>
 
     <!-- Octobre, mois précédent -->
-    <div data-when="estimation" id="pa-oct" class="pa-block" hidden>
+    <div id="pa-oct" class="pa-block" hidden>
       <section class="section" aria-labelledby="pa-oct-t">
         <div class="section-head">
           <h2 class="section-title" id="pa-oct-t">Octobre, mois complet</h2>
@@ -115,6 +116,8 @@
         </div>
         <p class="section-foot">Tant que t'as pas comparé avec ta fiche, ce montant reste une estimation.</p>
       </section>
+    </div>
+
     </div>
 
     <!-- Historique -->
@@ -218,6 +221,8 @@
   </div>
 
   <style>
+    #scr-paie .pa-wrap { display: flex; flex-direction: column; gap: var(--space-l); }
+    #scr-paie .pa-wrap[hidden] { display: none; }
     #scr-paie .pa-block { display: flex; flex-direction: column; gap: var(--space-l); }
     #scr-paie .pa-block[hidden] { display: none; }
     #scr-paie.is-discret .pa-amt { filter: blur(8px); user-select: none; }
