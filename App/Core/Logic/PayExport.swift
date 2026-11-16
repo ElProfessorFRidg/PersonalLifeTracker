@@ -149,7 +149,10 @@ enum PayExport {
 
     /// Protège un champ : entre guillemets s'il contient ";", un guillemet ou un saut de ligne ; les guillemets internes sont doublés.
     static func csvField(_ text: String) -> String {
-        let needsQuotes: Bool = text.contains(";") || text.contains("\"") || text.contains("\n") || text.contains("\r")
+        // CRLF is one Swift Character; inspect scalars to detect both line endings.
+        let needsQuotes = text.unicodeScalars.contains { scalar in
+            scalar == ";" || scalar == "\"" || scalar == "\n" || scalar == "\r"
+        }
         if !needsQuotes { return text }
         let doubled: String = text.replacingOccurrences(of: "\"", with: "\"\"")
         return "\"" + doubled + "\""

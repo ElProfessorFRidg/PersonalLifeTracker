@@ -123,6 +123,7 @@ final class PayExportTests: XCTestCase {
         XCTAssertEqual(PayExport.csvField("a;b"), "\"a;b\"")
         XCTAssertEqual(PayExport.csvField("dit \"oui\""), "\"dit \"\"oui\"\"\"")
         XCTAssertEqual(PayExport.csvField("ligne1\nligne2"), "\"ligne1\nligne2\"")
+        XCTAssertEqual(PayExport.csvField("ligne1\rligne2"), "\"ligne1\rligne2\"")
         XCTAssertEqual(PayExport.csvField("ligne1\r\nligne2"), "\"ligne1\r\nligne2\"")
     }
 
