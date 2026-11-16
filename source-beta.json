@@ -1,0 +1,33 @@
+{
+  "name": "Personal Life Tracker (bêta)",
+  "identifier": "io.github.elprofessorfridg.personallifetracker.source.beta",
+  "sourceURL": "https://raw.githubusercontent.com/ElProfessorFRidg/PersonalLifeTracker/altstore-source/source-beta.json",
+  "apps": [
+    {
+      "name": "Personal Life Tracker",
+      "bundleIdentifier": "io.github.elprofessorfridg.personallifetracker",
+      "developerName": "ElProfessorFRidg",
+      "subtitle": "Suivi auto du travail et des études",
+      "localizedDescription": "App perso, 100% locale, installée via AltStore.",
+      "iconURL": "https://raw.githubusercontent.com/ElProfessorFRidg/PersonalLifeTracker/altstore-source/icon.png",
+      "tintColor": "2447B8",
+      "screenshotURLs": [],
+      "versions": [
+        {
+          "version": "0.0.1-beta.1",
+          "buildVersion": "1",
+          "date": "2026-11-16T09:08:44Z",
+          "downloadURL": "https://github.com/ElProfessorFRidg/PersonalLifeTracker/releases/download/v0.0.1-beta.1/PersonalLifeTracker-0.0.1-beta.1.ipa",
+          "size": 8597,
+          "minOSVersion": "17.0",
+          "localizedDescription": "- Squelette technique (CI/CD, source AltStore, arrondi en heures pleines)."
+        }
+      ],
+      "appPermissions": {
+        "entitlements": [],
+        "privacy": {}
+      }
+    }
+  ],
+  "news": []
+}
