@@ -3,6 +3,8 @@
 # usage: build_ipa.sh <version x.y.z> <build number> <sortie.ipa>
 set -euo pipefail
 VERSION="${1:?version}"; BUILD="${2:?build}"; OUT="${3:?sortie.ipa}"
+[[ "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || { echo "ERREUR: version x.y.z requise"; exit 1; }
+[[ "$BUILD" =~ ^[0-9]+$ ]] || { echo "ERREUR: numéro de build invalide"; exit 1; }
 SCHEME="${SCHEME:-PersonalLifeTracker}"
 rm -rf build && mkdir -p build
 xcodebuild archive -project PersonalLifeTracker.xcodeproj -scheme "$SCHEME" \
@@ -18,5 +20,5 @@ if command -v ldid >/dev/null 2>&1 && [ -f App/PersonalLifeTracker.entitlements 
 fi
 rm -rf build/Payload && mkdir -p build/Payload && cp -R "$APP" build/Payload/
 (cd build && zip -qry "../$OUT" Payload)
-unzip -l "$OUT" | grep -q "Payload/.*\.app/Info.plist" || { echo "ERREUR: IPA invalide"; exit 1; }
+unzip -l "$OUT" | grep "Payload/.*\.app/Info.plist" >/dev/null || { echo "ERREUR: IPA invalide"; exit 1; }
 echo "IPA: $OUT ($(stat -c%s "$OUT" 2>/dev/null || stat -f%z "$OUT") octets)"

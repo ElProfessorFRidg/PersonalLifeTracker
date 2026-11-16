@@ -3,6 +3,10 @@
 Règles : un statut sans preuve est faux. `python3 scripts/check_progress.py` le vérifie. Statuts : NON COMMENCÉ, EN COURS, CODÉ NON TESTÉ, TESTS AUTO OK, VÉRIFIÉ SIMULATEUR, VÉRIFIÉ SUR APPAREIL, BLOQUÉ.
 La colonne Preuve contient un chemin evidence/... ou une URL de run CI. VÉRIFIÉ SUR APPAREIL exige un fichier evidence contenant la ligne `Confirmé par l'utilisateur :`.
 
+## Mise à jour CI/CD du 2026-11-16
+
+Workflows modifiés : pull-request.yml produit aussi l'artefact IPA ; manual-build.yml publie cet IPA dans une pré-release unique build-<run_id>, après réussite des tests. Les tags stables et bêta gardent leur publication existante avec source AltStore. Validation des entrées de build et vérification ZIP sans arrêt anticipé du pipeline. NON TESTÉ sur macOS pour cette modification : environnement Linux ; aucune nouvelle release publiée pendant cette intervention.
+
 ## Phases
 
 | ID | Titre | Étape | Statut | Preuve | Note |

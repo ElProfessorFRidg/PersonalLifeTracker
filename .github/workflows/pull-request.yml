@@ -9,3 +9,5 @@ permissions:
 jobs:
   build-test:
     uses: ./.github/workflows/_build-test.yml
+    with:
+      build_ipa: true

@@ -30,3 +30,11 @@ Ils ne remplacent pas la relecture et les tests sur ton iPhone.
 
 ## Limites connues
 Ce kit a été généré sans Mac : le Swift n'a pas été compilé et les workflows n'ont pas tourné. La phase 1 est faite pour le prouver. Le chemin d'IPA signé est un stub volontaire.
+
+## Télécharger un IPA
+- PR : le workflow pull-request produit l'artefact Actions ipa après les tests.
+- Build manuel : lance manual-build sur la branche voulue avec une version x.y.z. Après les tests, une pré-release build-<run_id> contient l'IPA ; relancer le même run remplace son fichier.
+- Release stable : pousse un tag v1.2.3 ou modifie release/STABLE_VERSION.
+- Bêta : pousse un tag v1.2.3-beta.1 ou modifie release/BETA_VERSION. Ces deux canaux mettent aussi à jour la source AltStore.
+
+Les IPA sont non signés et doivent être resignés pour être installés, par exemple avec AltStore. Une PR seule ne publie pas de release.
