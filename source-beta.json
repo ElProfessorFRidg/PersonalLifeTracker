@@ -14,6 +14,15 @@
       "screenshotURLs": [],
       "versions": [
         {
+          "version": "0.0.1-beta.2",
+          "buildVersion": "2",
+          "date": "2026-11-16T13:45:02Z",
+          "downloadURL": "https://github.com/ElProfessorFRidg/PersonalLifeTracker/releases/download/v0.0.1-beta.2/PersonalLifeTracker-0.0.1-beta.2.ipa",
+          "size": 649694,
+          "minOSVersion": "17.0",
+          "localizedDescription": "Pas de notes."
+        },
+        {
           "version": "0.0.1-beta.1",
           "buildVersion": "1",
           "date": "2026-11-16T09:08:44Z",
