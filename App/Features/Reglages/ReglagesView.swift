@@ -24,6 +24,7 @@ struct ReglagesView: View {
     var body: some View {
         PLTScreen(title: "Réglages") {
             detectionSection
+            diagnosticSection
             featuresSection
             appearanceSection
             preferencesSection
@@ -147,6 +148,34 @@ struct ReglagesView: View {
     private func openIOSSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             openURL(url)
+        }
+    }
+
+    // MARK: Diagnostic et instantanés
+
+    private var diagnosticSection: some View {
+        PLTListGroup {
+            NavigationLink {
+                DiagnosticView()
+            } label: {
+                PLTRow(symbol: "stethoscope",
+                       title: "Diagnostic de la détection",
+                       subtitle: "Pourquoi une arrivée ou un départ a été raté",
+                       showsChevron: true)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Diagnostic de la détection")
+            NavigationLink {
+                InstantanesView()
+            } label: {
+                PLTRow(symbol: "clock.arrow.circlepath",
+                       title: "Instantanés",
+                       subtitle: "Revenir à un état précédent de tes données",
+                       showsChevron: true,
+                       showsSeparator: false)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Instantanés")
         }
     }
 
