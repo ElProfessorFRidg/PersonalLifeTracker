@@ -14,6 +14,15 @@
       "screenshotURLs": [],
       "versions": [
         {
+          "version": "0.0.1-beta.3",
+          "buildVersion": "3",
+          "date": "2026-11-16T15:02:27Z",
+          "downloadURL": "https://github.com/ElProfessorFRidg/PersonalLifeTracker/releases/download/v0.0.1-beta.3/PersonalLifeTracker-0.0.1-beta.3.ipa",
+          "size": 841589,
+          "minOSVersion": "17.0",
+          "localizedDescription": "- Étape 2 : détection automatique des arrivées et départs par géorepérage, notifications de confirmation, écran de diagnostic, annuler partout et instantanés quotidiens.\n- Détection jamais testée sur un vrai iPhone à ce stade."
+        },
+        {
           "version": "0.0.1-beta.2",
           "buildVersion": "2",
           "date": "2026-11-16T13:45:02Z",
