@@ -26,9 +26,10 @@ targets:
   UnitTests:
     type: bundle.unit-test
     platform: iOS
-    sources: [Tests/UnitTests]
-    resources:
+    sources:
+      - path: Tests/UnitTests
       - path: spec/oracles.json
+        buildPhase: resources
     dependencies:
       - target: PersonalLifeTracker
     settings:
