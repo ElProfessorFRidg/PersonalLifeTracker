@@ -11,6 +11,10 @@ Workflows modifiés : pull-request.yml produit aussi l'artefact IPA ; manual-bui
 
 Les sept workflows utilisent des noms anglais classiques : CI, PR Checks, Build and Test, Manual Build, Beta Release, Release, Publish AltStore Source. Les libellés des jobs, étapes et champs de saisie sont en anglais. Les identifiants des jobs et les noms techniques des artefacts restent identiques pour conserver les références existantes. Modification limitée aux libellés ; exécution macOS NON TESTÉE pour ce renommage.
 
+## Téléchargement du dernier build du 2026-11-16
+
+Workflow pull-request.yml modifié : après tests et archive réussis, publication d'une pré-release Latest Build (PR #N) avec lien IPA fixe pr-N-latest/PersonalLifeTracker.ipa, tag actualisé sur le commit source et résumé de téléchargement. Publication limitée aux PR du dépôt ; les forks gardent les artefacts sans permission d'écriture. Un échec de build conserve le dernier IPA publié. NON TESTÉ en Actions pour cette modification ; lien disponible après première publication réussie.
+
 ## Phases
 
 | ID | Titre | Étape | Statut | Preuve | Note |

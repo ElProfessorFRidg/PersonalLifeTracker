@@ -38,3 +38,8 @@ Ce kit a été généré sans Mac : le Swift n'a pas été compilé et les workf
 - Bêta : pousse un tag v1.2.3-beta.1 ou modifie release/BETA_VERSION. Ces deux canaux mettent aussi à jour la source AltStore.
 
 Les IPA sont non signés et doivent être resignés pour être installés, par exemple avec AltStore. Une PR seule ne publie pas de release.
+
+## Dernier build de la PR
+[Télécharger directement le dernier IPA de la PR #1](https://github.com/ElProfessorFRidg/PersonalLifeTracker/releases/download/pr-1-latest/PersonalLifeTracker.ipa).
+
+La pré-release **Latest Build (PR #1)** est mise à jour après chaque build réussi de la PR. Le lien reste identique ; si un build échoue, il conserve la dernière version réussie. La description indique le commit source et le run CI. Le lien devient disponible après la première publication réussie. Les builds manuels restent disponibles dans leurs pré-releases individuelles pour retrouver une ancienne version. Chaque autre PR interne dispose de son propre lien pr-<numéro>-latest.
