@@ -1,6 +1,6 @@
 name: PersonalLifeTracker
 options:
-  bundleIdPrefix: com.CHANGEME
+  bundleIdPrefix: io.github.elprofessorfridg
   deploymentTarget:
     iOS: "17.0"
 settings:
@@ -15,7 +15,7 @@ targets:
     sources: [App]
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.CHANGEME.personallifetracker
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.elprofessorfridg.personallifetracker
         GENERATE_INFOPLIST_FILE: YES
         INFOPLIST_KEY_CFBundleDisplayName: "Life Tracker"
         INFOPLIST_KEY_UILaunchScreen_Generation: YES
@@ -34,7 +34,7 @@ targets:
       - target: PersonalLifeTracker
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.CHANGEME.personallifetracker.tests
+        PRODUCT_BUNDLE_IDENTIFIER: io.github.elprofessorfridg.personallifetracker.tests
         GENERATE_INFOPLIST_FILE: YES
 schemes:
   PersonalLifeTracker:
