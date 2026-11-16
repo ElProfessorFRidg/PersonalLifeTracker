@@ -7,7 +7,7 @@ La colonne Preuve contient un chemin evidence/... ou une URL de run CI. VÉRIFI�
 
 | ID | Titre | Étape | Statut | Preuve | Note |
 |---|---|---|---|---|---|
-| phase:P0_ui | Phase 0 : artefact UI + thème validé par l'utilisateur | 0 | NON COMMENCÉ |  |  |
+| phase:P0_ui | Phase 0 : artefact UI + thème validé par l'utilisateur | 0 | EN COURS |  | Maquette 33 écrans publiée (https://claude.ai/artifact/S4Qo1WKEqDBuhkLdGpScfh), en attente de la validation de l utilisateur. Vue seulement dans Chromium, pas sur iPhone. |
 | phase:P1_ci | Phase 1 : CI (build + tests) verte | 1 | NON COMMENCÉ |  |  |
 | phase:P1_beta | Phase 1 : pré-release avec IPA | 1 | NON COMMENCÉ |  |  |
 | phase:P1_release | Phase 1 : release avec IPA | 1 | NON COMMENCÉ |  |  |
