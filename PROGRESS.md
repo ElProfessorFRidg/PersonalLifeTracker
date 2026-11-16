@@ -9,9 +9,9 @@ La colonne Preuve contient un chemin evidence/... ou une URL de run CI. VÉRIFI�
 |---|---|---|---|---|---|
 | phase:P0_ui | Phase 0 : artefact UI + thème validé par l'utilisateur | 0 | TESTS AUTO OK | evidence/P0_ui.md | Validée par l'utilisateur le 2026-11-16. Vue seulement dans Chromium par l'orchestrateur. Devise à ajouter aux Réglages en Phase 2. |
 | phase:P1_ci | Phase 1 : CI (build + tests) verte | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43814312689 | Vert sur la PR 1 (détail : evidence/phase1-ci.md). ci.yml sur main jamais exécuté. |
-| phase:P1_beta | Phase 1 : pré-release avec IPA | 1 | EN COURS |  | Workflows beta.yml et release.yml MODIFIÉS le 2026-11-16 (demande de l'utilisateur) : déclenchement aussi par push de release/BETA_VERSION ou release/STABLE_VERSION, le workflow crée le tag. Premier essai v0.0.1-beta.1 lancé, résultat pas encore connu. |
-| phase:P1_release | Phase 1 : release avec IPA | 1 | BLOQUÉ |  | Dépend de la pré-release. La session ne peut pas pousser de tag (HTTP 403). À faire par l'utilisateur : fusionner la PR puis `git tag v0.0.1-beta.1 && git push origin v0.0.1-beta.1`. Workflow jamais exécuté. |
-| phase:P1_altstore | Phase 1 : source AltStore + installation réelle | 1 | BLOQUÉ |  | Dépend d'une release réelle, d'un dépôt public et d'un test d'installation sur iPhone par l'utilisateur. |
+| phase:P1_beta | Phase 1 : pré-release avec IPA | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43836366614 | v0.0.1-beta.1 publiée avec IPA (evidence/phase1-beta.md). Workflows beta.yml et release.yml MODIFIÉS le 2026-11-16 : déclenchement aussi par push de release/BETA_VERSION ou release/STABLE_VERSION. |
+| phase:P1_release | Phase 1 : release avec IPA | 1 | NON COMMENCÉ |  | Débloquée (même mécanisme que la bêta) mais jamais exécutée. À lancer quand le noyau compile. |
+| phase:P1_altstore | Phase 1 : source AltStore + installation réelle | 1 | EN COURS |  | source-beta.json en ligne et joignable (evidence/phase1-beta.md). Installation réelle sur iPhone : À VÉRIFIER PAR L'UTILISATEUR. Pas d'icône. |
 
 ## Noyau
 
