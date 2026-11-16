@@ -50,8 +50,25 @@ enum AppTab: Hashable {
 /// Les 4 onglets de la maquette. Chaque onglet a sa NavigationStack : les écrans de contenu n'en ajoutent pas.
 struct MainTabView: View {
     @State private var selection: AppTab = .accueil
+    @Environment(GeofenceService.self) private var geofence
+    @Query private var places: [Place]
+
+    /// Signature des lieux surveillés : dès qu'un lieu est ajouté, supprimé, déplacé ou change de rayon, on réenregistre les zones.
+    private var placesSignature: String {
+        return places
+            .map { (place: Place) -> String in "\(place.uid.uuidString)|\(place.latitude)|\(place.longitude)|\(place.radius)" }
+            .sorted()
+            .joined(separator: ";")
+    }
 
     var body: some View {
+        tabs
+            .onChange(of: placesSignature, initial: false) { (_: String, _: String) in
+                geofence.refreshMonitoredPlaces()
+            }
+    }
+
+    private var tabs: some View {
         TabView(selection: $selection) {
             NavigationStack { AccueilView() }
                 .tabItem { Label("Accueil", systemImage: "house") }
