@@ -35,7 +35,8 @@ final class ClassificationTests: XCTestCase {
     }
 
     func testStudyPlaceIsEducationNeverWork() {
-        for seconds in [TimeInterval(60), 3 * 3600, 9 * 3600] {
+        let durations: [TimeInterval] = [60, 3 * 3600, 9 * 3600]
+        for seconds in durations {
             let visit = VisitContext(placeKey: "lycee", placeType: .cours, alsoWorksHere: false, start: nov16(8, 0), durationSeconds: seconds)
             let result = classify(visit)
             XCTAssertEqual(result.activity, .education)
