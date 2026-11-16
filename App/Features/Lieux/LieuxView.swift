@@ -4,6 +4,8 @@ import UIKit
 
 /// Onglet Lieux (écran `lieux`).
 struct LieuxView: View {
+    @Environment(GeofenceService.self) private var geofence
+    @Environment(ModuleStore.self) private var modules
     @Environment(\.palette) private var palette
     @Query(sort: \Place.name) private var places: [Place]
     @State private var showsAdd: Bool = false
@@ -18,11 +20,26 @@ struct LieuxView: View {
                           actionTitle: "Ouvrir les réglages iOS",
                           action: { openSettings() })
             }
+            if modules.isActive("place_discovery") {
+                if let error = geofence.discovery.error {
+                    Text(error).foregroundStyle(.red)
+                }
+                if !geofence.discovery.isMonitoring {
+                    Text("Découverte : autorise la localisation Toujours.")
+                        .font(.footnote)
+                }
+                ForEach(suggestions) { candidate in
+                    DiscoveredPlaceCard(candidate: candidate, discovery: geofence.discovery)
+                }
+                if geofence.discovery.candidates.contains(where: { $0.dismissed }) {
+                    Button("Revoir les lieux ignorés") { geofence.discovery.restoreSuggestions() }
+                }
+            }
             if places.isEmpty {
                 PLTCard {
                     PLTEmptyState(symbol: "mappin.and.ellipse",
                                   title: "Aucun lieu pour l'instant.",
-                                  message: "Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Tout reste sur ton tel.",
+                                  message: modules.isActive("place_discovery") ? "Les lieux réguliers apparaîtront ici." : "Ajoute un lieu pour démarrer.",
                                   actionTitle: "Ajouter un lieu",
                                   action: { showsAdd = true })
                 }
@@ -47,6 +64,15 @@ struct LieuxView: View {
         }
         .onAppear {
             locationDenied = LocationOnce.isDenied()
+        }
+    }
+
+    private var suggestions: [DiscoveredPlace] {
+        geofence.discovery.candidates.filter { candidate in
+            candidate.isReady && !candidate.dismissed && !places.contains {
+                PlaceDiscoveryRules.distance(candidate.latitude, candidate.longitude,
+                                             $0.latitude, $0.longitude) <= max(100, $0.radius)
+            }
         }
     }
 
@@ -92,7 +118,7 @@ struct LieuxView: View {
 
     private func subtitle(for place: Place) -> String {
         let radius: Int = Int(place.radius.rounded())
-        let counted: String = place.type == .courses ? ", pas compté" : ""
+        let counted: String = (place.type != .taf && place.type != .cours) ? ", pas compté" : ""
         let last: Date? = place.sessions.map { $0.startDate }.max()
         let lastText: String = PlaceFormat.lastVisit(last, now: Date(), calendar: Calendar.current)
         return "\(place.type.title), rayon \(radius) m\(counted)\n\(lastText)"

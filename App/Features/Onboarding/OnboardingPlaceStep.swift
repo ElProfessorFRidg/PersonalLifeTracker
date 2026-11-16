@@ -45,7 +45,7 @@ struct OnboardingPlaceStep: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.l) {
             OnboardingHero(symbol: "mappin.and.ellipse")
             OnboardingTitle(title: "Ton premier lieu.",
-                            lead: "Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Tu en ajouteras d'autres après.")
+                            lead: "Ajoute un lieu ou laisse l’app repérer tes lieux réguliers.")
 
             VStack(alignment: .leading, spacing: Theme.Spacing.s) {
                 Text("C'est quoi comme endroit ?")
@@ -95,7 +95,7 @@ struct OnboardingPlaceStep: View {
                 }
                 .buttonStyle(.pltPrimary)
                 .disabled(!hasLocation || trimmedName.count < 2 || isSaving)
-                Button("Je le ferai plus tard", action: onContinue)
+                Button("Laisser la découverte automatique", action: onContinue)
                     .buttonStyle(.pltSecondary)
             }
         }

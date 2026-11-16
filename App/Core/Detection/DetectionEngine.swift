@@ -16,7 +16,7 @@ struct DetectionPlace: Equatable {
 
     /// Les lieux de courses sont notés mais ne créent jamais de session comptée.
     var createsSessions: Bool {
-        return type != .courses
+        return type == .taf || type == .cours
     }
 }
 

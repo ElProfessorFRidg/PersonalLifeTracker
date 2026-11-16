@@ -5,6 +5,8 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
     case taf
     case cours
     case courses
+    case domicile
+    case autre
 
     var id: String { rawValue }
 
@@ -13,6 +15,8 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
         case .taf: return "Taf"
         case .cours: return "Cours"
         case .courses: return "Courses"
+        case .domicile: return "Domicile"
+        case .autre: return "Autre"
         }
     }
 
@@ -22,6 +26,7 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
         case .taf: return .work
         case .cours: return .education
         case .courses: return .shopping
+        case .domicile, .autre: return .personal
         }
     }
 }

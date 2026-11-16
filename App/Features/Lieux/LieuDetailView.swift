@@ -165,15 +165,17 @@ struct LieuDetailView: View {
                         Text(t.title).tag(t)
                     }
                 }
-                .pickerStyle(.segmented)
+                .pickerStyle(.menu)
                 .frame(minHeight: 44)
-                if place.type == .courses {
-                    Text("Les courses sont notées mais jamais comptées dans tes heures.")
+                if place.type != .taf && place.type != .cours {
+                    Text("Ce lieu ne compte pas dans tes heures de travail ou de cours.")
                         .font(.footnote)
                         .foregroundStyle(palette.textSecondary)
-                    Toggle("J'y travaille aussi", isOn: alsoWorksBinding)
-                        .frame(minHeight: 44)
-                        .tint(palette.accent)
+                    if place.type == .courses {
+                        Toggle("J'y travaille aussi", isOn: alsoWorksBinding)
+                            .frame(minHeight: 44)
+                            .tint(palette.accent)
+                    }
                 }
             }
             VStack(alignment: .leading, spacing: Theme.Spacing.s) {
@@ -222,7 +224,7 @@ struct LieuDetailView: View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Ce mois-ci")
             HStack(spacing: Theme.Spacing.s) {
-                if place.type == .courses {
+                if place.type != .taf && place.type != .cours {
                     StatTile(label: "Visites", value: "\(stats.visits)", note: lastText, tone: place.type.tone)
                     StatTile(label: "Temps passé", value: Formatting.duration(seconds: stats.seconds),
                              note: "Pas compté dans tes heures", tone: place.type.tone)
@@ -271,7 +273,7 @@ struct LieuDetailView: View {
         let cal: Calendar = Calendar.current
         let start: String = Formatting.clock(session.startDate, calendar: cal)
         let end: String = session.endDate.map { Formatting.clock($0, calendar: cal) } ?? "en cours"
-        let suffix: String = place.type == .courses ? ", pas compté" : ""
+        let suffix: String = (place.type != .taf && place.type != .cours) ? ", pas compté" : ""
         return "\(start) à \(end)\(suffix)"
     }
 

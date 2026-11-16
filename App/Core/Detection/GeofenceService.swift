@@ -11,6 +11,8 @@ import UIKit
 @Observable
 final class GeofenceService: NSObject, CLLocationManagerDelegate {
 
+    let discovery: PlaceDiscovery
+
     private(set) var isMonitoring: Bool = false
     private(set) var monitoredPlaceUIDs: [UUID] = []
     private(set) var lastError: String?
@@ -29,6 +31,7 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
     @ObservationIgnored private var activeObserver: NSObjectProtocol?
 
     init(container: ModelContainer, notifier: DetectionNotifier, manager: CLLocationManager = CLLocationManager()) {
+        self.discovery = PlaceDiscovery(container: container)
         self.container = container
         self.notifier = notifier
         self.manager = manager
@@ -120,6 +123,7 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
 
     /// Réenregistre les régions : à appeler quand les lieux changent. Idempotent.
     func refreshMonitoredPlaces() {
+        discovery.refresh()
         lastRefreshDate = Date()
         let status: CLAuthorizationStatus = manager.authorizationStatus
         authorizationMessage = nil

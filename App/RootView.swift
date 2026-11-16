@@ -3,6 +3,7 @@ import SwiftData
 
 /// Racine : onboarding au premier lancement, ensuite les quatre onglets. Applique le thème (palette) à tout l'arbre.
 struct RootView: View {
+    @Environment(GeofenceService.self) private var geofence
     @Environment(AppSettings.self) private var settings
     @Environment(ModuleStore.self) private var modules
     @Environment(\.modelContext) private var modelContext
@@ -26,6 +27,9 @@ struct RootView: View {
         }
         .environment(undoCenter)
         .pltTheme()
+        .onChange(of: modules.isActive("place_discovery"), initial: true) { _, _ in
+            geofence.discovery.refresh()
+        }
         .onChange(of: modules.isActive("undo_safety"), initial: true) { (_: Bool, isOn: Bool) in
             undoCenter.isEnabled = isOn
         }

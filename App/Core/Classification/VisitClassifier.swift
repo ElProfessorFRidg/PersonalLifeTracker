@@ -107,6 +107,8 @@ enum VisitClassifier {
                          now: Date,
                          calendar: Calendar) -> ClassificationResult {
         switch visit.placeType {
+        case .domicile, .autre:
+            return fixed(.personal, "Lieu personnel.")
         case .taf:
             return fixed(.work, "Ce lieu est un lieu de taf.")
         case .cours:

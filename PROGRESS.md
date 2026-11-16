@@ -40,7 +40,7 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 | ID | Titre | Étape | Statut | Preuve | Note |
 |---|---|---|---|---|---|
 | module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | NON COMMENCÉ |  |  |
-| module:place_discovery | Découverte automatique des lieux | 10 | NON COMMENCÉ |  |  |
+| module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | CLVisit, regroupement local, confirmation et exclusion des lieux connus ; notes/place_discovery.md. Tests iOS et terrain NON TESTÉS pour cette modification. |
 | module:employment | Employeurs, contrats, fin de contrat | 5 | NON COMMENCÉ |  |  |
 | module:pay | Salaire, paie, conventions, primes, historique des taux | 5 (base), 6 (conventions, primes) | NON COMMENCÉ |  |  |
 | module:school_calendar | Calendrier scolaire, vacances, jours fériés | 9 | NON COMMENCÉ |  |  |

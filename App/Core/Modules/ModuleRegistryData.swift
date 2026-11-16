@@ -5,7 +5,7 @@ import Foundation
 extension ModuleRegistry {
     static let group1: [ModuleDefinition] = [
         ModuleDefinition(id: "planning_ocr", title: "Planning par photo, alerte de planning tardif", summary: "Importe ton planning papier depuis une photo et te prévient quand il tarde.", step: 7, defaultOn: true, requires: [], isAvailable: false),
-        ModuleDefinition(id: "place_discovery", title: "Découverte automatique des lieux", summary: "Repère les endroits où tu passes souvent et te propose de les ajouter.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "place_discovery", title: "Découverte automatique des lieux", summary: "Repère les endroits où tu passes souvent et te propose de les ajouter.", step: 10, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "employment", title: "Employeurs, contrats, fin de contrat", summary: "Garde tes employeurs, tes contrats et leurs dates de fin.", step: 5, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "pay", title: "Salaire, paie, conventions, primes, historique des taux", summary: "Estime ta paie à partir de tes heures, sans rien envoyer nulle part.", step: 5, defaultOn: true, requires: ["employment"], isAvailable: true),
         ModuleDefinition(id: "school_calendar", title: "Calendrier scolaire, vacances, jours fériés", summary: "Vacances scolaires et jours fériés dans tes semaines.", step: 9, defaultOn: true, requires: [], isAvailable: false),
