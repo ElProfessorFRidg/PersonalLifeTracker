@@ -1,0 +1,133 @@
+// Données du registre, extraites de spec/MODULES.md (section 1, une entrée par ligne du tableau).
+// Pour livrer un module : passer isAvailable à true ici (une seule ligne) quand son écran existe.
+import Foundation
+
+extension ModuleRegistry {
+    static let group1: [ModuleDefinition] = [
+        ModuleDefinition(id: "planning_ocr", title: "Planning par photo, alerte de planning tardif", summary: "Importe ton planning papier depuis une photo et te prévient quand il tarde.", step: 7, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "place_discovery", title: "Découverte automatique des lieux", summary: "Repère les endroits où tu passes souvent et te propose de les ajouter.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "employment", title: "Employeurs, contrats, fin de contrat", summary: "Garde tes employeurs, tes contrats et leurs dates de fin.", step: 5, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "pay", title: "Salaire, paie, conventions, primes, historique des taux", summary: "Estime ta paie à partir de tes heures, sans rien envoyer nulle part.", step: 5, defaultOn: true, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "school_calendar", title: "Calendrier scolaire, vacances, jours fériés", summary: "Vacances scolaires et jours fériés dans tes semaines.", step: 9, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "notes", title: "Notes de journée", summary: "Une petite note par journée, quand tu veux.", step: 9, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "search", title: "Recherche globale", summary: "Retrouve une session, un lieu ou une note en quelques lettres.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "weekly_review", title: "Revue de la semaine", summary: "Un point rapide chaque semaine sur ce que tu as fait.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "recaps", title: "Bilans mensuels et annuels", summary: "Bilans du mois et de l'année, prêts à relire.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "live_activity_widgets", title: "Live Activity, widgets, App Intents, contrôles, galerie de widgets", summary: "Écran verrouillé, widgets et raccourcis pour suivre ta session.", step: 8, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "missing_hours", title: "Détection d'heures manquantes", summary: "Te signale les heures qui semblent manquer.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "contract_hours", title: "Équilibrage des heures du contrat, compteurs, repos compensateur, alerte de quota", summary: "Suit tes heures par rapport au quota de ton contrat.", step: 6, defaultOn: true, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "pattern_detection", title: "Détection de motifs de planning", summary: "Repère tes rythmes de planning habituels.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "schedule_archive", title: "Historique des plannings", summary: "Garde l'historique de tes plannings importés.", step: 10, defaultOn: true, requires: ["planning_ocr"], isAvailable: false),
+        ModuleDefinition(id: "now_card", title: "Carte Maintenant (ActionEngine)", summary: "Une carte Maintenant qui te dit la seule chose à faire.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "smart_notifications", title: "Notifications qui apprennent (coordinateur)", summary: "Des notifications qui apprennent quand te déranger.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "data_trust", title: "Score de fiabilité des données", summary: "Un score qui dit à quel point tes données sont fiables.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "undo_safety", title: "Annuler partout et instantanés", summary: "Annuler partout, avec des instantanés quotidiens de tes données.", step: 2, defaultOn: true, requires: [], isAvailable: false),
+    ]
+
+    static let group2: [ModuleDefinition] = [
+        ModuleDefinition(id: "place_calibration", title: "Auto-calibration des lieux", summary: "Ajuste tout seul la taille de tes lieux selon tes passages.", step: 3, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "battery_recovery", title: "Récupération après batterie vide", summary: "Reconstitue ta journée si ton téléphone s'est éteint.", step: 3, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "detection_help", title: "Assistant de dépannage de la détection", summary: "Un assistant pour comprendre pourquoi une détection a raté.", step: 3, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "multi_employer", title: "Plusieurs employeurs", summary: "Gère plusieurs employeurs en même temps.", step: 10, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "leave", title: "Congés payés", summary: "Compte tes congés payés acquis et pris.", step: 6, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "simulator", title: "Simulateur et semaine en direct", summary: "Simule une semaine pour voir ce que ça donnerait.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "pay_date", title: "Date de paie attendue", summary: "Te dit quand ta paie devrait arriver.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "tax_threshold", title: "Seuil fiscal", summary: "Seuil fiscal", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "exam_mode", title: "Mode examens", summary: "Un mode spécial pour les semaines d'examens.", step: 9, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "breaks", title: "Pauses", summary: "Suit tes pauses pendant les sessions.", step: 9, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "short_night", title: "Alerte nuit courte", summary: "Te prévient quand la nuit risque d'être courte.", step: 9, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "study_slots", title: "Créneaux libres de révision", summary: "Trouve les créneaux libres pour réviser.", step: 9, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "travel_departure", title: "Trajet et Pars maintenant", summary: "Calcule le trajet et te dit quand partir.", step: 9, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "travel_cost", title: "Coût du trajet", summary: "Coût du trajet", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "going_home", title: "Je rentre", summary: "Je rentre", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "savings", title: "Objectifs d'épargne", summary: "Des objectifs d'épargne liés à ta paie estimée.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "send_hours_reminder", title: "Rappel d'envoi des heures", summary: "Rappel d'envoi des heures", step: 10, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "focus", title: "Concentration", summary: "Concentration", step: 11, defaultOn: false, requires: [], isAvailable: false),
+    ]
+
+    static let group3: [ModuleDefinition] = [
+        ModuleDefinition(id: "nfc", title: "Tag NFC", summary: "Tag NFC", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "biometric_lock", title: "Verrouillage Face ID", summary: "Verrouille l'app avec Face ID ou Touch ID.", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "icloud", title: "Sauvegarde iCloud", summary: "Sauvegarde dans iCloud (demande un compte développeur payant).", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "expenses", title: "Suivi des frais", summary: "Note tes frais liés au travail ou aux cours.", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "replacements", title: "Remplacements", summary: "Remplacements", step: 10, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "regularity", title: "Statistiques de régularité", summary: "Statistiques de régularité", step: 10, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "contract_journal", title: "Journal de contrat", summary: "Journal de contrat", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "vacation_mode", title: "Mode vacances de l'app", summary: "Mode vacances de l'app", step: 10, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "work_contacts", title: "Contacts du taf", summary: "Contacts du taf", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "badge_reminder", title: "Rappel de badgeuse", summary: "Rappel de badgeuse", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "departure_checklist", title: "Check avant de partir", summary: "Check avant de partir", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "voice_corrections", title: "Corrections à la voix", summary: "Corrections à la voix", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "weekly_balance", title: "Équilibre de la semaine", summary: "Équilibre de la semaine", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "share_summary", title: "Résumé partageable", summary: "Résumé partageable", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "proof_pack", title: "Dossier justificatif", summary: "Dossier justificatif", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "shift_swaps", title: "Carnet d'échanges de créneaux", summary: "Carnet d'échanges de créneaux", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "end_of_day_countdown", title: "Compte à rebours de fin de journée", summary: "Compte à rebours de fin de journée", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "rough_day", title: "Journée difficile", summary: "Journée difficile", step: 11, defaultOn: false, requires: [], isAvailable: false),
+    ]
+
+    static let group4: [ModuleDefinition] = [
+        ModuleDefinition(id: "premium_planner", title: "Primes de dimanche et de férié à venir", summary: "Primes de dimanche et de férié à venir", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "month_forecast", title: "Prévision du solde de fin de mois", summary: "Prévision du solde de fin de mois", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "morning_brief", title: "Brief du matin", summary: "Brief du matin", step: 10, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "schedule_rotation", title: "Rotation de planning A/B", summary: "Rotation de planning A/B", step: 10, defaultOn: false, requires: ["planning_ocr"], isAvailable: false),
+        ModuleDefinition(id: "rest_alert", title: "Alerte de jours consécutifs et de repos", summary: "Alerte de jours consécutifs et de repos", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "share_import", title: "Import par la feuille de partage (et planning par texte)", summary: "Import par la feuille de partage (et planning par texte)", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "payslip_check", title: "Vérificateur de fiche de paie", summary: "Vérificateur de fiche de paie", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "interview_prep", title: "Préparation d'entretien", summary: "Préparation d'entretien", step: 11, defaultOn: false, requires: ["employment", "pay"], isAvailable: false),
+        ModuleDefinition(id: "availability_planner", title: "Générateur de disponibilités", summary: "Générateur de disponibilités", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "end_prediction", title: "Prédiction d'heure de fin", summary: "Prédiction d'heure de fin", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "experience_log", title: "Carnet d'expériences", summary: "Carnet d'expériences", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "planning_diff", title: "Détecteur de changements de planning", summary: "Détecteur de changements de planning", step: 10, defaultOn: false, requires: ["planning_ocr"], isAvailable: false),
+        ModuleDefinition(id: "tamper_log", title: "Journal infalsifiable", summary: "Journal infalsifiable", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "load_forecast", title: "Prévision de charge", summary: "Prévision de charge", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "exam_budget", title: "Mode bac en approche", summary: "Mode bac en approche", step: 11, defaultOn: false, requires: ["exam_mode"], isAvailable: false),
+        ModuleDefinition(id: "return_recap", title: "Retour de congé", summary: "Retour de congé", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "heatmap", title: "Carte de chaleur annuelle", summary: "Une carte de chaleur de ton année.", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "place_memos", title: "Mémos de lieu", summary: "Mémos de lieu", step: 11, defaultOn: false, requires: [], isAvailable: false),
+    ]
+
+    static let group5: [ModuleDefinition] = [
+        ModuleDefinition(id: "travel_calibration", title: "Cohérence du trajet", summary: "Cohérence du trajet", step: 11, defaultOn: false, requires: ["travel_departure"], isAvailable: false),
+        ModuleDefinition(id: "delay_log", title: "Trace de retard", summary: "Trace de retard", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "pay_reconciliation", title: "Régularisation des heures payées", summary: "Régularisation des heures payées", step: 11, defaultOn: false, requires: ["pay", "contract_hours"], isAvailable: false),
+        ModuleDefinition(id: "plan_proposals", title: "Plannings proposés", summary: "Plannings proposés", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "holiday_outlook", title: "Jours fériés de l'année", summary: "Jours fériés de l'année", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "self_compare", title: "Comparaison avec ton passé", summary: "Comparaison avec ton passé", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "blocked_periods", title: "Périodes bloquées", summary: "Périodes bloquées", step: 10, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "class_work_tradeoff", title: "Arbitrage cours contre travail", summary: "Arbitrage cours contre travail", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "weekend_preview", title: "Aperçu de ta fin de semaine", summary: "Aperçu de ta fin de semaine", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "low_period_alert", title: "Anticipation des périodes creuses", summary: "Anticipation des périodes creuses", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "vacation_prep", title: "Prêt à partir en vacances", summary: "Prêt à partir en vacances", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "team_swaps", title: "Équipe et échanges malins", summary: "Équipe et échanges malins", step: 11, defaultOn: false, requires: ["planning_ocr"], isAvailable: false),
+        ModuleDefinition(id: "planning_text", title: "Planning par texte", summary: "Planning par texte", step: 10, defaultOn: false, requires: ["planning_ocr"], isAvailable: false),
+        ModuleDefinition(id: "live_earnings", title: "Compteur de gains en direct", summary: "Compteur de gains en direct", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "true_hourly_rate", title: "Vrai taux horaire", summary: "Vrai taux horaire", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "notice_check", title: "Délai de prévenance", summary: "Délai de prévenance", step: 11, defaultOn: false, requires: ["planning_ocr", "employment"], isAvailable: false),
+        ModuleDefinition(id: "backup_signals", title: "Signaux de secours (Wi-Fi, Bluetooth, CarPlay, charge, NFC)", summary: "Signaux de secours (Wi-Fi, Bluetooth, CarPlay, charge, NFC)", step: 10, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "folder_backup", title: "Sauvegarde automatique dans un dossier Fichiers", summary: "Sauvegarde automatique dans un dossier de l'app Fichiers.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+    ]
+
+    static let group6: [ModuleDefinition] = [
+        ModuleDefinition(id: "privacy_shield", title: "Protection à la capture et mode démo", summary: "Masque l'app dans le sélecteur d'apps et propose un mode démo.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "ask_assistant", title: "Demande-moi tout (assistant local)", summary: "Demande-moi tout (assistant local)", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "break_in", title: "Phase de rodage", summary: "Phase de rodage", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "clock_check", title: "Contrôle de l'horloge", summary: "Vérifie que l'horloge de ton téléphone est cohérente.", step: 3, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "age_rules", title: "Règles selon l'âge", summary: "Règles selon l'âge", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "last_minute_offer", title: "Demande de dernière minute", summary: "Demande de dernière minute", step: 11, defaultOn: false, requires: ["planning_text"], isAvailable: false),
+        ModuleDefinition(id: "school_timetable", title: "Emploi du temps scolaire", summary: "Ton emploi du temps de cours, semaine par semaine.", step: 9, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "extra_time", title: "Temps annexes", summary: "Temps annexes", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "constraint_counters", title: "Compteurs de contraintes", summary: "Compteurs de contraintes", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "pay_period", title: "Période de paie personnalisée", summary: "Période de paie personnalisée", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "contract_check", title: "Vérificateur de contrat avant signature", summary: "Vérificateur de contrat avant signature", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
+        ModuleDefinition(id: "internship_log", title: "Carnet de stage ou d'alternance", summary: "Carnet de stage ou d'alternance", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "day_replay", title: "Rejouer ma journée", summary: "Rejouer ma journée", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "glossary", title: "Termes expliqués", summary: "Explique les termes un peu techniques en deux lignes.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "multi_site", title: "Déplacements entre sites", summary: "Déplacements entre sites", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "calendar_constraints", title: "Agenda perso comme contrainte", summary: "Agenda perso comme contrainte", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "day_assistant", title: "Assistant de journée (détection de l'inhabituel)", summary: "Remarque quand une journée sort de l'ordinaire.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "reliability_center", title: "Centre de fiabilité", summary: "Un endroit pour voir ce qui est fiable et ce qui ne l'est pas.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+    ]
+
+    static let optionalModules: [ModuleDefinition] = group1 + group2 + group3 + group4 + group5 + group6
+}
