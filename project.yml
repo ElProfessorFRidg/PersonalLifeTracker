@@ -23,6 +23,7 @@ targets:
         INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone: UIInterfaceOrientationPortrait
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Pour détecter quand tu arrives au travail ou en cours."
         INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription: "Pour détecter ton arrivée et ton départ même quand l'app est fermée."
+        INFOPLIST_KEY_UIBackgroundModes: location
   UnitTests:
     type: bundle.unit-test
     platform: iOS

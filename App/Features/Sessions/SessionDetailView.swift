@@ -15,6 +15,7 @@ struct SessionDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @Environment(AppSettings.self) private var settings
+    @Environment(UndoCenter.self) private var undoCenter: UndoCenter?
     @Query private var allSessions: [WorkSession]
 
     let session: WorkSession
@@ -58,7 +59,9 @@ struct SessionDetailView: View {
             Button("Supprimer", role: .destructive) { deleteSession() }
             Button("Annuler", role: .cancel) { }
         } message: {
-            Text("Elle disparaît de ton historique et de tes totaux. Tu ne pourras pas la récupérer.")
+            Text(undoCenter?.isEnabled == true
+                 ? "Elle disparaît de ton historique et de tes totaux. Tu pourras annuler juste après."
+                 : "Elle disparaît de ton historique et de tes totaux. Tu ne pourras pas la récupérer.")
         }
     }
 
@@ -310,9 +313,14 @@ struct SessionDetailView: View {
     }
 
     private func deleteSession() {
+        let copy: ExportedSession = UndoSnapshots.exportedSession(session)
+        let ctx: ModelContext = context
         isDeleted = true
         context.delete(session)
         try? context.save()
+        undoCenter?.register(message: "Session supprimée") {
+            try? UndoSnapshots.restoreSession(copy, context: ctx)
+        }
         dismiss()
     }
 }

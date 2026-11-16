@@ -21,7 +21,7 @@ extension ModuleRegistry {
         ModuleDefinition(id: "now_card", title: "Carte Maintenant (ActionEngine)", summary: "Une carte Maintenant qui te dit la seule chose à faire.", step: 10, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "smart_notifications", title: "Notifications qui apprennent (coordinateur)", summary: "Des notifications qui apprennent quand te déranger.", step: 10, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "data_trust", title: "Score de fiabilité des données", summary: "Un score qui dit à quel point tes données sont fiables.", step: 10, defaultOn: true, requires: [], isAvailable: false),
-        ModuleDefinition(id: "undo_safety", title: "Annuler partout et instantanés", summary: "Annuler partout, avec des instantanés quotidiens de tes données.", step: 2, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "undo_safety", title: "Annuler partout et instantanés", summary: "Annuler partout, avec des instantanés quotidiens de tes données.", step: 2, defaultOn: true, requires: [], isAvailable: true),
     ]
 
     static let group2: [ModuleDefinition] = [

@@ -10,6 +10,7 @@ struct LieuDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.palette) private var palette
     @Environment(AppSettings.self) private var settings
+    @Environment(UndoCenter.self) private var undoCenter: UndoCenter?
     @Query(sort: \Place.name) private var allPlaces: [Place]
 
     @State private var nameDraft: String
@@ -287,9 +288,16 @@ struct LieuDetailView: View {
     }
 
     private func deletePlace() {
+        let placeCopy: ExportedPlace = UndoSnapshots.exportedPlace(place)
+        let sessionCopies: [ExportedSession] = place.sessions.map { UndoSnapshots.exportedSession($0) }
+        let ctx: ModelContext = context
+        let placeName: String = place.name
         isDeleted = true
         context.delete(place)
         try? context.save()
+        undoCenter?.register(message: "Lieu supprimé : \(placeName)") {
+            try? UndoSnapshots.restorePlace(placeCopy, sessions: sessionCopies, context: ctx)
+        }
         dismiss()
     }
 }

@@ -65,11 +65,11 @@ enum SnapshotPlan {
 /// Textes de comptage en français, purs.
 enum SnapshotFormat {
     static func places(_ count: Int) -> String {
-        return count == 1 ? "1 lieu" : "\(count) lieux"
+        return count > 1 ? "\(count) lieux" : "\(count) lieu"
     }
 
     static func sessions(_ count: Int) -> String {
-        return count == 1 ? "1 session" : "\(count) sessions"
+        return count > 1 ? "\(count) sessions" : "\(count) session"
     }
 
     static func summary(places: Int, sessions: Int) -> String {

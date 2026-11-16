@@ -134,7 +134,7 @@ final class DetectionNotifier: NSObject, UNUserNotificationCenterDelegate {
         return all.first { $0.uid == uid }
     }
 
-    func handleResponse(actionID: String, sessionUIDText: String?) {
+    func handleResponse(actionID: String, sessionUIDText: String?, isDoubt: Bool) {
         guard let text = sessionUIDText, let uid = UUID(uuidString: text) else { return }
         if actionID == DetectionNotifier.confirmActionID {
             if let s = session(with: uid) {
@@ -142,8 +142,9 @@ final class DetectionNotifier: NSObject, UNUserNotificationCenterDelegate {
                 try? container.mainContext.save()
                 log(.arrivalConfirmed, detail: "Confirmé depuis la notification (session \(uid.uuidString))")
             }
-        } else if actionID == DetectionNotifier.correctActionID || actionID == UNNotificationDefaultActionIdentifier {
-            // Le tap simple ouvre l'app : on retient la session à corriger seulement pour les doutes ou l'action "Corriger".
+        } else if actionID == DetectionNotifier.correctActionID
+                    || (actionID == UNNotificationDefaultActionIdentifier && isDoubt) {
+            // Le tap simple ouvre l'app : on retient la session à corriger seulement pour un doute ou l'action "Corriger".
             pendingCorrection.set(uid)
             log(.userCorrected, detail: "Correction demandée depuis la notification (session \(uid.uuidString))")
         }
@@ -162,8 +163,9 @@ final class DetectionNotifier: NSObject, UNUserNotificationCenterDelegate {
                                             withCompletionHandler completionHandler: @escaping () -> Void) {
         let actionID: String = response.actionIdentifier
         let uidText: String? = response.notification.request.content.userInfo["sessionUID"] as? String
+        let doubt: Bool = (response.notification.request.content.userInfo["doubt"] as? Bool) ?? false
         Task { @MainActor in
-            self.handleResponse(actionID: actionID, sessionUIDText: uidText)
+            self.handleResponse(actionID: actionID, sessionUIDText: uidText, isDoubt: doubt)
             completionHandler()
         }
     }

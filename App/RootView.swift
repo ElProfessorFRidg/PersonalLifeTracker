@@ -1,8 +1,13 @@
 import SwiftUI
+import SwiftData
 
 /// Racine : onboarding au premier lancement, ensuite les quatre onglets. Applique le thème (palette) à tout l'arbre.
 struct RootView: View {
     @Environment(AppSettings.self) private var settings
+    @Environment(ModuleStore.self) private var modules
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var undoCenter: UndoCenter = UndoCenter()
 
     var body: some View {
         Group {
@@ -14,7 +19,24 @@ struct RootView: View {
                 })
             }
         }
+        .overlay(alignment: .bottom) {
+            UndoToastView()
+                .padding(.horizontal, Theme.Spacing.m)
+                .padding(.bottom, 64)
+        }
+        .environment(undoCenter)
         .pltTheme()
+        .onChange(of: modules.isActive("undo_safety"), initial: true) { (_: Bool, isOn: Bool) in
+            undoCenter.isEnabled = isOn
+        }
+        .onChange(of: scenePhase, initial: true) { (_: ScenePhase, phase: ScenePhase) in
+            if phase == .active && modules.isActive("undo_safety") {
+                UndoSnapshots.takeDailySnapshotIfDue(context: modelContext,
+                                                     store: SnapshotStore(directory: SnapshotStore.defaultDirectory()),
+                                                     now: Date(),
+                                                     calendar: Calendar.current)
+            }
+        }
     }
 }
 
