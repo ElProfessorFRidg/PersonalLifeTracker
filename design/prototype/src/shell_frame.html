@@ -52,6 +52,7 @@
     <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.500h3l5-4v13l-5-4H4zM16 9a4.500 4.500 0 0 1 0 6"/></symbol>
     <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
     <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM14 3v5h5M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-amoled" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
     <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
   </defs>
 </svg>
@@ -62,9 +63,9 @@
     <div class="proto-group is-theme">
       <span class="proto-label" id="proto-theme-label">Thème de l'app</span>
       <div class="proto-seg" role="group" aria-labelledby="proto-theme-label">
-        <button type="button" data-theme-set="light" aria-pressed="true">Clair</button>
-        <button type="button" data-theme-set="dark" aria-pressed="false">Sombre</button>
-        <button type="button" data-theme-set="amoled" aria-pressed="false" aria-label="AMOLED, noir pur">AMOLED</button>
+        <button type="button" data-theme-set="light" aria-pressed="true" aria-label="Clair"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><span class="long">Clair</span></button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Sombre"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg><span class="long">Sombre</span></button>
+        <button type="button" data-theme-set="amoled" aria-pressed="false" aria-label="AMOLED, noir pur"><svg class="icon" aria-hidden="true"><use href="#i-amoled"/></svg><span class="long">AMOLED</span></button>
       </div>
     </div>
     <div class="proto-group" id="proto-states-group" hidden>

@@ -1,6 +1,6 @@
 <title>Personal Life Tracker</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
 /* ==========================================================================
    Personal Life Tracker, maquette Phase 0.
@@ -179,6 +179,7 @@ body {
 .proto-label { font: 600 11px/1.3 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--pg-muted); }
 .proto-seg { display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: var(--pg-fill); }
 .proto-seg button { flex: 1; min-width: 0; min-height: 40px; border: 0; border-radius: 9px; background: transparent; color: var(--pg-fg); font: 500 14px/1 var(--font-text); cursor: pointer; padding: 0 6px; }
+.proto-seg button .icon { display: none; width: 20px; height: 20px; }
 .proto-seg button[aria-pressed="true"] { background: var(--pg-panel); font-weight: 600; box-shadow: 0 1px 3px var(--pg-shadow); }
 .proto-select { display: none; width: 100%; min-height: 44px; border: 1px solid var(--pg-line); border-radius: 10px; background: var(--pg-panel); color: var(--pg-fg); font: 500 15px/1.2 var(--font-text); padding: 0 10px; }
 .proto-list { display: flex; flex-direction: column; gap: 14px; }
@@ -209,17 +210,17 @@ body {
 /* téléphone : plus de cadre, l'app remplit l'écran */
 @media (max-width: 480px) {
   body { display: flex; flex-direction: column; overflow: hidden; }
-  .page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 0; padding-block: 0; max-width: none; margin: 0; width: 100%; }
+  .page { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-block: 0; max-width: none; margin: 0; width: 100%; }
   .proto { flex: none; flex-wrap: nowrap; gap: 8px; padding-block: 6px; align-items: center; }
   .proto-label { display: none; }
   .proto-group { flex: 1 1 0; }
-  .proto-group.is-theme { flex: 0 0 132px; }
-  .proto-seg button { font-size: 12px; padding: 0 2px; }
+  .proto-group.is-theme { flex: 0 0 136px; }
   .proto-seg button .long { display: none; }
+  .proto-seg button .icon { display: block; margin: 0 auto; }
   .stage { flex: 1; min-height: 0; display: flex; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
   .device-wrap { flex: 1; min-width: 0; width: auto !important; height: auto !important; display: flex; }
-  .device { flex: 1; min-width: 0; width: auto; height: auto; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; }
-  .device .app { width: 100%; height: 100%; border-radius: 0; --sb-h: 0px; --tab-h: 58px; --home-h: 0px; }
+  .device { flex: 1; min-width: 0; width: auto; height: auto; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; display: flex; }
+  .device .app { flex: 1; min-width: 0; width: auto; height: auto; border-radius: 0; --sb-h: 8px; --tab-h: 58px; --home-h: 0px; }
   .device .statusbar, .device .island, .device .homebar { display: none; }
 }
 
@@ -228,7 +229,7 @@ body {
    ========================================================================== */
 .app {
   --sb-h: 54px; --tab-h: 83px; --home-h: 34px; --gutter: 16px;
-  position: relative; overflow: hidden; isolation: isolate;
+  position: relative; overflow: hidden; overflow: clip; isolation: isolate;
   background: var(--background); color: var(--textPrimary);
   font: var(--t-body) var(--font-text); letter-spacing: -.01em;
   -webkit-font-smoothing: antialiased; color-scheme: light;
@@ -242,7 +243,7 @@ body {
 [hidden] { display: none !important; }
 
 /* chiffres : .num partout où une heure, une durée ou un montant s'affiche */
-.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; word-spacing: -.32em; }
 .icon { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .icon--s { width: 18px; height: 18px; stroke-width: 2; }
 .icon--l { width: 32px; height: 32px; stroke-width: 1.6; }
@@ -270,7 +271,7 @@ body {
 .screen-body { display: flex; flex-direction: column; gap: var(--space-l); padding: var(--space-s) var(--gutter) var(--space-l); min-width: 0; }
 
 /* ---- barre de navigation et grand titre ---- */
-.navbar { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 44px; padding: 0 8px; background: color-mix(in srgb, var(--background) 86%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.navbar { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 44px; padding: 0 8px; background: var(--background); }
 .navbar-title { font: var(--t-headline) var(--font-text); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; grid-column: 2; }
 .navbar-back { justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: 44px; padding: 0 8px 0 0; border: 0; background: none; color: var(--accent); font-size: 17px; }
 .navbar-actions { grid-column: 3; justify-self: end; display: flex; align-items: center; }
@@ -302,6 +303,7 @@ body {
 .card--now .btn--ghost { color: var(--accentOn); text-decoration: underline; text-underline-offset: 3px; }
 .card--now :focus-visible { outline-color: var(--accentOn); }
 .card--now.is-calm { background: var(--surface); color: var(--textPrimary); box-shadow: var(--shadow-card); }
+.card--now.is-calm .btn--ghost { color: var(--accent); }
 .card--now.is-calm .eyebrow, .card--now.is-calm .card-text { color: var(--textSecondary); opacity: 1; }
 
 /* ---- liste groupée et lignes ---- */
@@ -323,8 +325,8 @@ button.row:active, a.row:active { background: var(--fill); }
 .row-value { flex: none; max-width: 50%; text-align: right; font-size: 16px; color: var(--textSecondary); }
 .row-chev { flex: none; width: 16px; height: 16px; color: var(--textTertiary); stroke-width: 2.4; }
 .row--destructive .row-title { color: var(--danger); }
-.row-check { flex: none; color: var(--accent); visibility: hidden; }
-.row[aria-checked="true"] .row-check { visibility: visible; }
+.row-check { flex: none; color: var(--accent); opacity: 0; }
+.row[aria-checked="true"] .row-check { opacity: 1; }
 .app[data-density="compact"] .row { min-height: 44px; padding-block: 5px; }
 .app[data-density="compact"] .screen-body { gap: var(--space-m); }
 
@@ -387,13 +389,13 @@ button.row:active, a.row:active { background: var(--fill); }
 .field.is-invalid .field-help { color: var(--danger); }
 
 /* ---- pastilles de couleur ---- */
-.swatches { display: flex; flex-wrap: wrap; gap: 4px; }
-.swatch { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); }
+.swatch { width: 100%; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
 .swatch::before { content: ""; width: 30px; height: 30px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--surface), 0 0 0 0 var(--c); transition: box-shadow var(--motion-fast); }
 .swatch[aria-pressed="true"]::before { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5.5px var(--c); }
 
 /* ---- feuille (bottom sheet) ---- */
-.overlay-host { position: absolute; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+.overlay-host { position: absolute; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; overflow: clip; }
 .sheet-backdrop { position: absolute; inset: 0; background: rgba(4, 8, 16, .5); opacity: 0; transition: opacity var(--motion-normal); }
 .overlay-host.has-sheet { pointer-events: auto; }
 .overlay-host.has-sheet .sheet-backdrop { opacity: 1; }
@@ -490,7 +492,7 @@ button.row:active, a.row:active { background: var(--fill); }
 .status--ok { color: var(--success); } .status--warn { color: var(--warning); } .status--error { color: var(--danger); }
 
 /* ---- barre d'onglets ---- */
-.tabbar { position: absolute; inset: auto 0 0; z-index: 25; height: var(--tab-h); display: flex; padding: 0 4px var(--home-h); border-top: 1px solid var(--separator); background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.tabbar { position: absolute; inset: auto 0 0; z-index: 25; height: var(--tab-h); display: flex; padding: 0 4px var(--home-h); border-top: 1px solid var(--separator); background: color-mix(in srgb, var(--surface) 95%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
 .app.no-tabbar .tabbar { display: none; }
 .tab { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; background: none; color: var(--textSecondary); font: 500 10.5px/1 var(--font-text); }
 .tab .icon { width: 25px; height: 25px; }
@@ -561,6 +563,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.500h3l5-4v13l-5-4H4zM16 9a4.500 4.500 0 0 1 0 6"/></symbol>
     <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
     <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM14 3v5h5M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-amoled" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 1 0 18z" fill="currentColor"/></symbol>
     <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
   </defs>
 </svg>
@@ -571,9 +574,9 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <div class="proto-group is-theme">
       <span class="proto-label" id="proto-theme-label">Thème de l'app</span>
       <div class="proto-seg" role="group" aria-labelledby="proto-theme-label">
-        <button type="button" data-theme-set="light" aria-pressed="true">Clair</button>
-        <button type="button" data-theme-set="dark" aria-pressed="false">Sombre</button>
-        <button type="button" data-theme-set="amoled" aria-pressed="false" aria-label="AMOLED, noir pur">AMOLED</button>
+        <button type="button" data-theme-set="light" aria-pressed="true" aria-label="Clair"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg><span class="long">Clair</span></button>
+        <button type="button" data-theme-set="dark" aria-pressed="false" aria-label="Sombre"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg><span class="long">Sombre</span></button>
+        <button type="button" data-theme-set="amoled" aria-pressed="false" aria-label="AMOLED, noir pur"><svg class="icon" aria-hidden="true"><use href="#i-amoled"/></svg><span class="long">AMOLED</span></button>
       </div>
     </div>
     <div class="proto-group" id="proto-states-group" hidden>
@@ -606,7 +609,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
           <main class="screens" id="screens">
 <!-- 10_accueil.html -->
 <section class="screen" id="scr-accueil" data-title="Accueil" data-group="Accueil" data-tab="accueil"
-         data-states="encours:Session en cours,calme:Journée finie,vide:Premier jour">
+         data-states="encours:En cours,calme:Journée finie,vide:Premier jour">
 
   <header class="largetitle">
     <div>
@@ -625,9 +628,9 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       <article class="card card--now" id="acc-now-ask" aria-labelledby="acc-now-ask-t">
         <div class="card-head">
           <p class="eyebrow">Maintenant</p>
-          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-pourquoi" style="margin:-12px -8px">Pourquoi cette carte ?</button>
+          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-pourquoi" style="margin:-12px -8px">Pourquoi cette carte&nbsp;?</button>
         </div>
-        <h2 class="card-title" id="acc-now-ask-t">T'es arrivé au taf à <span class="num">17:56</span>, c'est bon ?</h2>
+        <h2 class="card-title" id="acc-now-ask-t">T'es arrivé au taf à 17:56, c'est bon&nbsp;?</h2>
         <p class="card-text">Je l'ai noté tout seul quand t'es entré dans la zone de la Supérette du Canal.</p>
         <div class="btn-row">
           <button type="button" class="btn btn--primary" id="acc-now-yes">Oui, c'est bon</button>
@@ -651,12 +654,12 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <article class="card card--now is-calm" data-when="calme">
       <p class="eyebrow">Maintenant</p>
       <h2 class="card-title">Rien à faire, profites-en.</h2>
-      <p class="card-text">Bien joué, 3 h de taf aujourd'hui. Demain : cours à <span class="num">8:00</span>.</p>
+      <p class="card-text">Bien joué, 3 h de taf aujourd'hui. Demain&nbsp;: cours à <span class="num">8:00</span>.</p>
     </article>
 
     <article class="card card--now" data-when="vide">
       <p class="eyebrow">Maintenant</p>
-      <h2 class="card-title">On commence par un lieu ?</h2>
+      <h2 class="card-title">On commence par un lieu&nbsp;?</h2>
       <p class="card-text">Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Rien ne sort de ton tel.</p>
       <div class="btn-row">
         <button type="button" class="btn btn--primary" data-go="lieu-ajout">Ajouter un lieu</button>
@@ -699,7 +702,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         </div>
         <div class="stat stat--work">
           <span class="stat-label"><i aria-hidden="true"></i>Taf</span>
-          <span class="stat-value" data-when="encours" data-timer="4447" data-timer-format="hm">1 h 14</span>
+          <span class="stat-value" data-when="encours" data-timer="4447" data-timer-format="stat">1<small>h</small>14</span>
           <span class="stat-note" data-when="encours">En cours, 3 h prévues</span>
           <span class="stat-value" data-when="calme">3<small>h</small></span>
           <span class="stat-note" data-when="calme">Heures pleines, exact 3 h 04</span>
@@ -718,7 +721,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
 
       <div class="card" data-when="encours calme">
         <div class="timeline" style="--from:6;--to:24" role="img" data-when="encours"
-             aria-label="Ruban de la journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56, prévu jusqu'à 21:00.">
+             aria-label="Ruban de la journée&nbsp;: cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56, prévu jusqu'à 21:00.">
           <div class="timeline-track">
             <i class="timeline-seg timeline-seg--planned" style="--s:18;--e:21"></i>
             <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
@@ -729,7 +732,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
           <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
         </div>
         <div class="timeline" style="--from:6;--to:24" role="img" data-when="calme"
-             aria-label="Ruban de la journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf de 17:56 à 21:00.">
+             aria-label="Ruban de la journée&nbsp;: cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf de 17:56 à 21:00.">
           <div class="timeline-track">
             <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
             <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
@@ -811,8 +814,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
   </div>
 
   <div class="sheet" id="sheet-acc-pourquoi">
-    <h2 class="sheet-title">Pourquoi cette carte ?</h2>
-    <p class="sheet-text">Je te montre une seule chose à la fois : la plus utile maintenant. Là, ton arrivée au taf attend ton feu vert pour compter dans tes heures.</p>
+    <h2 class="sheet-title">Pourquoi cette carte&nbsp;?</h2>
+    <p class="sheet-text">Je te montre une seule chose à la fois&nbsp;: la plus utile maintenant. Là, ton arrivée au taf attend ton feu vert pour compter dans tes heures.</p>
     <div class="list">
       <div class="row"><span class="row-main"><span class="row-title">Ce que j'ai vu</span><span class="row-sub">T'es entré dans la zone de la Supérette du Canal à 17:56, à plus ou moins 3 min.</span></span></div>
       <div class="row"><span class="row-main"><span class="row-title">Pourquoi maintenant</span><span class="row-sub">Tant que c'est pas confirmé, ta session reste marquée à vérifier.</span></span></div>
@@ -826,17 +829,17 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <div class="list">
       <button type="button" class="row" data-go="session">
         <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
-        <span class="row-main"><span class="row-title">T'es parti de la fac à 12:02 ?</span><span class="row-sub">Aujourd'hui</span></span>
+        <span class="row-main"><span class="row-title">T'es parti de la fac à 12:02&nbsp;?</span><span class="row-sub">Aujourd'hui</span></span>
         <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
       </button>
       <button type="button" class="row" data-go="session">
         <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
-        <span class="row-main"><span class="row-title">Tu faisais juste tes courses, non ?</span><span class="row-sub">Marché du Canal, 25 min ce midi</span></span>
+        <span class="row-main"><span class="row-title">Tu faisais juste tes courses, non&nbsp;?</span><span class="row-sub">Marché du Canal, 25 min ce midi</span></span>
         <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
       </button>
       <button type="button" class="row" data-go="doute">
         <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
-        <span class="row-main"><span class="row-title">Samedi, fin à 20:38 : je compte 20 h ou 21 h ?</span><span class="row-sub">Zone de doute, c'est toi qui choisis</span></span>
+        <span class="row-main"><span class="row-title">Samedi, fin à 20:38&nbsp;: je compte 20 h ou 21 h&nbsp;?</span><span class="row-sub">Zone de doute, c'est toi qui choisis</span></span>
         <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
       </button>
     </div>
@@ -938,7 +941,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       <div class="list">
         <button type="button" class="row" data-go="fonctionnalites">
           <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span>
-          <span class="row-main"><span class="row-title">Fonctionnalités</span><span class="row-sub">Active seulement ce qui te sert : planning, paie, congés...</span></span>
+          <span class="row-main"><span class="row-title">Fonctionnalités</span><span class="row-sub">Active seulement ce qui te sert&nbsp;: planning, paie, congés...</span></span>
           <span class="row-value">7 actives</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
@@ -1041,23 +1044,23 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
           <span class="row-value" id="reg-base-val">Heures pleines</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-main"><span class="row-title">Rayon par défaut</span><span class="row-sub">La taille de la zone autour d'un nouveau lieu</span></span>
           <span class="row-value num">100 m</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-main"><span class="row-title">Seuil de pause</span><span class="row-sub">En dessous, une sortie compte comme une pause</span></span>
           <span class="row-value num">15 min</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-main"><span class="row-title">Délai avant de valider un départ</span><span class="row-sub">Pour pas couper ta session si tu sors deux minutes</span></span>
           <span class="row-value num">5 min</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
-          <span class="row-main"><span class="row-title">Mode économie</span><span class="row-sub">Auto : je ralentis quand ta batterie est basse</span></span>
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
+          <span class="row-main"><span class="row-title">Mode économie</span><span class="row-sub">Auto&nbsp;: je ralentis quand ta batterie est basse</span></span>
           <span class="row-value">Auto</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
@@ -1077,17 +1080,17 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
           <span class="row-main"><span class="row-title" id="reg-24h">Format 24 h</span><span class="row-sub">17:56 plutôt que 5:56 PM</span></span>
           <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-24h"></button>
         </div>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-main"><span class="row-title">Format des durées</span><span class="row-sub">7 h 30 ou 7,5 h</span></span>
           <span class="row-value num">7 h 30</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-main"><span class="row-title">Premier jour de la semaine</span></span>
           <span class="row-value">Lundi</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-main"><span class="row-title">Onglet de démarrage</span></span>
           <span class="row-value">Accueil</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
@@ -1104,7 +1107,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <section class="section" aria-labelledby="reg-secu-t">
       <div class="section-head"><h2 class="section-title" id="reg-secu-t">Sécurité</h2></div>
       <div class="list">
-        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-faceid"/></svg></span>
           <span class="row-main"><span class="row-title">Verrouillage Face ID</span><span class="row-sub">Au lancement ou après quelques minutes</span></span>
           <span class="row-value">Désactivé</span>
@@ -1122,15 +1125,15 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <section class="section" aria-labelledby="reg-data-t">
       <div class="section-head"><h2 class="section-title" id="reg-data-t">Tes données</h2></div>
       <div class="list">
-        <button type="button" class="row" data-toast="Export prêt : dans l'app, il part dans Fichiers.">
+        <button type="button" class="row" data-toast="Export prêt&nbsp;: dans l'app, il part dans Fichiers.">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg></span>
           <span class="row-main"><span class="row-title">Exporter en JSON</span><span class="row-sub">Sessions, lieux et réglages dans un seul fichier</span></span>
         </button>
-        <button type="button" class="row" data-toast="Import : dans l'app, tu choisis un fichier.">
+        <button type="button" class="row" data-toast="Import&nbsp;: dans l'app, tu choisis un fichier.">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
           <span class="row-main"><span class="row-title">Importer un fichier</span><span class="row-sub">Je te montre ce qui change avant de toucher à quoi que ce soit</span></span>
         </button>
-        <button type="button" class="row" data-toast="Suppression par période : dans l'app.">
+        <button type="button" class="row" data-toast="Suppression par période&nbsp;: dans l'app.">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
           <span class="row-main"><span class="row-title">Supprimer une période</span><span class="row-sub">Tu choisis les dates</span></span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
@@ -1169,8 +1172,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
   </div>
 
   <div class="sheet" id="sheet-reg-suppr">
-    <h2 class="sheet-title">Tout supprimer ?</h2>
-    <p class="sheet-text">Ça efface tes sessions, tes lieux et ton planning de ce tel. C'est définitif : sans export, impossible de revenir en arrière.</p>
+    <h2 class="sheet-title">Tout supprimer&nbsp;?</h2>
+    <p class="sheet-text">Ça efface tes sessions, tes lieux et ton planning de ce tel. C'est définitif&nbsp;: sans export, impossible de revenir en arrière.</p>
     <div class="field" id="reg-suppr-field">
       <label class="field-label" for="reg-suppr-input">Pour confirmer, écris SUPPRIMER</label>
       <input class="input" id="reg-suppr-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="SUPPRIMER">
@@ -1393,6 +1396,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     var el = document.getElementById(id);
     if (!el || !el.classList.contains('sheet')) return;
     if (openSheetEl) closeSheet(true);
+    hideToast();
     sheetOpener = document.activeElement;
     openSheetEl = el;
     el.removeAttribute('inert');
@@ -1457,7 +1461,13 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     $$('[data-timer]').forEach(function (el) {
       if (el.hasAttribute('data-timer-paused')) return;
       var s = parseFloat(el.getAttribute('data-timer')) + dt;
-      var txt = el.getAttribute('data-timer-format') === 'hm' ? fmtHM(s) : fmtHMS(s);
+      var f = el.getAttribute('data-timer-format');
+      if (f === 'stat') {
+        var h = Math.floor(s / 3600), m = pad(Math.floor(s % 3600 / 60)), key = h + ':' + m;
+        if (el.getAttribute('data-shown') !== key) { el.setAttribute('data-shown', key); el.innerHTML = h + '<small>h</small>' + m; }
+        return;
+      }
+      var txt = f === 'hm' ? fmtHM(s) : fmtHMS(s);
       if (el.textContent !== txt) el.textContent = txt;
     });
   }

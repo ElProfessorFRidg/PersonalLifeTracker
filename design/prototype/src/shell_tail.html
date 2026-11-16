@@ -154,6 +154,7 @@
     var el = document.getElementById(id);
     if (!el || !el.classList.contains('sheet')) return;
     if (openSheetEl) closeSheet(true);
+    hideToast();
     sheetOpener = document.activeElement;
     openSheetEl = el;
     el.removeAttribute('inert');
@@ -218,7 +219,13 @@
     $$('[data-timer]').forEach(function (el) {
       if (el.hasAttribute('data-timer-paused')) return;
       var s = parseFloat(el.getAttribute('data-timer')) + dt;
-      var txt = el.getAttribute('data-timer-format') === 'hm' ? fmtHM(s) : fmtHMS(s);
+      var f = el.getAttribute('data-timer-format');
+      if (f === 'stat') {
+        var h = Math.floor(s / 3600), m = pad(Math.floor(s % 3600 / 60)), key = h + ':' + m;
+        if (el.getAttribute('data-shown') !== key) { el.setAttribute('data-shown', key); el.innerHTML = h + '<small>h</small>' + m; }
+        return;
+      }
+      var txt = f === 'hm' ? fmtHM(s) : fmtHMS(s);
       if (el.textContent !== txt) el.textContent = txt;
     });
   }

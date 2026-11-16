@@ -1,5 +1,5 @@
 <section class="screen" id="scr-accueil" data-title="Accueil" data-group="Accueil" data-tab="accueil"
-         data-states="encours:Session en cours,calme:Journée finie,vide:Premier jour">
+         data-states="encours:En cours,calme:Journée finie,vide:Premier jour">
 
   <header class="largetitle">
     <div>
@@ -18,9 +18,9 @@
       <article class="card card--now" id="acc-now-ask" aria-labelledby="acc-now-ask-t">
         <div class="card-head">
           <p class="eyebrow">Maintenant</p>
-          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-pourquoi" style="margin:-12px -8px">Pourquoi cette carte ?</button>
+          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-pourquoi" style="margin:-12px -8px">Pourquoi cette carte&nbsp;?</button>
         </div>
-        <h2 class="card-title" id="acc-now-ask-t">T'es arrivé au taf à <span class="num">17:56</span>, c'est bon ?</h2>
+        <h2 class="card-title" id="acc-now-ask-t">T'es arrivé au taf à 17:56, c'est bon&nbsp;?</h2>
         <p class="card-text">Je l'ai noté tout seul quand t'es entré dans la zone de la Supérette du Canal.</p>
         <div class="btn-row">
           <button type="button" class="btn btn--primary" id="acc-now-yes">Oui, c'est bon</button>
@@ -44,12 +44,12 @@
     <article class="card card--now is-calm" data-when="calme">
       <p class="eyebrow">Maintenant</p>
       <h2 class="card-title">Rien à faire, profites-en.</h2>
-      <p class="card-text">Bien joué, 3 h de taf aujourd'hui. Demain : cours à <span class="num">8:00</span>.</p>
+      <p class="card-text">Bien joué, 3 h de taf aujourd'hui. Demain&nbsp;: cours à <span class="num">8:00</span>.</p>
     </article>
 
     <article class="card card--now" data-when="vide">
       <p class="eyebrow">Maintenant</p>
-      <h2 class="card-title">On commence par un lieu ?</h2>
+      <h2 class="card-title">On commence par un lieu&nbsp;?</h2>
       <p class="card-text">Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Rien ne sort de ton tel.</p>
       <div class="btn-row">
         <button type="button" class="btn btn--primary" data-go="lieu-ajout">Ajouter un lieu</button>
@@ -92,7 +92,7 @@
         </div>
         <div class="stat stat--work">
           <span class="stat-label"><i aria-hidden="true"></i>Taf</span>
-          <span class="stat-value" data-when="encours" data-timer="4447" data-timer-format="hm">1 h 14</span>
+          <span class="stat-value" data-when="encours" data-timer="4447" data-timer-format="stat">1<small>h</small>14</span>
           <span class="stat-note" data-when="encours">En cours, 3 h prévues</span>
           <span class="stat-value" data-when="calme">3<small>h</small></span>
           <span class="stat-note" data-when="calme">Heures pleines, exact 3 h 04</span>
@@ -111,7 +111,7 @@
 
       <div class="card" data-when="encours calme">
         <div class="timeline" style="--from:6;--to:24" role="img" data-when="encours"
-             aria-label="Ruban de la journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56, prévu jusqu'à 21:00.">
+             aria-label="Ruban de la journée&nbsp;: cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56, prévu jusqu'à 21:00.">
           <div class="timeline-track">
             <i class="timeline-seg timeline-seg--planned" style="--s:18;--e:21"></i>
             <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
@@ -122,7 +122,7 @@
           <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
         </div>
         <div class="timeline" style="--from:6;--to:24" role="img" data-when="calme"
-             aria-label="Ruban de la journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf de 17:56 à 21:00.">
+             aria-label="Ruban de la journée&nbsp;: cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf de 17:56 à 21:00.">
           <div class="timeline-track">
             <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
             <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
@@ -204,8 +204,8 @@
   </div>
 
   <div class="sheet" id="sheet-acc-pourquoi">
-    <h2 class="sheet-title">Pourquoi cette carte ?</h2>
-    <p class="sheet-text">Je te montre une seule chose à la fois : la plus utile maintenant. Là, ton arrivée au taf attend ton feu vert pour compter dans tes heures.</p>
+    <h2 class="sheet-title">Pourquoi cette carte&nbsp;?</h2>
+    <p class="sheet-text">Je te montre une seule chose à la fois&nbsp;: la plus utile maintenant. Là, ton arrivée au taf attend ton feu vert pour compter dans tes heures.</p>
     <div class="list">
       <div class="row"><span class="row-main"><span class="row-title">Ce que j'ai vu</span><span class="row-sub">T'es entré dans la zone de la Supérette du Canal à 17:56, à plus ou moins 3 min.</span></span></div>
       <div class="row"><span class="row-main"><span class="row-title">Pourquoi maintenant</span><span class="row-sub">Tant que c'est pas confirmé, ta session reste marquée à vérifier.</span></span></div>
@@ -219,17 +219,17 @@
     <div class="list">
       <button type="button" class="row" data-go="session">
         <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
-        <span class="row-main"><span class="row-title">T'es parti de la fac à 12:02 ?</span><span class="row-sub">Aujourd'hui</span></span>
+        <span class="row-main"><span class="row-title">T'es parti de la fac à 12:02&nbsp;?</span><span class="row-sub">Aujourd'hui</span></span>
         <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
       </button>
       <button type="button" class="row" data-go="session">
         <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
-        <span class="row-main"><span class="row-title">Tu faisais juste tes courses, non ?</span><span class="row-sub">Marché du Canal, 25 min ce midi</span></span>
+        <span class="row-main"><span class="row-title">Tu faisais juste tes courses, non&nbsp;?</span><span class="row-sub">Marché du Canal, 25 min ce midi</span></span>
         <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
       </button>
       <button type="button" class="row" data-go="doute">
         <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
-        <span class="row-main"><span class="row-title">Samedi, fin à 20:38 : je compte 20 h ou 21 h ?</span><span class="row-sub">Zone de doute, c'est toi qui choisis</span></span>
+        <span class="row-main"><span class="row-title">Samedi, fin à 20:38&nbsp;: je compte 20 h ou 21 h&nbsp;?</span><span class="row-sub">Zone de doute, c'est toi qui choisis</span></span>
         <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
       </button>
     </div>

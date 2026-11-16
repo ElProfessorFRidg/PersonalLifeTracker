@@ -1,6 +1,6 @@
 <title>Personal Life Tracker</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap">
 <style>
 /* ==========================================================================
    Personal Life Tracker, maquette Phase 0.
@@ -54,6 +54,7 @@ body {
 .proto-label { font: 600 11px/1.3 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--pg-muted); }
 .proto-seg { display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: var(--pg-fill); }
 .proto-seg button { flex: 1; min-width: 0; min-height: 40px; border: 0; border-radius: 9px; background: transparent; color: var(--pg-fg); font: 500 14px/1 var(--font-text); cursor: pointer; padding: 0 6px; }
+.proto-seg button .icon { display: none; width: 20px; height: 20px; }
 .proto-seg button[aria-pressed="true"] { background: var(--pg-panel); font-weight: 600; box-shadow: 0 1px 3px var(--pg-shadow); }
 .proto-select { display: none; width: 100%; min-height: 44px; border: 1px solid var(--pg-line); border-radius: 10px; background: var(--pg-panel); color: var(--pg-fg); font: 500 15px/1.2 var(--font-text); padding: 0 10px; }
 .proto-list { display: flex; flex-direction: column; gap: 14px; }
@@ -84,17 +85,17 @@ body {
 /* téléphone : plus de cadre, l'app remplit l'écran */
 @media (max-width: 480px) {
   body { display: flex; flex-direction: column; overflow: hidden; }
-  .page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 0; padding-block: 0; max-width: none; margin: 0; width: 100%; }
+  .page { flex: 1; min-height: 0; display: flex; flex-direction: column; align-items: stretch; gap: 0; padding-block: 0; max-width: none; margin: 0; width: 100%; }
   .proto { flex: none; flex-wrap: nowrap; gap: 8px; padding-block: 6px; align-items: center; }
   .proto-label { display: none; }
   .proto-group { flex: 1 1 0; }
-  .proto-group.is-theme { flex: 0 0 132px; }
-  .proto-seg button { font-size: 12px; padding: 0 2px; }
+  .proto-group.is-theme { flex: 0 0 136px; }
   .proto-seg button .long { display: none; }
+  .proto-seg button .icon { display: block; margin: 0 auto; }
   .stage { flex: 1; min-height: 0; display: flex; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
   .device-wrap { flex: 1; min-width: 0; width: auto !important; height: auto !important; display: flex; }
-  .device { flex: 1; min-width: 0; width: auto; height: auto; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; }
-  .device .app { width: 100%; height: 100%; border-radius: 0; --sb-h: 0px; --tab-h: 58px; --home-h: 0px; }
+  .device { flex: 1; min-width: 0; width: auto; height: auto; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; display: flex; }
+  .device .app { flex: 1; min-width: 0; width: auto; height: auto; border-radius: 0; --sb-h: 8px; --tab-h: 58px; --home-h: 0px; }
   .device .statusbar, .device .island, .device .homebar { display: none; }
 }
 
@@ -103,7 +104,7 @@ body {
    ========================================================================== */
 .app {
   --sb-h: 54px; --tab-h: 83px; --home-h: 34px; --gutter: 16px;
-  position: relative; overflow: hidden; isolation: isolate;
+  position: relative; overflow: hidden; overflow: clip; isolation: isolate;
   background: var(--background); color: var(--textPrimary);
   font: var(--t-body) var(--font-text); letter-spacing: -.01em;
   -webkit-font-smoothing: antialiased; color-scheme: light;
@@ -117,7 +118,7 @@ body {
 [hidden] { display: none !important; }
 
 /* chiffres : .num partout où une heure, une durée ou un montant s'affiche */
-.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; word-spacing: -.32em; }
 .icon { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 .icon--s { width: 18px; height: 18px; stroke-width: 2; }
 .icon--l { width: 32px; height: 32px; stroke-width: 1.6; }
@@ -145,7 +146,7 @@ body {
 .screen-body { display: flex; flex-direction: column; gap: var(--space-l); padding: var(--space-s) var(--gutter) var(--space-l); min-width: 0; }
 
 /* ---- barre de navigation et grand titre ---- */
-.navbar { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 44px; padding: 0 8px; background: color-mix(in srgb, var(--background) 86%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.navbar { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 44px; padding: 0 8px; background: var(--background); }
 .navbar-title { font: var(--t-headline) var(--font-text); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; grid-column: 2; }
 .navbar-back { justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: 44px; padding: 0 8px 0 0; border: 0; background: none; color: var(--accent); font-size: 17px; }
 .navbar-actions { grid-column: 3; justify-self: end; display: flex; align-items: center; }
@@ -177,6 +178,7 @@ body {
 .card--now .btn--ghost { color: var(--accentOn); text-decoration: underline; text-underline-offset: 3px; }
 .card--now :focus-visible { outline-color: var(--accentOn); }
 .card--now.is-calm { background: var(--surface); color: var(--textPrimary); box-shadow: var(--shadow-card); }
+.card--now.is-calm .btn--ghost { color: var(--accent); }
 .card--now.is-calm .eyebrow, .card--now.is-calm .card-text { color: var(--textSecondary); opacity: 1; }
 
 /* ---- liste groupée et lignes ---- */
@@ -198,8 +200,8 @@ button.row:active, a.row:active { background: var(--fill); }
 .row-value { flex: none; max-width: 50%; text-align: right; font-size: 16px; color: var(--textSecondary); }
 .row-chev { flex: none; width: 16px; height: 16px; color: var(--textTertiary); stroke-width: 2.4; }
 .row--destructive .row-title { color: var(--danger); }
-.row-check { flex: none; color: var(--accent); visibility: hidden; }
-.row[aria-checked="true"] .row-check { visibility: visible; }
+.row-check { flex: none; color: var(--accent); opacity: 0; }
+.row[aria-checked="true"] .row-check { opacity: 1; }
 .app[data-density="compact"] .row { min-height: 44px; padding-block: 5px; }
 .app[data-density="compact"] .screen-body { gap: var(--space-m); }
 
@@ -262,13 +264,13 @@ button.row:active, a.row:active { background: var(--fill); }
 .field.is-invalid .field-help { color: var(--danger); }
 
 /* ---- pastilles de couleur ---- */
-.swatches { display: flex; flex-wrap: wrap; gap: 4px; }
-.swatch { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(40px, 1fr)); }
+.swatch { width: 100%; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
 .swatch::before { content: ""; width: 30px; height: 30px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--surface), 0 0 0 0 var(--c); transition: box-shadow var(--motion-fast); }
 .swatch[aria-pressed="true"]::before { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5.5px var(--c); }
 
 /* ---- feuille (bottom sheet) ---- */
-.overlay-host { position: absolute; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+.overlay-host { position: absolute; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; overflow: clip; }
 .sheet-backdrop { position: absolute; inset: 0; background: rgba(4, 8, 16, .5); opacity: 0; transition: opacity var(--motion-normal); }
 .overlay-host.has-sheet { pointer-events: auto; }
 .overlay-host.has-sheet .sheet-backdrop { opacity: 1; }
@@ -365,7 +367,7 @@ button.row:active, a.row:active { background: var(--fill); }
 .status--ok { color: var(--success); } .status--warn { color: var(--warning); } .status--error { color: var(--danger); }
 
 /* ---- barre d'onglets ---- */
-.tabbar { position: absolute; inset: auto 0 0; z-index: 25; height: var(--tab-h); display: flex; padding: 0 4px var(--home-h); border-top: 1px solid var(--separator); background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.tabbar { position: absolute; inset: auto 0 0; z-index: 25; height: var(--tab-h); display: flex; padding: 0 4px var(--home-h); border-top: 1px solid var(--separator); background: color-mix(in srgb, var(--surface) 95%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
 .app.no-tabbar .tabbar { display: none; }
 .tab { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; background: none; color: var(--textSecondary); font: 500 10.5px/1 var(--font-text); }
 .tab .icon { width: 25px; height: 25px; }
