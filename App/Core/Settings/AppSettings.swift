@@ -94,34 +94,84 @@ final class AppSettings {
 
     @ObservationIgnored private let defaults: UserDefaults
 
-    var themeChoice: ThemeChoice {
-        didSet { defaults.set(themeChoice.rawValue, forKey: Key.theme) }
-    }
-    /// Code de devise (EUR par défaut). Utilise `currency` pour le symbole.
-    var currencyCode: String {
-        didSet { defaults.set(currencyCode, forKey: Key.currency) }
-    }
-    var calculationBase: CalculationBase {
-        didSet { defaults.set(calculationBase.rawValue, forKey: Key.base) }
-    }
-    var density: Density {
-        didSet { defaults.set(density.rawValue, forKey: Key.density) }
-    }
-    var reduceAnimations: Bool {
-        didSet { defaults.set(reduceAnimations, forKey: Key.reduceAnimations) }
-    }
-    var hasCompletedOnboarding: Bool {
-        didSet { defaults.set(hasCompletedOnboarding, forKey: Key.onboardingDone) }
-    }
-
     init(defaults: UserDefaults = UserDefaults.standard) {
         self.defaults = defaults
-        self.themeChoice = ThemeChoice(rawValue: defaults.string(forKey: Key.theme) ?? "") ?? .auto
-        self.currencyCode = defaults.string(forKey: Key.currency) ?? "EUR"
-        self.calculationBase = CalculationBase(rawValue: defaults.string(forKey: Key.base) ?? "") ?? .fullHours
-        self.density = Density(rawValue: defaults.string(forKey: Key.density) ?? "") ?? .comfortable
-        self.reduceAnimations = defaults.bool(forKey: Key.reduceAnimations)
-        self.hasCompletedOnboarding = defaults.bool(forKey: Key.onboardingDone)
+    }
+
+    // Les réglages sont des propriétés calculées lues et écrites dans UserDefaults.
+    // access(keyPath:) et withMutation(keyPath:_:) sont générés par @Observable : SwiftUI se met à jour à chaque changement.
+
+    var themeChoice: ThemeChoice {
+        get {
+            access(keyPath: \.themeChoice)
+            return ThemeChoice(rawValue: defaults.string(forKey: Key.theme) ?? "") ?? .auto
+        }
+        set {
+            withMutation(keyPath: \.themeChoice) {
+                defaults.set(newValue.rawValue, forKey: Key.theme)
+            }
+        }
+    }
+
+    /// Code de devise (EUR par défaut). Utilise `currency` pour le symbole.
+    var currencyCode: String {
+        get {
+            access(keyPath: \.currencyCode)
+            return defaults.string(forKey: Key.currency) ?? "EUR"
+        }
+        set {
+            withMutation(keyPath: \.currencyCode) {
+                defaults.set(newValue, forKey: Key.currency)
+            }
+        }
+    }
+
+    var calculationBase: CalculationBase {
+        get {
+            access(keyPath: \.calculationBase)
+            return CalculationBase(rawValue: defaults.string(forKey: Key.base) ?? "") ?? .fullHours
+        }
+        set {
+            withMutation(keyPath: \.calculationBase) {
+                defaults.set(newValue.rawValue, forKey: Key.base)
+            }
+        }
+    }
+
+    var density: Density {
+        get {
+            access(keyPath: \.density)
+            return Density(rawValue: defaults.string(forKey: Key.density) ?? "") ?? .comfortable
+        }
+        set {
+            withMutation(keyPath: \.density) {
+                defaults.set(newValue.rawValue, forKey: Key.density)
+            }
+        }
+    }
+
+    var reduceAnimations: Bool {
+        get {
+            access(keyPath: \.reduceAnimations)
+            return defaults.bool(forKey: Key.reduceAnimations)
+        }
+        set {
+            withMutation(keyPath: \.reduceAnimations) {
+                defaults.set(newValue, forKey: Key.reduceAnimations)
+            }
+        }
+    }
+
+    var hasCompletedOnboarding: Bool {
+        get {
+            access(keyPath: \.hasCompletedOnboarding)
+            return defaults.bool(forKey: Key.onboardingDone)
+        }
+        set {
+            withMutation(keyPath: \.hasCompletedOnboarding) {
+                defaults.set(newValue, forKey: Key.onboardingDone)
+            }
+        }
     }
 
     var currency: Currency { return Currency.find(code: currencyCode) }

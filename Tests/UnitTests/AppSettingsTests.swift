@@ -39,7 +39,7 @@ final class AppSettingsTests: XCTestCase {
 
     func testFormatMoneyUsesSelectedCurrency() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let settings = AppSettings(defaults: iso.defaults)
         XCTAssertEqual(settings.formatMoney(1234.5), "1\(nnbsp)234,50\(nbsp)€")
         settings.currencyCode = "USD"
@@ -52,7 +52,7 @@ final class AppSettingsTests: XCTestCase {
 
     func testUnknownCurrencyCodeFallsBackToEuro() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         iso.defaults.set("ZZZ", forKey: AppSettings.Key.currency)
         let settings = AppSettings(defaults: iso.defaults)
         XCTAssertEqual(settings.currency.code, "EUR")
@@ -67,7 +67,7 @@ final class AppSettingsTests: XCTestCase {
 
     func testDefaults() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let settings = AppSettings(defaults: iso.defaults)
         XCTAssertEqual(settings.themeChoice, .auto)
         XCTAssertEqual(settings.currencyCode, "EUR")
@@ -79,7 +79,7 @@ final class AppSettingsTests: XCTestCase {
 
     func testChangesArePersistedAndReloaded() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let settings = AppSettings(defaults: iso.defaults)
         settings.themeChoice = .amoled
         settings.currencyCode = "CHF"
@@ -99,7 +99,7 @@ final class AppSettingsTests: XCTestCase {
 
     func testResetToDefaultsKeepsOnboardingFlag() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let settings = AppSettings(defaults: iso.defaults)
         settings.themeChoice = .dark
         settings.currencyCode = "CAD"

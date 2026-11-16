@@ -122,7 +122,7 @@ final class ModuleRegistryTests: XCTestCase {
 
     func testStoreStartsFromRegistryDefaults() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let store = ModuleStore(defaults: iso.defaults)
         XCTAssertEqual(store.enabledIDs, ModuleRegistry.defaultEnabledIDs)
         XCTAssertTrue(store.isEnabled("employment"))
@@ -131,7 +131,7 @@ final class ModuleRegistryTests: XCTestCase {
 
     func testStoreAppliesDependenciesAndPersists() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let store = ModuleStore(defaults: iso.defaults)
         store.setEnabled("employment", false)
         XCTAssertFalse(store.isEnabled("pay"), "pay dépend d'employment")
@@ -147,7 +147,7 @@ final class ModuleRegistryTests: XCTestCase {
 
     func testStoreNeverDisablesCore() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let store = ModuleStore(defaults: iso.defaults)
         store.setEnabled("core", false)
         XCTAssertTrue(store.isEnabled("core"))
@@ -156,7 +156,7 @@ final class ModuleRegistryTests: XCTestCase {
 
     func testStoreIgnoresUnknownStoredIdsAndKeepsCore() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         iso.defaults.set(["notes", "module_disparu"], forKey: ModuleStore.defaultsKey)
         let store = ModuleStore(defaults: iso.defaults)
         XCTAssertEqual(store.enabledIDs, ["core", "notes"])
@@ -164,7 +164,7 @@ final class ModuleRegistryTests: XCTestCase {
 
     func testIsActiveRequiresAvailability() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let store = ModuleStore(defaults: iso.defaults)
         for m in ModuleRegistry.all {
             XCTAssertEqual(store.isActive(m.id), m.isAvailable && store.isEnabled(m.id), m.id)
@@ -174,7 +174,7 @@ final class ModuleRegistryTests: XCTestCase {
 
     func testResetToDefaults() {
         let iso = makeIsolatedDefaults()
-        defer { UserDefaults().removePersistentDomain(forName: iso.name) }
+        defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         let store = ModuleStore(defaults: iso.defaults)
         store.setEnabled("leave", true)
         store.setEnabled("notes", false)
