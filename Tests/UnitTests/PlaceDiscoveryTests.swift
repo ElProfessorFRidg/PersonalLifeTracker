@@ -85,7 +85,7 @@ final class PlaceDiscoveryTests: XCTestCase {
             XCTAssertEqual(type.defaultActivity, .personal)
             var engine = DetectionEngine()
             _ = engine.handle(.entered(place: place, date: now, accuracy: 10))
-            let decisions = engine.handle(.tick(now: now.addingTimeInterval(600)))
+            let decisions = engine.handle(.tick(date: now.addingTimeInterval(600)))
             XCTAssertEqual(decisions.count, 1)
             guard let decision = decisions.first, case .noteVisit = decision else {
                 XCTFail("Un lieu personnel ne doit pas démarrer de session.")
