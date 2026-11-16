@@ -1,0 +1,229 @@
+<section class="screen" id="scr-widgets" data-title="Widgets" data-group="Système iOS" data-tabbar="hide" data-fullbleed
+         data-states="encours:Session en cours,calme:Journée calme,vide:Sans données">
+
+  <header class="wg-head">
+    <p class="eyebrow">Maquette iOS</p>
+    <h1 class="wg-h1">Écran d'accueil</h1>
+    <p class="wg-lead" data-when="encours">Pendant une session&nbsp;: le temps qu'il reste, pas un chrono qui s'affole.</p>
+    <p class="wg-lead" data-when="calme">Rien d'urgent&nbsp;: les widgets le disent et s'effacent.</p>
+    <p class="wg-lead" data-when="vide">Sans accès aux données, ils restent honnêtes et te renvoient vers l'app.</p>
+  </header>
+
+  <div class="wg-body">
+
+    <!-- ===== Petit 2x2 ===== -->
+    <section class="wg-block" aria-labelledby="wg-s-t">
+      <h2 class="wg-cap" id="wg-s-t">Petit <span class="num">2×2</span></h2>
+      <div class="wg-grid">
+        <article class="wg wg--s" aria-label="Widget petit, Maintenant">
+          <div data-when="encours" class="wg-fill">
+            <p class="wg-k wg-k--work"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf<span class="dot-live" aria-hidden="true"></span></p>
+            <div class="wg-mid"><p class="wg-sm">encore</p><p class="wg-fig num">1 h 50</p></div>
+            <div class="wg-foot"><div class="meter meter--work" role="img" aria-label="40 pour cent de la session"><i style="--v:40"></i></div><p class="wg-sm">Fin à <span class="num">21:00</span></p></div>
+          </div>
+          <div data-when="calme" class="wg-fill">
+            <p class="wg-k"><svg class="icon icon--s" aria-hidden="true"><use href="#i-sun"/></svg>Maintenant</p>
+            <div class="wg-mid"><p class="wg-t">Rien à faire, profites-en.</p></div>
+            <p class="wg-sm">Demain&nbsp;: cours à <span class="num">8:00</span></p>
+          </div>
+          <div data-when="vide" class="wg-fill wg-fill--vide">
+            <svg class="icon icon--l wg-vico" aria-hidden="true"><use href="#i-clock"/></svg>
+            <p class="wg-t">Ouvre l'app pour voir ta journée.</p>
+            <span class="skeleton skeleton--line" style="width:70%"></span>
+          </div>
+        </article>
+        <div class="wg-icons" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      </div>
+      <p class="wg-note" data-when="encours">Maintenant. Un tap ouvre la session en cours.</p>
+      <p class="wg-note" data-when="calme">Même widget, version calme.</p>
+      <p class="wg-note" data-when="vide">Contenu générique, tap pour ouvrir l'app.</p>
+    </section>
+
+    <!-- ===== Moyen 4x2 ===== -->
+    <section class="wg-block" aria-labelledby="wg-m-t">
+      <h2 class="wg-cap" id="wg-m-t">Moyen <span class="num">4×2</span></h2>
+      <article class="wg wg--m" aria-label="Widget moyen, Ma journée">
+        <div data-when="encours" class="wg-fill">
+          <div class="wg-row"><p class="wg-k wg-k--work"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf en cours<span class="dot-live" aria-hidden="true"></span></p><p class="wg-sm">encore <span class="num wg-strong">1 h 50</span></p></div>
+          <div class="timeline wg-tl" style="--from:6;--to:24" role="img" aria-label="Journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56, prévu jusqu'à 21:00.">
+            <div class="timeline-track">
+              <i class="timeline-seg timeline-seg--planned" style="--s:18;--e:21"></i>
+              <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
+              <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
+              <i class="timeline-seg timeline-seg--work is-live" style="--s:17.93;--e:19.17"></i>
+              <i class="timeline-now" style="--s:19.17"></i>
+            </div>
+            <div class="timeline-axis" aria-hidden="true"><span>6</span><span>12</span><span>18</span><span>24</span></div>
+          </div>
+          <div class="wg-row"><p class="wg-sm"><span class="wg-dot wg-dot--study"></span>Cours <span class="num wg-strong">3 h 57</span></p><p class="wg-sm"><span class="wg-dot wg-dot--work"></span>Taf <span class="num wg-strong">1 h 14</span></p><p class="wg-sm">Fin <span class="num wg-strong">21:00</span></p></div>
+        </div>
+        <div data-when="calme" class="wg-fill wg-split">
+          <div class="wg-col">
+            <p class="wg-k"><svg class="icon icon--s" aria-hidden="true"><use href="#i-sun"/></svg>Maintenant</p>
+            <p class="wg-t wg-t--big">Rien à faire, profites-en.</p>
+            <p class="wg-sm">Bien joué, <span class="num">3 h</span> de taf aujourd'hui.</p>
+          </div>
+          <div class="wg-next wg-next--study">
+            <p class="wg-sm">Prochain</p>
+            <p class="wg-t">Cours</p>
+            <p class="wg-fig wg-fig--s num">8:00</p>
+            <p class="wg-sm">demain</p>
+          </div>
+        </div>
+        <div data-when="vide" class="wg-fill wg-fill--vide wg-fill--wide">
+          <svg class="icon icon--l wg-vico" aria-hidden="true"><use href="#i-clock"/></svg>
+          <div class="wg-col"><p class="wg-t">Ouvre l'app pour voir ta journée.</p><span class="skeleton skeleton--line" style="width:80%"></span><span class="skeleton skeleton--line" style="width:55%"></span></div>
+        </div>
+      </article>
+      <p class="wg-note" data-when="encours">Ma journée, avec le trait « maintenant ».</p>
+      <p class="wg-note" data-when="calme">Le message d'abord, le prochain créneau à droite.</p>
+      <p class="wg-note" data-when="vide">Pas de chiffres inventés&nbsp;: juste un renvoi vers l'app.</p>
+    </section>
+
+    <!-- ===== Grand 4x4 ===== -->
+    <section class="wg-block" aria-labelledby="wg-l-t">
+      <h2 class="wg-cap" id="wg-l-t">Grand <span class="num">4×4</span></h2>
+      <article class="wg wg--l" aria-label="Widget grand, Maintenant, ma journée et ma semaine">
+        <div data-when="encours calme" class="wg-fill">
+          <div class="wg-now" data-when="encours">
+            <div class="wg-row"><p class="wg-k wg-k--work"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf, Supérette du Canal<span class="dot-live" aria-hidden="true"></span></p></div>
+            <div class="wg-row wg-row--end"><p class="wg-fig num">encore 1 h 50</p><p class="wg-sm">fin à <span class="num">21:00</span></p></div>
+            <div class="meter meter--work" role="img" aria-label="40 pour cent de la session"><i style="--v:40"></i></div>
+          </div>
+          <div class="wg-now" data-when="calme">
+            <p class="wg-k"><svg class="icon icon--s" aria-hidden="true"><use href="#i-sun"/></svg>Maintenant</p>
+            <p class="wg-t wg-t--big">Rien à faire, profites-en.</p>
+            <p class="wg-sm">Bien joué, <span class="num">3 h</span> de taf aujourd'hui. Demain&nbsp;: cours à <span class="num">8:00</span>.</p>
+          </div>
+
+          <div class="wg-sec">
+            <p class="wg-sm wg-strong">Ma semaine</p>
+            <div class="wg-week" role="img" aria-label="Semaine : lundi cours et taf, mardi cours prévu, mercredi taf prévu, jeudi cours et taf prévus, vendredi taf prévu, samedi taf prévu, dimanche repos.">
+              <div class="wg-day is-today"><span class="wg-track"><i class="wg-bar wg-bar--work" data-when="encours" style="--h:15"></i><i class="wg-bar wg-bar--work" data-when="calme" style="--h:38"></i><i class="wg-bar wg-bar--study" style="--h:50"></i></span><span class="wg-dl">L</span></div>
+              <div class="wg-day"><span class="wg-track"><i class="wg-bar wg-bar--study wg-bar--plan" style="--h:50"></i></span><span class="wg-dl">M</span></div>
+              <div class="wg-day"><span class="wg-track"><i class="wg-bar wg-bar--work wg-bar--plan" style="--h:62"></i></span><span class="wg-dl">M</span></div>
+              <div class="wg-day"><span class="wg-track"><i class="wg-bar wg-bar--work wg-bar--plan" style="--h:38"></i><i class="wg-bar wg-bar--study wg-bar--plan" style="--h:50"></i></span><span class="wg-dl">J</span></div>
+              <div class="wg-day"><span class="wg-track"><i class="wg-bar wg-bar--work wg-bar--plan" style="--h:75"></i></span><span class="wg-dl">V</span></div>
+              <div class="wg-day"><span class="wg-track"><i class="wg-bar wg-bar--work wg-bar--plan" style="--h:38"></i></span><span class="wg-dl">S</span></div>
+              <div class="wg-day"><span class="wg-track"></span><span class="wg-dl">D</span></div>
+            </div>
+          </div>
+
+          <div class="wg-sec wg-sec--tl">
+            <div class="timeline wg-tl" style="--from:6;--to:24" role="img" data-when="encours" aria-label="Journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56.">
+              <div class="timeline-track">
+                <i class="timeline-seg timeline-seg--planned" style="--s:18;--e:21"></i>
+                <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
+                <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
+                <i class="timeline-seg timeline-seg--work is-live" style="--s:17.93;--e:19.17"></i>
+                <i class="timeline-now" style="--s:19.17"></i>
+              </div>
+              <div class="timeline-axis" aria-hidden="true"><span>6</span><span>12</span><span>18</span><span>24</span></div>
+            </div>
+            <div class="timeline wg-tl" style="--from:6;--to:24" role="img" data-when="calme" aria-label="Journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf de 17:56 à 21:00.">
+              <div class="timeline-track">
+                <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
+                <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
+                <i class="timeline-seg timeline-seg--work" style="--s:17.93;--e:21"></i>
+                <i class="timeline-now" style="--s:21.6"></i>
+              </div>
+              <div class="timeline-axis" aria-hidden="true"><span>6</span><span>12</span><span>18</span><span>24</span></div>
+            </div>
+          </div>
+
+          <div class="wg-next-row">
+            <p class="wg-sm">Prochain</p>
+            <p class="wg-sm wg-strong" data-when="encours">Cours, demain <span class="num">8:00</span></p>
+            <p class="wg-sm wg-strong" data-when="calme">Cours, demain <span class="num">8:00</span></p>
+          </div>
+        </div>
+        <div data-when="vide" class="wg-fill wg-fill--vide wg-fill--tall">
+          <svg class="icon icon--l wg-vico" aria-hidden="true"><use href="#i-clock"/></svg>
+          <p class="wg-t wg-t--big">Ouvre l'app pour voir ta journée.</p>
+          <p class="wg-sm">Je lis tes heures dans l'app. Tant que je les ai pas, je t'affiche rien de faux.</p>
+          <span class="skeleton skeleton--block" style="height:56px"></span>
+          <span class="skeleton skeleton--line" style="width:75%"></span>
+          <span class="skeleton skeleton--line" style="width:50%"></span>
+        </div>
+      </article>
+      <p class="wg-note" data-when="encours calme">Maintenant, semaine et journée dans un seul widget.</p>
+      <p class="wg-note" data-when="vide">Même renvoi à l'app. « État de l'app » dit pourquoi les données manquent.</p>
+    </section>
+
+    <aside class="wg-legend" aria-label="À propos de cet écran">
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>Maquette de l'écran d'accueil iOS, pas un écran de l'app. Tailles à l'échelle réelle&nbsp;: petit 2×2, moyen 4×2, grand 4×4. Les heures de la semaine à venir sont des exemples.</p>
+    </aside>
+  </div>
+
+  <style>
+    #scr-widgets {
+      background:
+        radial-gradient(90% 40% at 90% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 72%),
+        radial-gradient(80% 36% at 0% 55%, color-mix(in srgb, var(--study) 20%, transparent), transparent 72%),
+        radial-gradient(80% 36% at 100% 100%, color-mix(in srgb, var(--work) 22%, transparent), transparent 72%),
+        var(--background);
+    }
+    #scr-widgets .wg-head { padding: 12px var(--gutter) 0; }
+    #scr-widgets .wg-h1 { font: var(--t-title1) var(--font-text); }
+    #scr-widgets .wg-lead { margin-top: 4px; font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+    #scr-widgets .wg-body { display: flex; flex-direction: column; gap: 24px; padding: 18px 20px var(--space-l); min-width: 0; }
+    #scr-widgets .wg-block { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    #scr-widgets .wg-cap { font: 600 13px/16px var(--font-text); letter-spacing: .06em; text-transform: uppercase; color: var(--textSecondary); }
+    #scr-widgets .wg-note { font: 400 13px/18px var(--font-text); color: var(--textSecondary); }
+    #scr-widgets .wg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+    #scr-widgets .wg-icons { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: start; padding: 4px 12px; }
+    #scr-widgets .wg-icons i { aspect-ratio: 1; border-radius: 22%; background: color-mix(in srgb, var(--surfaceRaised) 80%, transparent); box-shadow: var(--shadow-card); }
+    #scr-widgets .wg { border-radius: 22px; background: var(--surface); box-shadow: var(--shadow-float); color: var(--textPrimary); overflow: hidden; min-width: 0; }
+    #scr-widgets .wg--s { aspect-ratio: 1; }
+    #scr-widgets .wg--m { aspect-ratio: 338 / 158; }
+    #scr-widgets .wg--l { aspect-ratio: 338 / 354; }
+    #scr-widgets .wg-fill { height: 100%; display: flex; flex-direction: column; justify-content: space-between; gap: 6px; padding: 14px; min-width: 0; }
+    #scr-widgets .wg--l .wg-fill { gap: 8px; padding: 14px 16px; justify-content: flex-start; }
+    #scr-widgets .wg-fill[data-when] { display: flex; }
+    #scr-widgets .wg-fill--vide { justify-content: center; gap: 8px; }
+    #scr-widgets .wg-fill--wide { flex-direction: row; align-items: center; gap: 14px; }
+    #scr-widgets .wg-fill--tall { justify-content: center; align-items: flex-start; gap: 10px; }
+    #scr-widgets .wg-vico { color: var(--textTertiary); flex: none; }
+    #scr-widgets .wg-k { display: flex; align-items: center; gap: 6px; font: 600 13px/16px var(--font-text); color: var(--textSecondary); }
+    #scr-widgets .wg-k--work { color: var(--work); }
+    #scr-widgets .wg-k .dot-live { margin-left: auto; }
+    #scr-widgets .wg-t { font: 600 15px/19px var(--font-text); }
+    #scr-widgets .wg-t--big { font-size: 17px; line-height: 21px; }
+    #scr-widgets .wg-sm { font: 400 12px/16px var(--font-text); color: var(--textSecondary); }
+    #scr-widgets .wg-strong { color: var(--textPrimary); font-weight: 600; }
+    #scr-widgets .wg-fig { font: 700 30px/34px var(--font-mono); letter-spacing: -.05em; white-space: nowrap; }
+    #scr-widgets .wg-fig.num { word-spacing: -.3em; }
+    #scr-widgets .wg-fig--s { font-size: 24px; line-height: 28px; }
+    #scr-widgets .wg--l .wg-fig { font-size: 28px; }
+    #scr-widgets .wg-mid { display: flex; flex-direction: column; gap: 0; min-width: 0; }
+    #scr-widgets .wg-foot { display: flex; flex-direction: column; gap: 5px; }
+    #scr-widgets .wg-foot .meter, #scr-widgets .wg-now .meter { height: 6px; }
+    #scr-widgets .wg-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; min-width: 0; }
+    #scr-widgets .wg-row--end { align-items: flex-end; }
+    #scr-widgets .wg-dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 5px; vertical-align: 1px; }
+    #scr-widgets .wg-dot--study { background: var(--study); } #scr-widgets .wg-dot--work { background: var(--work); }
+    #scr-widgets .wg-tl { gap: 4px; }
+    #scr-widgets .wg-tl .timeline-track { height: 22px; border-radius: 6px; }
+    #scr-widgets .wg-tl .timeline-axis { font-size: 10px; }
+    #scr-widgets .wg-split { flex-direction: row; align-items: stretch; gap: 12px; }
+    #scr-widgets .wg-col { display: flex; flex-direction: column; gap: 6px; flex: 1; min-width: 0; justify-content: center; }
+    #scr-widgets .wg-next { flex: none; width: 34%; display: flex; flex-direction: column; justify-content: center; gap: 1px; padding: 10px 12px; border-radius: 14px; background: var(--studySoft); color: var(--study); }
+    #scr-widgets .wg-next .wg-sm { color: var(--study); }
+    #scr-widgets .wg-now { display: flex; flex-direction: column; gap: 6px; }
+    #scr-widgets .wg-sec { display: flex; flex-direction: column; gap: 5px; }
+    #scr-widgets .wg-sec--tl { margin-top: auto; }
+    #scr-widgets .wg-week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    #scr-widgets .wg-day { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0; border-radius: 10px; }
+    #scr-widgets .wg-day.is-today { background: var(--accentSoft); }
+    #scr-widgets .wg-track { position: relative; display: flex; flex-direction: column-reverse; justify-content: flex-start; gap: 2px; width: 70%; height: 52px; border-radius: 5px; background: var(--fill); overflow: hidden; }
+    #scr-widgets .wg-bar { display: block; width: 100%; height: calc(var(--h) * 1%); max-height: 100%; flex: none; }
+    #scr-widgets .wg-bar--work { background: var(--work); } #scr-widgets .wg-bar--study { background: var(--study); }
+    #scr-widgets .wg-bar--plan { background: none; border: 1.5px dashed var(--textTertiary); box-sizing: border-box; }
+    #scr-widgets .wg-dl { font: 600 11px/12px var(--font-text); color: var(--textSecondary); }
+    #scr-widgets .wg-day.is-today .wg-dl { color: var(--accent); }
+    #scr-widgets .wg-next-row { display: flex; justify-content: space-between; gap: 8px; padding-top: 6px; border-top: 1px solid var(--separator); }
+    #scr-widgets .wg-legend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; background: var(--surface); color: var(--textSecondary); font: 400 12px/17px var(--font-text); }
+    #scr-widgets .wg-legend .icon { margin-top: 1px; }
+  </style>
+</section>

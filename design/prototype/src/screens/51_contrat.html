@@ -1,0 +1,264 @@
+<section class="screen" id="scr-contrat" data-title="Mon contrat, 13 h" data-group="Emploi et paie" data-tab="accueil"
+         data-states="semaine:Dans le contrat,quota:Quota bientôt atteint,depasse:Tu dépasses,manque:Il manque des heures">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="emploi"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Emploi</button>
+    <h1 class="navbar-title">Mon contrat</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Alerte de proximité du quota (section 109, réglage optionnel) -->
+    <div class="banner banner--info" role="status" data-when="quota">
+      <svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Plus que <span class="num">2 h</span> avant ton quota de la semaine</p>
+        <p class="banner-text">Je te le dis pour que tu choisisses en connaissance de cause. Rien d'autre à faire.</p>
+        <button type="button" class="banner-action" data-sheet="sheet-ct-alerte">Régler cette alerte</button>
+      </div>
+    </div>
+
+    <!-- Carte de la semaine -->
+    <section class="section" aria-labelledby="ct-sem-t">
+      <div class="section-head">
+        <h2 class="section-title" id="ct-sem-t">Ta semaine</h2>
+        <span class="muted num" style="font:var(--t-footnote) var(--font-mono)">16 au 22 nov.</span>
+      </div>
+      <article class="card">
+        <div class="card-head">
+          <span class="chip chip--accent" data-when="semaine quota">Dans le contrat</span>
+          <span class="chip chip--doubt" data-when="depasse">Au-dessus du contrat</span>
+          <span class="chip chip--doubt" data-when="manque">En dessous du contrat</span>
+        </div>
+        <h3 class="card-title" data-when="semaine">Tu finis la semaine à <span class="num">13 h</span>, pile ton contrat.</h3>
+        <h3 class="card-title" data-when="quota">Plus que <span class="num">2 h</span> avant tes <span class="num">13 h</span>.</h3>
+        <h3 class="card-title" data-when="depasse">Tu finis à <span class="num">18 h</span>, soit <span class="num">5 h</span> de plus que ton contrat.</h3>
+        <h3 class="card-title" data-when="manque">Il te manque <span class="num">3 h</span> pour tes <span class="num">13 h</span>.</h3>
+
+        <!-- Jauge : réalisé, prévu restant, repère du quota -->
+        <div class="ct-meter" role="img" data-when="semaine" style="--done:6;--plan:65" aria-label="13 h au contrat, 1 h 14 faites, 11 h 46 prévues, projection 13 h.">
+          <div class="ct-track"><i class="ct-plan"></i><i class="ct-done"></i></div><i class="ct-quota"></i>
+        </div>
+        <div class="ct-meter" role="img" data-when="quota" style="--done:55;--plan:65" aria-label="13 h au contrat, 11 h faites, 2 h prévues, projection 13 h.">
+          <div class="ct-track"><i class="ct-plan"></i><i class="ct-done"></i></div><i class="ct-quota"></i>
+        </div>
+        <div class="ct-meter" role="img" data-when="depasse" style="--done:60;--plan:90" aria-label="13 h au contrat, 12 h faites, 6 h prévues, projection 18 h.">
+          <div class="ct-track"><i class="ct-plan"></i><i class="ct-done"></i></div><i class="ct-quota"></i>
+        </div>
+        <div class="ct-meter" role="img" data-when="manque" style="--done:30;--plan:50" aria-label="13 h au contrat, 6 h faites, 4 h prévues, projection 10 h.">
+          <div class="ct-track"><i class="ct-plan"></i><i class="ct-done"></i></div><i class="ct-quota"></i>
+        </div>
+        <div class="ct-legend" aria-hidden="true">
+          <span><i class="ct-lg ct-lg--done"></i>Fait</span><span><i class="ct-lg ct-lg--plan"></i>Prévu</span><span><i class="ct-lg ct-lg--quota"></i>Contrat <span class="num">13 h</span></span>
+        </div>
+
+        <div class="stat-grid ct-stats">
+          <div class="stat"><span class="stat-label">Au contrat</span><span class="stat-value">13<small>h</small></span></div>
+          <div class="stat stat--work"><span class="stat-label"><i aria-hidden="true"></i>Fait</span>
+            <span class="stat-value" data-when="semaine">1<small>h</small>14</span><span class="stat-value" data-when="quota">11<small>h</small></span><span class="stat-value" data-when="depasse">12<small>h</small></span><span class="stat-value" data-when="manque">6<small>h</small></span></div>
+          <div class="stat"><span class="stat-label">Encore prévu</span>
+            <span class="stat-value" data-when="semaine">11<small>h</small>46</span><span class="stat-value" data-when="quota">2<small>h</small></span><span class="stat-value" data-when="depasse">6<small>h</small></span><span class="stat-value" data-when="manque">4<small>h</small></span></div>
+          <div class="stat"><span class="stat-label">Projection</span>
+            <span class="stat-value" data-when="semaine quota">13<small>h</small></span><span class="stat-value" data-when="depasse">18<small>h</small></span><span class="stat-value" data-when="manque">10<small>h</small></span></div>
+        </div>
+        <p class="card-text">Calculé sur les heures pleines, ta base actuelle. <span data-when="semaine">Sessions en cours incluses.</span><span data-when="depasse manque">Sessions à confirmer exclues, signalées dans le détail.</span></p>
+      </article>
+    </section>
+
+    <!-- Jour par jour -->
+    <section class="section" aria-labelledby="ct-jours-t">
+      <div class="section-head"><h2 class="section-title" id="ct-jours-t">Jour par jour</h2></div>
+      <div class="card">
+        <div class="ct-days" id="ct-days"></div>
+        <div class="ct-legend" aria-hidden="true">
+          <span><i class="ct-lg ct-lg--plan"></i>Prévu</span><span><i class="ct-lg ct-lg--done"></i>Fait</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ce que l'app propose -->
+    <section class="section" aria-labelledby="ct-sug-t">
+      <div class="section-head"><h2 class="section-title" id="ct-sug-t">Ce que je te propose</h2></div>
+      <div class="list">
+        <div class="row" data-when="semaine quota">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span>
+          <span class="row-main"><span class="row-title">Rien à changer</span><span class="row-sub">Si ton planning tient, tu atteins ton contrat sans dépasser. Je recalcule à chaque changement.</span></span>
+        </div>
+        <button type="button" class="row" data-sheet="sheet-ct-classement" data-when="depasse">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span>
+          <span class="row-main"><span class="row-title">Comment ces <span class="num">5 h</span> sont comptées</span><span class="row-sub">Heures complémentaires ou autre, selon ton contrat. À vérifier.</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-sheet="sheet-ct-repartir" data-when="manque">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="row-main"><span class="row-title">Où placer les <span class="num">3 h</span> manquantes</span><span class="row-sub">Les jours qu'il te reste, avec ton planning et tes cours</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-sheet="sheet-ct-regle">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg></span>
+          <span class="row-main"><span class="row-title">Ce qui se passe quand ça ne tombe pas pile</span><span class="row-sub">Reporté, lissé, payé en plus ou perdu. Je ne présume rien.</span></span>
+          <span class="row-value" id="ct-regle-val">À renseigner</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">Je t'informe et je te propose des options. C'est toi qui décides, et je ne te propose jamais de contourner ton contrat.</p>
+    </section>
+
+    <!-- Compteurs -->
+    <section class="section" aria-labelledby="ct-cpt-t">
+      <div class="section-head"><h2 class="section-title" id="ct-cpt-t">Tes compteurs</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title">Heures d'avance</span><span class="row-sub" data-when="depasse">Si ces <span class="num">5 h</span> sont reportées. Je ne sais pas encore, à renseigner.</span><span class="row-sub" data-when="semaine quota manque">Heures faites au-delà du contrat et gardées d'avance</span></span>
+          <span class="row-value num" data-when="semaine quota manque">0 h</span><span class="row-value num" data-when="depasse">0 h</span>
+        </div>
+        <div class="row">
+          <span class="row-main"><span class="row-title">Heures à rattraper</span><span class="row-sub" data-when="manque">Si ces <span class="num">3 h</span> sont à rattraper. Je ne sais pas encore, à renseigner.</span><span class="row-sub" data-when="semaine quota depasse">Heures en moins par rapport au contrat</span></span>
+          <span class="row-value num">0 h</span>
+        </div>
+        <div class="row">
+          <span class="row-main"><span class="row-title">Repos compensateur</span><span class="row-sub">Ta convention ne le précise pas. À renseigner si ça te concerne.</span></span>
+          <span class="row-value">À renseigner</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Historique des semaines -->
+    <section class="section" aria-labelledby="ct-hist-t">
+      <div class="section-head"><h2 class="section-title" id="ct-hist-t">Tes 8 dernières semaines</h2></div>
+      <div class="card">
+        <div class="ct-hist" role="img" aria-label="Heures réalisées par semaine, de la 39 à la 46&nbsp;: 13, 13, 18, 13, 11, 18, 13, 15. Le contrat est de 13 heures.">
+          <div class="ct-plot" aria-hidden="true">
+            <i class="ct-hline"></i>
+            <div class="ct-hcol"><b class="num">13</b><i style="--h:52"></i></div>
+            <div class="ct-hcol"><b class="num">13</b><i style="--h:52"></i></div>
+            <div class="ct-hcol is-over"><b class="num">18</b><i style="--h:72"></i></div>
+            <div class="ct-hcol"><b class="num">13</b><i style="--h:52"></i></div>
+            <div class="ct-hcol"><b class="num">11</b><i style="--h:44"></i></div>
+            <div class="ct-hcol is-over"><b class="num">18</b><i style="--h:72"></i></div>
+            <div class="ct-hcol"><b class="num">13</b><i style="--h:52"></i></div>
+            <div class="ct-hcol is-over"><b class="num">15</b><i style="--h:60"></i></div>
+          </div>
+          <div class="ct-hweeks" aria-hidden="true"><span class="num">39</span><span class="num">40</span><span class="num">41</span><span class="num">42</span><span class="num">43</span><span class="num">44</span><span class="num">45</span><span class="num">46</span></div>
+          <p class="ct-hcap" aria-hidden="true">Numéro de semaine. Trait&nbsp;: tes <span class="num">13 h</span> au contrat.</p>
+        </div>
+        <div class="stat-grid ct-stats">
+          <div class="stat"><span class="stat-label">Moyenne</span><span class="stat-value">14<small>h</small>15</span></div>
+          <div class="stat"><span class="stat-label">Plus petite, plus grande</span><span class="stat-value">11<small>à</small>18<small>h</small></span></div>
+        </div>
+        <p class="card-text">Tu as dépassé tes <span class="num">13 h</span> trois semaines sur huit. Si ça devient une habitude, un avenant a peut-être été prévu&nbsp;: à vérifier dans ton contrat.</p>
+      </div>
+    </section>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-ct-regle">
+    <h2 class="sheet-title">Quand ça ne tombe pas pile</h2>
+    <p class="sheet-text">Dis-moi ce qui se passe vraiment pour toi. Si tu ne sais pas, laisse «&nbsp;À renseigner&nbsp;»&nbsp;: je ne présume rien.</p>
+    <div class="list" role="radiogroup" aria-label="Ce qui se passe" id="ct-regle-group">
+      <button type="button" class="row" role="radio" aria-checked="true" data-value="À renseigner"><span class="row-main"><span class="row-title">À renseigner</span><span class="row-sub">Je ne sais pas encore, je compte sans reporter.</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Reporté"><span class="row-main"><span class="row-title">Reporté sur la période suivante</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Lissé"><span class="row-main"><span class="row-title">Lissé sur le mois</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Payé en plus"><span class="row-main"><span class="row-title">Payé en heures complémentaires</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Non reporté"><span class="row-main"><span class="row-title">Non reporté</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK</button>
+  </div>
+
+  <div class="sheet" id="sheet-ct-classement">
+    <h2 class="sheet-title">Comment ces <span class="num">5 h</span> sont comptées</h2>
+    <p class="sheet-text">Au-delà de <span class="num">13 h</span>, ce sont en général des heures complémentaires. Le classement, la majoration et le plafond dépendent de ton contrat et de ta convention.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Classement</span><span class="row-sub">Heures complémentaires, probable. À vérifier dans ton contrat.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Majoration</span><span class="row-sub">À renseigner. Ta convention (IDCC 2216) la précise, source dans Paie.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Plafond d'heures complémentaires</span><span class="row-sub">À renseigner. Je te préviens doucement quand tu t'en approches.</span></span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-ct-repartir">
+    <h2 class="sheet-title">Où placer les <span class="num">3 h</span></h2>
+    <p class="sheet-text">Pour atteindre tes <span class="num">13 h</span>, il te faut <span class="num">3 h</span> de plus. Voilà ce qui reste possible. Tu peux aussi ne rien faire.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Samedi, rallonger de <span class="num">3 h</span></span><span class="row-sub">Ton créneau passe de <span class="num">09:00 à 13:00</span> à <span class="num">09:00 à 16:00</span>.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Dimanche, un créneau de <span class="num">3 h</span></span><span class="row-sub">Jour de repos prévu. Je vérifie ton repos hebdomadaire avant.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Ne rien changer</span><span class="row-sub">Tu finis à <span class="num">10 h</span>. Je le note en heures à rattraper si tu me dis que c'est le cas.</span></span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-ct-alerte">
+    <h2 class="sheet-title">Alerte de quota</h2>
+    <p class="sheet-text">Optionnelle, éteinte au départ. Un message par seuil, jamais pendant tes congés ni tes heures silencieuses.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title" id="ct-al1">Prévenir à <span class="num">2 h</span> restantes</span></span><button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="ct-al1"></button></div>
+      <div class="row"><span class="row-main"><span class="row-title" id="ct-al2">Prévenir à <span class="num">1 h</span> restante</span></span><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="ct-al2"></button></div>
+      <div class="row"><span class="row-main"><span class="row-title" id="ct-al3">Prévenir quand le quota est atteint</span></span><button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="ct-al3"></button></div>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK</button>
+  </div>
+
+  <style>
+    #scr-contrat .ct-meter { position: relative; padding: 4px 0; }
+    #scr-contrat .ct-track { position: relative; height: 12px; border-radius: 6px; background: var(--fill); overflow: hidden; }
+    #scr-contrat .ct-plan { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--plan) * 1%); border: 1.5px dashed var(--textTertiary); border-radius: 6px; box-sizing: border-box; }
+    #scr-contrat .ct-done { position: absolute; left: 0; top: 0; bottom: 0; width: calc(var(--done) * 1%); border-radius: 6px; background: var(--work); }
+    #scr-contrat .ct-quota { position: absolute; left: 65%; top: -2px; bottom: -2px; width: 2px; background: var(--textPrimary); border-radius: 1px; }
+    #scr-contrat .ct-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font: var(--t-caption) var(--font-text); color: var(--textSecondary); }
+    #scr-contrat .ct-legend span { display: inline-flex; align-items: center; gap: 6px; }
+    #scr-contrat .ct-lg { display: inline-block; width: 14px; height: 10px; border-radius: 3px; }
+    #scr-contrat .ct-lg--done { background: var(--work); }
+    #scr-contrat .ct-lg--plan { border: 1.5px dashed var(--textTertiary); box-sizing: border-box; }
+    #scr-contrat .ct-lg--quota { width: 2px; height: 14px; background: var(--textPrimary); }
+    #scr-contrat .ct-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #scr-contrat .ct-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; align-items: end; }
+    #scr-contrat .ct-day { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
+    #scr-contrat .ct-bars { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 84px; width: 100%; }
+    #scr-contrat .ct-bar { width: 38%; max-width: 14px; border-radius: 4px 4px 0 0; min-height: 0; }
+    #scr-contrat .ct-bar--plan { border: 1.5px dashed var(--textTertiary); border-bottom: 0; box-sizing: border-box; }
+    #scr-contrat .ct-bar--done { background: var(--work); }
+    #scr-contrat .ct-dl { font: 600 12px/14px var(--font-text); color: var(--textSecondary); text-transform: uppercase; }
+    #scr-contrat .ct-dv { font: 500 11px/14px var(--font-mono); color: var(--textSecondary); min-height: 14px; }
+    #scr-contrat .ct-plot { position: relative; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; align-items: end; height: 120px; }
+    #scr-contrat .ct-hcol { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 2px; }
+    #scr-contrat .ct-hcol b { font: 600 11px/14px var(--font-mono); color: var(--textPrimary); }
+    #scr-contrat .ct-hcol i { display: block; width: 70%; height: calc(var(--h) * 1% - 16px); min-height: 4px; border-radius: 4px 4px 0 0; background: var(--textTertiary); }
+    #scr-contrat .ct-hcol.is-over i { background: var(--work); }
+    #scr-contrat .ct-hline { position: absolute; left: 0; right: 0; bottom: 52%; border-top: 1.5px dashed var(--textPrimary); opacity: .7; z-index: 1; pointer-events: none; }
+    #scr-contrat .ct-hweeks { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; margin-top: 4px; text-align: center; font: 500 11px/14px var(--font-mono); color: var(--textSecondary); }
+    #scr-contrat .ct-hcap { margin: 6px 0 0; font: var(--t-caption) var(--font-text); color: var(--textSecondary); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-contrat');
+    var names = ['lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi', 'dimanche'], letters = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+    var sets = {
+      semaine: { p: [3, 0, 0, 3, 0, 7, 0], r: [1.23, 0, 0, 0, 0, 0, 0] },
+      quota:   { p: [3, 0, 0, 3, 0, 7, 0], r: [3, 0, 0, 3, 0, 5, 0] },
+      depasse: { p: [3, 0, 0, 3, 0, 6, 6], r: [3, 0, 0, 3, 0, 6, 0] },
+      manque:  { p: [3, 0, 0, 3, 0, 4, 0], r: [3, 0, 0, 3, 0, 0, 0] }
+    };
+    var box = document.getElementById('ct-days');
+    function fmt(h) { if (!h) return ''; var t = Math.round(h * 60), a = Math.floor(t / 60), b = t % 60; return b ? a + ':' + (b < 10 ? '0' : '') + b : String(a); }
+    function draw(id) {
+      var s = sets[id] || sets.semaine, html = '', label = [];
+      for (var i = 0; i < 7; i++) {
+        var p = s.p[i], r = s.r[i];
+        html += '<div class="ct-day"><div class="ct-bars"><i class="ct-bar ct-bar--plan" style="height:' + (p / 8 * 100) + '%"></i><i class="ct-bar ct-bar--done" style="height:' + (r / 8 * 100) + '%"></i></div>' +
+          '<span class="ct-dv">' + fmt(r || p) + '</span><span class="ct-dl">' + letters[i] + '</span></div>';
+        if (p || r) label.push(names[i] + ' ' + (r ? fmt(r) + ' h faites' : '') + (r && p ? ', ' : '') + (p ? fmt(p) + ' h prévues' : ''));
+      }
+      box.innerHTML = html;
+      box.setAttribute('role', 'img');
+      box.setAttribute('aria-label', 'Heures par jour, prévu contre fait : ' + label.join(' ; ') + '.');
+    }
+    draw('semaine');
+    root.addEventListener('plt:state', function (e) { draw((e.detail && (e.detail.state || e.detail.id)) || root.getAttribute('data-state')); });
+    PLT.onShow('contrat', function () { draw(root.getAttribute('data-state')); });
+    document.getElementById('ct-regle-group').addEventListener('change', function (e) {
+      document.getElementById('ct-regle-val').textContent = e.detail.value;
+    });
+  });
+  </script>
+</section>

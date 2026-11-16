@@ -1,0 +1,183 @@
+<section class="screen" id="scr-fiabilite" data-title="Fiabilité des données" data-group="États" data-tab="accueil"
+         data-states="bonne:Bonne (92 %),moyenne:Moyenne (74 %),faible:Faible (48 %)">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
+    <h1 class="navbar-title">Fiabilité</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Score global -->
+    <section class="section" aria-labelledby="fia-score-t">
+      <article class="card">
+        <div class="card-head">
+          <p class="eyebrow">Du 10 au 16 novembre</p>
+          <span class="rel rel--high" id="fia-rel"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="fia-rel-t">Très bonne</span></span>
+        </div>
+        <h2 class="sr-only" id="fia-score-t">Score de la semaine</h2>
+        <p class="fia-big num" id="fia-big" aria-label="Score de fiabilité">92<small>%</small></p>
+        <div class="meter" id="fia-meter" role="presentation"><i style="--v:92"></i></div>
+        <p class="card-text" id="fia-sum">Ta semaine est fiable à 92 %. Ça mesure la qualité des données, pas ce que tu fais.</p>
+        <button type="button" class="btn btn--secondary btn--small" data-sheet="sheet-fia-why">Pourquoi ce score ?</button>
+      </article>
+    </section>
+
+    <div class="banner banner--warning" role="status" data-when="moyenne">
+      <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">À surveiller avant d'envoyer tes heures</p>
+        <p class="banner-text">Quelques sessions sont à confirmer. Je te conseille de les régler d'abord, mais je ne te bloque pas.</p>
+      </div>
+    </div>
+    <div class="banner banner--error" role="alert" data-when="faible">
+      <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Je ne peux pas te garantir tes heures</p>
+        <p class="banner-text">Trop de trous cette semaine pour que le total soit sûr. Règle les points ci-dessous avant d'envoyer ou de montrer tes heures.</p>
+        <button type="button" class="banner-action" data-go="doute">Confirmer les sessions douteuses</button>
+      </div>
+    </div>
+
+    <!-- Par jour -->
+    <section class="section" aria-labelledby="fia-days-t">
+      <div class="section-head"><h2 class="section-title" id="fia-days-t">Jour par jour</h2></div>
+      <div class="list" id="fia-days"></div>
+      <p class="section-foot">Trois barres : fiable, à vérifier, incertain. Le pourcentage est donné pour ceux qui préfèrent le chiffre.</p>
+    </section>
+
+    <!-- Ce qui fait baisser -->
+    <section class="section" aria-labelledby="fia-low-t">
+      <div class="section-head"><h2 class="section-title" id="fia-low-t">Ce qui fait baisser le score</h2></div>
+      <div class="list" id="fia-causes"></div>
+      <p class="section-foot" id="fia-causes-foot">100 moins les points perdus : 92 %.</p>
+    </section>
+
+    <!-- Actions -->
+    <section class="section" aria-labelledby="fia-act-t">
+      <div class="section-head"><h2 class="section-title" id="fia-act-t">Ce que tu peux faire maintenant</h2></div>
+      <div class="list" id="fia-acts"></div>
+    </section>
+
+    <!-- Centre de fiabilité : on agrège, sans dupliquer -->
+    <section class="section" aria-labelledby="fia-oth-t">
+      <div class="section-head"><h2 class="section-title" id="fia-oth-t">Le reste du centre de fiabilité</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title">Détections sans correction</span><span class="row-sub">Sur les 30 derniers jours, marge typique à plus ou moins 3 min</span></span>
+          <span class="row-value num" id="fia-det">96 %</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <span class="row-main"><span class="row-title">Horloge</span><span class="row-sub">Aucun changement d'heure suspect</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>OK</span>
+        </div>
+        <div class="row" data-when="moyenne faible">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-battery"/></svg></span>
+          <span class="row-main"><span class="row-title">Batterie vide</span><span class="row-sub">Une extinction mercredi, rattrapée à moitié</span></span>
+          <span class="status status--warn"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>À voir</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
+          <span class="row-main"><span class="row-title">Dernière sauvegarde</span><span class="row-sub">Hier à 22:40, dans ton dossier Fichiers</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>OK</span>
+        </div>
+        <button type="button" class="row" data-go="diagnostic">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-question"/></svg></span>
+          <span class="row-main"><span class="row-title">Pourquoi l'app a raté ça ?</span><span class="row-sub">Un dépannage pas à pas pour une arrivée ou un départ</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">Je lis seulement ce qui est déjà dans l'app. Je ne collecte rien de plus.</p>
+    </section>
+
+  </div>
+
+  <div class="sheet" id="sheet-fia-why">
+    <h2 class="sheet-title">Comment c'est calculé</h2>
+    <p class="sheet-text">Je pars de 100 % et j'enlève des points pour chaque truc qui rend tes heures moins sûres. Aucune pénalité pour ta façon de bosser, seulement pour la qualité des données.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Sessions confirmées ou bien détectées</span><span class="row-sub">Elles comptent en plein</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Sessions incertaines ou reconstituées</span><span class="row-sub">Elles font perdre des points</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Jours attendus sans session</span><span class="row-sub">Selon ton planning, s'il est importé</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Chevauchements et horaires bizarres</span><span class="row-sub">Deux sessions en même temps, une fin avant un début</span></span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <style>
+    #scr-fiabilite .fia-big { font: 600 56px/1 var(--font-mono); letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+    #scr-fiabilite .fia-big small { font: 500 22px/1 var(--font-text); letter-spacing: 0; color: var(--textSecondary); margin-left: 4px; }
+    #scr-fiabilite .fia-pct { font: 600 15px/20px var(--font-mono); white-space: nowrap; }
+    #scr-fiabilite .fia-end { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; }
+    #scr-fiabilite .meter--mid > i { background: var(--warning); }
+    #scr-fiabilite .meter--low > i { background: var(--danger); }
+    #scr-fiabilite .meter--high > i { background: var(--success); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-fiabilite');
+    var DAYS = [['mar', 10], ['mer', 11], ['jeu', 12], ['ven', 13], ['sam', 14], ['dim', 15], ['lun', 16]];
+    function lvl(p) { return p >= 85 ? 'high' : (p >= 60 ? 'mid' : 'low'); }
+    var LBL = { high: 'Fiable', mid: 'À vérifier', low: 'Incertain' };
+    var S = {
+      bonne: {
+        score: 92, rel: 'Très bonne',
+        days: [[98, 'Tout confirmé'], [95, 'Un départ détecté avec 4 min de retard'], [97, 'Tout confirmé'], [90, 'Planning de la semaine pas importé'], [88, 'Une session saisie à la main'], [null, 'Rien attendu, rien noté'], [86, 'Taf en cours, encore à confirmer']],
+        causes: [['GPS coupé', 'Localisation limitée 25 min vendredi', 3, 'nav'], ['Saisie manuelle', 'Une session ajoutée à la main samedi', 2, 'pencil'], ['Planning non importé', 'Le planning de la semaine manque', 2, 'calendar'], ['Téléphone éteint', 'Une extinction de 8 min', 1, 'battery']],
+        acts: [['Importer le planning', 'Je pourrai vérifier les jours attendus', 'camera', 'planning']]
+      },
+      moyenne: {
+        score: 74, rel: 'À surveiller',
+        days: [[92, 'Tout confirmé'], [70, 'Téléphone éteint de 15:10 à 16:00'], [85, 'Départ détecté avec 12 min de retard'], [60, 'GPS coupé pendant 1 h 20'], [72, 'Session saisie à la main'], [null, 'Rien attendu, rien noté'], [64, 'Taf en cours, arrivée à confirmer']],
+        causes: [['GPS coupé', 'Localisation limitée 1 h 20 vendredi', 9, 'nav'], ['Téléphone éteint', 'Deux extinctions, 50 min en tout', 6, 'battery'], ['Sessions à confirmer', '2 sessions incertaines', 5, 'question'], ['Saisie manuelle', '2 sessions ajoutées à la main', 4, 'pencil'], ['Planning non importé', 'Le planning de la semaine manque', 2, 'calendar']],
+        acts: [['Confirmer 2 sessions', 'Un tap chacune, ça remonte le score', 'check', 'doute'], ['Passer la localisation sur « Toujours »', 'Pour ne plus perdre de signal', 'nav', 'diagnostic'], ['Importer le planning', 'Je pourrai vérifier les jours attendus', 'camera', 'planning']]
+      },
+      faible: {
+        score: 48, rel: 'À régler',
+        days: [[70, 'Arrivée reconstituée, non confirmée'], [45, 'Téléphone éteint 3 h, départ reconstitué'], [60, 'GPS coupé tout l\'après-midi'], [35, 'Deux sessions qui se chevauchent'], [40, 'Journée entière saisie à la main'], [null, 'Rien attendu, rien noté'], [38, 'Taf en cours, arrivée non détectée']],
+        causes: [['GPS coupé', 'Localisation limitée 4 h au total', 18, 'nav'], ['Téléphone éteint', 'Trois extinctions, 3 h 40 en tout', 12, 'battery'], ['Sessions à confirmer', '4 sessions incertaines ou reconstituées', 9, 'question'], ['Saisie manuelle', '3 sessions ajoutées à la main', 7, 'pencil'], ['Planning non importé', 'Le planning de la semaine manque', 4, 'calendar'], ['Chevauchement', 'Vendredi, deux sessions en même temps', 2, 'alert']],
+        acts: [['Passer la localisation sur « Toujours »', 'C\'est la cause numéro 1 cette semaine', 'nav', 'diagnostic'], ['Confirmer 4 sessions', 'Un tap chacune, ça remonte le score', 'check', 'doute'], ['Corriger le chevauchement de vendredi', 'Garde la bonne session, supprime l\'autre', 'pencil', 'sessions']]
+      }
+    };
+    function el(id) { return document.getElementById(id); }
+    function render() {
+      var k = root.getAttribute('data-state') || 'bonne', d = S[k], l = lvl(d.score);
+      el('fia-big').innerHTML = d.score + '<small>%</small>';
+      el('fia-big').setAttribute('aria-label', 'Score de fiabilité, ' + d.score + ' pour cent');
+      el('fia-meter').className = 'meter meter--' + l; el('fia-meter').firstElementChild.style.setProperty('--v', d.score);
+      el('fia-rel').className = 'rel rel--' + l; el('fia-rel-t').textContent = d.rel;
+      el('fia-sum').textContent = 'Ta semaine est fiable à ' + d.score + ' %. Ça mesure la qualité des données, pas ce que tu fais.';
+      var h = '';
+      d.days.forEach(function (x, i) {
+        var nm = DAYS[i][0] + ' ' + DAYS[i][1];
+        if (x[0] === null) {
+          h += '<div class="row"><span class="row-main"><span class="row-title">' + nm + '</span><span class="row-sub">' + x[1] + '</span></span><span class="muted">Pas de donnée</span></div>';
+        } else {
+          var lv = lvl(x[0]);
+          h += '<div class="row"><span class="row-main"><span class="row-title">' + nm + '</span><span class="row-sub">' + x[1] + '</span></span>'
+            + '<span class="fia-end"><span class="rel rel--' + lv + '"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>' + LBL[lv] + '</span><span class="fia-pct">' + x[0] + ' %</span></span></div>';
+        }
+      });
+      el('fia-days').innerHTML = h;
+      var lost = 0, c = '';
+      d.causes.forEach(function (x) {
+        lost += x[2];
+        c += '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + x[3] + '"/></svg></span><span class="row-main"><span class="row-title">' + x[0] + '</span><span class="row-sub">' + x[1] + '</span></span><span class="row-value num">-' + x[2] + ' pts</span></div>';
+      });
+      el('fia-causes').innerHTML = c;
+      el('fia-causes-foot').textContent = '100 moins ' + lost + ' points perdus : ' + (100 - lost) + ' %.';
+      var a = '';
+      d.acts.forEach(function (x) {
+        a += '<button type="button" class="row" data-go="' + x[3] + '"><span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-' + x[2] + '"/></svg></span><span class="row-main"><span class="row-title">' + x[0] + '</span><span class="row-sub">' + x[1] + '</span></span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg></button>';
+      });
+      el('fia-acts').innerHTML = a;
+      el('fia-det').textContent = k === 'bonne' ? '96 %' : (k === 'moyenne' ? '88 %' : '71 %');
+    }
+    root.addEventListener('plt:state', render);
+    render();
+  });
+  </script>
+</section>

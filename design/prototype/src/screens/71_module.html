@@ -1,0 +1,168 @@
+<section class="screen" id="scr-module" data-title="Détail d'une fonctionnalité" data-group="Fonctionnalités" data-tab="accueil"
+         data-states="planning_ocr:Planning par photo (activé),leave:Congés payés (coupé),focus:Concentration (coupé),data_trust:Score de fiabilité (activé)">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="fonctionnalites"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Fonctionnalités</button>
+    <h1 class="navbar-title" id="mod-title">Planning par photo</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <section class="section" aria-label="Activation">
+      <article class="card">
+        <div class="card-head">
+          <span class="chip chip--accent" id="mod-group">Planning</span>
+          <span class="status status--ok" id="mod-status"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Activé</span>
+        </div>
+        <h2 class="card-title" id="mod-name">Planning par photo</h2>
+        <p class="card-text" id="mod-desc">Prends ton planning en photo, je le lis et je le range.</p>
+        <div class="row mod-switch">
+          <span class="row-main"><span class="row-title" id="mod-sw-l">Activer cette fonction</span><span class="row-sub" id="mod-sw-sub">Tu peux la couper quand tu veux.</span></span>
+          <button type="button" class="switch" id="mod-sw" role="switch" aria-checked="true" aria-labelledby="mod-sw-l"></button>
+        </div>
+      </article>
+      <div class="banner banner--warning" id="mod-miss" hidden>
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title" id="mod-miss-t">Il lui faut Emploi</p>
+          <p class="banner-text">Sans lui, cette fonction ne sait pas sur quoi se baser. Je peux l'activer avec.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="mod-do-t">
+      <div class="section-head"><h2 class="section-title" id="mod-do-t">Ce que ça fait</h2></div>
+      <div class="list" id="mod-do"></div>
+    </section>
+
+    <section class="section" aria-labelledby="mod-data-t">
+      <div class="section-head"><h2 class="section-title" id="mod-data-t">Données utilisées</h2></div>
+      <div class="list" id="mod-data"></div>
+      <p class="section-foot">Tout reste sur ton tel. Rien n'est envoyé nulle part.</p>
+    </section>
+
+    <section class="section" aria-labelledby="mod-perm-t">
+      <div class="section-head"><h2 class="section-title" id="mod-perm-t">Autorisations iOS</h2></div>
+      <div class="list" id="mod-perm"></div>
+    </section>
+
+    <section class="section" aria-labelledby="mod-dep-t" id="mod-dep-sec">
+      <div class="section-head"><h2 class="section-title" id="mod-dep-t">Dépendances</h2></div>
+      <div class="list" id="mod-dep"></div>
+    </section>
+
+    <section class="section" aria-labelledby="mod-off-t">
+      <div class="section-head"><h2 class="section-title" id="mod-off-t">Si tu la désactives</h2></div>
+      <article class="card card--outline">
+        <ul class="mod-ul">
+          <li>Rien n'est supprimé. Tes données restent là, et tout revient si tu rallumes.</li>
+          <li>Les écrans, boutons et notifications de cette fonction disparaissent.</li>
+          <li>Plus aucun calcul en arrière-plan, plus aucune demande d'autorisation.</li>
+          <li id="mod-off-x"></li>
+        </ul>
+      </article>
+    </section>
+
+  </div>
+
+  <style>
+    #scr-module .mod-switch { padding: 0; min-height: 44px; }
+    #scr-module .mod-ul { display: flex; flex-direction: column; gap: 8px; margin: 0; padding-left: 18px; font: var(--t-subhead) var(--font-text); color: var(--textPrimary); }
+    #scr-module .mod-ul li:empty { display: none; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-module');
+    var D = {
+      planning_ocr: {
+        does: ['Tu photographes ton planning papier ou une capture, je lis les jours et les heures.', 'Tu relis et tu corriges avant que ça entre dans ton planning.', 'Si une lecture est douteuse (6h31 ou 8h31 ?), je te demande, je ne devine pas.'],
+        data: ['Ta photo, traitée sur ton tel puis supprimée si tu veux', 'Les créneaux lus et ce que tu as corrigé', 'Tes lieux, pour rattacher chaque créneau'],
+        perm: [['camera', 'Appareil photo', 'Demandée au premier scan', 'warn'], ['image', 'Photos', 'Seulement si tu choisis une image existante', 'ok']],
+        offx: 'Tes plannings déjà importés restent consultables en lecture.'
+      },
+      leave: {
+        does: ['Compte tes jours de congés acquis, pris et restants.', 'Te prévient quand un solde baisse trop.', 'Propose de poser un congé sur une période creuse.'],
+        data: ['Tes dates de contrat (module Emploi)', 'Les congés que tu poses', 'Tes sessions de travail, pour le calcul des droits'],
+        perm: [['bell', 'Notifications', 'Seulement si tu actives les alertes de solde', 'ok']],
+        offx: 'Ton solde de congés n\'est plus mis à jour, mais il est gardé.'
+      },
+      focus: {
+        does: ['Quand tu es au taf ou en cours, l\'app peut activer ton mode Concentration iOS.', 'Tu choisis lequel et pour quels lieux.', 'Tu peux aussi le lancer à la main depuis l\'accueil.'],
+        data: ['Tes lieux et le type d\'activité (taf, cours)', 'Le mode Concentration que tu choisis'],
+        perm: [['sliders', 'Concentration', 'Demandée à l\'activation. Tu peux la retirer dans iOS', 'warn']],
+        offx: 'Ton mode Concentration iOS n\'est plus touché par l\'app.'
+      },
+      data_trust: {
+        does: ['Calcule un score de fiabilité pour ta semaine et ton mois.', 'Te montre ce qui le fait baisser et comment le remonter en un tap.', 'Te conseille de confirmer tes heures avant de les envoyer, sans jamais te bloquer.'],
+        data: ['Tes sessions et leur niveau de confiance', 'Les jours attendus sans session', 'Ton planning, s\'il est importé'],
+        perm: [],
+        offx: 'Le score et la pastille de fiabilité disparaissent des statistiques.'
+      }
+    };
+    var GEN = {
+      does: function (m) { return [m.desc, 'Tu peux régler son comportement dans ses réglages, une fois activée.', 'Aucune saisie obligatoire : tout est facultatif.']; },
+      data: ['Tes sessions et tes lieux, déjà dans l\'app', 'Les réglages propres à cette fonction'],
+      perm: []
+    };
+    function el(id) { return document.getElementById(id); }
+    function row(icon, title, sub, status) {
+      return '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + icon + '"/></svg></span><span class="row-main"><span class="row-title">' + title + '</span>' + (sub ? '<span class="row-sub">' + sub + '</span>' : '') + '</span>' + (status || '') + '</div>';
+    }
+    var cur = null;
+    function F() { return window.PLT_FON; }
+
+    function render(id) {
+      var f = F(); if (!f || !f.reg[id]) return;
+      cur = id;
+      var m = f.reg[id], d = D[id] || {}, isOn = !!f.on[id];
+      el('mod-title').textContent = m.name.length > 22 ? 'Détail' : m.name;
+      el('mod-name').textContent = m.name; el('mod-desc').textContent = m.desc; el('mod-group').textContent = m.gname;
+      var sw = el('mod-sw'); sw.setAttribute('aria-checked', String(isOn));
+      el('mod-status').className = 'status ' + (isOn ? 'status--ok' : '');
+      el('mod-status').innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-' + (isOn ? 'check' : 'pause') + '"/></svg>' + (isOn ? 'Activée' : 'Désactivée');
+      el('mod-sw-sub').textContent = isOn ? 'Tu peux la couper quand tu veux.' : 'Coupée : aucune interface, aucun calcul.';
+      var miss = m.req.filter(function (r) { return !f.on[r]; });
+      el('mod-miss').hidden = !(miss.length && !isOn);
+      if (miss.length) el('mod-miss-t').textContent = 'Il lui faut ' + miss.map(f.short).join(' et ');
+      el('mod-do').innerHTML = (d.does || GEN.does(m)).map(function (t) { return row('check', t, '', ''); }).join('');
+      el('mod-data').innerHTML = (d.data || GEN.data).map(function (t) { return row('doc', t, '', ''); }).join('');
+      var perms = d.perm || GEN.perm;
+      el('mod-perm').innerHTML = perms.length ? perms.map(function (p) {
+        var st = isOn ? '<span class="status status--' + p[3] + '"><svg class="icon" aria-hidden="true"><use href="#i-' + (p[3] === 'ok' ? 'check' : 'info') + '"/></svg>' + (p[3] === 'ok' ? 'Au besoin' : 'À autoriser') + '</span>' : '<span class="status">Pas demandée</span>';
+        return row(p[0], p[1], p[2], st);
+      }).join('') : row('lock', 'Aucune autorisation en plus', 'Elle utilise seulement ce que tu as déjà donné à l\'app.', '');
+      var rq = m.req;
+      el('mod-dep-sec').hidden = false;
+      var dh = rq.map(function (r) {
+        var ok = f.on[r];
+        return '<button type="button" class="row" data-modgo="' + r + '"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span><span class="row-main"><span class="row-title">Demande ' + f.reg[r].name + '</span><span class="row-sub">' + (ok ? 'Déjà activé' : 'Désactivé pour l\'instant') + '</span></span>'
+          + '<span class="status status--' + (ok ? 'ok' : 'warn') + '"><svg class="icon" aria-hidden="true"><use href="#i-' + (ok ? 'check' : 'info') + '"/></svg>' + (ok ? 'Activé' : 'Coupé') + '</span></button>';
+      });
+      var users = f.order.filter(function (k) { return f.reg[k].req.indexOf(id) !== -1; });
+      if (users.length) dh.push(row('list', 'Sert à ' + users.map(function (k) { return f.reg[k].name; }).slice(0, 3).join(', '), users.length > 3 ? 'et ' + (users.length - 3) + ' autre' + (users.length > 4 ? 's' : '') : '', ''));
+      if (!dh.length) dh.push(row('check', 'Aucune dépendance', 'Elle marche toute seule.', ''));
+      el('mod-dep').innerHTML = dh.join('');
+      el('mod-off-x').textContent = d.offx || '';
+    }
+
+    el('mod-sw').addEventListener('change', function (e) {
+      var f = F(); if (!f || !cur) return;
+      var ok = f.request(cur, !!e.detail.checked);
+      if (!ok) this.setAttribute('aria-checked', String(!e.detail.checked));
+    });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-modgo]') : null;
+      if (b) { PLT.store.set('fon-sel', b.getAttribute('data-modgo')); render(b.getAttribute('data-modgo')); root.scrollTop = 0; }
+    });
+    document.addEventListener('fon:changed', function () { if (cur) render(cur); });
+    root.addEventListener('plt:state', function (e) { var s = e.detail.state; if (F() && F().reg[s]) { PLT.store.set('fon-sel', s); render(s); } });
+    PLT.onShow('module', function () {
+      var s = PLT.store.get('fon-sel', null) || root.getAttribute('data-state') || 'planning_ocr';
+      if (!F() || !F().reg[s]) s = 'planning_ocr';
+      render(s);
+    });
+    render(root.getAttribute('data-state') || 'planning_ocr');
+  });
+  </script>
+</section>

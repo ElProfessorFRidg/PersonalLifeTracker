@@ -1,0 +1,99 @@
+<section class="screen" id="scr-onb-notifs" data-title="Permission notifications" data-group="Onboarding" data-tabbar="hide"
+         data-states="explique:Intro,ios:Fenêtre iOS,ok:Accordée,refuse:Refusée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="onb-loc"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Retour</button>
+    <span class="navbar-title">Étape 4 sur 7</span>
+    <div class="navbar-actions"><button type="button" class="btn btn--ghost btn--small" id="onbn-skip">Plus tard</button></div>
+  </header>
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 4 sur 7"><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-on"></i><i></i><i></i><i></i></div>
+
+    <div class="onb-head">
+      <span data-when="explique ios"><span class="onb-hero " aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-bell"/></svg></span></span>
+      <span data-when="ok" hidden><span class="onb-hero onb-hero--ok" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-check"/></svg></span></span>
+      <span data-when="refuse" hidden><span class="onb-hero onb-hero--warn" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-alert"/></svg></span></span>
+      <h1 class="onb-h1" data-when="explique ios">Je te préviens en un tap.</h1>
+      <h1 class="onb-h1" data-when="ok" hidden>Top, je te préviens au bon moment.</h1>
+      <h1 class="onb-h1" data-when="refuse" hidden>Pas de notifications, pas de souci.</h1>
+      <p class="onb-lead" data-when="explique ios">Quand j'ai un doute, je te le demande vite fait&nbsp;: « T'es arrivé au taf à 17:56, c'est bon&nbsp;? ». Tu réponds depuis l'écran verrouillé.</p>
+      <p class="onb-lead" data-when="ok" hidden>6 par jour maximum, jamais la nuit. Tu règles tout dans Réglages, Notifications.</p>
+      <p class="onb-lead" data-when="refuse" hidden>Je te poserai mes questions sur l'accueil, dans la carte Maintenant. Il faudra juste ouvrir l'app pour les voir.</p>
+    </div>
+
+    <div class="onb-result" data-when="explique ios">
+      <section class="section" aria-labelledby="onbn-ex-t">
+        <div class="section-head"><h2 class="section-title" id="onbn-ex-t">À quoi ça ressemble</h2></div>
+        <article class="card onb-notif" aria-label="Exemple de notification">
+          <div class="card-head"><span class="onb-notif-app"><span class="onb-notif-ic" aria-hidden="true"><svg class="icon icon--s" aria-hidden="true"><use href="#i-clock"/></svg></span>Personal Life Tracker</span><span class="muted num">19:10</span></div>
+          <p class="onb-notif-t">T'es arrivé au taf à 17:56, c'est bon&nbsp;?</p>
+          <div class="btn-row"><button type="button" class="btn btn--secondary btn--small" tabindex="-1" aria-hidden="true">Oui, c'est bon</button><button type="button" class="btn btn--secondary btn--small" tabindex="-1" aria-hidden="true">Corriger</button></div>
+        </article>
+      </section>
+      <section class="section" aria-labelledby="onbn-reg-t">
+        <div class="section-head"><h2 class="section-title" id="onbn-reg-t">Mes règles</h2></div>
+        <div class="list">
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg></span><span class="row-main"><span class="row-title">6 par jour maximum</span><span class="row-sub">Je regroupe, je spamme pas.</span></span></div>
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg></span><span class="row-main"><span class="row-title">Silence la nuit</span><span class="row-sub">Heures silencieuses réglables.</span></span></div>
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg></span><span class="row-main"><span class="row-title">Tu choisis par catégorie</span><span class="row-sub">Tu coupes ce qui te sert pas.</span></span></div>
+        </div>
+      </section>
+      <section class="section" aria-labelledby="onbn-non-t">
+        <div class="section-head"><h2 class="section-title" id="onbn-non-t">Et si tu refuses&nbsp;?</h2></div>
+        <div class="card card--outline"><p class="card-text">Rien ne casse. Tes heures sont notées pareil, mais je peux pas te demander de confirmer quand t'es pas dans l'app.</p></div>
+      </section>
+    </div>
+
+    <div class="onb-result" data-when="refuse" hidden>
+      <div class="banner banner--warning">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Les notifications sont coupées</p>
+          <p class="banner-text">Si tu changes d'avis&nbsp;: Réglages iOS, Notifications, Personal Life Tracker, puis « Autoriser les notifications ».</p>
+          <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre les Réglages iOS de Personal Life Tracker.">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" data-when="explique" data-act="ios">Continuer</button>
+      <button type="button" class="btn btn--primary btn--block" data-when="ok refuse" id="onbn-next" hidden>Continuer</button>
+      <p class="section-foot onb-foot" data-when="explique">Rien ne se passe avant que tu touches un bouton d'iOS.</p>
+    </div>
+  </div>
+
+  <div class="onb-ios" data-when="ios">
+    <div class="onb-ios-dlg" role="alertdialog" aria-labelledby="onbn-d1-t" aria-describedby="onbn-d1-m">
+      <div class="onb-ios-txt"><p class="onb-ios-t" id="onbn-d1-t">« Personal Life Tracker » souhaite t'envoyer des notifications</p><p class="onb-ios-m" id="onbn-d1-m">Les notifications peuvent inclure des alertes, des sons et des pastilles. Tu pourras les régler dans Réglages.</p></div>
+        <button type="button" class="onb-ios-b" data-act="refuse">Ne pas autoriser</button>
+        <button type="button" class="onb-ios-b is-strong" data-act="ok">Autoriser</button>
+    </div>
+  </div>
+
+  <style>
+    #scr-onb-notifs .onb-notif { gap: 8px; }
+    #scr-onb-notifs .onb-notif-app { display: inline-flex; align-items: center; gap: 8px; font: var(--t-footnote) var(--font-text); color: var(--textSecondary); }
+    #scr-onb-notifs .onb-notif-ic { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 6px; background: var(--accent); color: var(--accentOn); }
+    #scr-onb-notifs .onb-notif-t { font: var(--t-headline) var(--font-text); }
+  </style>
+  <script>
+  PLT.ready(function () {
+    var N = 'onb-notifs', el = document.getElementById('scr-onb-notifs');
+    function st(s) {
+      setState(N, s); el.scrollTop = 0;
+      if (['ok', 'refuse'].indexOf(s) !== -1) PLT.store.set('onb.notif', s);
+    }
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-act]'); if (b) st(b.getAttribute('data-act'));
+    });
+    el.addEventListener('plt:state', function () {
+      var s = el.getAttribute('data-state'); el.style.overflowY = (s.indexOf('ios') === 0) ? 'hidden' : '';
+    });
+    PLT.onShow(N, function () { var s = el.getAttribute('data-state') || ''; if (s.indexOf('ios') === 0) st('explique'); });
+    function next() { go(PLT.store.get('onb.modules', 'planning_ocr').split(',').indexOf('planning_ocr') !== -1 ? 'onb-photos' : 'onb-lieu'); }
+    document.getElementById('onbn-next').addEventListener('click', next);
+    document.getElementById('onbn-skip').addEventListener('click', next);
+  });
+  </script>
+</section>

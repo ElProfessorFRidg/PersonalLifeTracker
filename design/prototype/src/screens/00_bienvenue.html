@@ -1,0 +1,83 @@
+<section class="screen" id="scr-onb-bienvenue" data-title="Bienvenue" data-group="Onboarding" data-tabbar="hide">
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 1 sur 7"><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+    <div class="onb-head onb-head--center">
+      <span class="onb-hero onb-hero--big" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-clock"/></svg></span>
+      <h1 class="onb-h1">Tes heures, notées toutes seules.</h1>
+      <p class="onb-lead">Je repère quand t'arrives au taf ou en cours et quand tu pars. Toi, tu fais rien. Deux minutes de réglages et c'est parti.</p>
+    </div>
+
+    <div class="list" aria-label="Ce que fait l'app">
+      <div class="row">
+        <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+        <span class="row-main"><span class="row-title">Je sens tes arrivées et tes départs</span><span class="row-sub">Au taf, en cours, aux courses, sans que tu ouvres l'app.</span></span>
+      </div>
+      <div class="row">
+        <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
+        <span class="row-main"><span class="row-title">Tu vois où passe ton temps</span><span class="row-sub">Ta journée, ta semaine, tes heures de taf et de cours.</span></span>
+      </div>
+      <div class="row">
+        <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+        <span class="row-main"><span class="row-title">100&nbsp;% sur ton tel</span><span class="row-sub">Pas de compte, pas de serveur, rien ne part nulle part.</span></span>
+      </div>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" data-go="onb-modules">C'est parti</button>
+      <button type="button" class="btn btn--ghost btn--block" data-sheet="sheet-onbb-donnees">Et mes données&nbsp;?</button>
+      <p class="section-foot onb-foot">Tout est passable et tu peux tout changer plus tard dans Réglages.</p>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet-onbb-donnees">
+    <h2 class="sheet-title">Où vont tes données&nbsp;?</h2>
+    <p class="sheet-text">Nulle part. Tout reste sur ton iPhone, rien n'est envoyé à qui que ce soit.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Pas de compte</span><span class="row-sub">Tu n'as ni mail ni mot de passe à donner.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Pas de serveur</span><span class="row-sub">Ta position et tes heures ne quittent jamais ton tel.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Tu gardes la main</span><span class="row-sub">Tu peux tout exporter ou tout effacer depuis Réglages.</span></span></div>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK, compris</button>
+  </div>
+
+  <!-- Styles communs de l'onboarding : définis ici, utilisés par les écrans 00 à 09 (classes onb-*) -->
+  <style>
+    .onb-body { flex: 1 1 auto; padding-top: var(--space-s); }
+    .onb-steps { display: flex; gap: 6px; }
+    .onb-steps i { flex: 1; height: 4px; border-radius: 2px; background: var(--fill); }
+    .onb-steps i.is-done, .onb-steps i.is-on { background: var(--accent); }
+    .onb-steps i.is-on { opacity: .55; }
+    .onb-head { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; padding-top: var(--space-s); }
+    .onb-head--center { align-items: center; text-align: center; padding-top: var(--space-m); }
+    .onb-hero { display: grid; place-items: center; width: 64px; height: 64px; border-radius: 50%; background: var(--accentSoft); color: var(--accent); flex: none; }
+    .onb-hero--big { width: 88px; height: 88px; }
+    .onb-hero--warn { background: var(--warningSoft); color: var(--warning); }
+    .onb-hero--ok { background: var(--accentSoft); color: var(--success); }
+    .onb-hero--err { background: var(--dangerSoft); color: var(--danger); }
+    .onb-h1 { font: var(--t-title1) var(--font-text); letter-spacing: -.02em; text-wrap: balance; }
+    .onb-lead { font: var(--t-body) var(--font-text); color: var(--textSecondary); text-wrap: pretty; max-width: 38ch; }
+    .onb-cta { margin-top: auto; display: flex; flex-direction: column; gap: 8px; padding-top: var(--space-m); }
+    .onb-foot { text-align: center; }
+    .onb-ol { margin: 0; padding: 0; list-style: none; counter-reset: onb; display: flex; flex-direction: column; gap: 10px; }
+    .onb-ol li { counter-increment: onb; display: grid; grid-template-columns: 28px 1fr; gap: 10px; align-items: start; font: var(--t-subhead) var(--font-text); color: var(--textPrimary); }
+    .onb-ol li::before { content: counter(onb); display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--accentSoft); color: var(--accent); font: 600 14px/1 var(--font-text); }
+    .onb-card-title { font: var(--t-headline) var(--font-text); }
+    .onb-note { display: flex; gap: 10px; align-items: flex-start; font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+    .onb-note .icon { flex: none; margin-top: 2px; }
+    .onb-note[hidden], .onb-ios[hidden] { display: none; }
+    .onb-result { display: flex; flex-direction: column; gap: var(--space-m); }
+    .onb-result[hidden] { display: none; }
+    /* Fausse fenêtre iOS, posée en haut de l'écran qui défile (l'écran revient en haut quand elle s'ouvre) */
+    .onb-ios { position: absolute; inset: 0; z-index: 40; display: grid; place-items: center; padding: 24px; background: color-mix(in srgb, var(--textPrimary) 45%, transparent); }
+    .onb-ios-dlg { width: min(270px, 100%); border-radius: 14px; overflow: hidden; background: var(--surfaceRaised); color: var(--textPrimary); box-shadow: var(--shadow-sheet); text-align: center; }
+    .onb-ios-txt { padding: 18px 16px 16px; display: flex; flex-direction: column; gap: 4px; }
+    .onb-ios-t { font: 600 17px/1.25 var(--font-text); text-wrap: balance; }
+    .onb-ios-m { font: 400 13px/1.35 var(--font-text); text-wrap: pretty; }
+    .onb-ios-b { display: block; width: 100%; min-height: 44px; padding: 10px 12px; border: 0; border-top: 1px solid var(--separator); background: none; color: var(--accent); font: 400 17px/1.2 var(--font-text); }
+    .onb-ios-b.is-strong { font-weight: 600; }
+    .onb-ios-b:active { background: var(--fill); }
+  </style>
+
+</section>

@@ -1,0 +1,122 @@
+<section class="screen" id="scr-session-ajout" data-title="Ajouter une session" data-group="Sessions" data-tab="accueil"
+         data-states="formulaire:Formulaire,erreur:Heures incohérentes">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="sessions"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Sessions</button>
+    <h1 class="navbar-title">Session passée</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <div class="banner banner--error" role="alert" id="sa-banner" hidden>
+      <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Je peux pas enregistrer ça</p>
+        <p class="banner-text" id="sa-banner-text">Le départ est avant l'arrivée. Corrige une des deux heures.</p>
+      </div>
+    </div>
+
+    <section class="section" aria-labelledby="sa-quoi-t">
+      <div class="section-head"><h2 class="section-title" id="sa-quoi-t">C'était où et quoi&nbsp;?</h2></div>
+      <div class="list" role="radiogroup" aria-label="Lieu" id="sa-place">
+        <button type="button" class="row" role="radio" aria-checked="true" data-value="Supérette du Canal" data-type="Taf">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main"><span class="row-title">Supérette du Canal</span><span class="row-sub">Ton dernier lieu</span></span>
+          <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+        <button type="button" class="row" role="radio" aria-checked="false" data-value="Fac de lettres" data-type="Cours">
+          <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <span class="row-main"><span class="row-title">Fac de lettres</span></span>
+          <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+        <button type="button" class="row" role="radio" aria-checked="false" data-value="Marché du Canal" data-type="Courses">
+          <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main"><span class="row-title">Marché du Canal</span></span>
+          <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+      </div>
+      <div class="field" style="margin-top:var(--space-m)">
+        <span class="field-label" id="sa-type-l">Type</span>
+        <div class="segmented" id="sa-type" role="group" aria-labelledby="sa-type-l">
+          <button type="button" data-value="Taf" aria-pressed="true">Taf</button>
+          <button type="button" data-value="Cours" aria-pressed="false">Cours</button>
+          <button type="button" data-value="Courses" aria-pressed="false">Courses</button>
+        </div>
+        <span class="field-help">Préchoisi selon le lieu. Les courses sont notées mais pas comptées.</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="sa-quand-t">
+      <div class="section-head"><h2 class="section-title" id="sa-quand-t">Quand&nbsp;?</h2></div>
+      <div class="field">
+        <label class="field-label" for="sa-date">Date</label>
+        <input class="input num" id="sa-date" type="date" value="2026-11-15" max="2026-11-16">
+      </div>
+      <div class="sa-times">
+        <div class="field" id="sa-start-field">
+          <label class="field-label" for="sa-start">Début</label>
+          <input class="input num" id="sa-start" type="time" value="17:56">
+        </div>
+        <div class="field" id="sa-end-field">
+          <label class="field-label" for="sa-end">Fin</label>
+          <input class="input num" id="sa-end" type="time" value="21:00">
+        </div>
+      </div>
+      <span class="field-help" id="sa-help" style="display:block;margin-top:6px">Tu peux entrer l'heure exacte. J'applique les heures pleines après, avec toi si c'est dans la zone de doute.</span>
+      <p class="card-text" id="sa-dur" style="margin-top:var(--space-s)">Durée&nbsp;: <span class="num">3 h 04</span></p>
+    </section>
+
+    <div class="btn-stack">
+      <button type="button" class="btn btn--primary btn--block" id="sa-save">Enregistrer la session</button>
+      <button type="button" class="btn btn--ghost btn--block" data-back="sessions">Annuler</button>
+    </div>
+  </div>
+
+  <style>
+  #scr-session-ajout .sa-times { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-s); margin-top: var(--space-s); }
+  #scr-session-ajout .field { min-width: 0; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var s = document.getElementById('sa-start'), e = document.getElementById('sa-end'),
+        sf = document.getElementById('sa-start-field'), ef = document.getElementById('sa-end-field'),
+        banner = document.getElementById('sa-banner'), dur = document.getElementById('sa-dur'),
+        type = 'Taf';
+    function mins(v) { var p = v.split(':'); return (+p[0]) * 60 + (+p[1]); }
+    function fmt(m) { var h = Math.floor(m / 60), r = m % 60; return h ? h + ' h ' + (r < 10 ? '0' : '') + r : r + ' min'; }
+    function update() {
+      var ok = s.value && e.value && mins(e.value) > mins(s.value);
+      dur.innerHTML = ok ? 'Durée&nbsp;: <span class="num">' + fmt(mins(e.value) - mins(s.value)) + '</span>' : 'Durée&nbsp;: <span class="num">à corriger</span>';
+      return ok;
+    }
+    function check(show) {
+      var ok = update();
+      banner.hidden = ok || !show;
+      sf.classList.remove('is-invalid'); ef.classList.toggle('is-invalid', !ok && show);
+      if (!ok && show) e.setAttribute('aria-invalid', 'true'); else e.removeAttribute('aria-invalid');
+      return ok;
+    }
+    s.addEventListener('input', function () { check(!banner.hidden); });
+    e.addEventListener('input', function () { check(!banner.hidden); });
+    document.getElementById('sa-place').addEventListener('change', function (ev) {
+      var row = document.querySelector('#sa-place [aria-checked="true"]'); type = row.getAttribute('data-type');
+      document.querySelectorAll('#sa-type button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === type)); });
+    });
+    document.getElementById('sa-type').addEventListener('change', function (ev) { type = ev.detail.value; });
+    document.getElementById('sa-save').addEventListener('click', function () {
+      if (!check(true)) { e.focus(); return; }
+      toast('Session ajoutée : ' + type.toLowerCase() + ', ' + s.value + ' à ' + e.value + '.', { undo: function () { go('session-ajout'); } });
+      go('sessions');
+    });
+    document.addEventListener('plt:state', function (ev) {
+      if (ev.detail.name !== 'session-ajout') return;
+      if (ev.detail.state === 'erreur') { s.value = '21:00'; e.value = '18:00'; check(true); }
+      else { s.value = '17:56'; e.value = '21:00'; check(false); }
+    });
+    PLT.onShow('session-ajout', function (el) {
+      if (el.getAttribute('data-state') === 'erreur') { s.value = '21:00'; e.value = '18:00'; check(true); } else check(false);
+    });
+  });
+  </script>
+</section>

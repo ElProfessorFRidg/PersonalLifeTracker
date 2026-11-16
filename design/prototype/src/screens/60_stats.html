@@ -1,0 +1,275 @@
+<section class="screen" id="scr-stats" data-title="Statistiques" data-group="Statistiques" data-tab="stats"
+         data-states="semaine:Semaine,mois:Mois,vide:Aucune donnée">
+
+  <header class="largetitle">
+    <div>
+      <p class="eyebrow" id="sta-eyebrow">Du 10 au 16 novembre</p>
+      <h1>Statistiques</h1>
+    </div>
+    <button type="button" class="iconbtn iconbtn--tonal" data-go="reglages" aria-label="Réglages">
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-sliders"/></svg>
+    </button>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Choix de la période et de la base de calcul -->
+    <section class="section" aria-label="Période et base de calcul">
+      <div class="segmented" id="sta-per" role="group" aria-label="Période">
+        <button type="button" data-value="semaine" aria-pressed="true">Semaine</button>
+        <button type="button" data-value="mois" aria-pressed="false">Mois</button>
+      </div>
+      <div class="field" data-when="semaine mois">
+        <span class="field-label" id="sta-base-l">Base de calcul</span>
+        <div class="segmented" id="sta-base" role="group" aria-labelledby="sta-base-l">
+          <button type="button" data-value="pleines" aria-pressed="true">Heures pleines</button>
+          <button type="button" data-value="exact" aria-pressed="false">Heure exacte</button>
+        </div>
+        <span class="field-help" id="sta-base-help">Heures pleines : 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.</span>
+      </div>
+    </section>
+
+    <!-- Vide -->
+    <section class="section" data-when="vide" aria-label="Aucune donnée">
+      <div class="card">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-chart"/></svg></span>
+          <h2 class="empty-title">Rien à compter pour l'instant.</h2>
+          <p class="empty-text">Dès ta première session de taf ou de cours, tes heures apparaissent ici. Pas besoin de remplir quoi que ce soit.</p>
+          <button type="button" class="btn btn--primary" data-go="session-ajout">Ajouter une session à la main</button>
+        </div>
+      </div>
+      <p class="section-foot">Je ne dessine aucun graphique tant que je n'ai pas de vraies données. Pas de faux zéros.</p>
+    </section>
+
+    <!-- Totaux -->
+    <section class="section" data-when="semaine mois" aria-labelledby="sta-tot-t">
+      <div class="section-head"><h2 class="section-title" id="sta-tot-t">Totaux</h2></div>
+      <div class="stat-grid">
+        <div class="stat stat--work">
+          <span class="stat-label"><i aria-hidden="true"></i>Taf</span>
+          <span class="stat-value num" id="sta-t-val">18<small>h</small></span>
+          <span class="stat-note" id="sta-t-note">Heures pleines, exact 18 h 18</span>
+        </div>
+        <div class="stat stat--study">
+          <span class="stat-label"><i aria-hidden="true"></i>Cours</span>
+          <span class="stat-value num" id="sta-c-val">16<small>h</small></span>
+          <span class="stat-note" id="sta-c-note">Heures pleines, exact 15 h 48</span>
+        </div>
+      </div>
+      <div class="banner banner--info" data-when="semaine">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Aujourd'hui n'est pas fini</p>
+          <p class="banner-text">Ton taf de ce soir compte pour <span class="num">1 h 14</span> pour l'instant. Le total bouge jusqu'à ton départ.</p>
+        </div>
+      </div>
+      <div class="banner banner--info" data-when="mois">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Novembre n'est pas fini</p>
+          <p class="banner-text">Je compte du 1<sup>er</sup> au 16. Les vacances de la Toussaint (jusqu'au 2) n'ont aucune session de cours, c'est normal.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Graphique par jour -->
+    <section class="section" data-when="semaine mois" aria-labelledby="sta-gr-t">
+      <div class="section-head"><h2 class="section-title" id="sta-gr-t">Jour par jour</h2></div>
+      <div class="card">
+        <div class="sta-chart" id="sta-chart" role="img" aria-label="Graphique des heures par jour"></div>
+        <div class="timeline-legend" aria-hidden="true">
+          <span><i class="lg-work"></i>Taf</span>
+          <span><i class="lg-study"></i>Cours</span>
+          <span><i class="sta-lg-live"></i>En cours</span>
+        </div>
+        <p class="card-text" id="sta-chart-cap">Chaque barre est à l'échelle, de 0 à 8 h. Les valeurs sous chaque jour sont celles du graphique.</p>
+      </div>
+    </section>
+
+    <!-- Moyennes -->
+    <section class="section" data-when="semaine mois" aria-labelledby="sta-moy-t">
+      <div class="section-head"><h2 class="section-title" id="sta-moy-t">Moyennes</h2></div>
+      <div class="list" id="sta-moy"></div>
+      <p class="section-foot" id="sta-moy-foot">Les jours sans session ne tirent pas la moyenne vers le bas.</p>
+    </section>
+
+    <!-- Évolution -->
+    <section class="section" data-when="semaine mois" aria-labelledby="sta-evo-t">
+      <div class="section-head"><h2 class="section-title" id="sta-evo-t">Évolution</h2></div>
+      <div class="list" id="sta-evo"></div>
+    </section>
+
+    <!-- Pas compté -->
+    <section class="section" data-when="semaine mois" aria-labelledby="sta-aut-t">
+      <div class="section-head"><h2 class="section-title" id="sta-aut-t">Pas compté dans les totaux</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main"><span class="row-title">Courses</span><span class="row-sub">Marché du Canal, lundi 12:20 à 12:45</span></span>
+          <span class="row-value num">25 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">Les courses restent visibles mais ne gonflent pas tes heures de taf.</p>
+    </section>
+
+    <!-- Fiabilité -->
+    <section class="section" data-when="semaine mois" aria-label="Fiabilité des chiffres">
+      <div class="list">
+        <button type="button" class="row" data-go="fiabilite">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+          <span class="row-main"><span class="row-title">Fiabilité des chiffres</span><span class="row-sub" id="sta-rel-sub">Ta semaine est fiable à <span class="num">92 %</span></span></span>
+          <span class="rel rel--high"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>Bonne</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+  </div>
+
+  <style>
+    #scr-stats .sta-chart { display: grid; grid-template-columns: 30px minmax(0, 1fr); column-gap: 6px; row-gap: 6px; }
+    #scr-stats .sta-y { position: relative; height: 150px; }
+    #scr-stats .sta-y span { position: absolute; right: 0; bottom: calc(var(--g) * 1%); transform: translateY(50%); font: 500 11px/1 var(--font-mono); color: var(--textSecondary); }
+    #scr-stats .sta-plot { position: relative; height: 150px; border-bottom: 1px solid var(--separator); }
+    #scr-stats .sta-lines i { position: absolute; left: 0; right: 0; bottom: calc(var(--g) * 1%); height: 1px; background: var(--separator); opacity: .7; }
+    #scr-stats .sta-cols { position: absolute; inset: 0; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--cg, 6px); }
+    #scr-stats .sta-col { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 100%; min-width: 0; }
+    #scr-stats .sta-col--stack { flex-direction: column-reverse; align-items: center; gap: 1px; justify-content: flex-start; }
+    #scr-stats .sta-bar { display: block; width: 100%; max-width: 18px; height: calc(var(--h) * 1%); min-height: 3px; border-radius: 4px 4px 0 0; background: var(--work); }
+    #scr-stats .sta-bar--study { background: var(--study); }
+    #scr-stats .sta-col--stack .sta-bar { max-width: 12px; border-radius: 2px; }
+    #scr-stats .sta-bar.is-zero { min-height: 0; height: 0; }
+    #scr-stats .sta-bar.is-live { background: var(--workSoft); box-shadow: inset 0 0 0 1.5px var(--work); }
+    #scr-stats .sta-lg-live { background: var(--workSoft) !important; box-shadow: inset 0 0 0 1.5px var(--work); }
+    #scr-stats .sta-x { grid-column: 2; display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: var(--cg, 6px); text-align: center; }
+    #scr-stats .sta-xc { display: flex; flex-direction: column; align-items: center; gap: 2px; min-width: 0; font: 500 12px/14px var(--font-text); color: var(--textSecondary); }
+    #scr-stats .sta-xc b { font-weight: 600; color: var(--textPrimary); }
+    #scr-stats .sta-xc.is-today b { color: var(--accent); }
+    #scr-stats .sta-v { font: 500 11px/13px var(--font-mono); letter-spacing: -.04em; white-space: nowrap; }
+    #scr-stats .sta-v--work { color: var(--work); }
+    #scr-stats .sta-v--study { color: var(--study); }
+    #scr-stats .sta-v--none { color: var(--textTertiary); }
+    #scr-stats .sta-delta { font: 600 15px/20px var(--font-mono); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-stats');
+    var NAMES = ['dim', 'lun', 'mar', 'mer', 'jeu', 'ven', 'sam'];
+    /* minutes exactes par jour de novembre : [taf, cours]. 16 = aujourd'hui, taf en cours (17:56 à 19:10). */
+    var M = { 1: [0, 0], 2: [0, 0], 3: [181, 237], 4: [297, 0], 5: [0, 237], 6: [184, 237], 7: [362, 0], 8: [0, 0],
+              9: [180, 237], 10: [182, 237], 11: [298, 0], 12: [0, 237], 13: [185, 237], 14: [359, 0], 15: [0, 0], 16: [74, 237] };
+    var base = 'pleines';
+    var per = 'semaine';
+
+    function range(a, b) { var r = []; for (var i = a; i <= b; i++) r.push(i); return r; }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function val(min) { return base === 'pleines' ? Math.round(min / 60) * 60 : min; }          /* minutes retenues */
+    function sum(days, k) { return days.reduce(function (s, d) { return s + val(M[d][k]); }, 0); }
+    function exactSum(days, k) { return days.reduce(function (s, d) { return s + M[d][k]; }, 0); }
+    function hm(min) { return Math.floor(min / 60) + ' h ' + pad(min % 60); }
+    function hmFull(min) { return min % 60 === 0 ? (min / 60) + ' h' : hm(min); }
+    function compact(min) { return base === 'pleines' ? (min / 60) + 'h' : Math.floor(min / 60) + 'h' + pad(min % 60); }
+    function big(min) { return Math.floor(min / 60) + '<small>h</small>' + (min % 60 ? pad(min % 60) : ''); }
+    function signed(min) { var a = Math.abs(min); return (min < 0 ? '-' : (min > 0 ? '+' : '')) + (a === 0 ? '0 h' : hmFull(a)); }
+    function days() { return per === 'mois' ? range(1, 16) : range(10, 16); }
+
+    function renderTotals() {
+      var d = days();
+      [['t', 0, 'taf'], ['c', 1, 'cours']].forEach(function (x) {
+        var v = sum(d, x[1]), e = exactSum(d, x[1]), pl = sum(d, x[1]);
+        var el = document.getElementById('sta-' + x[0] + '-val');
+        el.innerHTML = big(v);
+        el.setAttribute('aria-label', hm(v).replace(' ', ' '));
+        var pleines = d.reduce(function (s, k) { return s + Math.round(M[k][x[1]] / 60) * 60; }, 0);
+        document.getElementById('sta-' + x[0] + '-note').textContent = base === 'pleines'
+          ? 'Heures pleines, exact ' + hm(e) : 'Heure exacte, heures pleines ' + hmFull(pleines);
+      });
+      document.getElementById('sta-base-help').textContent = base === 'pleines'
+        ? 'Heures pleines : 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.'
+        : 'Heure exacte : 17:56 compte comme 17:56, à la minute près.';
+    }
+
+    function renderChart() {
+      var d = days(), n = d.length, stacked = per === 'mois', MAX = 480;
+      var y = '', lines = '';
+      [0, 2, 4, 6, 8].forEach(function (h) { var g = h * 60 / MAX * 100; y += '<span class="num" style="--g:' + g + '">' + h + ' h</span>'; if (h) lines += '<i style="--g:' + g + '"></i>'; });
+      var cols = '', xs = '', desc = [];
+      d.forEach(function (k) {
+        var t = val(M[k][0]), c = val(M[k][1]);
+        var live = k === 16;
+        var bt = '<i class="sta-bar' + (t ? '' : ' is-zero') + (live ? ' is-live' : '') + '" style="--h:' + (t / MAX * 100).toFixed(2) + '"></i>';
+        var bc = '<i class="sta-bar sta-bar--study' + (c ? '' : ' is-zero') + '" style="--h:' + (c / MAX * 100).toFixed(2) + '"></i>';
+        cols += '<div class="sta-col' + (stacked ? ' sta-col--stack' : '') + '">' + bt + bc + '</div>';
+        var wd = NAMES[(k - 1) % 7];
+        var lab = stacked ? ((k % 2 === 1 || k === 16) ? '<b class="num">' + k + '</b>' : '<b class="num" aria-hidden="true">&nbsp;</b>') : wd + '<b class="num">' + k + '</b>';
+        xs += '<div class="sta-xc' + (k === 16 ? ' is-today' : '') + '">' + lab
+          + (stacked ? '' : '<span class="sta-v ' + (t ? 'sta-v--work' : 'sta-v--none') + '">' + (t ? compact(t) : '0') + '</span><span class="sta-v ' + (c ? 'sta-v--study' : 'sta-v--none') + '">' + (c ? compact(c) : '0') + '</span>')
+          + '</div>';
+        desc.push(wd + ' ' + k + ' : taf ' + hmFull(t) + ', cours ' + hmFull(c));
+      });
+      var el = document.getElementById('sta-chart');
+      el.style.setProperty('--n', n); el.style.setProperty('--cg', stacked ? '3px' : '6px');
+      el.innerHTML = '<div class="sta-y" aria-hidden="true">' + y + '</div><div class="sta-plot" aria-hidden="true"><div class="sta-lines">' + lines + '</div><div class="sta-cols">' + cols + '</div></div>'
+        + '<div class="sta-x" aria-hidden="true">' + xs + '</div>';
+      el.setAttribute('aria-label', 'Heures par jour, ' + (base === 'pleines' ? 'heures pleines' : 'heure exacte') + '. ' + desc.join(' ; ') + '.');
+      document.getElementById('sta-chart-cap').textContent = stacked
+        ? 'Chaque barre empile le taf (bas) et les cours (haut), de 0 à 8 h. Les chiffres des totaux sont en haut de page.'
+        : 'Chaque barre est à l\'échelle, de 0 à 8 h. Les valeurs sous chaque jour sont celles du graphique.';
+    }
+
+    function rowHtml(icon, cls, title, sub, value) {
+      return '<div class="row"><span class="row-icon ' + cls + '"><svg class="icon" aria-hidden="true"><use href="#i-' + icon + '"/></svg></span>'
+        + '<span class="row-main"><span class="row-title">' + title + '</span><span class="row-sub">' + sub + '</span></span><span class="row-value num">' + value + '</span></div>';
+    }
+    function renderMoy() {
+      var d = days(), n = d.length, html = '';
+      [[0, 'briefcase', 'row-icon--work', 'Taf'], [1, 'book', 'row-icon--study', 'Cours']].forEach(function (x) {
+        var worked = d.filter(function (k) { return M[k][x[0]] > 0; }).length;
+        var tot = sum(d, x[0]);
+        html += rowHtml(x[1], x[2], x[3] + ', jours avec une session', 'Sur ' + n + ' jours', worked + ' sur ' + n);
+        html += rowHtml(x[1], x[2], x[3] + ', moyenne par jour', 'Calculée sur les jours où il y a eu une session', hm(Math.round(tot / worked)));
+      });
+      document.getElementById('sta-moy').innerHTML = html;
+    }
+    function renderEvo() {
+      var el = document.getElementById('sta-evo');
+      if (per === 'mois') {
+        el.innerHTML = '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span><span class="row-main"><span class="row-title">Pas de comparaison avec octobre</span><span class="row-sub">Octobre est incomplet : la détection n\'était pas encore réglée avant le 20. Comparer serait trompeur.</span></span></div>';
+        return;
+      }
+      var cur = days(), prev = range(3, 9), html = '';
+      [[0, 'briefcase', 'row-icon--work', 'Taf'], [1, 'book', 'row-icon--study', 'Cours']].forEach(function (x) {
+        var dl = sum(cur, x[0]) - sum(prev, x[0]);
+        html += '<div class="row"><span class="row-icon ' + x[2] + '"><svg class="icon" aria-hidden="true"><use href="#i-' + x[1] + '"/></svg></span>'
+          + '<span class="row-main"><span class="row-title">' + x[3] + '</span><span class="row-sub">Par rapport aux 7 jours d\'avant (3 au 9 nov.)</span></span>'
+          + '<span class="sta-delta num">' + signed(dl) + '</span></div>';
+      });
+      el.innerHTML = html;
+    }
+    function renderAll() {
+      var m = per === 'mois';
+      document.getElementById('sta-eyebrow').textContent = m ? 'Novembre, jusqu\'au 16' : 'Du 10 au 16 novembre';
+      document.getElementById('sta-rel-sub').innerHTML = m ? 'Ton mois est fiable à <span class="num">89 %</span>' : 'Ta semaine est fiable à <span class="num">92 %</span>';
+      renderTotals(); renderChart(); renderMoy(); renderEvo();
+    }
+
+    function syncSeg(id, v) {
+      Array.prototype.forEach.call(document.querySelectorAll('#' + id + ' button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === v)); });
+    }
+    function fromState() {
+      var s = root.getAttribute('data-state') || 'semaine';
+      if (s === 'semaine' || s === 'mois') per = s;
+      syncSeg('sta-per', per);
+      renderAll();
+    }
+    document.getElementById('sta-per').addEventListener('change', function (e) { setState('stats', e.detail.value); });
+    document.getElementById('sta-base').addEventListener('change', function (e) { base = e.detail.value; renderAll(); });
+    root.addEventListener('plt:state', fromState);
+    PLT.onShow('stats', fromState);
+    fromState();
+  });
+  </script>
+</section>

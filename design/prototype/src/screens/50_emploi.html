@@ -1,0 +1,182 @@
+<section class="screen" id="scr-emploi" data-title="Emploi" data-group="Emploi et paie" data-tab="accueil"
+         data-states="actif:Module activé,desactive:Module désactivé">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
+    <h1 class="navbar-title">Emploi</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Module activé -->
+    <section class="section" data-when="actif" aria-labelledby="emp-emp-t">
+      <div class="section-head">
+        <h2 class="section-title" id="emp-emp-t">Ton employeur</h2>
+        <span class="chip chip--accent">Module optionnel</span>
+      </div>
+      <article class="card" aria-labelledby="emp-name">
+        <div class="card-head">
+          <span class="chip chip--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf</span>
+          <span class="chip">CDD</span>
+        </div>
+        <h3 class="card-title" id="emp-name">Supérette du Canal</h3>
+        <p class="card-text">Commerce alimentaire, convention <span class="num">IDCC 2216</span>. Tes heures sur ce lieu sont rattachées à cet employeur.</p>
+        <div class="emp-count" role="group" aria-label="Fin de ton CDD">
+          <div class="emp-count-row">
+            <p class="emp-count-main">Fin de ton CDD dans <span class="num">23 jours</span></p>
+            <span class="muted num">9 déc.</span>
+          </div>
+          <div class="meter meter--work" role="progressbar" aria-label="Avancement du contrat" aria-valuemin="0" aria-valuemax="100" aria-valuenow="77"><i style="--v:77"></i></div>
+          <p class="stat-note emp-note">Début le <span class="num">1</span> septembre. Période d'essai terminée.</p>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" data-when="actif" aria-labelledby="emp-ctr-t">
+      <div class="section-head"><h2 class="section-title" id="emp-ctr-t">Ton contrat</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title">Type de contrat</span></span>
+          <span class="row-value">CDD</span>
+        </div>
+        <button type="button" class="row" data-go="contrat">
+          <span class="row-main"><span class="row-title">Heures au contrat</span><span class="row-sub">Suivi semaine par semaine</span></span>
+          <span class="row-value num">13 h par semaine</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-main"><span class="row-title">Date de début</span></span>
+          <span class="row-value num">1 sept. 2026</span>
+        </div>
+        <div class="row">
+          <span class="row-main"><span class="row-title">Date de fin</span><span class="row-sub">Contrat à durée déterminée</span></span>
+          <span class="row-value num">9 déc. 2026</span>
+        </div>
+        <button type="button" class="row" data-go="paie">
+          <span class="row-main"><span class="row-title">Taux horaire brut saisi</span><span class="row-sub">Tu l'as renseigné, ta fiche de paie fait foi</span></span>
+          <span class="row-value num">12,02 €</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">Chaque ligne se corrige en deux taps. Un contrat terminé est archivé, jamais supprimé.</p>
+    </section>
+
+    <section class="section" data-when="actif" aria-labelledby="emp-fin-t">
+      <div class="section-head"><h2 class="section-title" id="emp-fin-t">Quand ça se termine</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-sheet="sheet-emp-check">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg></span>
+          <span class="row-main"><span class="row-title">Checklist de fin de contrat</span><span class="row-sub">Papiers à demander, 7 points</span></span>
+          <span class="row-value num" id="emp-check-val">0/7</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-sheet="sheet-emp-indem">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span>
+          <span class="row-main"><span class="row-title">Indemnité de fin de contrat</span><span class="row-sub">Peut-être applicable, à vérifier</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title">Prévenir avant la fin</span><span class="row-sub">14 jours et 3 jours avant</span></span>
+          <span class="row-value">Activé</span>
+        </div>
+        <button type="button" class="row" data-toast="Dans l'app, je recopie tes infos pour un renouvellement ou un CDI.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+          <span class="row-main"><span class="row-title">Préparer la suite</span><span class="row-sub">Renouvellement ou passage en CDI, en reprenant tes infos</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">Je t'informe et je cite mes sources, mais je ne donne pas de conseil juridique. Vérifie toujours ton contrat. Règles vérifiées pour la dernière fois le <span class="num">3</span> novembre.</p>
+    </section>
+
+    <section class="section" data-when="actif" aria-labelledby="emp-mod-t">
+      <div class="section-head"><h2 class="section-title" id="emp-mod-t">Ce module</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="emp-sw-l">Emploi et contrat</span><span class="row-sub">Optionnel. Tu peux l'éteindre, tes heures continuent d'être suivies.</span></span>
+          <button type="button" class="switch" id="emp-sw" role="switch" aria-checked="true" aria-labelledby="emp-sw-l"></button>
+        </div>
+        <button type="button" class="row" data-toast="Dans l'app, tu ajoutes un employeur en moins de 2 minutes.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></span>
+          <span class="row-main"><span class="row-title">Ajouter un autre employeur</span><span class="row-sub">Utile si t'as deux jobs en même temps</span></span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Module désactivé -->
+    <section class="section" data-when="desactive" aria-label="Module désactivé">
+      <div class="card card--outline">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <h3 class="empty-title">Emploi, c'est optionnel.</h3>
+          <p class="empty-text">Tant qu'il est éteint, l'app suit tes heures sans parler de contrat, de paie ni d'employeur. Rien ne manque.</p>
+          <button type="button" class="btn btn--primary" id="emp-on">Activer Emploi</button>
+        </div>
+      </div>
+      <div class="list" aria-label="Ce que le module apporte">
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-doc"/></svg></span><span class="row-main"><span class="row-title">Ton contrat en un coup d'œil</span><span class="row-sub">Type, dates, heures par semaine, décompte avant la fin</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span><span class="row-main"><span class="row-title">Équilibrage des heures</span><span class="row-sub">Voir si tu es au-dessus ou en dessous de tes heures au contrat</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-euro"/></svg></span><span class="row-main"><span class="row-title">Estimation de paie</span><span class="row-sub">Un autre module, qui a besoin de celui-ci</span></span></div>
+      </div>
+      <p class="section-foot">Pour l'allumer plus tard&nbsp;: Réglages, puis Fonctionnalités, puis Emploi et contrat. Tout reste sur ton tel.</p>
+      <button type="button" class="btn btn--secondary btn--block" data-go="fonctionnalites">Voir les fonctionnalités</button>
+    </section>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-emp-check">
+    <h2 class="sheet-title">Fin de contrat, les papiers</h2>
+    <p class="sheet-text">Coche au fur et à mesure. Chaque ligne dit à quoi ça sert.</p>
+    <div class="list" id="emp-check-list">
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Certificat de travail</span><span class="row-sub">Prouve ce que tu as fait chez cet employeur.</span></span></button>
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Solde de tout compte</span><span class="row-sub">Récapitule ce qu'on te doit à la fin.</span></span></button>
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Attestation pour France Travail</span><span class="row-sub">Utile si tu demandes des allocations.</span></span></button>
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Dernière fiche de paie</span><span class="row-sub">Pour comparer avec mes estimations.</span></span></button>
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Relevé des congés non pris</span><span class="row-sub">Pour être sûr que rien ne saute.</span></span></button>
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Restitution du matériel</span><span class="row-sub">Badge, clés, tenue si besoin.</span></span></button>
+      <button type="button" class="row emp-cb" role="checkbox" aria-checked="false"><span class="emp-box" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Export du relevé d'heures final</span><span class="row-sub">Ta preuve à toi, si on te la demande.</span></span></button>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-emp-indem">
+    <h2 class="sheet-title">Indemnité de fin de contrat</h2>
+    <p class="sheet-text">Pour un CDD, une indemnité peut s'appliquer à la fin, mais pas toujours. Certains contrats saisonniers ou jobs d'étudiant pendant les vacances en sont exclus.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Ce que je sais</span><span class="row-sub">Je ne connais pas assez ton contrat pour dire si elle s'applique. Je ne la compte pas.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Où vérifier</span><span class="row-sub">Ton contrat, puis service-public.fr ou code.travail.gouv.fr. Règle marquée «&nbsp;à vérifier&nbsp;».</span></span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <style>
+    #scr-emploi .emp-count { display: flex; flex-direction: column; gap: 8px; }
+    #scr-emploi .emp-count-row { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+    #scr-emploi .emp-count-main { font: var(--t-headline) var(--font-text); }
+    #scr-emploi .emp-note { margin: 0; }
+    #sheet-emp-check .emp-box { flex: none; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 8px; border: 1.5px solid var(--textTertiary); color: transparent; }
+    #sheet-emp-check .emp-cb[aria-checked="true"] .emp-box { background: var(--accent); border-color: var(--accent); color: var(--accentOn); }
+    #sheet-emp-check .emp-cb[aria-checked="true"] .row-title { color: var(--textSecondary); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var sw = document.getElementById('emp-sw');
+    sw.addEventListener('change', function (e) {
+      if (e.detail.checked) return;
+      setState('emploi', 'desactive');
+      toast('Emploi éteint. Tes heures continuent d\'être suivies.', { undo: function () { setState('emploi', 'actif'); sw.setAttribute('aria-checked', 'true'); } });
+    });
+    document.getElementById('emp-on').addEventListener('click', function () {
+      setState('emploi', 'actif'); sw.setAttribute('aria-checked', 'true');
+      toast('Emploi activé.', { undo: function () { setState('emploi', 'desactive'); } });
+    });
+    var list = document.getElementById('emp-check-list');
+    list.addEventListener('click', function (e) {
+      var b = e.target.closest('.emp-cb'); if (!b) return;
+      b.setAttribute('aria-checked', b.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+      document.getElementById('emp-check-val').textContent = list.querySelectorAll('[aria-checked="true"]').length + '/7';
+    });
+  });
+  </script>
+</section>

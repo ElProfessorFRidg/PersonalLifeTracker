@@ -1,0 +1,270 @@
+<section class="screen" id="scr-fonctionnalites" data-title="Fonctionnalités" data-group="Fonctionnalités" data-tab="accueil"
+         data-states="liste:Réglage d'origine,recherche:Recherche &quot;paie&quot;,minimal:Tout désactivé">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
+    <h1 class="navbar-title">Fonctionnalités</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <section class="section" aria-label="Recherche">
+      <div class="field">
+        <label class="field-label sr-only" for="fon-q">Chercher une fonctionnalité</label>
+        <div class="fon-search">
+          <svg class="icon icon--s" aria-hidden="true"><use href="#i-search"/></svg>
+          <input class="input" id="fon-q" type="search" placeholder="Chercher : paie, congés, notes..." autocomplete="off">
+        </div>
+        <span class="field-help" id="fon-count" aria-live="polite"></span>
+      </div>
+    </section>
+
+    <div class="banner banner--info" id="fon-allOff" hidden>
+      <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Tout est désactivé, et ça marche</p>
+        <p class="banner-text">Il te reste l'essentiel : tes lieux, tes sessions et tes heures. Tu peux rallumer ce que tu veux quand tu veux, tes données sont gardées.</p>
+      </div>
+    </div>
+
+    <!-- Noyau -->
+    <section class="section" id="fon-core" aria-labelledby="fon-core-t">
+      <div class="section-head"><h2 class="section-title" id="fon-core-t">Toujours là</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title">Lieux et sessions</span><span class="row-sub">Ton taf, ta fac, tes courses, avec leurs heures</span></span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-nav"/></svg></span>
+          <span class="row-main"><span class="row-title">Détection arrivée et départ</span><span class="row-sub">Dans la limite des autorisations que tu donnes</span></span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></span>
+          <span class="row-main"><span class="row-title">Saisie manuelle</span><span class="row-sub">Démarrer, arrêter ou ajouter une session à la main</span></span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
+          <span class="row-main"><span class="row-title">Statistiques d'heures</span><span class="row-sub">Totaux, moyennes, graphique par jour</span></span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
+          <span class="row-main"><span class="row-title">Réglages, export et import</span><span class="row-sub">Tes données en JSON, quand tu veux</span></span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+        </div>
+      </div>
+      <p class="section-foot">Ça, tu ne peux pas le couper : sans ça l'app ne note rien. Tout le reste est à toi. Rien sur la paie ou l'argent n'est obligatoire.</p>
+    </section>
+
+    <div id="fon-groups"></div>
+
+    <div class="empty" id="fon-none" hidden>
+      <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-search"/></svg></span>
+      <h3 class="empty-title">Aucune fonctionnalité ne s'appelle comme ça.</h3>
+      <p class="empty-text">Essaie un mot plus court, comme « paie », « congés » ou « notes ».</p>
+      <button type="button" class="btn btn--secondary" id="fon-clear">Effacer la recherche</button>
+    </div>
+
+  </div>
+
+  <!-- Dépendance : activer un module qui en demande un autre, ou couper un module dont d'autres dépendent -->
+  <div class="sheet" id="sheet-fon-dep">
+    <h2 class="sheet-title" id="fon-dep-title">Titre</h2>
+    <p class="sheet-text" id="fon-dep-text">Texte</p>
+    <div class="btn-stack">
+      <button type="button" class="btn btn--primary btn--block" id="fon-dep-ok">Confirmer</button>
+      <button type="button" class="btn btn--secondary btn--block" data-sheet-close id="fon-dep-no">Annuler</button>
+    </div>
+  </div>
+
+  <style>
+    #scr-fonctionnalites .fon-search { position: relative; }
+    #scr-fonctionnalites .fon-search > .icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--textSecondary); pointer-events: none; }
+    #scr-fonctionnalites .fon-search .input { padding-left: 40px; }
+    #scr-fonctionnalites #fon-groups { display: flex; flex-direction: column; gap: var(--space-l); }
+    #scr-fonctionnalites .fon-open { flex: 1; min-width: 0; min-height: 44px; display: flex; flex-direction: column; gap: 2px; justify-content: center; border: 0; background: none; padding: 0; text-align: left; color: inherit; font: inherit; }
+    #scr-fonctionnalites .fon-open .row-title { display: block; }
+    #scr-fonctionnalites .fon-open .row-sub { display: block; }
+    #scr-fonctionnalites .fon-dep { display: block; font: 500 12px/16px var(--font-text); color: var(--textSecondary); }
+    #scr-fonctionnalites .fon-dep.is-miss { color: var(--warning); }
+    #scr-fonctionnalites .fon-row .switch { flex: none; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-fonctionnalites');
+
+    /* Registre : titres français de MODULES.md. d = coché par défaut, r = exige. Sélection représentative, pas les 130. */
+    var G = [
+      { id: 'planning', t: 'Planning', icon: 'calendar', foot: 'L\'onglet Planning n\'affiche que ce que ces fonctions fournissent.', m: [
+        ['planning_ocr', 'Planning par photo', 'Prends ton planning en photo, je le lis et je le range.', 1, []],
+        ['planning_text', 'Planning par texte', 'Colle le message de ton chef, je le transforme en créneaux.', 0, ['planning_ocr']],
+        ['schedule_archive', 'Historique des plannings', 'Retrouve les plannings des semaines passées.', 1, ['planning_ocr']],
+        ['planning_diff', 'Détecteur de changements de planning', 'Te dit ce qui a bougé entre deux versions.', 0, ['planning_ocr']],
+        ['pattern_detection', 'Détection de motifs de planning', 'Repère tes semaines types et propose des suggestions.', 1, []],
+        ['blocked_periods', 'Périodes bloquées', 'Bloque un jour, une semaine ou une plage où tu n\'es pas dispo.', 0, []]
+      ] },
+      { id: 'emploi', t: 'Emploi et paie', icon: 'briefcase', foot: 'Aucune saisie de salaire ou de contrat n\'est obligatoire. L\'app marche sans.', m: [
+        ['employment', 'Employeurs, contrats, fin de contrat', 'Ton employeur, ton contrat et ses dates importantes.', 1, []],
+        ['pay', 'Salaire, paie, conventions, primes', 'Estime ta paie à partir de tes heures. Estimation, pas fiche de paie.', 1, ['employment']],
+        ['contract_hours', 'Équilibrage des heures du contrat', 'Suit ton quota d\'heures et ce qu\'il te reste à faire.', 1, ['employment']],
+        ['leave', 'Congés payés', 'Compte tes jours acquis, pris et restants.', 0, ['employment']],
+        ['pay_date', 'Date de paie attendue', 'Te dit quand tomber sur ton virement.', 0, ['pay']],
+        ['payslip_check', 'Vérificateur de fiche de paie', 'Compare ta fiche avec tes heures, ligne par ligne.', 0, ['pay']],
+        ['send_hours_reminder', 'Rappel d\'envoi des heures', 'Un rappel pour envoyer tes heures à temps.', 0, ['employment']]
+      ] },
+      { id: 'etudes', t: 'Études', icon: 'book', foot: '', m: [
+        ['school_calendar', 'Calendrier scolaire, vacances, jours fériés', 'Sait quand tu as cours, vacances ou férié.', 1, []],
+        ['school_timetable', 'Emploi du temps scolaire', 'Ton emploi du temps de cours, semaine par semaine.', 1, []],
+        ['exam_mode', 'Mode examens', 'Allège l\'app et protège tes créneaux de révision.', 0, []],
+        ['study_slots', 'Créneaux libres de révision', 'Propose des plages libres pour réviser.', 0, []]
+      ] },
+      { id: 'confort', t: 'Au quotidien', icon: 'sun', foot: '', m: [
+        ['now_card', 'Carte Maintenant', 'Une seule chose à faire, en haut de l\'accueil.', 1, []],
+        ['smart_notifications', 'Notifications qui apprennent', 'Moins de notifs, au bon moment, selon tes habitudes.', 1, []],
+        ['live_activity_widgets', 'Live Activity, widgets, App Intents', 'Ton taf en cours sur l\'écran verrouillé et en widget.', 1, []],
+        ['notes', 'Notes de journée', 'Une phrase par jour pour te souvenir.', 1, []],
+        ['search', 'Recherche globale', 'Cherche une session, un lieu ou une note.', 1, []],
+        ['weekly_review', 'Revue de la semaine', 'Le dimanche, je te montre ce qu\'il y a à vérifier.', 1, []],
+        ['recaps', 'Bilans mensuels et annuels', 'Un bilan sympa à la fin de chaque mois.', 1, []],
+        ['travel_departure', 'Trajet et « Pars maintenant »', 'Calcule quand partir pour arriver à l\'heure.', 0, []],
+        ['focus', 'Concentration', 'Branche l\'app sur ton mode Concentration iOS.', 0, []],
+        ['glossary', 'Termes expliqués', 'Explique les mots un peu techniques, en un tap.', 1, []]
+      ] },
+      { id: 'securite', t: 'Fiabilité et sécurité', icon: 'shield', foot: 'Tout reste sur ton tel. Pas de compte, pas de serveur.', m: [
+        ['data_trust', 'Score de fiabilité des données', 'Te dit à quel point tes heures sont sûres.', 1, []],
+        ['reliability_center', 'Centre de fiabilité', 'Un écran pour voir ce qui cloche et le régler.', 1, []],
+        ['detection_help', 'Assistant de dépannage de la détection', 'Explique pourquoi l\'app a raté une arrivée ou un départ.', 1, []],
+        ['place_calibration', 'Auto-calibration des lieux', 'Ajuste le rayon de tes lieux avec le temps.', 1, []],
+        ['battery_recovery', 'Récupération après batterie vide', 'Rattrape ce qui s\'est passé pendant une extinction.', 1, []],
+        ['clock_check', 'Contrôle de l\'horloge', 'Te prévient si l\'heure du téléphone a été changée.', 1, []],
+        ['undo_safety', 'Annuler partout et instantanés', 'Annule presque tout et reviens en arrière.', 1, []],
+        ['folder_backup', 'Sauvegarde automatique dans un dossier', 'Copie tes données dans un dossier Fichiers.', 1, []],
+        ['biometric_lock', 'Verrouillage Face ID', 'Demande Face ID pour ouvrir l\'app.', 0, []],
+        ['privacy_shield', 'Protection à la capture et mode démo', 'Masque tes données dans les captures d\'écran.', 1, []],
+        ['icloud', 'Sauvegarde iCloud', 'Garde une copie dans ton iCloud. Facultatif.', 0, []]
+      ] },
+      { id: 'argent', t: 'Argent perso (facultatif)', icon: 'euro', foot: 'Tout ça est coupé par défaut. Rien d\'obligatoire.', m: [
+        ['savings', 'Objectifs d\'épargne', 'Fixe un objectif et vois si tes heures y mènent.', 0, ['pay']],
+        ['expenses', 'Suivi des frais', 'Note tes frais liés au taf (transport, repas).', 0, []],
+        ['travel_cost', 'Coût du trajet', 'Estime ce que te coûte chaque trajet.', 0, []],
+        ['month_forecast', 'Prévision du solde de fin de mois', 'Estime ce qui te restera à la fin du mois.', 0, ['pay']]
+      ] }
+    ];
+    var REG = {}, ORDER = [];
+    G.forEach(function (g) { g.m.forEach(function (m) { REG[m[0]] = { id: m[0], name: m[1], desc: m[2], def: !!m[3], req: m[4], group: g.id, gname: g.t, icon: g.icon }; ORDER.push(m[0]); }); });
+
+    var on = {};
+    function resetDefaults() { ORDER.forEach(function (id) { on[id] = REG[id].def; }); }
+    var saved = PLT.store.get('fon-on', null);
+    if (saved) ORDER.forEach(function (id) { on[id] = saved[id] !== undefined ? !!saved[id] : REG[id].def; }); else resetDefaults();
+    function persist() { PLT.store.set('fon-on', on); }
+    function dependents(id) { return ORDER.filter(function (k) { return on[k] && REG[k].req.indexOf(id) !== -1; }); }
+    function names(ids) { return ids.map(function (i) { return REG[i].name; }); }
+    function list(a) { return a.length < 2 ? a.join('') : a.slice(0, -1).join(', ') + ' et ' + a[a.length - 1]; }
+    function short(id) { var s = { employment: 'Emploi', pay: 'Paie', planning_ocr: 'Planning par photo' }; return s[id] || REG[id].name; }
+
+    /* API partagée avec l'écran « module » */
+    var pending = null;
+    function request(id, want, after) {
+      var m = REG[id];
+      if (want) {
+        var miss = m.req.filter(function (r) { return !on[r]; });
+        if (miss.length) {
+          pending = { id: id, want: true, also: miss, after: after };
+          document.getElementById('fon-dep-title').textContent = m.name + ' a besoin de ' + list(miss.map(short)) + '.';
+          document.getElementById('fon-dep-text').textContent = 'Je l\'active aussi ? Tu pourras le couper plus tard, et tes données ne bougent pas.';
+          document.getElementById('fon-dep-ok').textContent = 'Activer les deux';
+          document.getElementById('fon-dep-no').textContent = 'Laisser coupé';
+          openSheet('sheet-fon-dep'); return false;
+        }
+        on[id] = true; commit(id, true); return true;
+      }
+      var dep = dependents(id);
+      if (dep.length) {
+        pending = { id: id, want: false, also: dep, after: after };
+        document.getElementById('fon-dep-title').textContent = short(id) + ' sert à d\'autres fonctions.';
+        document.getElementById('fon-dep-text').textContent = list(names(dep)) + ' en dépend' + (dep.length > 1 ? 'ent' : '') + '. Je les coupe aussi ? Rien n\'est supprimé, tout revient si tu rallumes.';
+        document.getElementById('fon-dep-ok').textContent = 'Tout désactiver';
+        document.getElementById('fon-dep-no').textContent = 'Garder ' + short(id);
+        openSheet('sheet-fon-dep'); return false;
+      }
+      on[id] = false; commit(id, false); return true;
+    }
+    function commit(id, want) {
+      persist(); render();
+      document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: id } }));
+      toast(REG[id].name + (want ? ' activé.' : ' désactivé. Tes données sont gardées.'), { undo: function () { on[id] = !want; persist(); render(); document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: id } })); } });
+    }
+    document.getElementById('fon-dep-ok').addEventListener('click', function () {
+      var p = pending; if (!p) return; pending = null;
+      var changed = [p.id].concat(p.also);
+      changed.forEach(function (k) { on[k] = p.want; });
+      closeSheet(); persist(); render();
+      document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } }));
+      toast((p.want ? 'Activé' : 'Désactivé') + ' : ' + list(names(changed)) + '.', { undo: function () { changed.forEach(function (k) { on[k] = !p.want; }); persist(); render(); document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } })); } });
+    });
+    window.PLT_FON = { reg: REG, on: on, request: request, order: ORDER, short: short };
+
+    function esc(s) { return s; }
+    function rowHtml(m) {
+      var req = m.req.map(function (r) {
+        return '<span class="fon-dep' + (on[r] ? '' : ' is-miss') + '">Demande : ' + short(r) + (on[r] ? ' (activé)' : ' (désactivé)') + '</span>';
+      }).join('');
+      return '<div class="row fon-row" data-id="' + m.id + '">'
+        + '<span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + m.icon + '"/></svg></span>'
+        + '<button type="button" class="fon-open" data-open="' + m.id + '" aria-label="' + m.name + ', détails"><span class="row-title">' + m.name + '</span><span class="row-sub">' + m.desc + '</span>' + req + '</button>'
+        + '<button type="button" class="switch" role="switch" aria-checked="' + on[m.id] + '" aria-label="' + m.name + '" data-id="' + m.id + '"></button></div>';
+    }
+    function render() {
+      var q = document.getElementById('fon-q').value.trim().toLowerCase();
+      var html = '', shown = 0, total = ORDER.length;
+      G.forEach(function (g) {
+        var rows = g.m.map(function (x) { return REG[x[0]]; }).filter(function (m) { return !q || (m.name + ' ' + m.desc + ' ' + m.gname).toLowerCase().indexOf(q) !== -1; });
+        if (!rows.length) return;
+        shown += rows.length;
+        var n = rows.filter(function (m) { return on[m.id]; }).length;
+        html += '<section class="section" aria-labelledby="fon-g-' + g.id + '"><div class="section-head"><h2 class="section-title" id="fon-g-' + g.id + '">' + g.t + '</h2><span class="muted num">' + n + ' sur ' + rows.length + '</span></div>'
+          + '<div class="list">' + rows.map(rowHtml).join('') + '</div>' + (g.foot && !q ? '<p class="section-foot">' + g.foot + '</p>' : '') + '</section>';
+      });
+      document.getElementById('fon-groups').innerHTML = html;
+      var act = ORDER.filter(function (k) { return on[k]; }).length;
+      document.getElementById('fon-count').textContent = q ? shown + ' résultat' + (shown > 1 ? 's' : '') + '. ' + act + ' fonctionnalités actives en tout.' : act + ' fonctionnalités actives sur ' + total + '. Tu peux changer ça quand tu veux.';
+      document.getElementById('fon-none').hidden = !(q && !shown);
+      document.getElementById('fon-core').hidden = !!q;
+      document.getElementById('fon-allOff').hidden = act !== 0;
+    }
+
+    root.addEventListener('change', function (e) {
+      var sw = e.target.closest ? e.target.closest('.fon-row .switch') : null;
+      if (!sw) return;
+      var id = sw.getAttribute('data-id'), want = !!e.detail.checked;
+      var ok = request(id, want);
+      if (!ok) sw.setAttribute('aria-checked', String(!want));
+    });
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-open]') : null;
+      if (!b) return;
+      PLT.store.set('fon-sel', b.getAttribute('data-open'));
+      go('module');
+    });
+    document.getElementById('fon-q').addEventListener('input', render);
+    document.getElementById('fon-clear').addEventListener('click', function () { document.getElementById('fon-q').value = ''; render(); });
+    document.addEventListener('fon:changed', render);
+
+    function fromState() {
+      var s = root.getAttribute('data-state') || 'liste', q = document.getElementById('fon-q');
+      if (s === 'liste') { resetDefaults(); q.value = ''; }
+      else if (s === 'recherche') { resetDefaults(); q.value = 'paie'; }
+      else if (s === 'minimal') { ORDER.forEach(function (k) { on[k] = false; }); q.value = ''; }
+      persist(); render();
+    }
+    root.addEventListener('plt:state', fromState);
+    render();
+  });
+  </script>
+</section>

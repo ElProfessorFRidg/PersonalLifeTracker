@@ -1,0 +1,163 @@
+<section class="screen" id="scr-sessions" data-title="Historique des sessions" data-group="Sessions" data-tab="accueil"
+         data-states="liste:Liste,vide:Aucune session,chargement:Chargement">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="accueil"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Accueil</button>
+    <h1 class="navbar-title">Sessions</h1>
+    <div class="navbar-actions"><button type="button" class="iconbtn iconbtn--tonal" data-go="session-ajout" aria-label="Ajouter une session"><svg class="icon icon--s" aria-hidden="true"><use href="#i-plus"/></svg></button></div>
+  </header>
+
+  <div class="screen-body">
+
+    <div data-when="liste">
+      <div class="segmented" id="se-filter" role="group" aria-label="Filtrer par type">
+        <button type="button" data-value="tout" aria-pressed="true">Tout</button>
+        <button type="button" data-value="taf" aria-pressed="false">Taf</button>
+        <button type="button" data-value="cours" aria-pressed="false">Cours</button>
+        <button type="button" data-value="courses" aria-pressed="false">Courses</button>
+      </div>
+      <div class="se-tools">
+        <button type="button" class="chip chip--doubt se-pend" id="se-pend" aria-pressed="false">À confirmer <span class="num">(2)</span></button>
+        <span class="muted se-count" id="se-count" aria-live="polite">7 sessions</span>
+      </div>
+    </div>
+
+    <div id="se-list" data-when="liste">
+      <section class="section" data-day aria-labelledby="se-d1">
+        <div class="section-head"><h2 class="section-title" id="se-d1">Aujourd'hui, lundi 16 novembre</h2></div>
+        <div class="list">
+          <button type="button" class="row" data-go="session" data-kind="taf">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Taf</span><span class="row-sub">Supérette du Canal, depuis <span class="num">17:56</span></span></span>
+            <span class="chip chip--work"><span class="dot-live" aria-hidden="true"></span>En cours</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+          <button type="button" class="row" data-go="session" data-kind="courses">
+            <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+            <span class="row-main"><span class="row-title">Courses</span><span class="row-sub">Marché du Canal, <span class="num">12:20</span> à <span class="num">12:45</span>. Pas compté.</span></span>
+            <span class="row-value num">25 min</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+          <button type="button" class="row" data-go="session" data-kind="cours">
+            <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+            <span class="row-main"><span class="row-title">Cours</span><span class="row-sub">Fac de lettres, <span class="num">08:05</span> à <span class="num">12:02</span></span></span>
+            <span class="row-value num">3 h 57</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="section" data-day aria-labelledby="se-d2">
+        <div class="section-head"><h2 class="section-title" id="se-d2">Samedi 14 novembre</h2></div>
+        <div class="list">
+          <button type="button" class="row" data-go="doute" data-kind="taf" data-pending="1">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Taf</span><span class="row-sub">Supérette du Canal, <span class="num">17:56</span> à <span class="num">20:38</span></span>
+              <span class="chip-row"><span class="chip chip--doubt">À confirmer</span></span></span>
+            <span class="row-value num">2 h 42</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <section class="section" data-day aria-labelledby="se-d3">
+        <div class="section-head"><h2 class="section-title" id="se-d3">Vendredi 13 novembre</h2></div>
+        <div class="list">
+          <button type="button" class="row" data-go="session" data-kind="taf">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Taf</span><span class="row-sub">Supérette du Canal, <span class="num">18:01</span> à <span class="num">21:00</span></span></span>
+            <span class="row-value num">2 h 59</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+          <button type="button" class="row" data-go="session" data-kind="courses" data-pending="1">
+            <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+            <span class="row-main"><span class="row-title">Courses</span><span class="row-sub">Supérette du Canal, <span class="num">12:31</span> à <span class="num">12:52</span></span>
+              <span class="chip-row"><span class="chip chip--doubt">À confirmer</span></span></span>
+            <span class="row-value num">21 min</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+          <button type="button" class="row" data-go="session" data-kind="cours">
+            <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+            <span class="row-main"><span class="row-title">Cours</span><span class="row-sub">Fac de lettres, <span class="num">08:02</span> à <span class="num">12:05</span></span></span>
+            <span class="row-value num">4 h 03</span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+        </div>
+      </section>
+
+      <div class="card card--outline" id="se-none" hidden>
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-search"/></svg></span>
+          <h3 class="empty-title">Rien avec ce filtre.</h3>
+          <p class="empty-text">Aucune session ne correspond. Remets « Tout » pour tout revoir.</p>
+          <button type="button" class="btn btn--secondary" id="se-reset">Tout afficher</button>
+        </div>
+      </div>
+      <p class="section-foot">Les courses sont notées mais jamais comptées dans tes heures.</p>
+    </div>
+
+    <div class="card card--outline" data-when="vide">
+      <div class="empty">
+        <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-clock"/></svg></span>
+        <h3 class="empty-title">Aucune session pour l'instant.</h3>
+        <p class="empty-text">Dès que t'arrives à un de tes lieux, ta session apparaît ici. Tu peux aussi en ajouter une à la main.</p>
+        <button type="button" class="btn btn--primary" data-go="session-ajout">Ajouter une session</button>
+      </div>
+    </div>
+
+    <div data-when="chargement" role="status" aria-label="Chargement des sessions">
+      <section class="section" aria-hidden="true">
+        <div class="section-head"><span class="skeleton skeleton--title" style="width:55%"></span></div>
+        <div class="list">
+          <div class="row"><span class="skeleton skeleton--circle" style="width:40px;height:40px"></span><span class="row-main"><span class="skeleton skeleton--line" style="width:30%"></span><span class="skeleton skeleton--line" style="width:70%"></span></span><span class="skeleton skeleton--line" style="width:44px"></span></div>
+          <div class="row"><span class="skeleton skeleton--circle" style="width:40px;height:40px"></span><span class="row-main"><span class="skeleton skeleton--line" style="width:35%"></span><span class="skeleton skeleton--line" style="width:65%"></span></span><span class="skeleton skeleton--line" style="width:44px"></span></div>
+          <div class="row"><span class="skeleton skeleton--circle" style="width:40px;height:40px"></span><span class="row-main"><span class="skeleton skeleton--line" style="width:25%"></span><span class="skeleton skeleton--line" style="width:75%"></span></span><span class="skeleton skeleton--line" style="width:44px"></span></div>
+        </div>
+      </section>
+      <section class="section" aria-hidden="true">
+        <div class="section-head"><span class="skeleton skeleton--title" style="width:40%"></span></div>
+        <div class="list">
+          <div class="row"><span class="skeleton skeleton--circle" style="width:40px;height:40px"></span><span class="row-main"><span class="skeleton skeleton--line" style="width:30%"></span><span class="skeleton skeleton--line" style="width:60%"></span></span><span class="skeleton skeleton--line" style="width:44px"></span></div>
+        </div>
+      </section>
+      <p class="section-foot" style="text-align:center">Je range ton historique...</p>
+    </div>
+  </div>
+
+  <style>
+  #scr-sessions #se-list, #scr-sessions [data-when="chargement"] { display: flex; flex-direction: column; gap: var(--space-l); }
+  #scr-sessions [data-when="liste"]:not(#se-list) { display: block; }
+  #scr-sessions .se-tools { display: flex; align-items: center; justify-content: space-between; gap: var(--space-s); margin-top: var(--space-s); }
+  #scr-sessions .se-pend { min-height: 44px; padding: 0 14px; cursor: pointer; }
+  #scr-sessions .se-pend[aria-pressed="true"] { background: var(--accentSoft); color: var(--accent); border-style: solid; border-color: var(--accent); }
+  #scr-sessions .se-count { font: var(--t-footnote) var(--font-text); }
+  #scr-sessions .row .chip-row { margin-top: 4px; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var kind = 'tout', pend = false;
+    var btn = document.getElementById('se-pend'), count = document.getElementById('se-count');
+    function apply() {
+      var shown = 0;
+      document.querySelectorAll('#se-list [data-day]').forEach(function (day) {
+        var n = 0;
+        day.querySelectorAll('.row').forEach(function (r) {
+          var ok = (kind === 'tout' || r.getAttribute('data-kind') === kind) && (!pend || r.getAttribute('data-pending') === '1');
+          r.hidden = !ok; if (ok) n++;
+        });
+        day.hidden = n === 0; shown += n;
+      });
+      document.getElementById('se-none').hidden = shown !== 0;
+      count.textContent = shown + (shown > 1 ? ' sessions' : ' session');
+    }
+    document.getElementById('se-filter').addEventListener('change', function (e) { kind = e.detail.value; apply(); });
+    btn.addEventListener('click', function () { pend = !pend; btn.setAttribute('aria-pressed', String(pend)); apply(); });
+    document.getElementById('se-reset').addEventListener('click', function () {
+      kind = 'tout'; pend = false; btn.setAttribute('aria-pressed', 'false');
+      document.querySelectorAll('#se-filter button').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === 'tout')); });
+      apply();
+    });
+  });
+  </script>
+</section>

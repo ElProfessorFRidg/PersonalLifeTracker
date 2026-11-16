@@ -1,0 +1,19 @@
+| Écran | Rôle | Composants clés | États | Module | Étape | Étiquettes VoiceOver |
+|---|---|---|---|---|---|---|
+| `lieux` | Liste des lieux avec type, rayon, fiabilité, dernière visite (onglet Lieux) | `list`/`row`, `rel`, `banner--error`, `empty`, carte d'explication taf/cours/courses | liste, vide, refuse (localisation refusée) | core (lieux, section 10) | Étape 3 (lieux) | « Ajouter un lieu », « Ouvrir les réglages iOS », fiabilité lue en texte (Fiable, À vérifier, À l'arrêt) |
+| `lieu-ajout` | Ajouter un lieu : carte SVG, épingle, cercle de rayon réglable, nom, type taf/cours/courses, « J'y travaille aussi » | carte SVG (`role="img"`), `input type=range`, `field`, `radiogroup`, `switch`, toast avec Annuler | carte, erreur (nom manquant) | core (lieux, sections 10 et 11) | Étape 3 (lieux) | « Carte du quartier avec une épingle et un cercle de 100 mètres autour », « Rayon : N m » (aria-valuetext), « Type de lieu », « J'y travaille aussi », « Ma position » |
+| `lieu` | Détail d'un lieu : carte, rayon, type, fiabilité, stats du mois, dernières sessions, suppression | carte SVG, `list`, `rel`, `stat-grid`, `row--destructive`, toast Annuler | taf, courses | core (lieux) | Étape 3 (lieux) | « Aperçu de la carte : [lieu], zone de N mètres », « Modifier le lieu », « Supprimer ce lieu » |
+| `sessions` | Historique groupé par jour, filtres tout/taf/cours/courses, pastille « À confirmer » | `segmented`, chip bouton `aria-pressed`, `list`/`row`, `chip--doubt`, `skeleton`, `empty` | liste, vide, chargement | core (sessions, section 14) | Étape 4 (sessions) | « Filtrer par type », « À confirmer (2) » (pressed), « Ajouter une session », compteur `aria-live`, chargement en `role="status"` |
+| `session` | Détail et correction : horodatages exacts, base heures pleines, trois bases, marge, source, changement de type, suppression | `card`, `rel`, `banner--warning`, `list`, 2 feuilles (heures, type), `radiogroup`, toast Annuler | terminee, incertaine | core (sessions, section 13.1) | Étape 4 (sessions) | « Durée retenue », « Durée provisoire », « Type de session », champs Arrivée et Départ (labels), « Choisir l'heure pleine » |
+| `session-ajout` | Saisie manuelle : lieu, type, date, début, fin, durée calculée, erreur de cohérence | `radiogroup`, `segmented`, `input` date et time, `field is-invalid`, `banner--error` | formulaire, erreur (fin avant début) | core (saisie manuelle, section 15) | Étape 4 (sessions) | « Lieu », « Type », Date, Début, Fin (labels), `aria-invalid` sur la fin, bandeau `role="alert"` |
+| `doute` | Zone de doute 13.1 : choisir l'heure pleine, deux options avec durée résultante, heure exacte gardée, « Appliquer toujours ce choix pour ce lieu », rappel de la règle :00-:14 / :15-:45 / :46-:59 | `card--now`, `radiogroup`, `switch`, `chip`, boutons Compter / Garder l'heure exacte / Plus tard, toast Annuler | depart (20:38), arrivee (17:32) | core (normalisation, section 13.1) | Étape 4 (sessions) | « Heure pleine de départ », « Heure pleine d'arrivée », « Appliquer toujours ce choix pour ce lieu » (switch), bouton « Compter 21:00 (3 h) » |
+
+## Non maquetté
+
+- Recherche d'adresse (MapKit) et choix « position actuelle » réels : la carte est un dessin SVG, le rayon seul est interactif.
+- Catégories Domicile, Commerce, Autre, horaires habituels, employeur rattaché, mode de transport (section 10).
+- Fusion et séparation de sessions, notes, journal des modifications, démarrage manuel (en dehors de l'accueil).
+- Options de doute 3 à 5 (demi-heure, heure du planning) : seules heure pleine avant, heure pleine après et heure exacte sont montrées.
+- Détail « Pourquoi cette classification ? » (score 0 à 100, section 11) et renommer, fusionner un lieu.
+- Pagination et défilement infini de l'historique, recherche globale.
+- Dates et heures : champs natifs du navigateur, pas les sélecteurs iOS.
