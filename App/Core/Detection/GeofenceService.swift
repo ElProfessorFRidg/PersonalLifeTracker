@@ -294,6 +294,8 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
                 log(.regionEntered, place: place, detail: "Retour dans la zone pendant le délai de grâce : la session continue", date: date)
             case .ignoreExitWithoutEntry(let place, let date):
                 log(.regionExited, place: place, detail: "Sortie sans entrée connue et sans session en cours : rien fait", date: date)
+            case .visitEnded(let place, let entered, let exited):
+                classifyDualUseVisit(place: place, entered: entered, exited: exited)
             }
         }
     }
@@ -305,7 +307,14 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
             return nil
         }
         do {
-            let session: WorkSession = try SessionService(context: context).start(activity: model.type.defaultActivity, place: model, now: date)
+            // Section 11 : le classeur tranche l'activité (taf donne travail, cours donne études).
+            let visit = VisitContext(placeKey: model.uid.uuidString, placeType: model.type, alsoWorksHere: model.alsoWorksHere,
+                                     start: date, durationSeconds: nil, plannedShifts: [])
+            let result: ClassificationResult = VisitClassifier.classify(visit, habits: HabitStore.shared.model,
+                                                                        now: date, calendar: Calendar.current)
+            var activity: ActivityType = result.activity
+            if activity == .unknown { activity = model.type.defaultActivity }
+            let session: WorkSession = try SessionService(context: context).start(activity: activity, place: model, now: date)
             session.source = .gps
             session.isConfirmed = false
             try context.save()
@@ -316,6 +325,41 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         } catch {
             log(.monitoringFailed, place: place, detail: "Démarrage de session impossible : \(error)", date: date)
             return nil
+        }
+    }
+
+    /// Visite terminée dans un lieu de courses où l'on travaille aussi (section 11) : classée avec sa durée réelle.
+    /// Courses sûres (score au-dessus de 75) : visite notée, aucune session. Sinon une session déjà terminée est créée,
+    /// non confirmée, avec le classement provisoire ou "inconnu" à confirmer.
+    private func classifyDualUseVisit(place: DetectionPlace, entered: Date, exited: Date) {
+        guard let model = fetchPlace(uid: place.uid) else {
+            log(.monitoringFailed, place: place, detail: "Lieu introuvable pour classer la visite", date: exited)
+            return
+        }
+        let seconds: TimeInterval = max(0, exited.timeIntervalSince(entered))
+        let visit = VisitContext(placeKey: model.uid.uuidString, placeType: model.type, alsoWorksHere: model.alsoWorksHere,
+                                 start: entered, durationSeconds: seconds, plannedShifts: [])
+        let result: ClassificationResult = VisitClassifier.classify(visit, habits: HabitStore.shared.model,
+                                                                    now: exited, calendar: Calendar.current)
+        if result.activity == .shopping && !result.needsConfirmation {
+            log(.arrivalConfirmed, place: place, detail: "Visite classée courses, aucune session comptée. \(result.reason)", date: exited)
+            return
+        }
+        let context: ModelContext = container.mainContext
+        let service = SessionService(context: context)
+        let running: WorkSession? = (try? service.runningSession()) ?? nil
+        if running != nil {
+            log(.ignoredShortVisit, place: place, detail: "Visite non classée en session : une session est en cours. \(result.reason)", date: exited)
+            return
+        }
+        let session = WorkSession(activity: result.activity, start: entered, end: exited, place: model,
+                                  source: .gps, isConfirmed: result.level == .automatic)
+        context.insert(session)
+        do {
+            try context.save()
+            log(.sessionStarted, place: place, detail: "Visite classée \(result.activity.title), score \(result.confidence). \(result.reason)", date: exited)
+        } catch {
+            log(.monitoringFailed, place: place, detail: "Session de visite impossible à enregistrer : \(error)", date: exited)
         }
     }
 

@@ -97,6 +97,8 @@ struct AccueilView: View {
                 PLTBanner(kind: .error, title: message)
             }
 
+            RecoveryCardsSection(now: now, calendar: cal, running: running)
+
             AccueilNowCard(decision: decision,
                            running: running,
                            doubtSession: doubtTarget,

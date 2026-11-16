@@ -52,6 +52,9 @@ enum DetectionDecision: Equatable {
     case departureCancelled(place: DetectionPlace, date: Date)
     /// Sortie d'un lieu dont on n'avait pas vu l'entrée et sans session en cours : rien à faire.
     case ignoreExitWithoutEntry(place: DetectionPlace, date: Date)
+    /// Fin d'une visite notée dans un lieu de courses où l'on travaille aussi (section 11) : la durée est connue,
+    /// l'appelant peut la classer (travail ou courses). Jamais émis pour un lieu de courses ordinaire.
+    case visitEnded(place: DetectionPlace, entered: Date, exited: Date)
 }
 
 /// Machine à états de la détection (sections 8, 13 et 14). Foundation seulement.
@@ -80,8 +83,8 @@ struct DetectionEngine {
 
     private var pendingArrivals: [UUID: PendingArrival] = [:]
     private var pendingDepartures: [UUID: PendingDeparture] = [:]
-    /// Lieux de courses dont la visite est notée et pas encore terminée.
-    private var notedVisits: Set<UUID> = []
+    /// Lieux de courses dont la visite est notée et pas encore terminée, avec l'heure d'entrée.
+    private var notedVisits: [UUID: Date] = [:]
     /// Lieu de la session en cours (nil si aucune). Les sessions manuelles ont un lieu nil mais comptent comme en cours.
     private(set) var runningPlace: DetectionPlace?
     private(set) var isSessionRunning: Bool = false
@@ -138,7 +141,7 @@ struct DetectionEngine {
         if isSessionRunning, let running = runningPlace, running.uid == place.uid {
             return []
         }
-        if pendingArrivals[place.uid] != nil || notedVisits.contains(place.uid) {
+        if pendingArrivals[place.uid] != nil || notedVisits[place.uid] != nil {
             return []
         }
         pendingArrivals[place.uid] = PendingArrival(place: place, entered: date, accuracy: accuracy)
@@ -160,8 +163,11 @@ struct DetectionEngine {
             decisions.append(contentsOf: promote(arrival))
         }
 
-        if notedVisits.contains(place.uid) {
-            notedVisits.remove(place.uid)
+        if let notedEntry = notedVisits[place.uid] {
+            notedVisits[place.uid] = nil
+            if place.alsoWorksHere {
+                decisions.append(.visitEnded(place: place, entered: notedEntry, exited: date))
+            }
             return decisions
         }
 
@@ -208,7 +214,7 @@ struct DetectionEngine {
     private mutating func promote(_ arrival: PendingArrival) -> [DetectionDecision] {
         let place: DetectionPlace = arrival.place
         if !place.createsSessions {
-            notedVisits.insert(place.uid)
+            notedVisits[place.uid] = arrival.entered
             return [.noteVisit(place: place, entered: arrival.entered)]
         }
         if isSessionRunning {

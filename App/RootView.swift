@@ -37,6 +37,17 @@ struct RootView: View {
                                                      calendar: Calendar.current)
             }
         }
+        .onChange(of: scenePhase, initial: true) { (_: ScenePhase, phase: ScenePhase) in
+            // Sections 131 et 140 : indices datés et contrôle de l'horloge, sans timer ni polling.
+            let recoveryOn: Bool = modules.isActive("battery_recovery")
+            let clockOn: Bool = modules.isActive("clock_check")
+            if !recoveryOn && !clockOn { return }
+            if phase == .active {
+                LifecycleChecks.sceneBecameActive(context: modelContext, batteryRecoveryOn: recoveryOn, clockCheckOn: clockOn)
+            } else if phase == .background {
+                LifecycleChecks.sceneWentToBackground(context: modelContext, batteryRecoveryOn: recoveryOn, clockCheckOn: clockOn)
+            }
+        }
     }
 }
 

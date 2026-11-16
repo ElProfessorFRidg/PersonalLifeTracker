@@ -212,6 +212,8 @@ struct SessionDetailView: View {
             set: { (newValue: ActivityType) in
                 session.activity = newValue
                 persist()
+                // Section 11 : toute correction crée une règle locale limitée à son contexte (voir HabitLearning).
+                HabitLearning.recordFeedback(for: session, store: HabitStore.shared)
             }
         )
     }
@@ -245,6 +247,8 @@ struct SessionDetailView: View {
             Button("C'est bon, je confirme") {
                 session.isConfirmed = true
                 persist()
+                // Section 11 : une confirmation compte comme une réponse concordante pour son contexte.
+                HabitLearning.recordFeedback(for: session, store: HabitStore.shared)
             }
             .buttonStyle(.pltPrimary)
         }

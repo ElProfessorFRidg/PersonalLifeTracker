@@ -10,6 +10,7 @@ struct LieuDetailView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.palette) private var palette
     @Environment(AppSettings.self) private var settings
+    @Environment(ModuleStore.self) private var modules
     @Environment(UndoCenter.self) private var undoCenter: UndoCenter?
     @Query(sort: \Place.name) private var allPlaces: [Place]
 
@@ -99,6 +100,9 @@ struct LieuDetailView: View {
                 PLTBanner(kind: .warning, title: "Zones qui se touchent", message: warning)
             }
             settingsSection
+            if modules.isActive("place_calibration") {
+                CalibrationCard(place: place)
+            }
             statsSection
             sessionsSection
             deleteSection

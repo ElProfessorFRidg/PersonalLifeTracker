@@ -185,4 +185,43 @@ final class DetectionEngineTests: XCTestCase {
         let selected = RegionSelection.select(candidates, referenceLatitude: 48.24, referenceLongitude: 2.0)
         XCTAssertEqual(Set(selected), Set(candidates[5..<25].map { $0.uid }))
     }
+
+    // MARK: Fin de visite dans un lieu de courses où l'on travaille aussi (classification, section 11)
+
+    func testDualUseVisitEndEmitsVisitEndedWithExactTimes() {
+        let mixed = DetectionPlace(uid: UUID(), name: "Intermarché", type: .courses, alsoWorksHere: true)
+        var engine = DetectionEngine()
+        _ = engine.handle(.entered(place: mixed, date: nov16(11, 0, 0), accuracy: nil))
+        XCTAssertEqual(engine.handle(.tick(date: nov16(11, 6, 0))), [.noteVisit(place: mixed, entered: nov16(11, 0, 0))])
+        let decisions = engine.handle(.exited(place: mixed, date: nov16(13, 30, 15)))
+        XCTAssertEqual(decisions, [.visitEnded(place: mixed, entered: nov16(11, 0, 0), exited: nov16(13, 30, 15))])
+        // Une deuxième sortie ne produit plus rien.
+        XCTAssertEqual(engine.handle(.exited(place: mixed, date: nov16(13, 31, 0))), [.ignoreExitWithoutEntry(place: mixed, date: nov16(13, 31, 0))])
+    }
+
+    func testDualUseExitBeforeTickNotesThenEnds() {
+        let mixed = DetectionPlace(uid: UUID(), name: "Intermarché", type: .courses, alsoWorksHere: true)
+        var engine = DetectionEngine()
+        _ = engine.handle(.entered(place: mixed, date: nov16(11, 0, 0), accuracy: nil))
+        let decisions = engine.handle(.exited(place: mixed, date: nov16(11, 10, 0)))
+        XCTAssertEqual(decisions, [
+            .noteVisit(place: mixed, entered: nov16(11, 0, 0)),
+            .visitEnded(place: mixed, entered: nov16(11, 0, 0), exited: nov16(11, 10, 0))
+        ])
+    }
+
+    func testDualUseShortPassageIsStillIgnored() {
+        let mixed = DetectionPlace(uid: UUID(), name: "Intermarché", type: .courses, alsoWorksHere: true)
+        var engine = DetectionEngine()
+        _ = engine.handle(.entered(place: mixed, date: nov16(11, 0, 0), accuracy: nil))
+        let decisions = engine.handle(.exited(place: mixed, date: nov16(11, 4, 59)))
+        XCTAssertEqual(decisions, [.ignoreShortVisit(place: mixed, entered: nov16(11, 0, 0), exited: nov16(11, 4, 59))])
+    }
+
+    func testPlainCoursesVisitEndEmitsNoVisitEnded() {
+        var engine = DetectionEngine()
+        _ = engine.handle(.entered(place: courses, date: nov16(11, 0, 0), accuracy: nil))
+        _ = engine.handle(.tick(date: nov16(11, 6, 0)))
+        XCTAssertEqual(engine.handle(.exited(place: courses, date: nov16(12, 0, 0))), [])
+    }
 }
