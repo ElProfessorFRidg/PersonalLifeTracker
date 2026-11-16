@@ -19,7 +19,7 @@
         <p class="fia-big num" id="fia-big" aria-label="Score de fiabilité">92<small>%</small></p>
         <div class="meter" id="fia-meter" role="presentation"><i style="--v:92"></i></div>
         <p class="card-text" id="fia-sum">Ta semaine est fiable à 92 %. Ça mesure la qualité des données, pas ce que tu fais.</p>
-        <button type="button" class="btn btn--secondary btn--small" data-sheet="sheet-fia-why">Pourquoi ce score ?</button>
+        <button type="button" class="btn btn--secondary btn--small" data-sheet="sheet-fia-why">Pourquoi ce score&nbsp;?</button>
       </article>
     </section>
 
@@ -43,14 +43,14 @@
     <section class="section" aria-labelledby="fia-days-t">
       <div class="section-head"><h2 class="section-title" id="fia-days-t">Jour par jour</h2></div>
       <div class="list" id="fia-days"></div>
-      <p class="section-foot">Trois barres : fiable, à vérifier, incertain. Le pourcentage est donné pour ceux qui préfèrent le chiffre.</p>
+      <p class="section-foot">Trois barres&nbsp;: fiable, à vérifier, incertain. Le pourcentage est donné pour ceux qui préfèrent le chiffre.</p>
     </section>
 
     <!-- Ce qui fait baisser -->
     <section class="section" aria-labelledby="fia-low-t">
       <div class="section-head"><h2 class="section-title" id="fia-low-t">Ce qui fait baisser le score</h2></div>
       <div class="list" id="fia-causes"></div>
-      <p class="section-foot" id="fia-causes-foot">100 moins les points perdus : 92 %.</p>
+      <p class="section-foot" id="fia-causes-foot">100 moins les points perdus&nbsp;: 92 %.</p>
     </section>
 
     <!-- Actions -->
@@ -59,7 +59,7 @@
       <div class="list" id="fia-acts"></div>
     </section>
 
-    <!-- Centre de fiabilité : on agrège, sans dupliquer -->
+    <!-- Centre de fiabilité&nbsp;: on agrège, sans dupliquer -->
     <section class="section" aria-labelledby="fia-oth-t">
       <div class="section-head"><h2 class="section-title" id="fia-oth-t">Le reste du centre de fiabilité</h2></div>
       <div class="list">
@@ -85,7 +85,7 @@
         </div>
         <button type="button" class="row" data-go="diagnostic">
           <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-question"/></svg></span>
-          <span class="row-main"><span class="row-title">Pourquoi l'app a raté ça ?</span><span class="row-sub">Un dépannage pas à pas pour une arrivée ou un départ</span></span>
+          <span class="row-main"><span class="row-title">Pourquoi l'app a raté ça&nbsp;?</span><span class="row-sub">Un dépannage pas à pas pour une arrivée ou un départ</span></span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
       </div>
@@ -149,7 +149,7 @@
       el('fia-big').setAttribute('aria-label', 'Score de fiabilité, ' + d.score + ' pour cent');
       el('fia-meter').className = 'meter meter--' + l; el('fia-meter').firstElementChild.style.setProperty('--v', d.score);
       el('fia-rel').className = 'rel rel--' + l; el('fia-rel-t').textContent = d.rel;
-      el('fia-sum').textContent = 'Ta semaine est fiable à ' + d.score + ' %. Ça mesure la qualité des données, pas ce que tu fais.';
+      el('fia-sum').textContent = (d.score >= 85 ? 'Ta semaine est fiable à ' + d.score + '\u00a0%.' : 'Ta semaine n\'est fiable qu\'à ' + d.score + '\u00a0%.') + ' Ça mesure la qualité des données, pas ce que tu fais.';
       var h = '';
       d.days.forEach(function (x, i) {
         var nm = DAYS[i][0] + ' ' + DAYS[i][1];
@@ -158,7 +158,7 @@
         } else {
           var lv = lvl(x[0]);
           h += '<div class="row"><span class="row-main"><span class="row-title">' + nm + '</span><span class="row-sub">' + x[1] + '</span></span>'
-            + '<span class="fia-end"><span class="rel rel--' + lv + '"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>' + LBL[lv] + '</span><span class="fia-pct">' + x[0] + ' %</span></span></div>';
+            + '<span class="fia-end"><span class="rel rel--' + lv + '"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>' + LBL[lv] + '</span><span class="fia-pct">' + x[0] + '\u00a0%</span></span></div>';
         }
       });
       el('fia-days').innerHTML = h;
@@ -168,7 +168,7 @@
         c += '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + x[3] + '"/></svg></span><span class="row-main"><span class="row-title">' + x[0] + '</span><span class="row-sub">' + x[1] + '</span></span><span class="row-value num">-' + x[2] + ' pts</span></div>';
       });
       el('fia-causes').innerHTML = c;
-      el('fia-causes-foot').textContent = '100 moins ' + lost + ' points perdus : ' + (100 - lost) + ' %.';
+      el('fia-causes-foot').textContent = '100 moins ' + lost + ' points perdus : ' + (100 - lost) + '\u00a0%.';
       var a = '';
       d.acts.forEach(function (x) {
         a += '<button type="button" class="row" data-go="' + x[3] + '"><span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-' + x[2] + '"/></svg></span><span class="row-main"><span class="row-title">' + x[0] + '</span><span class="row-sub">' + x[1] + '</span></span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg></button>';

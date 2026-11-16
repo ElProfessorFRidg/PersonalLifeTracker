@@ -25,7 +25,7 @@
           <button type="button" data-value="pleines" aria-pressed="true">Heures pleines</button>
           <button type="button" data-value="exact" aria-pressed="false">Heure exacte</button>
         </div>
-        <span class="field-help" id="sta-base-help">Heures pleines : 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.</span>
+        <span class="field-help" id="sta-base-help">Heures pleines&nbsp;: 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.</span>
       </div>
     </section>
 
@@ -169,8 +169,8 @@
     function val(min) { return base === 'pleines' ? Math.round(min / 60) * 60 : min; }          /* minutes retenues */
     function sum(days, k) { return days.reduce(function (s, d) { return s + val(M[d][k]); }, 0); }
     function exactSum(days, k) { return days.reduce(function (s, d) { return s + M[d][k]; }, 0); }
-    function hm(min) { return Math.floor(min / 60) + ' h ' + pad(min % 60); }
-    function hmFull(min) { return min % 60 === 0 ? (min / 60) + ' h' : hm(min); }
+    function hm(min) { return Math.floor(min / 60) + '\u00a0h\u00a0' + pad(min % 60); }
+    function hmFull(min) { return min % 60 === 0 ? (min / 60) + '\u00a0h' : hm(min); }
     function compact(min) { return base === 'pleines' ? (min / 60) + 'h' : Math.floor(min / 60) + 'h' + pad(min % 60); }
     function big(min) { return Math.floor(min / 60) + '<small>h</small>' + (min % 60 ? pad(min % 60) : ''); }
     function signed(min) { var a = Math.abs(min); return (min < 0 ? '-' : (min > 0 ? '+' : '')) + (a === 0 ? '0 h' : hmFull(a)); }
@@ -182,14 +182,14 @@
         var v = sum(d, x[1]), e = exactSum(d, x[1]), pl = sum(d, x[1]);
         var el = document.getElementById('sta-' + x[0] + '-val');
         el.innerHTML = big(v);
-        el.setAttribute('aria-label', hm(v).replace(' ', ' '));
+        el.setAttribute('aria-label', hm(v));
         var pleines = d.reduce(function (s, k) { return s + Math.round(M[k][x[1]] / 60) * 60; }, 0);
         document.getElementById('sta-' + x[0] + '-note').textContent = base === 'pleines'
           ? 'Heures pleines, exact ' + hm(e) : 'Heure exacte, heures pleines ' + hmFull(pleines);
       });
       document.getElementById('sta-base-help').textContent = base === 'pleines'
-        ? 'Heures pleines : 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.'
-        : 'Heure exacte : 17:56 compte comme 17:56, à la minute près.';
+        ? 'Heures pleines\u00a0: 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.'
+        : 'Heure exacte\u00a0: 17:56 compte comme 17:56, à la minute près.';
     }
 
     function renderChart() {
@@ -237,7 +237,7 @@
     function renderEvo() {
       var el = document.getElementById('sta-evo');
       if (per === 'mois') {
-        el.innerHTML = '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span><span class="row-main"><span class="row-title">Pas de comparaison avec octobre</span><span class="row-sub">Octobre est incomplet : la détection n\'était pas encore réglée avant le 20. Comparer serait trompeur.</span></span></div>';
+        el.innerHTML = '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span><span class="row-main"><span class="row-title">Pas de comparaison avec octobre</span><span class="row-sub">Octobre est incomplet\u00a0: la détection n\'était pas encore réglée avant le 20. Comparer serait trompeur.</span></span></div>';
         return;
       }
       var cur = days(), prev = range(3, 9), html = '';
@@ -251,7 +251,7 @@
     }
     function renderAll() {
       var m = per === 'mois';
-      document.getElementById('sta-eyebrow').textContent = m ? 'Novembre, jusqu\'au 16' : 'Du 10 au 16 novembre';
+      document.getElementById('sta-eyebrow').textContent = root.getAttribute('data-state') === 'vide' ? 'Pas encore de session' : (m ? 'Novembre, jusqu\'au 16' : 'Du 10 au 16 novembre');
       document.getElementById('sta-rel-sub').innerHTML = m ? 'Ton mois est fiable à <span class="num">89 %</span>' : 'Ta semaine est fiable à <span class="num">92 %</span>';
       renderTotals(); renderChart(); renderMoy(); renderEvo();
     }

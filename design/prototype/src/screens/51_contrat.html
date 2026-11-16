@@ -96,7 +96,7 @@
         </button>
         <button type="button" class="row" data-sheet="sheet-ct-regle">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg></span>
-          <span class="row-main"><span class="row-title">Ce qui se passe quand ça ne tombe pas pile</span><span class="row-sub">Reporté, lissé, payé en plus ou perdu. Je ne présume rien.</span></span>
+          <span class="row-main"><span class="row-title">Quand ça ne tombe pas pile</span><span class="row-sub">Reporté, lissé ou payé en plus</span></span>
           <span class="row-value" id="ct-regle-val">À renseigner</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
@@ -144,7 +144,7 @@
         </div>
         <div class="stat-grid ct-stats">
           <div class="stat"><span class="stat-label">Moyenne</span><span class="stat-value">14<small>h</small>15</span></div>
-          <div class="stat"><span class="stat-label">Plus petite, plus grande</span><span class="stat-value">11<small>à</small>18<small>h</small></span></div>
+          <div class="stat"><span class="stat-label">Min et max</span><span class="stat-value">11<small>à</small>18<small>h</small></span></div>
         </div>
         <p class="card-text">Tu as dépassé tes <span class="num">13 h</span> trois semaines sur huit. Si ça devient une habitude, un avenant a peut-être été prévu&nbsp;: à vérifier dans ton contrat.</p>
       </div>
@@ -211,9 +211,12 @@
     #scr-contrat .ct-lg--plan { border: 1.5px dashed var(--textTertiary); box-sizing: border-box; }
     #scr-contrat .ct-lg--quota { width: 2px; height: 14px; background: var(--textPrimary); }
     #scr-contrat .ct-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #scr-contrat .ct-stats .stat { background: var(--fill); box-shadow: none; }
+    #scr-contrat .ct-hcol b { position: relative; z-index: 1; }
     #scr-contrat .ct-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; align-items: end; }
     #scr-contrat .ct-day { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
     #scr-contrat .ct-bars { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 84px; width: 100%; }
+    #scr-contrat .ct-bar[hidden] { display: block; visibility: hidden; }
     #scr-contrat .ct-bar { width: 38%; max-width: 14px; border-radius: 4px 4px 0 0; min-height: 0; }
     #scr-contrat .ct-bar--plan { border: 1.5px dashed var(--textTertiary); border-bottom: 0; box-sizing: border-box; }
     #scr-contrat .ct-bar--done { background: var(--work); }
@@ -224,7 +227,7 @@
     #scr-contrat .ct-hcol b { font: 600 11px/14px var(--font-mono); color: var(--textPrimary); }
     #scr-contrat .ct-hcol i { display: block; width: 70%; height: calc(var(--h) * 1%); min-height: 4px; border-radius: 4px 4px 0 0; background: var(--textTertiary); }
     #scr-contrat .ct-hcol.is-over i { background: var(--work); }
-    #scr-contrat .ct-hline { position: absolute; left: 0; right: 0; bottom: 52%; border-top: 1.5px dashed var(--textPrimary); opacity: .7; z-index: 1; pointer-events: none; }
+    #scr-contrat .ct-hline { position: absolute; left: 0; right: 0; bottom: 52%; border-top: 1.5px dashed var(--textPrimary); opacity: .7; pointer-events: none; }
     #scr-contrat .ct-hweeks { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; margin-top: 4px; text-align: center; font: 500 11px/14px var(--font-mono); color: var(--textSecondary); }
     #scr-contrat .ct-hcap { margin: 6px 0 0; font: var(--t-caption) var(--font-text); color: var(--textSecondary); }
   </style>
@@ -245,7 +248,7 @@
       var s = sets[id] || sets.semaine, html = '', label = [];
       for (var i = 0; i < 7; i++) {
         var p = s.p[i], r = s.r[i];
-        html += '<div class="ct-day"><div class="ct-bars"><i class="ct-bar ct-bar--plan" style="height:' + (p / 8 * 100) + '%"></i><i class="ct-bar ct-bar--done" style="height:' + (r / 8 * 100) + '%"></i></div>' +
+        html += '<div class="ct-day"><div class="ct-bars"><i class="ct-bar ct-bar--plan" style="height:' + (p / 8 * 100) + '%"' + (p ? '' : ' hidden') + '></i><i class="ct-bar ct-bar--done" style="height:' + (r / 8 * 100) + '%"' + (r ? '' : ' hidden') + '></i></div>' +
           '<span class="ct-dv">' + fmt(r || p) + '</span><span class="ct-dl">' + letters[i] + '</span></div>';
         if (p || r) label.push(names[i] + ' ' + (r ? fmt(r) + ' h faites' : '') + (r && p ? ', ' : '') + (p ? fmt(p) + ' h prévues' : ''));
       }

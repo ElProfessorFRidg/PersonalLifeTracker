@@ -2734,7 +2734,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <section class="section" data-when="semaine" aria-labelledby="pl-jours-t">
       <div class="section-head">
         <h2 class="section-title" id="pl-jours-t">Jour par jour</h2>
-        <button type="button" class="section-link" data-sheet="sheet-pl-legende">Que veulent dire les mentions&nbsp;?</button>
+        <button type="button" class="section-link" data-sheet="sheet-pl-legende">Légende</button>
       </div>
       <div class="list">
         <button type="button" class="row pl-day is-today" data-go="planning-jour" aria-label="Lundi 16 novembre, aujourd'hui. Cours de 8:00 à 12:00, fait en 3 h 57. Taf de 18:00 à 21:00, en cours, 1 h 14 déjà faite.">
@@ -3011,7 +3011,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <div class="pp-item" data-h="3" data-open="0" data-id="lun">
           <div class="pp-top">
             <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
-            <span class="row-main"><span class="row-title">Lundi 23 novembre</span><span class="row-sub">Taf <span class="num pp-when">18:00 à 21:00</span></span></span>
+            <span class="row-main"><span class="row-title">Lun. 23 nov.</span><span class="row-sub">Taf <span class="num pp-when">18:00 à 21:00</span></span></span>
             <span class="rel rel--high"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">Fiable</span>&nbsp;<span class="num">97&nbsp;%</span></span>
           </div>
           <div class="pp-actions">
@@ -3023,7 +3023,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <div class="pp-item" data-h="3" data-open="0" data-id="jeu">
           <div class="pp-top">
             <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
-            <span class="row-main"><span class="row-title">Jeudi 26 novembre</span><span class="row-sub">Taf <span class="num pp-when">18:00 à 21:00</span></span></span>
+            <span class="row-main"><span class="row-title">Jeu. 26 nov.</span><span class="row-sub">Taf <span class="num pp-when">18:00 à 21:00</span></span></span>
             <span class="rel rel--high"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">Fiable</span>&nbsp;<span class="num">95&nbsp;%</span></span>
           </div>
           <div class="pp-actions">
@@ -3035,7 +3035,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <div class="pp-item" data-h="7" data-open="1" data-id="sam">
           <div class="pp-top">
             <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
-            <span class="row-main"><span class="row-title">Samedi 28 novembre</span><span class="row-sub">Taf <span class="num pp-when">09:00 à 16:00</span></span></span>
+            <span class="row-main"><span class="row-title">Sam. 28 nov.</span><span class="row-sub">Taf <span class="num pp-when">09:00 à 16:00</span></span></span>
             <span class="rel rel--mid"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">À vérifier</span>&nbsp;<span class="num">71&nbsp;%</span></span>
           </div>
           <p class="pp-why">Le 6 ressemble un peu à un 8. Regarde la photo avant de garder.</p>
@@ -3049,7 +3049,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <div class="pp-item" data-h="4" data-open="1" data-id="dim">
           <div class="pp-top">
             <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
-            <span class="row-main"><span class="row-title">Dimanche 29 novembre</span><span class="row-sub">Taf <span class="num pp-when">10:00 à 14:00</span></span></span>
+            <span class="row-main"><span class="row-title">Dim. 29 nov.</span><span class="row-sub">Taf <span class="num pp-when">10:00 à 14:00</span></span></span>
             <span class="rel rel--low"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">Incertain</span>&nbsp;<span class="num">38&nbsp;%</span></span>
           </div>
           <p class="pp-why">Il y a une tache sur la case. Je devine, donc corrige ou retire.</p>
@@ -3681,7 +3681,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         </button>
         <button type="button" class="row" data-sheet="sheet-ct-regle">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sliders"/></svg></span>
-          <span class="row-main"><span class="row-title">Ce qui se passe quand ça ne tombe pas pile</span><span class="row-sub">Reporté, lissé, payé en plus ou perdu. Je ne présume rien.</span></span>
+          <span class="row-main"><span class="row-title">Quand ça ne tombe pas pile</span><span class="row-sub">Reporté, lissé ou payé en plus</span></span>
           <span class="row-value" id="ct-regle-val">À renseigner</span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
@@ -3799,6 +3799,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     #scr-contrat .ct-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 6px; align-items: end; }
     #scr-contrat .ct-day { display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; }
     #scr-contrat .ct-bars { display: flex; align-items: flex-end; justify-content: center; gap: 3px; height: 84px; width: 100%; }
+    #scr-contrat .ct-bar[hidden] { display: block; visibility: hidden; }
     #scr-contrat .ct-bar { width: 38%; max-width: 14px; border-radius: 4px 4px 0 0; min-height: 0; }
     #scr-contrat .ct-bar--plan { border: 1.5px dashed var(--textTertiary); border-bottom: 0; box-sizing: border-box; }
     #scr-contrat .ct-bar--done { background: var(--work); }
@@ -3807,7 +3808,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     #scr-contrat .ct-plot { position: relative; display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; align-items: end; height: 120px; }
     #scr-contrat .ct-hcol { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; height: 100%; gap: 2px; }
     #scr-contrat .ct-hcol b { font: 600 11px/14px var(--font-mono); color: var(--textPrimary); }
-    #scr-contrat .ct-hcol i { display: block; width: 70%; height: calc(var(--h) * 1% - 16px); min-height: 4px; border-radius: 4px 4px 0 0; background: var(--textTertiary); }
+    #scr-contrat .ct-hcol i { display: block; width: 70%; height: calc(var(--h) * 1%); min-height: 4px; border-radius: 4px 4px 0 0; background: var(--textTertiary); }
     #scr-contrat .ct-hcol.is-over i { background: var(--work); }
     #scr-contrat .ct-hline { position: absolute; left: 0; right: 0; bottom: 52%; border-top: 1.5px dashed var(--textPrimary); opacity: .7; z-index: 1; pointer-events: none; }
     #scr-contrat .ct-hweeks { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 6px; margin-top: 4px; text-align: center; font: 500 11px/14px var(--font-mono); color: var(--textSecondary); }
@@ -3830,7 +3831,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       var s = sets[id] || sets.semaine, html = '', label = [];
       for (var i = 0; i < 7; i++) {
         var p = s.p[i], r = s.r[i];
-        html += '<div class="ct-day"><div class="ct-bars"><i class="ct-bar ct-bar--plan" style="height:' + (p / 8 * 100) + '%"></i><i class="ct-bar ct-bar--done" style="height:' + (r / 8 * 100) + '%"></i></div>' +
+        html += '<div class="ct-day"><div class="ct-bars"><i class="ct-bar ct-bar--plan" style="height:' + (p / 8 * 100) + '%"' + (p ? '' : ' hidden') + '></i><i class="ct-bar ct-bar--done" style="height:' + (r / 8 * 100) + '%"' + (r ? '' : ' hidden') + '></i></div>' +
           '<span class="ct-dv">' + fmt(r || p) + '</span><span class="ct-dl">' + letters[i] + '</span></div>';
         if (p || r) label.push(names[i] + ' ' + (r ? fmt(r) + ' h faites' : '') + (r && p ? ', ' : '') + (p ? fmt(p) + ' h prévues' : ''));
       }
@@ -3843,6 +3844,266 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     PLT.onShow('contrat', function () { draw(root.getAttribute('data-state')); });
     document.getElementById('ct-regle-group').addEventListener('change', function (e) {
       document.getElementById('ct-regle-val').textContent = e.detail.value;
+    });
+  });
+  </script>
+</section>
+<!-- 52_paie.html -->
+<section class="screen" id="scr-paie" data-title="Paie" data-group="Emploi et paie" data-tab="accueil"
+         data-states="estimation:Estimation,vide:Pas de taux,desactive:Module désactivé">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="emploi"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Emploi</button>
+    <h1 class="navbar-title">Paie</h1>
+    <div class="navbar-actions" data-when="estimation">
+      <button type="button" class="iconbtn iconbtn--tonal" id="pa-hide" aria-pressed="false" aria-label="Masquer les montants"><svg class="icon icon--s" aria-hidden="true"><use href="#i-eye-off"/></svg></button>
+    </div>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- ESTIMATION -->
+    <div class="banner banner--warning" data-when="estimation" role="note">
+      <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Ce sont des estimations</p>
+        <p class="banner-text">Je calcule d'après tes heures et les taux que tu as saisis. Ta fiche de paie fait foi, pas moi.</p>
+      </div>
+    </div>
+
+    <section class="section" data-when="estimation" aria-label="Choix du mois">
+      <div class="segmented" id="pa-month" role="group" aria-label="Mois">
+        <button type="button" data-value="nov" aria-pressed="true">Novembre</button>
+        <button type="button" data-value="oct" aria-pressed="false">Octobre</button>
+      </div>
+    </section>
+
+    <!-- Novembre, mois en cours -->
+    <div data-when="estimation" id="pa-nov" class="pa-block">
+      <section class="section" aria-labelledby="pa-nov-t">
+        <div class="section-head">
+          <h2 class="section-title" id="pa-nov-t">Novembre, au <span class="num">16</span></h2>
+          <span class="chip chip--doubt">Estimation</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">Brut estimé</span>
+            <span class="stat-value pa-amt">≈369<small>€</small></span>
+            <span class="stat-note">Environ, sur <span class="num">29 h</span> faites</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Net estimé</span>
+            <span class="stat-value pa-amt">≈291<small>€</small></span>
+            <span class="stat-note">Environ, ratio <span class="num">0,79</span></span>
+          </div>
+        </div>
+        <p class="section-foot">Si ton planning tient jusqu'au <span class="num">30</span>, environ <span class="num pa-amt">713 €</span> brut et <span class="num pa-amt">563 €</span> net. Une prévision, pas une promesse.</p>
+      </section>
+
+      <section class="section" aria-labelledby="pa-nov-d">
+        <div class="section-head">
+          <h2 class="section-title" id="pa-nov-d">Comment je l'estime</h2>
+          <button type="button" class="section-link" data-sheet="sheet-pa-calcul">Détail du calcul</button>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="row-main"><span class="row-title">Heures de taf</span><span class="row-sub">Heures pleines. Une session à confirmer n'est pas comptée.</span></span>
+            <span class="row-value num">29 h</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Taux horaire brut</span><span class="row-sub">Saisi par toi, vérifie-le avec ta fiche de paie</span></span>
+            <span class="row-value num pa-amt">12,02 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Heures multipliées par le taux</span></span>
+            <span class="row-value num pa-amt">≈ 349 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Majoration du dimanche</span><span class="row-sub">Aucun dimanche travaillé ce mois. Taux à renseigner.</span></span>
+            <span class="row-value">0 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Prime de panier</span><span class="row-sub"><span class="num">2,50 €</span> par session, <span class="num">8</span> sessions</span>
+              <span class="chip-row"><span class="chip">Saisie par toi</span></span></span>
+            <span class="row-value num pa-amt">≈ 20 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Total brut estimé</span></span>
+            <span class="row-value num pa-amt">≈ 369 €</span>
+          </div>
+        </div>
+        <p class="section-foot">Montants arrondis à l'euro. Les primes du pack de convention ne sont jamais ajoutées sans que tu les aies confirmées.</p>
+      </section>
+    </div>
+
+    <!-- Octobre, mois précédent -->
+    <div data-when="estimation" id="pa-oct" class="pa-block" hidden>
+      <section class="section" aria-labelledby="pa-oct-t">
+        <div class="section-head">
+          <h2 class="section-title" id="pa-oct-t">Octobre, mois complet</h2>
+          <span class="chip chip--doubt">Estimation</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">Brut estimé</span>
+            <span class="stat-value pa-amt">≈742<small>€</small></span>
+            <span class="stat-note">Environ, sur <span class="num">58 h</span></span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Net estimé</span>
+            <span class="stat-value pa-amt">≈586<small>€</small></span>
+            <span class="stat-note">Environ, ratio <span class="num">0,79</span></span>
+          </div>
+        </div>
+      </section>
+      <section class="section" aria-label="Fiche de paie d'octobre">
+        <div class="list">
+          <button type="button" class="row" data-toast="Dans l'app, tu photographies ta fiche et je compare ligne par ligne, avec ton accord.">
+            <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+            <span class="row-main"><span class="row-title">Comparer avec ta fiche de paie</span><span class="row-sub">Je lis la fiche sur ton tel et je te montre les écarts</span></span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+        </div>
+        <p class="section-foot">Tant que t'as pas comparé avec ta fiche, ce montant reste une estimation.</p>
+      </section>
+    </div>
+
+    <!-- Historique -->
+    <section class="section" data-when="estimation" aria-labelledby="pa-hist-t">
+      <div class="section-head"><h2 class="section-title" id="pa-hist-t">Historique</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Dans l'app, le détail du mois s'ouvre ici.">
+          <span class="row-main"><span class="row-title">Octobre</span><span class="row-sub"><span class="num">58 h</span>, brut estimé, pas de fiche comparée</span></span>
+          <span class="row-value num pa-amt">≈ 742 €</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Dans l'app, le détail du mois s'ouvre ici.">
+          <span class="row-main"><span class="row-title">Septembre</span><span class="row-sub"><span class="num">52 h</span>, brut estimé, pas de fiche comparée</span></span>
+          <span class="row-value num pa-amt">≈ 665 €</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="section" data-when="estimation" aria-label="Relevé et sources">
+      <div class="list">
+        <button type="button" class="row" data-toast="Dans l'app, ton relevé part en PDF ou CSV, avec les sessions corrigées signalées.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-share"/></svg></span>
+          <span class="row-main"><span class="row-title">Préparer un relevé pour mon employeur</span><span class="row-sub">PDF ou CSV, avec arrivées, départs et totaux</span></span>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+          <span class="row-main"><span class="row-title">Règles et taux utilisés</span><span class="row-sub">Dernière vérification le <span class="num">3</span> novembre. Source&nbsp;: service-public.fr.</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDE : module actif, pas de taux -->
+    <section class="section" data-when="vide" aria-label="Aucun taux saisi">
+      <div class="card card--outline">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-euro"/></svg></span>
+          <h3 class="empty-title">Pas encore d'estimation.</h3>
+          <p class="empty-text">Dis-moi ton taux horaire et j'estime ton mois d'après tes heures. Sans taux, je n'affiche aucun montant.</p>
+          <button type="button" class="btn btn--primary" data-sheet="sheet-pa-taux">Saisir mon taux</button>
+          <button type="button" class="btn btn--secondary" id="pa-smic">Je suis au SMIC</button>
+        </div>
+      </div>
+      <p class="section-foot">Tes heures sont comptées quand même. Tout reste sur ton tel.</p>
+    </section>
+
+    <!-- DÉSACTIVÉ -->
+    <section class="section" data-when="desactive" aria-label="Module désactivé">
+      <div class="card card--outline">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-euro"/></svg></span>
+          <h3 class="empty-title">La paie, c'est optionnel.</h3>
+          <p class="empty-text">Tant que ce module est éteint, l'app n'affiche aucun montant. Elle ne compte que tes heures.</p>
+          <button type="button" class="btn btn--primary" id="pa-on">Activer la paie</button>
+        </div>
+      </div>
+      <div class="list" aria-label="Ce que le module apporte">
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-euro"/></svg></span><span class="row-main"><span class="row-title">Brut et net estimés</span><span class="row-sub">Toujours marqués comme des estimations</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-doc"/></svg></span><span class="row-main"><span class="row-title">Relevé d'heures</span><span class="row-sub">À envoyer à ton employeur, en PDF ou CSV</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span><span class="row-main"><span class="row-title">Besoin d'Emploi</span><span class="row-sub">Le module Emploi est déjà activé</span></span><span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Prêt</span></div>
+      </div>
+      <p class="section-foot">Pour l'allumer plus tard&nbsp;: Réglages, puis Fonctionnalités, puis Paie.</p>
+      <button type="button" class="btn btn--secondary btn--block" data-go="fonctionnalites">Voir les fonctionnalités</button>
+    </section>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-pa-calcul">
+    <h2 class="sheet-title">Comment c'est calculé</h2>
+    <p class="sheet-text">Les trois bases restent enregistrées en parallèle. Changer de base ne modifie jamais tes sessions. Pour la paie, j'utilise tes heures pleines.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Heures pleines</span><span class="row-sub">Base utilisée ici</span></span><span class="row-value num">29 h</span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Exact</span><span class="row-sub">À la minute près</span></span><span class="row-value num">29 h 36</span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Planning</span><span class="row-sub">Les heures prévues</span></span><span class="row-value num">28 h</span></div>
+    </div>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Ratio net sur brut</span><span class="row-sub">Indicatif pour un salarié non cadre, tu peux le changer</span></span><span class="row-value num">0,79</span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-pa-taux">
+    <h2 class="sheet-title">Ton taux horaire</h2>
+    <p class="sheet-text">Je m'en sers pour estimer ton mois. Ta fiche de paie fait foi.</p>
+    <div class="field">
+      <span class="field-label" id="pa-unit-l">Tu saisis</span>
+      <div class="segmented" role="group" aria-labelledby="pa-unit-l">
+        <button type="button" data-value="brut" aria-pressed="true">Brut</button>
+        <button type="button" data-value="net" aria-pressed="false">Net</button>
+      </div>
+    </div>
+    <div class="field" id="pa-taux-field">
+      <label class="field-label" for="pa-taux-in">Taux par heure, en euros</label>
+      <input class="input num" id="pa-taux-in" type="text" inputmode="decimal" autocomplete="off" placeholder="12,02">
+      <span class="field-help" id="pa-taux-help">Le net est converti avec un ratio indicatif, affiché comme une estimation.</span>
+    </div>
+    <div class="btn-stack">
+      <button type="button" class="btn btn--primary btn--block" id="pa-taux-ok">Enregistrer</button>
+      <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Annuler</button>
+    </div>
+  </div>
+
+  <style>
+    #scr-paie .pa-block { display: flex; flex-direction: column; gap: var(--space-l); }
+    #scr-paie .pa-block[hidden] { display: none; }
+    #scr-paie.is-discret .pa-amt { filter: blur(8px); user-select: none; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-paie');
+    var nov = document.getElementById('pa-nov'), oct = document.getElementById('pa-oct');
+    document.getElementById('pa-month').addEventListener('change', function (e) {
+      nov.hidden = e.detail.value !== 'nov'; oct.hidden = e.detail.value !== 'oct';
+    });
+    var hide = document.getElementById('pa-hide');
+    hide.addEventListener('click', function () {
+      var on = !root.classList.contains('is-discret');
+      root.classList.toggle('is-discret', on);
+      hide.setAttribute('aria-pressed', on ? 'true' : 'false');
+      hide.setAttribute('aria-label', on ? 'Afficher les montants' : 'Masquer les montants');
+      toast(on ? 'Montants masqués.' : 'Montants affichés.');
+    });
+    document.getElementById('pa-on').addEventListener('click', function () {
+      setState('paie', 'estimation');
+      toast('Paie activée. Tout est indiqué comme estimation.', { undo: function () { setState('paie', 'desactive'); } });
+    });
+    document.getElementById('pa-smic').addEventListener('click', function () {
+      setState('paie', 'estimation');
+      toast('Taux rempli avec le SMIC en vigueur, vérifié le 3 novembre.', { undo: function () { setState('paie', 'vide'); } });
+    });
+    var field = document.getElementById('pa-taux-field'), input = document.getElementById('pa-taux-in'), help = document.getElementById('pa-taux-help');
+    document.getElementById('pa-taux-ok').addEventListener('click', function () {
+      var v = parseFloat(input.value.replace(',', '.'));
+      if (!(v > 0 && v < 200)) { field.classList.add('is-invalid'); help.textContent = 'Écris un taux comme 12,02.'; return; }
+      field.classList.remove('is-invalid'); help.textContent = 'Le net est converti avec un ratio indicatif, affiché comme une estimation.';
+      closeSheet(); setState('paie', 'estimation'); input.value = '';
+      toast('Taux enregistré. Les montants restent des estimations.', { undo: function () { setState('paie', 'vide'); } });
     });
   });
   </script>
@@ -3875,7 +4136,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
           <button type="button" data-value="pleines" aria-pressed="true">Heures pleines</button>
           <button type="button" data-value="exact" aria-pressed="false">Heure exacte</button>
         </div>
-        <span class="field-help" id="sta-base-help">Heures pleines : 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.</span>
+        <span class="field-help" id="sta-base-help">Heures pleines&nbsp;: 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.</span>
       </div>
     </section>
 
@@ -4019,8 +4280,8 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     function val(min) { return base === 'pleines' ? Math.round(min / 60) * 60 : min; }          /* minutes retenues */
     function sum(days, k) { return days.reduce(function (s, d) { return s + val(M[d][k]); }, 0); }
     function exactSum(days, k) { return days.reduce(function (s, d) { return s + M[d][k]; }, 0); }
-    function hm(min) { return Math.floor(min / 60) + ' h ' + pad(min % 60); }
-    function hmFull(min) { return min % 60 === 0 ? (min / 60) + ' h' : hm(min); }
+    function hm(min) { return Math.floor(min / 60) + '\u00a0h\u00a0' + pad(min % 60); }
+    function hmFull(min) { return min % 60 === 0 ? (min / 60) + '\u00a0h' : hm(min); }
     function compact(min) { return base === 'pleines' ? (min / 60) + 'h' : Math.floor(min / 60) + 'h' + pad(min % 60); }
     function big(min) { return Math.floor(min / 60) + '<small>h</small>' + (min % 60 ? pad(min % 60) : ''); }
     function signed(min) { var a = Math.abs(min); return (min < 0 ? '-' : (min > 0 ? '+' : '')) + (a === 0 ? '0 h' : hmFull(a)); }
@@ -4032,14 +4293,14 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         var v = sum(d, x[1]), e = exactSum(d, x[1]), pl = sum(d, x[1]);
         var el = document.getElementById('sta-' + x[0] + '-val');
         el.innerHTML = big(v);
-        el.setAttribute('aria-label', hm(v).replace(' ', ' '));
+        el.setAttribute('aria-label', hm(v));
         var pleines = d.reduce(function (s, k) { return s + Math.round(M[k][x[1]] / 60) * 60; }, 0);
         document.getElementById('sta-' + x[0] + '-note').textContent = base === 'pleines'
           ? 'Heures pleines, exact ' + hm(e) : 'Heure exacte, heures pleines ' + hmFull(pleines);
       });
       document.getElementById('sta-base-help').textContent = base === 'pleines'
-        ? 'Heures pleines : 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.'
-        : 'Heure exacte : 17:56 compte comme 17:56, à la minute près.';
+        ? 'Heures pleines\u00a0: 17:56 compte comme 18:00. Ton heure exacte reste toujours gardée.'
+        : 'Heure exacte\u00a0: 17:56 compte comme 17:56, à la minute près.';
     }
 
     function renderChart() {
@@ -4087,7 +4348,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     function renderEvo() {
       var el = document.getElementById('sta-evo');
       if (per === 'mois') {
-        el.innerHTML = '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span><span class="row-main"><span class="row-title">Pas de comparaison avec octobre</span><span class="row-sub">Octobre est incomplet : la détection n\'était pas encore réglée avant le 20. Comparer serait trompeur.</span></span></div>';
+        el.innerHTML = '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg></span><span class="row-main"><span class="row-title">Pas de comparaison avec octobre</span><span class="row-sub">Octobre est incomplet\u00a0: la détection n\'était pas encore réglée avant le 20. Comparer serait trompeur.</span></span></div>';
         return;
       }
       var cur = days(), prev = range(3, 9), html = '';
@@ -4101,7 +4362,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     }
     function renderAll() {
       var m = per === 'mois';
-      document.getElementById('sta-eyebrow').textContent = m ? 'Novembre, jusqu\'au 16' : 'Du 10 au 16 novembre';
+      document.getElementById('sta-eyebrow').textContent = root.getAttribute('data-state') === 'vide' ? 'Pas encore de session' : (m ? 'Novembre, jusqu\'au 16' : 'Du 10 au 16 novembre');
       document.getElementById('sta-rel-sub').innerHTML = m ? 'Ton mois est fiable à <span class="num">89 %</span>' : 'Ta semaine est fiable à <span class="num">92 %</span>';
       renderTotals(); renderChart(); renderMoy(); renderEvo();
     }
@@ -4139,7 +4400,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <label class="field-label sr-only" for="fon-q">Chercher une fonctionnalité</label>
         <div class="fon-search">
           <svg class="icon icon--s" aria-hidden="true"><use href="#i-search"/></svg>
-          <input class="input" id="fon-q" type="search" placeholder="Chercher : paie, congés, notes..." autocomplete="off">
+          <input class="input" id="fon-q" type="search" placeholder="Chercher&nbsp;: paie, congés, notes..." autocomplete="off">
         </div>
         <span class="field-help" id="fon-count" aria-live="polite"></span>
       </div>
@@ -4149,7 +4410,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
       <div class="banner-main">
         <p class="banner-title">Tout est désactivé, et ça marche</p>
-        <p class="banner-text">Il te reste l'essentiel : tes lieux, tes sessions et tes heures. Tu peux rallumer ce que tu veux quand tu veux, tes données sont gardées.</p>
+        <p class="banner-text">Il te reste l'essentiel&nbsp;: tes lieux, tes sessions et tes heures. Tu peux rallumer ce que tu veux quand tu veux, tes données sont gardées.</p>
       </div>
     </div>
 
@@ -4160,30 +4421,30 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
           <span class="row-main"><span class="row-title">Lieux et sessions</span><span class="row-sub">Ton taf, ta fac, tes courses, avec leurs heures</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-nav"/></svg></span>
           <span class="row-main"><span class="row-title">Détection arrivée et départ</span><span class="row-sub">Dans la limite des autorisations que tu donnes</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></span>
           <span class="row-main"><span class="row-title">Saisie manuelle</span><span class="row-sub">Démarrer, arrêter ou ajouter une session à la main</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
           <span class="row-main"><span class="row-title">Statistiques d'heures</span><span class="row-sub">Totaux, moyennes, graphique par jour</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
           <span class="row-main"><span class="row-title">Réglages, export et import</span><span class="row-sub">Tes données en JSON, quand tu veux</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
       </div>
-      <p class="section-foot">Ça, tu ne peux pas le couper : sans ça l'app ne note rien. Tout le reste est à toi. Rien sur la paie ou l'argent n'est obligatoire.</p>
+      <p class="section-foot">Ça, tu ne peux pas le couper&nbsp;: sans ça l'app ne note rien. Tout le reste est à toi. Rien sur la paie ou l'argent n'est obligatoire.</p>
     </section>
 
     <div id="fon-groups"></div>
@@ -4197,7 +4458,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
 
   </div>
 
-  <!-- Dépendance : activer un module qui en demande un autre, ou couper un module dont d'autres dépendent -->
+  <!-- Dépendance&nbsp;: activer un module qui en demande un autre, ou couper un module dont d'autres dépendent -->
   <div class="sheet" id="sheet-fon-dep">
     <h2 class="sheet-title" id="fon-dep-title">Titre</h2>
     <p class="sheet-text" id="fon-dep-text">Texte</p>
@@ -4303,7 +4564,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         if (miss.length) {
           pending = { id: id, want: true, also: miss, after: after };
           document.getElementById('fon-dep-title').textContent = m.name + ' a besoin de ' + list(miss.map(short)) + '.';
-          document.getElementById('fon-dep-text').textContent = 'Je l\'active aussi ? Tu pourras le couper plus tard, et tes données ne bougent pas.';
+          document.getElementById('fon-dep-text').textContent = 'Je l\'active aussi\u00a0? Tu pourras le couper plus tard, et tes données ne bougent pas.';
           document.getElementById('fon-dep-ok').textContent = 'Activer les deux';
           document.getElementById('fon-dep-no').textContent = 'Laisser coupé';
           openSheet('sheet-fon-dep'); return false;
@@ -4314,7 +4575,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       if (dep.length) {
         pending = { id: id, want: false, also: dep, after: after };
         document.getElementById('fon-dep-title').textContent = short(id) + ' sert à d\'autres fonctions.';
-        document.getElementById('fon-dep-text').textContent = list(names(dep)) + ' en dépend' + (dep.length > 1 ? 'ent' : '') + '. Je les coupe aussi ? Rien n\'est supprimé, tout revient si tu rallumes.';
+        document.getElementById('fon-dep-text').textContent = list(names(dep)) + ' en dépend' + (dep.length > 1 ? 'ent' : '') + '. Je les coupe aussi\u00a0? Rien n\'est supprimé, tout revient si tu rallumes.';
         document.getElementById('fon-dep-ok').textContent = 'Tout désactiver';
         document.getElementById('fon-dep-no').textContent = 'Garder ' + short(id);
         openSheet('sheet-fon-dep'); return false;
@@ -4332,14 +4593,14 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       changed.forEach(function (k) { on[k] = p.want; });
       closeSheet(); persist(); render();
       document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } }));
-      toast((p.want ? 'Activé' : 'Désactivé') + ' : ' + list(names(changed)) + '.', { undo: function () { changed.forEach(function (k) { on[k] = !p.want; }); persist(); render(); document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } })); } });
+      toast((p.want ? 'Activé' : 'Désactivé') + '\u00a0: ' + list(names(changed)) + '.', { undo: function () { changed.forEach(function (k) { on[k] = !p.want; }); persist(); render(); document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } })); } });
     });
     window.PLT_FON = { reg: REG, on: on, request: request, order: ORDER, short: short };
 
     function esc(s) { return s; }
     function rowHtml(m) {
       var req = m.req.map(function (r) {
-        return '<span class="fon-dep' + (on[r] ? '' : ' is-miss') + '">Demande : ' + short(r) + (on[r] ? ' (activé)' : ' (désactivé)') + '</span>';
+        return '<span class="fon-dep' + (on[r] ? '' : ' is-miss') + '">Demande\u00a0: ' + short(r) + (on[r] ? ' (activé)' : ' (désactivé)') + '</span>';
       }).join('');
       return '<div class="row fon-row" data-id="' + m.id + '">'
         + '<span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + m.icon + '"/></svg></span>'
@@ -4350,7 +4611,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       var q = document.getElementById('fon-q').value.trim().toLowerCase();
       var html = '', shown = 0, total = ORDER.length;
       G.forEach(function (g) {
-        var rows = g.m.map(function (x) { return REG[x[0]]; }).filter(function (m) { return !q || (m.name + ' ' + m.desc + ' ' + m.gname).toLowerCase().indexOf(q) !== -1; });
+        var rows = g.m.map(function (x) { return REG[x[0]]; }).filter(function (m) { return !q || (m.name + ' ' + m.desc).toLowerCase().indexOf(q) !== -1; });
         if (!rows.length) return;
         shown += rows.length;
         var n = rows.filter(function (m) { return on[m.id]; }).length;
@@ -4359,7 +4620,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       });
       document.getElementById('fon-groups').innerHTML = html;
       var act = ORDER.filter(function (k) { return on[k]; }).length;
-      document.getElementById('fon-count').textContent = q ? shown + ' résultat' + (shown > 1 ? 's' : '') + '. ' + act + ' fonctionnalités actives en tout.' : act + ' fonctionnalités actives sur ' + total + '. Tu peux changer ça quand tu veux.';
+      document.getElementById('fon-count').textContent = q ? shown + ' résultat' + (shown > 1 ? 's' : '') + '. ' + (act === 0 ? 'Aucune fonctionnalité active en tout.' : act + ' fonctionnalités actives en tout.') : (act === 0 ? 'Aucune fonctionnalité active sur ' + total : act + (act > 1 ? ' fonctionnalités actives' : ' fonctionnalité active') + ' sur ' + total) + '. Tu peux changer ça quand tu veux.';
       document.getElementById('fon-none').hidden = !(q && !shown);
       document.getElementById('fon-core').hidden = !!q;
       document.getElementById('fon-allOff').hidden = act !== 0;
@@ -4498,7 +4759,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       }
     };
     var GEN = {
-      does: function (m) { return [m.desc, 'Tu peux régler son comportement dans ses réglages, une fois activée.', 'Aucune saisie obligatoire : tout est facultatif.']; },
+      does: function (m) { return [m.desc, 'Tu peux régler son comportement dans ses réglages, une fois activée.', 'Aucune saisie obligatoire\u00a0: tout est facultatif.']; },
       data: ['Tes sessions et tes lieux, déjà dans l\'app', 'Les réglages propres à cette fonction'],
       perm: []
     };
@@ -4518,7 +4779,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       var sw = el('mod-sw'); sw.setAttribute('aria-checked', String(isOn));
       el('mod-status').className = 'status ' + (isOn ? 'status--ok' : '');
       el('mod-status').innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-' + (isOn ? 'check' : 'pause') + '"/></svg>' + (isOn ? 'Activée' : 'Désactivée');
-      el('mod-sw-sub').textContent = isOn ? 'Tu peux la couper quand tu veux.' : 'Coupée : aucune interface, aucun calcul.';
+      el('mod-sw-sub').textContent = isOn ? 'Tu peux la couper quand tu veux.' : 'Coupée\u00a0: aucune interface, aucun calcul.';
       var miss = m.req.filter(function (r) { return !f.on[r]; });
       el('mod-miss').hidden = !(miss.length && !isOn);
       if (miss.length) el('mod-miss-t').textContent = 'Il lui faut ' + miss.map(f.short).join(' et ');
@@ -5091,6 +5352,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     #scr-widgets .wg-day { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 4px 0; border-radius: 10px; }
     #scr-widgets .wg-day.is-today { background: var(--accentSoft); }
     #scr-widgets .wg-track { position: relative; display: flex; flex-direction: column-reverse; justify-content: flex-start; gap: 2px; width: 70%; height: 52px; border-radius: 5px; background: var(--fill); overflow: hidden; }
+    #scr-widgets .wg--l .wg-track { height: 84px; }
     #scr-widgets .wg-bar { display: block; width: 100%; height: calc(var(--h) * 1%); max-height: 100%; flex: none; }
     #scr-widgets .wg-bar--work { background: var(--work); } #scr-widgets .wg-bar--study { background: var(--study); }
     #scr-widgets .wg-bar--plan { background: none; border: 1.5px dashed var(--textTertiary); box-sizing: border-box; }
@@ -5300,6 +5562,302 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     #scr-controles .ct-legend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; background: var(--surface); color: var(--textSecondary); font: 400 12px/17px var(--font-text); }
     #scr-controles .ct-legend .icon { margin-top: 1px; }
   </style>
+</section>
+<!-- 88_notifications.html -->
+<section class="screen" id="scr-notifications" data-title="Notifications" data-group="Système iOS" data-tabbar="hide"
+         data-states="reglages:Préférences,exemples:Exemples de bannières,refus:Autorisation refusée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
+    <h1 class="navbar-title">Notifications</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- État : iOS a refusé les notifications -->
+    <section class="section" data-when="refus" aria-labelledby="nt-refus-t">
+      <div class="banner banner--error" role="alert">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title" id="nt-refus-t">Les notifications sont coupées dans iOS</p>
+          <p class="banner-text">Du coup je peux pas te demander de confirmer une arrivée ou un départ. Tes heures restent notées, mais plus incertaines. Autorise-les dans les réglages de ton iPhone.</p>
+          <button type="button" class="banner-action" id="nt-fix">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+      <p class="section-foot">Tu peux aussi tout confirmer depuis la carte « Maintenant » de l'accueil.</p>
+    </section>
+
+    <!-- Préférences : par type, heures silencieuses, budget -->
+    <section class="section" data-when="reglages" aria-labelledby="nt-types-t">
+      <div class="section-head"><h2 class="section-title" id="nt-types-t">Ce que je te demande</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t1">Arrivée et départ à confirmer</span><span class="row-sub">Quand je suis pas sûr d'une arrivée ou d'un départ. Essentielle.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t1" data-name="Arrivée et départ"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t2">Taf ou courses&nbsp;?</span><span class="row-sub">Quand je suis pas sûr de ce que tu fais. Utile.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t2" data-name="Taf ou courses"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t3">Heure pleine à choisir</span><span class="row-sub">Quand ta fin tombe entre :15 et :45. Essentielle.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t3" data-name="Heure pleine à choisir"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t4">Pars maintenant</span><span class="row-sub">Avant ta prise de poste, selon ton trajet. Essentielle.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t4" data-name="Pars maintenant"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t5">Relancer l'affichage</span><span class="row-sub">Quand iOS coupe l'écran verrouillé après 8 h. Utile.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t5" data-name="Relancer l'affichage"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t6">Nuit courte</span><span class="row-sub">La veille, si tu dors moins de 8 h. Informative.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t6" data-name="Nuit courte"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t7">Planning pas encore là</span><span class="row-sub">Une seule relance par semaine. Coupée par défaut.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="nt-t7" data-name="Planning pas encore là"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t8">Plus qu'une heure</span><span class="row-sub">Avant la fin prévue, si je la connais. Coupée par défaut.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="nt-t8" data-name="Plus qu'une heure"></button>
+        </div>
+      </div>
+      <p class="section-foot">Un module coupé ne t'envoie rien. Les trois essentielles, je les garde tant que tu dis pas non.</p>
+    </section>
+
+    <section class="section" data-when="reglages" aria-labelledby="nt-quiet-t">
+      <div class="section-head"><h2 class="section-title" id="nt-quiet-t">Heures silencieuses</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="nt-q">Ne pas me déranger la nuit</span><span class="row-sub">Je garde tout pour le matin</span></span>
+          <button type="button" class="switch" id="nt-q-sw" role="switch" aria-checked="true" aria-labelledby="nt-q"></button>
+        </div>
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
+          <span class="row-main"><span class="row-title">De</span></span>
+          <span class="row-value num">22:00</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
+          <span class="row-main"><span class="row-title">À</span></span>
+          <span class="row-value num">7:00</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <div class="card">
+        <div class="field">
+          <span class="field-label" id="nt-max-l">Maximum par jour</span>
+          <div class="segmented" id="nt-max" role="group" aria-labelledby="nt-max-l">
+            <button type="button" data-value="3" aria-pressed="false">3</button>
+            <button type="button" data-value="6" aria-pressed="true">6</button>
+            <button type="button" data-value="10" aria-pressed="false">10</button>
+          </div>
+          <span class="field-help">Au-delà, je regroupe ce qui se ressemble en une seule.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-when="reglages" aria-labelledby="nt-learn-t">
+      <div class="section-head"><h2 class="section-title" id="nt-learn-t">Notifications qui apprennent</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-l">Proposer de couper ce que tu ignores</span><span class="row-sub">Tout reste sur ton tel, sans télémétrie</span></span>
+          <button type="button" class="switch" id="nt-l-sw" role="switch" aria-checked="true" aria-labelledby="nt-l"></button>
+        </div>
+      </div>
+      <article class="card" id="nt-prop" aria-labelledby="nt-prop-t">
+        <p class="eyebrow">Proposition</p>
+        <h3 class="card-title" id="nt-prop-t">Tu as ignoré 5 rappels de pause, je les coupe&nbsp;?</h3>
+        <p class="card-text">Je coupe rien sans ton accord. Une proposition par catégorie et par mois, pas plus.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn--primary" id="nt-prop-cut">Les couper</button>
+          <button type="button" class="btn btn--secondary" id="nt-prop-keep">Les garder</button>
+        </div>
+      </article>
+      <p class="section-foot">« Ignorée » veut dire ni ouverte ni action dans les 24 h. iOS me dit pas si tu l'as juste vue, donc c'est une estimation.</p>
+    </section>
+
+    <!-- Exemples : bannières de l'écran verrouillé -->
+    <section class="section" data-when="exemples" aria-labelledby="nt-ex-t">
+      <div class="section-head"><h2 class="section-title" id="nt-ex-t">Sur ton écran verrouillé</h2></div>
+      <div class="nt-wall">
+        <p class="nt-tag"><svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>Maquette d'iOS, pas un écran de l'app</p>
+
+        <article class="nt-ex" aria-label="Exemple : arrivée détectée">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Arrivée détectée</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">maintenant</span></div>
+            <p class="nt-title">Taf</p>
+            <p class="nt-body">T'es arrivé au taf à <span class="num">17:56</span>, c'est bon&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="C'est noté : arrivée à 17:56.">Oui</button>
+            <button type="button" class="nt-act" data-toast="Dans l'app, tu corriges l'heure d'arrivée.">Corriger</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : arrivée probable">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Arrivée probable, pour lancer le suivi</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">il y a 1 min</span></div>
+            <p class="nt-title">Taf</p>
+            <p class="nt-body">T'es arrivé au taf&nbsp;? Touche pour lancer le suivi.</p>
+          </div>
+          <p class="nt-hint">Le tap ouvre l'app, qui démarre la Live Activity. Rien ne démarre en arrière-plan.</p>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : départ à confirmer">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Départ à confirmer</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">il y a 2 min</span></div>
+            <p class="nt-title">Fac de lettres</p>
+            <p class="nt-body">T'es parti de la fac vers <span class="num">12:02</span>, à plus ou moins <span class="num">3 min</span>. C'est bon&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="C'est noté : départ à 12:02.">Oui</button>
+            <button type="button" class="nt-act" data-toast="Dans l'app, tu choisis l'heure exacte.">Autre heure</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : zone de doute">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Zone de doute, tu choisis l'heure</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">samedi</span></div>
+            <p class="nt-title">Taf, samedi</p>
+            <p class="nt-body">T'as fini à <span class="num">20:38</span>. Je compte <span class="num">20 h</span> ou <span class="num">21 h</span>&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="OK, je compte 20 h.">20 h</button>
+            <button type="button" class="nt-act nt-act--main" data-toast="OK, je compte 21 h.">21 h</button>
+            <button type="button" class="nt-act" data-toast="OK, je te le redemande plus tard.">Plus tard</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : Pars maintenant">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Rappel de départ, module trajet</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">17:28</span></div>
+            <p class="nt-title">Pars maintenant</p>
+            <p class="nt-body">Faut y aller, il est <span class="num">17:28</span>. T'as <span class="num">22 min</span> de route et tu prends ton poste à <span class="num">18:00</span>.</p>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : relancer l'affichage">
+          <p class="nt-cap"><span class="chip">Utile</span>Limite de 8 h de la Live Activity</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">il y a 5 min</span></div>
+            <p class="nt-title">Relancer l'affichage&nbsp;?</p>
+            <p class="nt-body">Ton chrono tourne toujours, mais iOS coupe l'affichage. Je le relance&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="C'est relancé, même chrono.">Relancer</button>
+            <button type="button" class="nt-act" data-toast="OK, le chrono continue dans l'app.">Pas la peine</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : planning tardif">
+          <p class="nt-cap"><span class="chip">Informative</span>Planning tardif, coupé par défaut</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">dimanche</span></div>
+            <p class="nt-title">Planning</p>
+            <p class="nt-body">Le planning de la semaine prochaine est pas encore là, tu l'as reçu&nbsp;?</p>
+          </div>
+          <div class="nt-actions nt-actions--stack">
+            <button type="button" class="nt-act nt-act--main" data-toast="Dans l'app, tu prends la photo du planning.">Importer une photo</button>
+            <button type="button" class="nt-act" data-toast="OK, je te redemande dans une semaine.">Pas encore reçu</button>
+            <button type="button" class="nt-act" data-toast="OK, pas de planning cette semaine.">Pas cette semaine</button>
+            <button type="button" class="nt-act" data-toast="OK, je te le rappelle plus.">Ne plus me le rappeler</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : nuit courte">
+          <p class="nt-cap"><span class="chip">Informative</span>Nuit courte, la veille</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">20:30</span></div>
+            <p class="nt-title">Demain, cours à <span class="num">8:00</span></p>
+            <p class="nt-body">Tu finis à <span class="num">00:30</span>, cours à <span class="num">8:00</span>, ça te fait <span class="num">7 h 30</span> max pour dormir.</p>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : plus qu'une heure">
+          <p class="nt-cap"><span class="chip">Informative</span>Compte à rebours, coupé par défaut</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">20:00</span></div>
+            <p class="nt-title">Taf</p>
+            <p class="nt-body">Plus qu'une heure, tu tiens le bon bout.</p>
+          </div>
+        </article>
+      </div>
+      <p class="section-foot">Les boutons apparaissent quand tu appuies longuement sur la notification. Une seule notification à la fois sur un même sujet.</p>
+    </section>
+  </div>
+
+  <style>
+    #scr-notifications .nt-wall { display: flex; flex-direction: column; gap: 22px; padding: 14px 12px 18px; border-radius: var(--radius-large);
+      background:
+        radial-gradient(90% 22% at 12% 0%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 72%),
+        radial-gradient(80% 20% at 100% 45%, color-mix(in srgb, var(--work) 24%, transparent), transparent 72%),
+        radial-gradient(80% 18% at 0% 100%, color-mix(in srgb, var(--study) 20%, transparent), transparent 72%),
+        var(--fill); }
+    #scr-notifications .nt-cap .chip:not([class*="chip--"]) { background: var(--surface); }
+    #scr-notifications .nt-tag { display: flex; align-items: center; gap: 6px; font: 600 12px/16px var(--font-text); color: var(--textPrimary); }
+    #scr-notifications .nt-ex { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    #scr-notifications .nt-cap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font: 600 13px/18px var(--font-text); color: var(--textPrimary); }
+    #scr-notifications .nt-banner { padding: 12px 14px; border-radius: 22px; background: color-mix(in srgb, var(--surface) 90%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 2px; }
+    #scr-notifications .nt-app { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    #scr-notifications .nt-appico { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent); color: var(--accentOn); flex: none; }
+    #scr-notifications .nt-appico .icon { width: 14px; height: 14px; }
+    #scr-notifications .nt-appname { flex: 1; min-width: 0; font: 500 12px/16px var(--font-text); letter-spacing: .03em; text-transform: uppercase; color: var(--textSecondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #scr-notifications .nt-when { font: 400 12px/16px var(--font-text); color: var(--textSecondary); flex: none; }
+    #scr-notifications .nt-title { font: 600 15px/20px var(--font-text); }
+    #scr-notifications .nt-body { font: 400 15px/20px var(--font-text); color: var(--textPrimary); }
+    #scr-notifications .nt-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    #scr-notifications .nt-actions--stack { flex-direction: column; }
+    #scr-notifications .nt-act { flex: 1 1 auto; min-height: 44px; padding: 0 16px; border: 0; border-radius: 16px; font: 600 15px/1.15 var(--font-text); background: color-mix(in srgb, var(--surface) 90%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); color: var(--textPrimary); text-align: center; }
+    #scr-notifications .nt-act--main { color: var(--accent); }
+    #scr-notifications .nt-hint { font: 400 13px/18px var(--font-text); color: var(--textPrimary); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var scr = document.getElementById('scr-notifications');
+    function title(sw) { return sw.getAttribute('data-name') || 'Cette notification'; }
+    scr.addEventListener('change', function (e) {
+      var sw = e.target.closest ? e.target.closest('.switch') : null;
+      if (!sw || e.detail.checked || !sw.hasAttribute('data-name')) return;
+      toast(title(sw) + '\u00a0: coupée. Tu peux la rallumer ici.', { undo: function () { sw.setAttribute('aria-checked', 'true'); } });
+    });
+    document.getElementById('nt-q-sw').addEventListener('change', function (e) {
+      toast(e.detail.checked ? 'Heures silencieuses de 22:00 à 7:00.' : 'Plus d\'heures silencieuses, je te dérange quand il faut.', { undo: function () { document.getElementById('nt-q-sw').setAttribute('aria-checked', String(!e.detail.checked)); } });
+    });
+    var prop = document.getElementById('nt-prop');
+    document.getElementById('nt-prop-cut').addEventListener('click', function () {
+      prop.hidden = true;
+      toast('Rappels de pause coupés. Tu peux les rallumer ici.', { undo: function () { prop.hidden = false; } });
+    });
+    document.getElementById('nt-prop-keep').addEventListener('click', function () {
+      prop.hidden = true;
+      toast('OK, je les garde. Je te redemande pas avant un mois.', { undo: function () { prop.hidden = false; } });
+    });
+    document.getElementById('nt-l-sw').addEventListener('change', function (e) {
+      prop.hidden = !e.detail.checked;
+    });
+    document.getElementById('nt-fix').addEventListener('click', function () {
+      setState('notifications', 'reglages');
+      toast('Notifications autorisées. Merci, je te préviens quand il faut.', { undo: function () { setState('notifications', 'refus'); } });
+    });
+  });
+  </script>
 </section>
 <!-- 90_reglages.html -->
 <section class="screen" id="scr-reglages" data-title="Réglages" data-group="Réglages" data-tab="accueil"
@@ -5659,7 +6217,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <p class="fia-big num" id="fia-big" aria-label="Score de fiabilité">92<small>%</small></p>
         <div class="meter" id="fia-meter" role="presentation"><i style="--v:92"></i></div>
         <p class="card-text" id="fia-sum">Ta semaine est fiable à 92 %. Ça mesure la qualité des données, pas ce que tu fais.</p>
-        <button type="button" class="btn btn--secondary btn--small" data-sheet="sheet-fia-why">Pourquoi ce score ?</button>
+        <button type="button" class="btn btn--secondary btn--small" data-sheet="sheet-fia-why">Pourquoi ce score&nbsp;?</button>
       </article>
     </section>
 
@@ -5683,14 +6241,14 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
     <section class="section" aria-labelledby="fia-days-t">
       <div class="section-head"><h2 class="section-title" id="fia-days-t">Jour par jour</h2></div>
       <div class="list" id="fia-days"></div>
-      <p class="section-foot">Trois barres : fiable, à vérifier, incertain. Le pourcentage est donné pour ceux qui préfèrent le chiffre.</p>
+      <p class="section-foot">Trois barres&nbsp;: fiable, à vérifier, incertain. Le pourcentage est donné pour ceux qui préfèrent le chiffre.</p>
     </section>
 
     <!-- Ce qui fait baisser -->
     <section class="section" aria-labelledby="fia-low-t">
       <div class="section-head"><h2 class="section-title" id="fia-low-t">Ce qui fait baisser le score</h2></div>
       <div class="list" id="fia-causes"></div>
-      <p class="section-foot" id="fia-causes-foot">100 moins les points perdus : 92 %.</p>
+      <p class="section-foot" id="fia-causes-foot">100 moins les points perdus&nbsp;: 92 %.</p>
     </section>
 
     <!-- Actions -->
@@ -5699,7 +6257,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       <div class="list" id="fia-acts"></div>
     </section>
 
-    <!-- Centre de fiabilité : on agrège, sans dupliquer -->
+    <!-- Centre de fiabilité&nbsp;: on agrège, sans dupliquer -->
     <section class="section" aria-labelledby="fia-oth-t">
       <div class="section-head"><h2 class="section-title" id="fia-oth-t">Le reste du centre de fiabilité</h2></div>
       <div class="list">
@@ -5725,7 +6283,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         </div>
         <button type="button" class="row" data-go="diagnostic">
           <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-question"/></svg></span>
-          <span class="row-main"><span class="row-title">Pourquoi l'app a raté ça ?</span><span class="row-sub">Un dépannage pas à pas pour une arrivée ou un départ</span></span>
+          <span class="row-main"><span class="row-title">Pourquoi l'app a raté ça&nbsp;?</span><span class="row-sub">Un dépannage pas à pas pour une arrivée ou un départ</span></span>
           <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
         </button>
       </div>
@@ -5789,7 +6347,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       el('fia-big').setAttribute('aria-label', 'Score de fiabilité, ' + d.score + ' pour cent');
       el('fia-meter').className = 'meter meter--' + l; el('fia-meter').firstElementChild.style.setProperty('--v', d.score);
       el('fia-rel').className = 'rel rel--' + l; el('fia-rel-t').textContent = d.rel;
-      el('fia-sum').textContent = 'Ta semaine est fiable à ' + d.score + ' %. Ça mesure la qualité des données, pas ce que tu fais.';
+      el('fia-sum').textContent = (d.score >= 85 ? 'Ta semaine est fiable à ' + d.score + '\u00a0%.' : 'Ta semaine n\'est fiable qu\'à ' + d.score + '\u00a0%.') + ' Ça mesure la qualité des données, pas ce que tu fais.';
       var h = '';
       d.days.forEach(function (x, i) {
         var nm = DAYS[i][0] + ' ' + DAYS[i][1];
@@ -5798,7 +6356,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         } else {
           var lv = lvl(x[0]);
           h += '<div class="row"><span class="row-main"><span class="row-title">' + nm + '</span><span class="row-sub">' + x[1] + '</span></span>'
-            + '<span class="fia-end"><span class="rel rel--' + lv + '"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>' + LBL[lv] + '</span><span class="fia-pct">' + x[0] + ' %</span></span></div>';
+            + '<span class="fia-end"><span class="rel rel--' + lv + '"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>' + LBL[lv] + '</span><span class="fia-pct">' + x[0] + '\u00a0%</span></span></div>';
         }
       });
       el('fia-days').innerHTML = h;
@@ -5808,7 +6366,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         c += '<div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + x[3] + '"/></svg></span><span class="row-main"><span class="row-title">' + x[0] + '</span><span class="row-sub">' + x[1] + '</span></span><span class="row-value num">-' + x[2] + ' pts</span></div>';
       });
       el('fia-causes').innerHTML = c;
-      el('fia-causes-foot').textContent = '100 moins ' + lost + ' points perdus : ' + (100 - lost) + ' %.';
+      el('fia-causes-foot').textContent = '100 moins ' + lost + ' points perdus : ' + (100 - lost) + '\u00a0%.';
       var a = '';
       d.acts.forEach(function (x) {
         a += '<button type="button" class="row" data-go="' + x[3] + '"><span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-' + x[2] + '"/></svg></span><span class="row-main"><span class="row-title">' + x[0] + '</span><span class="row-sub">' + x[1] + '</span></span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg></button>';
@@ -5823,7 +6381,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
 </section>
 <!-- 96_etats.html -->
 <section class="screen" id="scr-etats" data-title="Galerie des états" data-group="États" data-tab="accueil"
-         data-states="tout:Tout,vides:États vides,erreurs:Bandeaux,chargement:Chargement,toasts:Toasts">
+         data-states="tout:Tout,vides:Vides,erreurs:Erreurs,chargement:Attente,toasts:Toasts">
 
   <header class="navbar">
     <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
@@ -5832,7 +6390,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
 
   <div class="screen-body">
 
-    <p class="eta-intro">Tout ce que l'app te montre quand il n'y a rien, quand ça coince ou quand ça charge. L'app marche sans réseau : aucun de ces cas ne parle de connexion.</p>
+    <p class="eta-intro">Tout ce que l'app te montre quand il n'y a rien, quand ça coince ou quand ça charge. L'app marche sans réseau&nbsp;: aucun de ces cas ne parle de connexion.</p>
 
     <!-- 1. États vides -->
     <section class="section" data-when="tout vides" aria-labelledby="eta-vide-t">
@@ -6078,7 +6636,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
           <span class="chip chip--doubt">Départ manqué</span>
         </div>
         <h2 class="card-title" id="dia-ctx-t">Mercredi 11, Supérette du Canal</h2>
-        <p class="card-text">Arrivée détectée à <span class="num">14:03</span>. Départ jamais détecté : tu l'as corrigé à la main à <span class="num">19:01</span>.</p>
+        <p class="card-text">Arrivée détectée à <span class="num">14:03</span>. Départ jamais détecté&nbsp;: tu l'as corrigé à la main à <span class="num">19:01</span>.</p>
       </article>
     </section>
 
@@ -6103,7 +6661,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
       <div class="banner banner--error" role="status" data-when="causes">
         <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
         <div class="banner-main">
-          <p class="banner-title">Cause la plus probable : l'actualisation en arrière-plan</p>
+          <p class="banner-title">Cause la plus probable&nbsp;: l'actualisation en arrière-plan</p>
           <p class="banner-text">Elle était coupée à partir de <span class="num">16:05</span>, donc je n'ai pas vu ta sortie. Confiance forte. Le rayon un peu serré du lieu a pu jouer aussi.</p>
         </div>
       </div>
@@ -6111,7 +6669,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
         <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
         <div class="banner-main">
           <p class="banner-title">Je ne trouve rien d'anormal</p>
-          <p class="banner-text">Tous les réglages étaient bons. Le plus probable : un signal GPS faible dans le bâtiment. Confiance moyenne, je ne peux pas être certain.</p>
+          <p class="banner-text">Tous les réglages étaient bons. Le plus probable&nbsp;: un signal GPS faible dans le bâtiment. Confiance moyenne, je ne peux pas être certain.</p>
           <button type="button" class="banner-action" data-go="session">Corriger l'heure à la main</button>
         </div>
       </div>
@@ -6147,7 +6705,7 @@ window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
   <style>
     #scr-diagnostic .dia-sk { display: flex; align-items: center; gap: 12px; }
     #scr-diagnostic .dia-sk-t { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-    #scr-diagnostic .dia-step { display: flex; flex-direction: column; gap: 8px; padding: 12px var(--space-m); }
+    #scr-diagnostic .dia-step { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px var(--space-m); }
     #scr-diagnostic .dia-step-top { display: flex; align-items: flex-start; gap: 12px; }
     #scr-diagnostic .dia-step-top .row-main { flex: 1; min-width: 0; }
     #scr-diagnostic .dia-step .btn { align-self: flex-start; margin-left: 44px; }

@@ -101,7 +101,7 @@
       }
     };
     var GEN = {
-      does: function (m) { return [m.desc, 'Tu peux régler son comportement dans ses réglages, une fois activée.', 'Aucune saisie obligatoire : tout est facultatif.']; },
+      does: function (m) { return [m.desc, 'Tu peux régler son comportement dans ses réglages, une fois activée.', 'Aucune saisie obligatoire\u00a0: tout est facultatif.']; },
       data: ['Tes sessions et tes lieux, déjà dans l\'app', 'Les réglages propres à cette fonction'],
       perm: []
     };
@@ -121,7 +121,7 @@
       var sw = el('mod-sw'); sw.setAttribute('aria-checked', String(isOn));
       el('mod-status').className = 'status ' + (isOn ? 'status--ok' : '');
       el('mod-status').innerHTML = '<svg class="icon" aria-hidden="true"><use href="#i-' + (isOn ? 'check' : 'pause') + '"/></svg>' + (isOn ? 'Activée' : 'Désactivée');
-      el('mod-sw-sub').textContent = isOn ? 'Tu peux la couper quand tu veux.' : 'Coupée : aucune interface, aucun calcul.';
+      el('mod-sw-sub').textContent = isOn ? 'Tu peux la couper quand tu veux.' : 'Coupée\u00a0: aucune interface, aucun calcul.';
       var miss = m.req.filter(function (r) { return !f.on[r]; });
       el('mod-miss').hidden = !(miss.length && !isOn);
       if (miss.length) el('mod-miss-t').textContent = 'Il lui faut ' + miss.map(f.short).join(' et ');

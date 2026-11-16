@@ -13,7 +13,7 @@
         <label class="field-label sr-only" for="fon-q">Chercher une fonctionnalité</label>
         <div class="fon-search">
           <svg class="icon icon--s" aria-hidden="true"><use href="#i-search"/></svg>
-          <input class="input" id="fon-q" type="search" placeholder="Chercher : paie, congés, notes..." autocomplete="off">
+          <input class="input" id="fon-q" type="search" placeholder="Chercher&nbsp;: paie, congés, notes..." autocomplete="off">
         </div>
         <span class="field-help" id="fon-count" aria-live="polite"></span>
       </div>
@@ -23,7 +23,7 @@
       <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
       <div class="banner-main">
         <p class="banner-title">Tout est désactivé, et ça marche</p>
-        <p class="banner-text">Il te reste l'essentiel : tes lieux, tes sessions et tes heures. Tu peux rallumer ce que tu veux quand tu veux, tes données sont gardées.</p>
+        <p class="banner-text">Il te reste l'essentiel&nbsp;: tes lieux, tes sessions et tes heures. Tu peux rallumer ce que tu veux quand tu veux, tes données sont gardées.</p>
       </div>
     </div>
 
@@ -34,30 +34,30 @@
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
           <span class="row-main"><span class="row-title">Lieux et sessions</span><span class="row-sub">Ton taf, ta fac, tes courses, avec leurs heures</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-nav"/></svg></span>
           <span class="row-main"><span class="row-title">Détection arrivée et départ</span><span class="row-sub">Dans la limite des autorisations que tu donnes</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></span>
           <span class="row-main"><span class="row-title">Saisie manuelle</span><span class="row-sub">Démarrer, arrêter ou ajouter une session à la main</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
           <span class="row-main"><span class="row-title">Statistiques d'heures</span><span class="row-sub">Totaux, moyennes, graphique par jour</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
         <div class="row">
           <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
           <span class="row-main"><span class="row-title">Réglages, export et import</span><span class="row-sub">Tes données en JSON, quand tu veux</span></span>
-          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours actif</span>
+          <span class="status"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>Toujours<span class="sr-only"> actif</span></span>
         </div>
       </div>
-      <p class="section-foot">Ça, tu ne peux pas le couper : sans ça l'app ne note rien. Tout le reste est à toi. Rien sur la paie ou l'argent n'est obligatoire.</p>
+      <p class="section-foot">Ça, tu ne peux pas le couper&nbsp;: sans ça l'app ne note rien. Tout le reste est à toi. Rien sur la paie ou l'argent n'est obligatoire.</p>
     </section>
 
     <div id="fon-groups"></div>
@@ -71,7 +71,7 @@
 
   </div>
 
-  <!-- Dépendance : activer un module qui en demande un autre, ou couper un module dont d'autres dépendent -->
+  <!-- Dépendance&nbsp;: activer un module qui en demande un autre, ou couper un module dont d'autres dépendent -->
   <div class="sheet" id="sheet-fon-dep">
     <h2 class="sheet-title" id="fon-dep-title">Titre</h2>
     <p class="sheet-text" id="fon-dep-text">Texte</p>
@@ -177,7 +177,7 @@
         if (miss.length) {
           pending = { id: id, want: true, also: miss, after: after };
           document.getElementById('fon-dep-title').textContent = m.name + ' a besoin de ' + list(miss.map(short)) + '.';
-          document.getElementById('fon-dep-text').textContent = 'Je l\'active aussi ? Tu pourras le couper plus tard, et tes données ne bougent pas.';
+          document.getElementById('fon-dep-text').textContent = 'Je l\'active aussi\u00a0? Tu pourras le couper plus tard, et tes données ne bougent pas.';
           document.getElementById('fon-dep-ok').textContent = 'Activer les deux';
           document.getElementById('fon-dep-no').textContent = 'Laisser coupé';
           openSheet('sheet-fon-dep'); return false;
@@ -188,7 +188,7 @@
       if (dep.length) {
         pending = { id: id, want: false, also: dep, after: after };
         document.getElementById('fon-dep-title').textContent = short(id) + ' sert à d\'autres fonctions.';
-        document.getElementById('fon-dep-text').textContent = list(names(dep)) + ' en dépend' + (dep.length > 1 ? 'ent' : '') + '. Je les coupe aussi ? Rien n\'est supprimé, tout revient si tu rallumes.';
+        document.getElementById('fon-dep-text').textContent = list(names(dep)) + ' en dépend' + (dep.length > 1 ? 'ent' : '') + '. Je les coupe aussi\u00a0? Rien n\'est supprimé, tout revient si tu rallumes.';
         document.getElementById('fon-dep-ok').textContent = 'Tout désactiver';
         document.getElementById('fon-dep-no').textContent = 'Garder ' + short(id);
         openSheet('sheet-fon-dep'); return false;
@@ -206,14 +206,14 @@
       changed.forEach(function (k) { on[k] = p.want; });
       closeSheet(); persist(); render();
       document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } }));
-      toast((p.want ? 'Activé' : 'Désactivé') + ' : ' + list(names(changed)) + '.', { undo: function () { changed.forEach(function (k) { on[k] = !p.want; }); persist(); render(); document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } })); } });
+      toast((p.want ? 'Activé' : 'Désactivé') + '\u00a0: ' + list(names(changed)) + '.', { undo: function () { changed.forEach(function (k) { on[k] = !p.want; }); persist(); render(); document.dispatchEvent(new CustomEvent('fon:changed', { detail: { id: p.id } })); } });
     });
     window.PLT_FON = { reg: REG, on: on, request: request, order: ORDER, short: short };
 
     function esc(s) { return s; }
     function rowHtml(m) {
       var req = m.req.map(function (r) {
-        return '<span class="fon-dep' + (on[r] ? '' : ' is-miss') + '">Demande : ' + short(r) + (on[r] ? ' (activé)' : ' (désactivé)') + '</span>';
+        return '<span class="fon-dep' + (on[r] ? '' : ' is-miss') + '">Demande\u00a0: ' + short(r) + (on[r] ? ' (activé)' : ' (désactivé)') + '</span>';
       }).join('');
       return '<div class="row fon-row" data-id="' + m.id + '">'
         + '<span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + m.icon + '"/></svg></span>'
@@ -224,7 +224,7 @@
       var q = document.getElementById('fon-q').value.trim().toLowerCase();
       var html = '', shown = 0, total = ORDER.length;
       G.forEach(function (g) {
-        var rows = g.m.map(function (x) { return REG[x[0]]; }).filter(function (m) { return !q || (m.name + ' ' + m.desc + ' ' + m.gname).toLowerCase().indexOf(q) !== -1; });
+        var rows = g.m.map(function (x) { return REG[x[0]]; }).filter(function (m) { return !q || (m.name + ' ' + m.desc).toLowerCase().indexOf(q) !== -1; });
         if (!rows.length) return;
         shown += rows.length;
         var n = rows.filter(function (m) { return on[m.id]; }).length;
@@ -233,7 +233,7 @@
       });
       document.getElementById('fon-groups').innerHTML = html;
       var act = ORDER.filter(function (k) { return on[k]; }).length;
-      document.getElementById('fon-count').textContent = q ? shown + ' résultat' + (shown > 1 ? 's' : '') + '. ' + act + ' fonctionnalités actives en tout.' : act + ' fonctionnalités actives sur ' + total + '. Tu peux changer ça quand tu veux.';
+      document.getElementById('fon-count').textContent = q ? shown + ' résultat' + (shown > 1 ? 's' : '') + '. ' + (act === 0 ? 'Aucune fonctionnalité active en tout.' : act + ' fonctionnalités actives en tout.') : (act === 0 ? 'Aucune fonctionnalité active sur ' + total : act + (act > 1 ? ' fonctionnalités actives' : ' fonctionnalité active') + ' sur ' + total) + '. Tu peux changer ça quand tu veux.';
       document.getElementById('fon-none').hidden = !(q && !shown);
       document.getElementById('fon-core').hidden = !!q;
       document.getElementById('fon-allOff').hidden = act !== 0;

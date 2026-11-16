@@ -1,0 +1,259 @@
+<section class="screen" id="scr-paie" data-title="Paie" data-group="Emploi et paie" data-tab="accueil"
+         data-states="estimation:Estimation,vide:Pas de taux,desactive:Module désactivé">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="emploi"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Emploi</button>
+    <h1 class="navbar-title">Paie</h1>
+    <div class="navbar-actions" data-when="estimation">
+      <button type="button" class="iconbtn iconbtn--tonal" id="pa-hide" aria-pressed="false" aria-label="Masquer les montants"><svg class="icon icon--s" aria-hidden="true"><use href="#i-eye-off"/></svg></button>
+    </div>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- ESTIMATION -->
+    <div class="banner banner--warning" data-when="estimation" role="note">
+      <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Ce sont des estimations</p>
+        <p class="banner-text">Je calcule d'après tes heures et les taux que tu as saisis. Ta fiche de paie fait foi, pas moi.</p>
+      </div>
+    </div>
+
+    <section class="section" data-when="estimation" aria-label="Choix du mois">
+      <div class="segmented" id="pa-month" role="group" aria-label="Mois">
+        <button type="button" data-value="nov" aria-pressed="true">Novembre</button>
+        <button type="button" data-value="oct" aria-pressed="false">Octobre</button>
+      </div>
+    </section>
+
+    <!-- Novembre, mois en cours -->
+    <div data-when="estimation" id="pa-nov" class="pa-block">
+      <section class="section" aria-labelledby="pa-nov-t">
+        <div class="section-head">
+          <h2 class="section-title" id="pa-nov-t">Novembre, au <span class="num">16</span></h2>
+          <span class="chip chip--doubt">Estimation</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">Brut estimé</span>
+            <span class="stat-value pa-amt">≈369<small>€</small></span>
+            <span class="stat-note">Environ, sur <span class="num">29 h</span> faites</span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Net estimé</span>
+            <span class="stat-value pa-amt">≈291<small>€</small></span>
+            <span class="stat-note">Environ, ratio <span class="num">0,79</span></span>
+          </div>
+        </div>
+        <p class="section-foot">Si ton planning tient jusqu'au <span class="num">30</span>, environ <span class="num pa-amt">713 €</span> brut et <span class="num pa-amt">563 €</span> net. Une prévision, pas une promesse.</p>
+      </section>
+
+      <section class="section" aria-labelledby="pa-nov-d">
+        <div class="section-head">
+          <h2 class="section-title" id="pa-nov-d">Comment je l'estime</h2>
+          <button type="button" class="section-link" data-sheet="sheet-pa-calcul">Détail du calcul</button>
+        </div>
+        <div class="list">
+          <div class="row">
+            <span class="row-main"><span class="row-title">Heures de taf</span><span class="row-sub">Heures pleines. Une session à confirmer n'est pas comptée.</span></span>
+            <span class="row-value num">29 h</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Taux horaire brut</span><span class="row-sub">Saisi par toi, vérifie-le avec ta fiche de paie</span></span>
+            <span class="row-value num pa-amt">12,02 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Heures multipliées par le taux</span></span>
+            <span class="row-value num pa-amt">≈ 349 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Majoration du dimanche</span><span class="row-sub">Aucun dimanche travaillé ce mois. Taux à renseigner.</span></span>
+            <span class="row-value">0 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Prime de panier</span><span class="row-sub"><span class="num">2,50 €</span> par session, <span class="num">8</span> sessions</span>
+              <span class="chip-row"><span class="chip">Saisie par toi</span></span></span>
+            <span class="row-value num pa-amt">≈ 20 €</span>
+          </div>
+          <div class="row">
+            <span class="row-main"><span class="row-title">Total brut estimé</span></span>
+            <span class="row-value num pa-amt">≈ 369 €</span>
+          </div>
+        </div>
+        <p class="section-foot">Montants arrondis à l'euro. Les primes du pack de convention ne sont jamais ajoutées sans que tu les aies confirmées.</p>
+      </section>
+    </div>
+
+    <!-- Octobre, mois précédent -->
+    <div data-when="estimation" id="pa-oct" class="pa-block" hidden>
+      <section class="section" aria-labelledby="pa-oct-t">
+        <div class="section-head">
+          <h2 class="section-title" id="pa-oct-t">Octobre, mois complet</h2>
+          <span class="chip chip--doubt">Estimation</span>
+        </div>
+        <div class="stat-grid">
+          <div class="stat">
+            <span class="stat-label">Brut estimé</span>
+            <span class="stat-value pa-amt">≈742<small>€</small></span>
+            <span class="stat-note">Environ, sur <span class="num">58 h</span></span>
+          </div>
+          <div class="stat">
+            <span class="stat-label">Net estimé</span>
+            <span class="stat-value pa-amt">≈586<small>€</small></span>
+            <span class="stat-note">Environ, ratio <span class="num">0,79</span></span>
+          </div>
+        </div>
+      </section>
+      <section class="section" aria-label="Fiche de paie d'octobre">
+        <div class="list">
+          <button type="button" class="row" data-toast="Dans l'app, tu photographies ta fiche et je compare ligne par ligne, avec ton accord.">
+            <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+            <span class="row-main"><span class="row-title">Comparer avec ta fiche de paie</span><span class="row-sub">Je lis la fiche sur ton tel et je te montre les écarts</span></span>
+            <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+          </button>
+        </div>
+        <p class="section-foot">Tant que t'as pas comparé avec ta fiche, ce montant reste une estimation.</p>
+      </section>
+    </div>
+
+    <!-- Historique -->
+    <section class="section" data-when="estimation" aria-labelledby="pa-hist-t">
+      <div class="section-head"><h2 class="section-title" id="pa-hist-t">Historique</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Dans l'app, le détail du mois s'ouvre ici.">
+          <span class="row-main"><span class="row-title">Octobre</span><span class="row-sub"><span class="num">58 h</span>, brut estimé, pas de fiche comparée</span></span>
+          <span class="row-value num pa-amt">≈ 742 €</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Dans l'app, le détail du mois s'ouvre ici.">
+          <span class="row-main"><span class="row-title">Septembre</span><span class="row-sub"><span class="num">52 h</span>, brut estimé, pas de fiche comparée</span></span>
+          <span class="row-value num pa-amt">≈ 665 €</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <section class="section" data-when="estimation" aria-label="Relevé et sources">
+      <div class="list">
+        <button type="button" class="row" data-toast="Dans l'app, ton relevé part en PDF ou CSV, avec les sessions corrigées signalées.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-share"/></svg></span>
+          <span class="row-main"><span class="row-title">Préparer un relevé pour mon employeur</span><span class="row-sub">PDF ou CSV, avec arrivées, départs et totaux</span></span>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span>
+          <span class="row-main"><span class="row-title">Règles et taux utilisés</span><span class="row-sub">Dernière vérification le <span class="num">3</span> novembre. Source&nbsp;: service-public.fr.</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDE : module actif, pas de taux -->
+    <section class="section" data-when="vide" aria-label="Aucun taux saisi">
+      <div class="card card--outline">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-euro"/></svg></span>
+          <h3 class="empty-title">Pas encore d'estimation.</h3>
+          <p class="empty-text">Dis-moi ton taux horaire et j'estime ton mois d'après tes heures. Sans taux, je n'affiche aucun montant.</p>
+          <button type="button" class="btn btn--primary" data-sheet="sheet-pa-taux">Saisir mon taux</button>
+          <button type="button" class="btn btn--secondary" id="pa-smic">Je suis au SMIC</button>
+        </div>
+      </div>
+      <p class="section-foot">Tes heures sont comptées quand même. Tout reste sur ton tel.</p>
+    </section>
+
+    <!-- DÉSACTIVÉ -->
+    <section class="section" data-when="desactive" aria-label="Module désactivé">
+      <div class="card card--outline">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-euro"/></svg></span>
+          <h3 class="empty-title">La paie, c'est optionnel.</h3>
+          <p class="empty-text">Tant que ce module est éteint, l'app n'affiche aucun montant. Elle ne compte que tes heures.</p>
+          <button type="button" class="btn btn--primary" id="pa-on">Activer la paie</button>
+        </div>
+      </div>
+      <div class="list" aria-label="Ce que le module apporte">
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-euro"/></svg></span><span class="row-main"><span class="row-title">Brut et net estimés</span><span class="row-sub">Toujours marqués comme des estimations</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-doc"/></svg></span><span class="row-main"><span class="row-title">Relevé d'heures</span><span class="row-sub">À envoyer à ton employeur, en PDF ou CSV</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span><span class="row-main"><span class="row-title">Besoin d'Emploi</span><span class="row-sub">Le module Emploi est déjà activé</span></span><span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Prêt</span></div>
+      </div>
+      <p class="section-foot">Pour l'allumer plus tard&nbsp;: Réglages, puis Fonctionnalités, puis Paie.</p>
+      <button type="button" class="btn btn--secondary btn--block" data-go="fonctionnalites">Voir les fonctionnalités</button>
+    </section>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-pa-calcul">
+    <h2 class="sheet-title">Comment c'est calculé</h2>
+    <p class="sheet-text">Les trois bases restent enregistrées en parallèle. Changer de base ne modifie jamais tes sessions. Pour la paie, j'utilise tes heures pleines.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Heures pleines</span><span class="row-sub">Base utilisée ici</span></span><span class="row-value num">29 h</span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Exact</span><span class="row-sub">À la minute près</span></span><span class="row-value num">29 h 36</span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Planning</span><span class="row-sub">Les heures prévues</span></span><span class="row-value num">28 h</span></div>
+    </div>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Ratio net sur brut</span><span class="row-sub">Indicatif pour un salarié non cadre, tu peux le changer</span></span><span class="row-value num">0,79</span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-pa-taux">
+    <h2 class="sheet-title">Ton taux horaire</h2>
+    <p class="sheet-text">Je m'en sers pour estimer ton mois. Ta fiche de paie fait foi.</p>
+    <div class="field">
+      <span class="field-label" id="pa-unit-l">Tu saisis</span>
+      <div class="segmented" role="group" aria-labelledby="pa-unit-l">
+        <button type="button" data-value="brut" aria-pressed="true">Brut</button>
+        <button type="button" data-value="net" aria-pressed="false">Net</button>
+      </div>
+    </div>
+    <div class="field" id="pa-taux-field">
+      <label class="field-label" for="pa-taux-in">Taux par heure, en euros</label>
+      <input class="input num" id="pa-taux-in" type="text" inputmode="decimal" autocomplete="off" placeholder="12,02">
+      <span class="field-help" id="pa-taux-help">Le net est converti avec un ratio indicatif, affiché comme une estimation.</span>
+    </div>
+    <div class="btn-stack">
+      <button type="button" class="btn btn--primary btn--block" id="pa-taux-ok">Enregistrer</button>
+      <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Annuler</button>
+    </div>
+  </div>
+
+  <style>
+    #scr-paie .pa-block { display: flex; flex-direction: column; gap: var(--space-l); }
+    #scr-paie .pa-block[hidden] { display: none; }
+    #scr-paie.is-discret .pa-amt { filter: blur(8px); user-select: none; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-paie');
+    var nov = document.getElementById('pa-nov'), oct = document.getElementById('pa-oct');
+    document.getElementById('pa-month').addEventListener('change', function (e) {
+      nov.hidden = e.detail.value !== 'nov'; oct.hidden = e.detail.value !== 'oct';
+    });
+    var hide = document.getElementById('pa-hide');
+    hide.addEventListener('click', function () {
+      var on = !root.classList.contains('is-discret');
+      root.classList.toggle('is-discret', on);
+      hide.setAttribute('aria-pressed', on ? 'true' : 'false');
+      hide.setAttribute('aria-label', on ? 'Afficher les montants' : 'Masquer les montants');
+      toast(on ? 'Montants masqués.' : 'Montants affichés.');
+    });
+    document.getElementById('pa-on').addEventListener('click', function () {
+      setState('paie', 'estimation');
+      toast('Paie activée. Tout est indiqué comme estimation.', { undo: function () { setState('paie', 'desactive'); } });
+    });
+    document.getElementById('pa-smic').addEventListener('click', function () {
+      setState('paie', 'estimation');
+      toast('Taux rempli avec le SMIC en vigueur, vérifié le 3 novembre.', { undo: function () { setState('paie', 'vide'); } });
+    });
+    var field = document.getElementById('pa-taux-field'), input = document.getElementById('pa-taux-in'), help = document.getElementById('pa-taux-help');
+    document.getElementById('pa-taux-ok').addEventListener('click', function () {
+      var v = parseFloat(input.value.replace(',', '.'));
+      if (!(v > 0 && v < 200)) { field.classList.add('is-invalid'); help.textContent = 'Écris un taux comme 12,02.'; return; }
+      field.classList.remove('is-invalid'); help.textContent = 'Le net est converti avec un ratio indicatif, affiché comme une estimation.';
+      closeSheet(); setState('paie', 'estimation'); input.value = '';
+      toast('Taux enregistré. Les montants restent des estimations.', { undo: function () { setState('paie', 'vide'); } });
+    });
+  });
+  </script>
+</section>
