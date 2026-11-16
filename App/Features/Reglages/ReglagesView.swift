@@ -26,6 +26,9 @@ struct ReglagesView: View {
             detectionSection
             diagnosticSection
             featuresSection
+            if modules.isActive("employment") {
+                employmentSection
+            }
             appearanceSection
             preferencesSection
             dataSection
@@ -197,6 +200,24 @@ struct ReglagesView: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel("Fonctionnalités, \(counts.active) actives sur \(counts.total)")
+    }
+
+    // MARK: Emploi (module optionnel)
+
+    private var employmentSection: some View {
+        NavigationLink {
+            EmploiView()
+        } label: {
+            PLTListGroup {
+                PLTRow(symbol: "briefcase",
+                       title: "Emploi",
+                       subtitle: "Ton employeur, ton contrat et sa fin",
+                       showsChevron: true,
+                       showsSeparator: false)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Emploi")
     }
 
     // MARK: Apparence

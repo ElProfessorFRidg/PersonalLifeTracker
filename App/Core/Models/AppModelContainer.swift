@@ -3,7 +3,7 @@ import SwiftData
 
 /// Point d'entrée unique pour créer le ModelContainer (app et tests).
 enum AppModelContainer {
-    static let schema: Schema = Schema([Place.self, WorkSession.self, DetectionEvent.self, PlaceSample.self])
+    static let schema: Schema = Schema([Place.self, WorkSession.self, DetectionEvent.self, PlaceSample.self, Employer.self, Contract.self, PayRate.self])
 
     /// `inMemory: true` pour les tests et les aperçus : rien n'est écrit sur disque.
     static func make(inMemory: Bool = false) throws -> ModelContainer {
