@@ -154,7 +154,7 @@ struct DepannageView: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.m) {
             PLTSectionHeader(title: "Qu'est-ce qui s'est mal passé ?")
             PLTListGroup {
-                ForEach(Array(MissQuestion.allCases.enumerated()), id: \.element) { (index: Int, item: MissQuestion) in
+                ForEach(Array(MissQuestion.allCases.enumerated()), id: \.element) { index, item in
                     PLTRow(symbol: item == question ? "checkmark.circle.fill" : "circle",
                            tone: item == question ? .accent : .neutral,
                            title: item.title,
@@ -294,7 +294,7 @@ struct DepannageView: View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Autres pistes")
             PLTListGroup {
-                ForEach(Array(others.enumerated()), id: \.element.id) { (index: Int, cause: MissCause) in
+                ForEach(Array(others.enumerated()), id: \.element.id) { index, cause in
                     VStack(alignment: .leading, spacing: 0) {
                         PLTRow(symbol: "questionmark.circle.fill",
                                tone: .neutral,
@@ -325,7 +325,7 @@ struct DepannageView: View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Ce que j'ai vérifié")
             PLTListGroup {
-                ForEach(Array(result.checks.enumerated()), id: \.element.id) { (index: Int, check: MissCheck) in
+                ForEach(Array(result.checks.enumerated()), id: \.element.id) { index, check in
                     VStack(alignment: .leading, spacing: 0) {
                         PLTRow(symbol: symbol(for: check.id),
                                tone: tone(for: check.status),

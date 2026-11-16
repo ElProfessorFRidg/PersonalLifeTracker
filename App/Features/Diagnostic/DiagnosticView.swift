@@ -42,6 +42,7 @@ struct DiagnosticView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.modelContext) private var context
     @Environment(GeofenceService.self) private var geofence
+    @Environment(ModuleStore.self) private var modules
 
     @Query(sort: \DetectionEvent.date, order: .reverse) private var events: [DetectionEvent]
     @Query private var places: [Place]
@@ -59,6 +60,9 @@ struct DiagnosticView: View {
             summarySection
             checksSection
             restartSection
+            if modules.isActive("detection_help") {
+                DepannageEntryRow()
+            }
             journalSection
         }
         .onAppear { capabilities.refresh() }
