@@ -6,9 +6,9 @@ final class SessionRulesTests: XCTestCase {
     private let utc: Calendar = TestCalendar.utc
     private let paris: Calendar = TestCalendar.paris
 
-    private func item(_ id: UUID = UUID(), _ start: Date, activity: ActivityType = .work,
+    private func item(_ start: Date, activity: ActivityType = .work,
                       confirmed: Bool = true, doubt: Bool = false) -> SessionListItem {
-        return SessionListItem(id: id, start: start, end: nil, activity: activity, isConfirmed: confirmed, hasUnresolvedDoubt: doubt)
+        return SessionListItem(id: UUID(), start: start, end: nil, activity: activity, isConfirmed: confirmed, hasUnresolvedDoubt: doubt)
     }
 
     // MARK: Validation
