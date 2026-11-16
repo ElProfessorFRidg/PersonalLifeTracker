@@ -1,4 +1,4 @@
-name: altstore-source
+name: Publish AltStore Source
 # Appelé par beta.yml et release.yml (un workflow lancé avec GITHUB_TOKEN ne déclenche pas d'autres workflows).
 # Peut aussi être lancé à la main pour reconstruire la source d'un tag existant.
 on:
@@ -20,16 +20,18 @@ concurrency:
   cancel-in-progress: false
 jobs:
   source:
+    name: Publish AltStore Source
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - name: Récupérer l'IPA de la release
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Download release IPA
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           mkdir dl && gh release download "${{ inputs.tag }}" --pattern '*.ipa' --dir dl
           ls -l dl
-      - name: Préparer la branche altstore-source
+      - name: Prepare AltStore source branch
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -38,7 +40,7 @@ jobs:
           else
             git worktree add --detach src-branch && cd src-branch && git checkout --orphan altstore-source && git rm -rf . >/dev/null 2>&1 || true
           fi
-      - name: Générer la source
+      - name: Generate AltStore source
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
@@ -51,14 +53,14 @@ jobs:
           [ -f altstore/icon.png ] && cp altstore/icon.png src-branch/icon.png || echo "pas d'icône (altstore/icon.png)"
           F=source.json; [ "${{ inputs.channel }}" = beta ] && F=source-beta.json
           python3 scripts/validate_altstore_source.py "src-branch/$F"
-      - name: Publier la branche
+      - name: Push AltStore source branch
         run: |
           cd src-branch
           git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
           git diff --cached --quiet && echo "rien à publier" || git commit -m "altstore: ${{ inputs.tag }} (${{ inputs.channel }})"
           git push origin HEAD:altstore-source
-      - name: Vérifier que le lien répond (réseau réel)
+      - name: Verify published source
         run: |
           F=source.json; [ "${{ inputs.channel }}" = beta ] && F=source-beta.json
           URL="https://raw.githubusercontent.com/${{ github.repository }}/altstore-source/$F"

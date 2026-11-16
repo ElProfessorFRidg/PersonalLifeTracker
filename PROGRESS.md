@@ -7,6 +7,10 @@ La colonne Preuve contient un chemin evidence/... ou une URL de run CI. VÉRIFI�
 
 Workflows modifiés : pull-request.yml produit aussi l'artefact IPA ; manual-build.yml publie cet IPA dans une pré-release unique build-<run_id>, après réussite des tests. Les tags stables et bêta gardent leur publication existante avec source AltStore. Validation des entrées de build et vérification ZIP sans arrêt anticipé du pipeline. NON TESTÉ sur macOS pour cette modification : environnement Linux ; aucune nouvelle release publiée pendant cette intervention.
 
+## Noms CI/CD du 2026-11-16
+
+Les sept workflows utilisent des noms anglais classiques : CI, PR Checks, Build and Test, Manual Build, Beta Release, Release, Publish AltStore Source. Les libellés des jobs, étapes et champs de saisie sont en anglais. Les identifiants des jobs et les noms techniques des artefacts restent identiques pour conserver les références existantes. Modification limitée aux libellés ; exécution macOS NON TESTÉE pour ce renommage.
+
 ## Phases
 
 | ID | Titre | Étape | Statut | Preuve | Note |

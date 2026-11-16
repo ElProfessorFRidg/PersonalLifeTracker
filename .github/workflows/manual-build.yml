@@ -1,9 +1,9 @@
-name: manual-build
+name: Manual Build
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: "Version x.y.z pour le build"
+        description: "App version in x.y.z format"
         type: string
         required: true
         default: "0.0.0"
@@ -11,20 +11,23 @@ permissions:
   contents: read
 jobs:
   build:
+    name: Build and Test
     uses: ./.github/workflows/_build-test.yml
     with:
       build_ipa: true
       version: ${{ inputs.version }}
   publish:
+    name: Publish Release
     needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/download-artifact@v4
+      - name: Download IPA artifact
+        uses: actions/download-artifact@v4
         with:
           name: ipa
-      - name: Publier l'IPA dans une pré-release de build
+      - name: Publish build prerelease
         env:
           GH_TOKEN: ${{ github.token }}
           GH_REPO: ${{ github.repository }}

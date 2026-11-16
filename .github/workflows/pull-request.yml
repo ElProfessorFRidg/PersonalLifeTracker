@@ -1,4 +1,4 @@
-name: pull-request
+name: PR Checks
 on:
   pull_request:
 concurrency:
@@ -8,6 +8,7 @@ permissions:
   contents: read
 jobs:
   build-test:
+    name: Build and Test
     uses: ./.github/workflows/_build-test.yml
     with:
       build_ipa: true
