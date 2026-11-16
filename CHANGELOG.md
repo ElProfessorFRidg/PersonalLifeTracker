@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.0.1-beta.3
+- Étape 2 : détection automatique des arrivées et départs par géorepérage, notifications de confirmation, écran de diagnostic, annuler partout et instantanés quotidiens.
+- Détection jamais testée sur un vrai iPhone à ce stade.
+
 ## 0.0.1-beta.2
 - Noyau, étape 1 : onboarding, Accueil avec démarrage et arrêt manuel, lieux sur carte, sessions, saisie manuelle, choix de l'heure pleine en zone de doute, Fonctionnalités, Réglages (thème, devise, base de calcul, export JSON).
 - Pas encore de détection automatique (géorepérage) : elle arrive à l'étape 2.

@@ -27,7 +27,7 @@ Les sept workflows utilisent des noms anglais classiques : CI, PR Checks, Build 
 |---|---|---|---|---|---|
 | core:core_models | Noyau : modèles SwiftData, ModuleRegistry, écran Fonctionnalités | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43877060132 | Modèles, registre (108 modules, tous encore « bientôt »), écran Fonctionnalités, Réglages (thème, devise, base de calcul, export JSON). Build + tests + archive verts en CI. Jamais lancé sur simulateur ni iPhone par quiconque : aucun écran vu. |
 | core:core_places | Noyau : lieux, sessions, saisie manuelle, onglets Accueil et Lieux | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43877060132 | Lieux (carte, rayon), sessions, saisie manuelle, démarrage et arrêt manuel, Accueil, onboarding de base. Logique testée en CI. Écrans jamais vus à l'écran ; permissions et carte NON TESTÉES sur appareil. |
-| core:core_geofence | Géorepérage, arrivée/départ, notifications, diagnostic, annuler partout | 2 | NON COMMENCÉ |  |  |
+| core:core_geofence | Géorepérage, arrivée/départ, notifications, diagnostic, annuler partout | 2 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43889057891 | Moteur de détection (logique pure) et règles de notification testés en CI. Géorepérage réel, relance en arrière-plan, notifications et leurs actions : NON TESTÉS, seulement vérifiables sur iPhone. Seuils choisis par l'agent (5 min, 3 min, 6 notifs par jour, silence 22:00 à 04:59), voir notes/core_geofence.md. État du moteur non persisté. |
 | core:core_classify | Classification travail/études/courses, apprentissage, récupération | 3 | NON COMMENCÉ |  |  |
 | core:core_time_rounding | Heures : timestamp exact + base normalisée + zone de doute (13.1) | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43877060132 | Arrondi, zone de doute, durées, choix utilisateur stocké à part de l'heure exacte : testés en CI. Écran de choix jamais vu à l'écran. Mutation à la main (14 en 15) non faite. |
 
@@ -52,7 +52,7 @@ Les sept workflows utilisent des noms anglais classiques : CI, PR Checks, Build 
 | module:now_card | Carte Maintenant (ActionEngine) | 10 | NON COMMENCÉ |  |  |
 | module:smart_notifications | Notifications qui apprennent (coordinateur) | 10 | NON COMMENCÉ |  |  |
 | module:data_trust | Score de fiabilité des données | 10 | NON COMMENCÉ |  |  |
-| module:undo_safety | Annuler partout et instantanés | 2 | NON COMMENCÉ |  |  |
+| module:undo_safety | Annuler partout et instantanés | 2 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43889057891 | Toast Annuler, instantanés quotidiens, restauration : logique testée en CI. Écrans jamais vus. Pas fait : secousse, annulation des modifications d'heure, restauration sélective. |
 | module:place_calibration | Auto-calibration des lieux | 3 | NON COMMENCÉ |  |  |
 | module:battery_recovery | Récupération après batterie vide | 3 | NON COMMENCÉ |  |  |
 | module:detection_help | Assistant de dépannage de la détection | 3 | NON COMMENCÉ |  |  |
