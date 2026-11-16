@@ -25,11 +25,11 @@ Les sept workflows utilisent des noms anglais classiques : CI, PR Checks, Build 
 
 | ID | Titre | Étape | Statut | Preuve | Note |
 |---|---|---|---|---|---|
-| core:core_models | Noyau : modèles SwiftData, ModuleRegistry, écran Fonctionnalités | 1 | NON COMMENCÉ |  |  |
-| core:core_places | Noyau : lieux, sessions, saisie manuelle, onglets Accueil et Lieux | 1 | NON COMMENCÉ |  |  |
+| core:core_models | Noyau : modèles SwiftData, ModuleRegistry, écran Fonctionnalités | 1 | EN COURS |  | Modèles, registre, réglages, logique pure : 89 tests verts en CI (https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43837550194). Écran Fonctionnalités pas encore construit. |
+| core:core_places | Noyau : lieux, sessions, saisie manuelle, onglets Accueil et Lieux | 1 | EN COURS |  | Modèles Place et WorkSession faits. Écrans Lieux, Sessions, saisie manuelle, Accueil en cours d'écriture. |
 | core:core_geofence | Géorepérage, arrivée/départ, notifications, diagnostic, annuler partout | 2 | NON COMMENCÉ |  |  |
 | core:core_classify | Classification travail/études/courses, apprentissage, récupération | 3 | NON COMMENCÉ |  |  |
-| core:core_time_rounding | Heures : timestamp exact + base normalisée + zone de doute (13.1) | 1 | NON COMMENCÉ |  |  |
+| core:core_time_rounding | Heures : timestamp exact + base normalisée + zone de doute (13.1) | 1 | EN COURS |  | Logique (arrondi, zone de doute, durées) testée en CI (https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43837550194). Écran de choix en zone de doute pas encore construit. |
 
 ## Modules (registre MODULES.md)
 
