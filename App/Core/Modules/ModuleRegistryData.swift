@@ -25,9 +25,9 @@ extension ModuleRegistry {
     ]
 
     static let group2: [ModuleDefinition] = [
-        ModuleDefinition(id: "place_calibration", title: "Auto-calibration des lieux", summary: "Ajuste tout seul la taille de tes lieux selon tes passages.", step: 3, defaultOn: true, requires: [], isAvailable: false),
-        ModuleDefinition(id: "battery_recovery", title: "Récupération après batterie vide", summary: "Reconstitue ta journée si ton téléphone s'est éteint.", step: 3, defaultOn: true, requires: [], isAvailable: false),
-        ModuleDefinition(id: "detection_help", title: "Assistant de dépannage de la détection", summary: "Un assistant pour comprendre pourquoi une détection a raté.", step: 3, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "place_calibration", title: "Auto-calibration des lieux", summary: "Ajuste tout seul la taille de tes lieux selon tes passages.", step: 3, defaultOn: true, requires: [], isAvailable: true),
+        ModuleDefinition(id: "battery_recovery", title: "Récupération après batterie vide", summary: "Reconstitue ta journée si ton téléphone s'est éteint.", step: 3, defaultOn: true, requires: [], isAvailable: true),
+        ModuleDefinition(id: "detection_help", title: "Assistant de dépannage de la détection", summary: "Un assistant pour comprendre pourquoi une détection a raté.", step: 3, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "multi_employer", title: "Plusieurs employeurs", summary: "Gère plusieurs employeurs en même temps.", step: 10, defaultOn: false, requires: ["employment"], isAvailable: false),
         ModuleDefinition(id: "leave", title: "Congés payés", summary: "Compte tes congés payés acquis et pris.", step: 6, defaultOn: false, requires: ["employment"], isAvailable: false),
         ModuleDefinition(id: "simulator", title: "Simulateur et semaine en direct", summary: "Simule une semaine pour voir ce que ça donnerait.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
@@ -112,7 +112,7 @@ extension ModuleRegistry {
         ModuleDefinition(id: "privacy_shield", title: "Protection à la capture et mode démo", summary: "Masque l'app dans le sélecteur d'apps et propose un mode démo.", step: 10, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "ask_assistant", title: "Demande-moi tout (assistant local)", summary: "Demande-moi tout (assistant local)", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "break_in", title: "Phase de rodage", summary: "Phase de rodage", step: 10, defaultOn: true, requires: [], isAvailable: false),
-        ModuleDefinition(id: "clock_check", title: "Contrôle de l'horloge", summary: "Vérifie que l'horloge de ton téléphone est cohérente.", step: 3, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "clock_check", title: "Contrôle de l'horloge", summary: "Vérifie que l'horloge de ton téléphone est cohérente.", step: 3, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "age_rules", title: "Règles selon l'âge", summary: "Règles selon l'âge", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "last_minute_offer", title: "Demande de dernière minute", summary: "Demande de dernière minute", step: 11, defaultOn: false, requires: ["planning_text"], isAvailable: false),
         ModuleDefinition(id: "school_timetable", title: "Emploi du temps scolaire", summary: "Ton emploi du temps de cours, semaine par semaine.", step: 9, defaultOn: true, requires: [], isAvailable: false),
