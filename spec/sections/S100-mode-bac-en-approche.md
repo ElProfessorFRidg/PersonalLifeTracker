@@ -1,0 +1,4 @@
+## 100. MODE "BAC EN APPROCHE" (module exam_budget, exige exam_mode, désactivé par défaut)
+
+À l'approche des épreuves, calcule un budget d'heures de travail rémunéré à ne pas dépasser, à partir des objectifs de révision saisis par l'utilisateur (heures par semaine, éventuellement par matière), des cours, des trajets et du repos : heures disponibles moins cours, révision cible et repos égale marge pour le travail. Affichage : "Tu peux bosser jusqu'à 8 h cette semaine sans casser ton planning de révision."
+Suivi des heures de révision (module study_slots) contre l'objectif, alertes douces si le budget est dépassé. Si le contrat (section 106) prévoit plus d'heures que le budget, l'app le signale factuellement ("Ton contrat prévoit 13 h, ton budget en autorise 8") et peut préparer un brouillon de message pour demander un aménagement, JAMAIS envoyé sans action de l'utilisateur, sans aucun conseil juridique. Dates d'épreuves reprises du mode examens.

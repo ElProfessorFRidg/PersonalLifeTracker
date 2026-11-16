@@ -1,0 +1,3 @@
+## 36. COÛT DU TRAJET (module travel_cost, optionnel, désactivé par défaut)
+
+Distance via MapKit, estimation du coût par trajet et par mois selon le mode : voiture (coût au km saisi par l'utilisateur, aucune valeur imposée), transport en commun (prix d'abonnement saisi), vélo et marche (zéro). Affiche le coût mensuel, "net après trajet" et la part du trajet dans le net estimé. Remboursement par l'employeur déductible si saisi. Aucun barème en dur dans le Swift : un éventuel barème indicatif vit dans reference/ avec source et date. Rien n'apparaît tant que le module est désactivé, et le module ne demande aucune donnée en plus de ses propres saisies.

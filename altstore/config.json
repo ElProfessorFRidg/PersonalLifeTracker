@@ -1,0 +1,14 @@
+{
+  "sourceName": "Personal Life Tracker",
+  "sourceIdentifier": "com.CHANGEME.personallifetracker.source",
+  "app": {
+    "name": "Personal Life Tracker",
+    "bundleIdentifier": "com.CHANGEME.personallifetracker",
+    "developerName": "CHANGEME",
+    "subtitle": "Suivi auto du travail et des études",
+    "localizedDescription": "App perso, 100% locale, installée via AltStore.",
+    "tintColor": "#4F7CFF",
+    "iconPath": "altstore/icon.png",
+    "minOSVersion": "17.0"
+  }
+}

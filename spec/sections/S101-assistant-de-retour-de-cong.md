@@ -1,0 +1,3 @@
+## 101. ASSISTANT DE RETOUR DE CONGÉ (module return_recap, désactivé par défaut)
+
+Après une absence longue (mode vacances de l'app, période de congés payés, ou toute absence de plus de N jours, défaut 7), un récap à la reprise : planning des prochains jours, changements de planning survenus pendant l'absence (module planning_diff), solde de congés mis à jour, échéances proches (fin de contrat, période d'essai), éléments à confirmer, règles ou valeurs de référence mises à jour (SMIC, packs de convention) et état de l'app (permissions, suivi). Contenu modulaire : seulement ce que fournissent les modules actifs. Notification de reprise et carte sur l'accueil, qui disparaît après lecture. Ton léger et cool.

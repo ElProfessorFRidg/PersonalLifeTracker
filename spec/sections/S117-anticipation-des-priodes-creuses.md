@@ -1,0 +1,4 @@
+## 117. ANTICIPATION DES PÉRIODES CREUSES (module low_period_alert, exige employment, désactivé par défaut)
+
+Repère à l'avance les semaines ou les mois où le quota ou le revenu risque de ne pas être atteint : jours bloqués, vacances scolaires, congés posés, jours fériés, absence de planning, fin de contrat proche, période d'examens, périodes creuses constatées les années précédentes. Projette le quota (section 106) et le net estimé (section 85) sur un horizon réglable (défaut 4 à 8 semaines), avec une fourchette.
+Alerte douce, hebdomadaire ou à la détection : "Dans 3 semaines (vacances), ton quota risque de ne pas être atteint : environ 18 h à rattraper, soit environ X € net en moins." Options proposées : demander des heures, poser des congés, décaler un objectif d'épargne, ajuster un blocage. Basé sur les données déclarées et l'historique, "pas assez de données" sinon. Estimation, jamais une certitude.

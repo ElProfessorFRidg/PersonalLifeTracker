@@ -1,0 +1,3 @@
+## 79. RÉSUMÉ PARTAGEABLE (module share_summary, désactivé par défaut)
+
+Génère une image (ImageRenderer) ou un PDF simple de la semaine ou du mois : heures de cours, heures de travail, jours travaillés, planning à venir (facultatif), par exemple pour les parents. Avant de générer, l'utilisateur coche le contenu : montants (masqués par défaut), lieux précis (masqués par défaut, affichage "le taf", "le lycée"), notes (exclues par défaut), employeur. Aperçu avant partage, feuille de partage native, jamais d'envoi automatique, ni lien, ni serveur. Réutilise la mise en page des bilans (section 40).

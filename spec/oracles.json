@@ -1,0 +1,97 @@
+{
+  "_comment": "Valeurs attendues dérivées du prompt (section 13.1, 106). NE JAMAIS les recopier depuis la sortie du code. Toute modification doit citer la section.",
+  "rounding": [
+    {
+      "hhmm": "06:02",
+      "expect": "rounded",
+      "minutes": 360
+    },
+    {
+      "hhmm": "06:14",
+      "expect": "rounded",
+      "minutes": 360
+    },
+    {
+      "hhmm": "07:12",
+      "expect": "rounded",
+      "minutes": 420
+    },
+    {
+      "hhmm": "05:47",
+      "expect": "rounded",
+      "minutes": 360
+    },
+    {
+      "hhmm": "07:46",
+      "expect": "rounded",
+      "minutes": 480
+    },
+    {
+      "hhmm": "06:46",
+      "expect": "rounded",
+      "minutes": 420
+    },
+    {
+      "hhmm": "00:00",
+      "expect": "rounded",
+      "minutes": 0
+    },
+    {
+      "hhmm": "23:50",
+      "expect": "rounded",
+      "minutes": 1440
+    },
+    {
+      "hhmm": "06:15",
+      "expect": "doubt"
+    },
+    {
+      "hhmm": "06:29",
+      "expect": "doubt"
+    },
+    {
+      "hhmm": "06:31",
+      "expect": "doubt"
+    },
+    {
+      "hhmm": "06:45",
+      "expect": "doubt"
+    }
+  ],
+  "bases_example": {
+    "start": "17:56",
+    "end": "22:03",
+    "exact_minutes": 247,
+    "normalized_minutes": 240
+  },
+  "contract_13h": [
+    {
+      "case": "vendredi 4 h réalisées (5 h prévues), samedi 8 h et dimanche 5 h prévus",
+      "contract": 13,
+      "worked": 4,
+      "remaining": 9,
+      "projection": 17,
+      "delta": 4,
+      "note": "vérifié contre la section 106.3 : planning restant 13 (sam 8 + dim 5), projection 4 + 13 = 17",
+      "planned_remaining": 13
+    },
+    {
+      "case": "ven 0, sam 8, dim 5",
+      "contract": 13,
+      "worked": 13,
+      "delta": 0
+    },
+    {
+      "case": "semaine à 18h",
+      "contract": 13,
+      "worked": 18,
+      "delta": 5
+    },
+    {
+      "case": "semaine à 10h",
+      "contract": 13,
+      "worked": 10,
+      "delta": -3
+    }
+  ]
+}

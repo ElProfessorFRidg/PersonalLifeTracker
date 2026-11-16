@@ -1,0 +1,4 @@
+## 118. HISTORIQUE DES PLANNINGS CONSULTABLE (module schedule_archive, exige planning_ocr, proposé et coché par défaut)
+
+Navigation par semaine, mois et année dans tous les plannings passés : planning prévu (avec ses versions, section 97), réel, écarts, changements, notes, et image d'origine du planning importé si l'utilisateur choisit de la conserver. Retrouvable par la recherche (section 41, "semaine du 3 mars"). Comparaison de deux semaines côte à côte. Une semaine passée peut être proposée comme point de départ d'un prévu (suggestion, jamais confirmée automatiquement). Export PDF d'une semaine ou d'un mois.
+Stockage : conservation des images désactivée ou activée au choix, compression, taille occupée affichée, purge par période, protection des données d'iOS, Face ID si le verrouillage est actif. Hors ligne, aucune transmission.

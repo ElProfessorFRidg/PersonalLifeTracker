@@ -1,0 +1,4 @@
+## 148. CARNET DE STAGE OU D'ALTERNANCE (module internship_log, désactivé par défaut)
+
+Journal de bord quotidien structuré : date, durée (reprise des sessions), tâches (étiquettes), compétences mobilisées, outils, difficultés, apprentissages, photos facultatives stockées localement. Les entrées alimentent le carnet d'expériences (section 96) et les notes de journée (section 39).
+Sorties : fiche d'activités hebdomadaire et récapitulatif d'heures en PDF avec une zone de signature vierge à faire valider par le tuteur, par exemple sur papier. Statut "à faire valider" puis "validé", que l'utilisateur coche lui-même après la validation : l'app ne vérifie rien et n'envoie rien au tuteur ni à l'établissement. Export du carnet complet pour le rapport de stage. Tout reste local. Pensé aussi pour les projets et stages de filières techniques.

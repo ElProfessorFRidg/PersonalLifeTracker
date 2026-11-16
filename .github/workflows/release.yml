@@ -1,0 +1,51 @@
+name: release
+# Déclenché par un tag du type v1.2.0 (sans suffixe)
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+permissions:
+  contents: read
+jobs:
+  prep:
+    runs-on: ubuntu-latest
+    outputs:
+      base: ${{ steps.v.outputs.base }}
+    steps:
+      - id: v
+        run: echo "base=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+  build:
+    needs: prep
+    uses: ./.github/workflows/_build-test.yml
+    with:
+      build_ipa: true
+      version: ${{ needs.prep.outputs.base }}
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ipa
+      - name: Créer ou mettre à jour la release (idempotent)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${GITHUB_REF_NAME}"; V="${TAG#v}"
+          IPA="PersonalLifeTracker-$V.ipa"; mv PersonalLifeTracker.ipa "$IPA"
+          python3 scripts/extract_changelog.py "$TAG" > release-notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$IPA" --clobber
+          else
+            gh release create "$TAG" "$IPA" --latest --title "$TAG" --notes-file release-notes.md
+          fi
+  altstore:
+    needs: publish
+    permissions:
+      contents: write
+    uses: ./.github/workflows/altstore-source.yml
+    with:
+      tag: ${{ github.ref_name }}
+      channel: stable

@@ -1,0 +1,15 @@
+name: manual-build
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version x.y.z pour le build"
+        default: "0.0.0"
+permissions:
+  contents: read
+jobs:
+  build:
+    uses: ./.github/workflows/_build-test.yml
+    with:
+      build_ipa: true
+      version: ${{ inputs.version }}

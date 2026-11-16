@@ -1,0 +1,4 @@
+## 109. ALERTE DE PROXIMITÉ DU QUOTA (réglage du module contract_hours, désactivé par défaut)
+
+Prévient quand l'utilisateur approche d'une limite : "Plus que 2 h avant ton quota de la semaine." Limites au choix : quota du contrat, plafond personnel fixé par l'utilisateur, plafond d'heures complémentaires du contrat, durée maximale légale ou conventionnelle (règles sourcées, "à vérifier"). Seuils réglables (par exemple 2 h, 1 h, 0 h restant), un rappel par seuil, par employeur. Le calcul inclut la session en cours et les heures déjà réalisées. Affichage possible dans la Live Activity (section 44) en option.
+Ton neutre : l'app donne l'information pour que l'utilisateur choisisse en connaissance de cause, sans pousser à en faire plus ou moins. Aucune alerte pendant les congés, le mode vacances ou une période bloquée, heures silencieuses respectées.

@@ -1,0 +1,4 @@
+## 146. PÉRIODE DE PAIE PERSONNALISÉE (module pay_period, exige pay, désactivé par défaut)
+
+Par employeur : jour de clôture de la paie (par exemple le 25, ou "dernier jour du mois"), jour de versement (section 27) et décalage éventuel ("les heures variables sont payées le mois suivant"). Les vues "mois" et les estimations de paie suivent alors "du 26 au 25" au lieu du mois civil, au choix.
+Chaque session est rattachée à une période de paie, donc à une fiche de paie (les sessions à cheval sur minuit à la clôture sont gérées avec la base exacte). Rappel doux avant la clôture : "Clôture dans 3 jours, vérifie tes heures", avec le score de fiabilité (section 127) et le rappel d'envoi des heures (section 42) alignés sur cette date. Les congés (section 23) gardent leur propre période de référence.

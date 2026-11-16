@@ -1,0 +1,4 @@
+## 74. CONTACTS DU TAF (module work_contacts, désactivé par défaut)
+
+Contacts par employeur : nom, rôle (responsable, collègue, RH, autre), téléphone, note. Ajout à la main ou avec le sélecteur de contacts natif d'iOS, qui ne copie que le contact choisi et n'exige pas l'accès à tout le carnet d'adresses. Actions rapides : appeler, envoyer un message (composeur natif).
+Bouton "Je suis en retard" : proposé sur la carte d'accueil et dans la notification quand le calcul de trajet (section 35) prévoit une arrivée tardive, et disponible en App Intent. Il prépare un message prérempli avec l'heure d'arrivée estimée ("Je vais arriver vers 18:06, désolé"), modifiable, JAMAIS envoyé sans action de l'utilisateur. Action "Appeler mon responsable" disponible dans un widget et par Siri. Contacts stockés localement, exclus d'iCloud sauf choix explicite.

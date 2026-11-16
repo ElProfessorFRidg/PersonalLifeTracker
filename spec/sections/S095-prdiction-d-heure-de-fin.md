@@ -1,0 +1,4 @@
+## 95. PRÉDICTION D'HEURE DE FIN (module end_prediction, désactivé par défaut)
+
+À partir de l'historique des écarts entre fin prévue et fin réelle, estime une "fin probable" : "prévu 22:00, fin probable 22:15". Calcul par contexte (employeur, lieu, type et durée du créneau, jour de la semaine), jamais par semaine type (section 91), avec un échantillon minimal réglable (défaut 8 sessions comparables) et un niveau de confiance affiché. Sous le seuil : "pas assez de données", aucune prédiction.
+Utilisée pour affiner, avec une mention claire "probable", le widget "encore X h" (option), la nuit courte, le trajet retour, le brief du matin et le compte à rebours. Elle ne remplace jamais silencieusement l'heure prévue : "prévu" et "probable" restent distincts partout. Sessions incertaines exclues de l'apprentissage.

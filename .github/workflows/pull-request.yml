@@ -1,0 +1,11 @@
+name: pull-request
+on:
+  pull_request:
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  build-test:
+    uses: ./.github/workflows/_build-test.yml

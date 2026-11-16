@@ -1,0 +1,5 @@
+## 125. PILE INTELLIGENTE ET CONTRÔLES (réglage du module live_activity_widgets, activé avec lui)
+
+- Pile intelligente : les widgets fournissent des informations de pertinence pour remonter au bon moment (avant la prise de poste, pendant la session, à l'approche de la fin) quand l'API de pertinence de WidgetKit est disponible dans le SDK utilisé. L'app donne aussi ses App Intents ("Démarrer ma session") au bon moment pour que le système puisse les suggérer.
+- Contrôles : boutons "Démarrer ma session", "Arrêter", "Pause" et, si work_contacts est actif, "Je suis en retard", disponibles dans le Centre de contrôle, l'écran verrouillé et le Bouton Action. Les contrôles du Centre de contrôle demandent iOS 18 : ils sont protégés par une vérification de disponibilité. Sous iOS 17, repli par widgets interactifs, App Intents et Bouton Action assigné via Raccourcis.
+- Aucune cible supplémentaire : les contrôles font partie de l'extension de widgets existante. La capacité est signalée dans "État de l'app" (section 51).

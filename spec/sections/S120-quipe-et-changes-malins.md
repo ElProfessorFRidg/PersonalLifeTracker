@@ -1,0 +1,7 @@
+## 120. ÉQUIPE ET ÉCHANGES MALINS (module team_swaps, exige planning_ocr, désactivé par défaut)
+
+Les plannings importés (section 16) contiennent aussi les créneaux des collègues. Ce module les exploite, avec leur accord implicite d'usage strictement personnel et local.
+- Collecte : à l'import, l'utilisateur choisit de retenir ou non les noms et créneaux des collègues. Par défaut rien n'est conservé hors de ses propres créneaux. Avec le choix "retenir mon équipe", l'app garde localement les prénoms ou initiales et leurs créneaux datés. Les initiales ambiguës sont confirmées par l'utilisateur, la liste "Mon équipe" est modifiable et chaque personne peut être effacée.
+- "Avec qui je bosse" : pour un créneau, affichage des collègues présents en même temps (chevauchement des horaires).
+- "Qui pourrait me remplacer ou échanger" : pour un créneau que l'utilisateur veut céder ou obtenir, liste des collègues sans créneau ce jour-là d'après le planning. L'app précise qu'elle ne connaît pas leurs contraintes réelles ("pas prévu ce jour-là d'après le planning, à confirmer avec la personne"). Elle prépare un brouillon de message (contact du module work_contacts s'il existe), jamais envoyé automatiquement, et crée une entrée dans le carnet d'échanges (section 81).
+- Vie privée : données de tiers minimisées, jamais partagées, jamais exportées par défaut, exclues des résumés et dossiers, aucune statistique ni classement sur les collègues.

@@ -1,0 +1,5 @@
+## 87. BRIEF DU MATIN (module morning_brief, désactivé par défaut)
+
+Notification locale et widget qui résument la journée : "Aujourd'hui : cours 8 h à 17 h, taf 18 h à 22 h. Départ conseillé à 17 h 28." Heure réglable, ou automatique : X minutes avant le premier événement du jour, jamais avant une heure minimale réglable.
+Contenu modulaire, cases à cocher dans les réglages : activités du jour avec leurs heures, heure de départ conseillée (si travel_departure est actif), éléments à confirmer de la veille, congés ou fin de contrat proche, check avant de partir, total d'heures prévues de la semaine. Seuls les modules actifs fournissent du contenu. S'il n'y a rien, une courte phrase suffit. Version réduite pendant le mode examens, version minimale ou aucune pendant le mode vacances.
+Contrainte iOS : le contenu d'une notification locale est fixé à sa programmation. Programmer le brief à l'avance avec le contenu connu du planning, le mettre à jour de façon opportuniste (BackgroundTasks, à l'ouverture de l'app), et ne jamais promettre un contenu temps réel. Ton pote, pas de blague sur les sujets sérieux.
