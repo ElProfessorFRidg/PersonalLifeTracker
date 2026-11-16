@@ -246,6 +246,12 @@ enum PayCalculator {
         return r
     }
 
+    /// Évolution en pourcentage entre deux taux, arrondie à 1 décimale (section 69). nil si l'ancien taux n'est pas positif.
+    static func percentChange(from old: Decimal, to new: Decimal) -> Decimal? {
+        if old <= 0 { return nil }
+        return rounded((new - old) / old * 100, scale: 1)
+    }
+
     /// Date d'effet proposée pour "Je suis au SMIC" : la plus tardive entre le début du contrat et la date d'effet du SMIC.
     /// Avant cette date, la valeur actuelle du SMIC serait fausse : on ne l'applique pas rétroactivement (section 69).
     static func smicEffectiveDate(contractStart: Date, calendar: Calendar) -> Date {

@@ -72,8 +72,16 @@ enum PayExport {
         return n < 10 ? "0\(n)" : "\(n)"
     }
 
+    /// Décimal en texte avec point et au moins 2 décimales : 10 donne "10.00", 12.5 donne "12.50", 12.0253 reste "12.0253".
     static func decimalText(_ value: Decimal) -> String {
-        return NSDecimalNumber(decimal: value).stringValue
+        var text: String = NSDecimalNumber(decimal: value).stringValue
+        if let dot = text.firstIndex(of: ".") {
+            let decimals: Int = text.distance(from: dot, to: text.endIndex) - 1
+            if decimals < 2 { text += String(repeating: "0", count: 2 - decimals) }
+        } else {
+            text += ".00"
+        }
+        return text
     }
 
     static func makeDocument(result: PayMonthResult, currencyCode: String, exportedAt: Date, calendar: Calendar) -> PayExportDocument {
@@ -190,13 +198,16 @@ enum PayExport {
             var notes: [String] = []
             if d.hasUnresolvedDoubt { notes.append("zone de doute, heure exacte comptée") }
             if d.isOngoing { notes.append("session en cours") }
-            lines.append(row([d.date,
-                              "\(d.sessionCount)",
-                              hoursText(seconds: d.fullHoursSeconds),
-                              hoursText(seconds: d.exactSeconds),
-                              hoursText(seconds: d.retainedSeconds),
-                              d.hourlyGross.map { commaDecimal($0) } ?? "",
-                              notes.joined(separator: ", ")]))
+            var rateField: String = ""
+            if let g = d.hourlyGross { rateField = commaDecimal(g) }
+            let fields: [String] = [d.date,
+                                    "\(d.sessionCount)",
+                                    hoursText(seconds: d.fullHoursSeconds),
+                                    hoursText(seconds: d.exactSeconds),
+                                    hoursText(seconds: d.retainedSeconds),
+                                    rateField,
+                                    notes.joined(separator: ", ")]
+            lines.append(row(fields))
         }
         lines.append("")
         lines.append(row(["Total heures retenues (h)", hoursText(seconds: doc.retainedSeconds)]))
