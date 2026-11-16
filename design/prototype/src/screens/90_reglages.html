@@ -1,0 +1,335 @@
+<section class="screen" id="scr-reglages" data-title="Réglages" data-group="Réglages" data-tab="accueil"
+         data-states="ok:Tout est bon,limite:Localisation limitée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="accueil"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Accueil</button>
+    <h1 class="navbar-title">Réglages</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Statuts détectés : ce dont l'app a besoin pour noter les heures toute seule -->
+    <section class="section" aria-labelledby="reg-statuts-t">
+      <div class="section-head"><h2 class="section-title" id="reg-statuts-t">Ce que je détecte</h2></div>
+
+      <div class="banner banner--error" role="alert" data-when="limite">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Je te vois seulement quand l'app est ouverte</p>
+          <p class="banner-text">Du coup je rate tes arrivées et tes départs. Passe la localisation sur « Toujours » pour que je note tes heures tout seul.</p>
+          <button type="button" class="banner-action" id="reg-fix-loc">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-nav"/></svg></span>
+          <span class="row-main"><span class="row-title">Localisation</span><span class="row-sub">Pour savoir quand t'arrives et quand tu pars</span></span>
+          <span class="status status--ok" data-when="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Toujours</span>
+          <span class="status status--error" data-when="limite"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>App ouverte</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title">Position exacte</span><span class="row-sub">Sans ça, je confonds le taf et le magasin d'à côté</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Activée</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title">Notifications</span><span class="row-sub">Pour te demander de confirmer en un tap</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Autorisées</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+          <span class="row-main"><span class="row-title">Actualisation en arrière-plan</span><span class="row-sub">Pour rattraper ce qui s'est passé écran éteint</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Activée</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-battery"/></svg></span>
+          <span class="row-main"><span class="row-title">Mode économie d'énergie</span><span class="row-sub">Quand il est actif, la détection peut avoir quelques minutes de retard</span></span>
+          <span class="status status--warn"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Actif</span>
+        </div>
+      </div>
+      <p class="section-foot">Tout reste sur ton tel. Pas de compte, pas de serveur.</p>
+    </section>
+
+    <!-- Fonctionnalités -->
+    <section class="section" aria-label="Fonctionnalités">
+      <div class="list">
+        <button type="button" class="row" data-go="fonctionnalites">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span>
+          <span class="row-main"><span class="row-title">Fonctionnalités</span><span class="row-sub">Active seulement ce qui te sert : planning, paie, congés...</span></span>
+          <span class="row-value">7 actives</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Apparence -->
+    <section class="section" aria-labelledby="reg-app-t">
+      <div class="section-head"><h2 class="section-title" id="reg-app-t">Apparence</h2></div>
+      <div class="card">
+        <div class="field">
+          <span class="field-label" id="reg-theme-l">Thème</span>
+          <div class="segmented" role="group" aria-labelledby="reg-theme-l">
+            <button type="button" data-theme-set="auto" aria-pressed="false">Auto</button>
+            <button type="button" data-theme-set="light" aria-pressed="false">Clair</button>
+            <button type="button" data-theme-set="dark" aria-pressed="false">Sombre</button>
+            <button type="button" data-theme-set="amoled" aria-pressed="false">Noir pur</button>
+          </div>
+          <span class="field-help" id="reg-theme-help">Auto suit le réglage de ton iPhone.</span>
+        </div>
+        <div class="field">
+          <span class="field-label" id="reg-accent-l">Couleur d'accent</span>
+          <div class="swatches" role="group" aria-labelledby="reg-accent-l">
+            <button type="button" class="swatch" style="--c:var(--accent)" aria-pressed="true" aria-label="Bleu de travail"></button>
+            <button type="button" class="swatch" style="--c:#0E7C86" aria-pressed="false" aria-label="Canard"></button>
+            <button type="button" class="swatch" style="--c:#3E7B27" aria-pressed="false" aria-label="Sapin"></button>
+            <button type="button" class="swatch" style="--c:#B4630A" aria-pressed="false" aria-label="Ambre"></button>
+            <button type="button" class="swatch" style="--c:#C2410C" aria-pressed="false" aria-label="Brique"></button>
+            <button type="button" class="swatch" style="--c:#B5306B" aria-pressed="false" aria-label="Framboise"></button>
+            <button type="button" class="swatch" style="--c:#7A3FB8" aria-pressed="false" aria-label="Prune"></button>
+            <button type="button" class="swatch" style="--c:#5B6475" aria-pressed="false" aria-label="Ardoise"></button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="reg-dens-l">Densité</span>
+          <div class="segmented" id="reg-density" role="group" aria-labelledby="reg-dens-l">
+            <button type="button" data-value="comfortable" aria-pressed="true">Confortable</button>
+            <button type="button" data-value="compact" aria-pressed="false">Compacte</button>
+          </div>
+        </div>
+      </div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Les couleurs par activité arrivent avec l'app.">
+          <span class="row-main"><span class="row-title">Couleurs des activités</span><span class="row-sub">Taf, cours, courses</span></span>
+          <span class="chip-row" aria-hidden="true"><span class="chip chip--work">Taf</span><span class="chip chip--study">Cours</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Les icônes alternatives arrivent avec l'app.">
+          <span class="row-main"><span class="row-title">Icône de l'app</span><span class="row-sub">3 au choix</span></span>
+          <span class="row-value">Bleu</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">La taille du texte suit celle de ton iPhone, partout.</p>
+    </section>
+
+    <!-- Animations et sensations -->
+    <section class="section" aria-labelledby="reg-anim-t">
+      <div class="section-head"><h2 class="section-title" id="reg-anim-t">Animations et sensations</h2></div>
+      <div class="card">
+        <div class="field">
+          <span class="field-label" id="reg-motion-l">Animations</span>
+          <div class="segmented" id="reg-motion" role="group" aria-labelledby="reg-motion-l">
+            <button type="button" data-value="system" aria-pressed="true">Système</button>
+            <button type="button" data-value="reduced" aria-pressed="false">Réduites</button>
+            <button type="button" data-value="none" aria-pressed="false">Aucune</button>
+          </div>
+          <span class="field-help">Système suit « Réduire les animations » de ton iPhone.</span>
+        </div>
+      </div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-vibrate"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-hapt">Retours haptiques</span><span class="row-sub">Une petite vibration quand tu confirmes</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-hapt"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sound"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-sons">Sons</span><span class="row-sub">Coupés par défaut</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="reg-sons"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-fete">Effets de célébration</span><span class="row-sub">Quand t'atteins un objectif</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-fete"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Suivi -->
+    <section class="section" aria-labelledby="reg-suivi-t">
+      <div class="section-head"><h2 class="section-title" id="reg-suivi-t">Suivi</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="reg-pasauj">Pas aujourd'hui</span><span class="row-sub">Je coupe la détection jusqu'à demain matin</span></span>
+          <button type="button" class="switch" id="reg-pasauj-sw" role="switch" aria-checked="false" aria-labelledby="reg-pasauj"></button>
+        </div>
+        <button type="button" class="row" data-sheet="sheet-reg-base">
+          <span class="row-main"><span class="row-title">Base de calcul des heures</span><span class="row-sub">Ce qui compte pour tes stats et ton contrat</span></span>
+          <span class="row-value" id="reg-base-val">Heures pleines</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Rayon par défaut</span><span class="row-sub">La taille de la zone autour d'un nouveau lieu</span></span>
+          <span class="row-value num">100 m</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Seuil de pause</span><span class="row-sub">En dessous, une sortie compte comme une pause</span></span>
+          <span class="row-value num">15 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Délai avant de valider un départ</span><span class="row-sub">Pour pas couper ta session si tu sors deux minutes</span></span>
+          <span class="row-value num">5 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Mode économie</span><span class="row-sub">Auto : je ralentis quand ta batterie est basse</span></span>
+          <span class="row-value">Auto</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Notifications et affichage -->
+    <section class="section" aria-labelledby="reg-aff-t">
+      <div class="section-head"><h2 class="section-title" id="reg-aff-t">Notifications et affichage</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-go="notifications">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title">Notifications</span><span class="row-sub">Par catégorie, heures silencieuses, 6 par jour maximum</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="reg-24h">Format 24 h</span><span class="row-sub">17:56 plutôt que 5:56 PM</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-24h"></button>
+        </div>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Format des durées</span><span class="row-sub">7 h 30 ou 7,5 h</span></span>
+          <span class="row-value num">7 h 30</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Premier jour de la semaine</span></span>
+          <span class="row-value">Lundi</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Onglet de démarrage</span></span>
+          <span class="row-value">Accueil</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-eye-off"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-discret">Mode discret</span><span class="row-sub">Masque les montants en euros</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="reg-discret"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sécurité -->
+    <section class="section" aria-labelledby="reg-secu-t">
+      <div class="section-head"><h2 class="section-title" id="reg-secu-t">Sécurité</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-faceid"/></svg></span>
+          <span class="row-main"><span class="row-title">Verrouillage Face ID</span><span class="row-sub">Au lancement ou après quelques minutes</span></span>
+          <span class="row-value">Désactivé</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-flou">Flou dans le sélecteur d'apps</span><span class="row-sub">Personne ne voit tes heures par-dessus ton épaule</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-flou"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Données -->
+    <section class="section" aria-labelledby="reg-data-t">
+      <div class="section-head"><h2 class="section-title" id="reg-data-t">Tes données</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Export prêt : dans l'app, il part dans Fichiers.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg></span>
+          <span class="row-main"><span class="row-title">Exporter en JSON</span><span class="row-sub">Sessions, lieux et réglages dans un seul fichier</span></span>
+        </button>
+        <button type="button" class="row" data-toast="Import : dans l'app, tu choisis un fichier.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
+          <span class="row-main"><span class="row-title">Importer un fichier</span><span class="row-sub">Je te montre ce qui change avant de toucher à quoi que ce soit</span></span>
+        </button>
+        <button type="button" class="row" data-toast="Suppression par période : dans l'app.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="row-main"><span class="row-title">Supprimer une période</span><span class="row-sub">Tu choisis les dates</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row row--destructive" data-sheet="sheet-reg-suppr">
+          <span class="row-icon row-icon--danger"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></span>
+          <span class="row-main"><span class="row-title">Tout supprimer</span><span class="row-sub">Sessions, lieux, planning. Avec double confirmation.</span></span>
+        </button>
+      </div>
+      <button type="button" class="btn btn--secondary btn--block" id="reg-reset">Réinitialiser les réglages</button>
+      <p class="section-foot">Réinitialiser remet les réglages d'origine sans toucher à tes données.</p>
+    </section>
+
+    <p class="section-foot" style="text-align:center">Personal Life Tracker <span class="num">0.1</span>, maquette</p>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-reg-base">
+    <h2 class="sheet-title">Base de calcul des heures</h2>
+    <p class="sheet-text">L'heure exacte reste toujours enregistrée et affichée à côté. Tu peux changer quand tu veux, rien n'est perdu.</p>
+    <div class="list" role="radiogroup" aria-label="Base de calcul" id="reg-base-group">
+      <button type="button" class="row" role="radio" aria-checked="true" data-value="Heures pleines">
+        <span class="row-main"><span class="row-title">Heures pleines</span><span class="row-sub">17:56 compte comme 18 h. Entre :15 et :45, c'est toi qui choisis.</span></span>
+        <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+      </button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Exacte">
+        <span class="row-main"><span class="row-title">Exacte</span><span class="row-sub">À la minute près, sans arrondi.</span></span>
+        <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+      </button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Planning">
+        <span class="row-main"><span class="row-title">Planning</span><span class="row-sub">Les heures prévues, quand t'as un planning.</span></span>
+        <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK</button>
+  </div>
+
+  <div class="sheet" id="sheet-reg-suppr">
+    <h2 class="sheet-title">Tout supprimer ?</h2>
+    <p class="sheet-text">Ça efface tes sessions, tes lieux et ton planning de ce tel. C'est définitif : sans export, impossible de revenir en arrière.</p>
+    <div class="field" id="reg-suppr-field">
+      <label class="field-label" for="reg-suppr-input">Pour confirmer, écris SUPPRIMER</label>
+      <input class="input" id="reg-suppr-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="SUPPRIMER">
+    </div>
+    <div class="btn-stack">
+      <button type="button" class="btn btn--destructive btn--block" id="reg-suppr-go" disabled>Tout supprimer</button>
+      <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Garder mes données</button>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var app = document.getElementById('app');
+    document.getElementById('reg-density').addEventListener('change', function (e) {
+      if (e.detail.value === 'compact') app.setAttribute('data-density', 'compact'); else app.removeAttribute('data-density');
+    });
+    document.getElementById('reg-motion').addEventListener('change', function (e) {
+      if (e.detail.value === 'system') app.removeAttribute('data-motion'); else app.setAttribute('data-motion', 'none');
+    });
+    document.getElementById('reg-base-group').addEventListener('change', function (e) {
+      document.getElementById('reg-base-val').textContent = e.detail.value;
+    });
+    document.getElementById('reg-pasauj-sw').addEventListener('change', function (e) {
+      toast(e.detail.checked ? 'Détection en pause jusqu\'à demain 6:00.' : 'Détection relancée.');
+    });
+    document.getElementById('reg-fix-loc').addEventListener('click', function () {
+      setState('reglages', 'ok');
+      toast('Localisation sur « Toujours ». Merci, je gère la suite.', { undo: function () { setState('reglages', 'limite'); } });
+    });
+    document.getElementById('reg-reset').addEventListener('click', function () {
+      var before = PLT.theme().pref;
+      setTheme('auto');
+      toast('Réglages d\'origine remis. Tes données n\'ont pas bougé.', { undo: function () { setTheme(before); } });
+    });
+    var input = document.getElementById('reg-suppr-input'), btn = document.getElementById('reg-suppr-go');
+    input.addEventListener('input', function () { btn.disabled = input.value.trim().toUpperCase() !== 'SUPPRIMER'; });
+    btn.addEventListener('click', function () {
+      closeSheet(); input.value = ''; btn.disabled = true;
+      toast('Dans l\'app, tout serait effacé ici. La maquette ne supprime rien.');
+    });
+  });
+  </script>
+</section>

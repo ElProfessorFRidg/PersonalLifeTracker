@@ -1,0 +1,1531 @@
+<title>Personal Life Tracker</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap">
+<style>
+/* ==========================================================================
+   Personal Life Tracker, maquette Phase 0.
+   Mise en page : panneau de contrôle (hors app) + cadre iPhone 390x844 mis à l'échelle ;
+   sous 480px de large le cadre disparaît et l'app remplit l'écran.
+   Identité : bleu de travail (accent), chiffres en mono comme un ticket de pointeuse,
+   ruban horaire pour la journée. Tout le reste reste calme.
+   ========================================================================== */
+
+/* ---- 1. Tokens de l'app, générés depuis design/tokens.json (ne pas éditer ici) ---- */
+.app {
+  --background: #EDF0F5;
+  --surface: #FFFFFF;
+  --surfaceRaised: #F5F7FA;
+  --fill: #E0E5EE;
+  --separator: #D3D9E4;
+  --textPrimary: #101726;
+  --textSecondary: #4A566C;
+  --textTertiary: #5F6A7F;
+  --accent: #2447B8;
+  --accentOn: #FFFFFF;
+  --accentSoft: #DCE4FA;
+  --work: #146B45;
+  --workSoft: #D8EEE2;
+  --study: #962A70;
+  --studySoft: #F5DEEB;
+  --errand: #755400;
+  --errandSoft: #F5E9C8;
+  --danger: #B82828;
+  --dangerOn: #FFFFFF;
+  --dangerSoft: #F9DEDC;
+  --warning: #99440A;
+  --warningSoft: #FAE0CC;
+  --success: #146B45;
+}
+.app[data-theme="dark"] {
+  --background: #0E131D;
+  --surface: #182030;
+  --surfaceRaised: #212B3E;
+  --fill: #2A3449;
+  --separator: #2E384C;
+  --textPrimary: #EEF2FA;
+  --textSecondary: #A9B4C9;
+  --textTertiary: #909CB4;
+  --accent: #93ABFF;
+  --accentOn: #0A1230;
+  --accentSoft: #22305C;
+  --work: #5FCD96;
+  --workSoft: #173B2C;
+  --study: #F09ACF;
+  --studySoft: #47223D;
+  --errand: #EDBA52;
+  --errandSoft: #41310F;
+  --danger: #FF8A81;
+  --dangerOn: #3A0B08;
+  --dangerSoft: #4C201E;
+  --warning: #FFA465;
+  --warningSoft: #48290F;
+  --success: #5FCD96;
+}
+.app[data-theme="amoled"] {
+  --background: #000000;
+  --surface: #0C0F15;
+  --surfaceRaised: #151A23;
+  --fill: #1C222D;
+  --separator: #1F2631;
+  --textPrimary: #EEF2FA;
+  --textSecondary: #A3AEC4;
+  --textTertiary: #8490A8;
+  --accent: #93ABFF;
+  --accentOn: #0A1230;
+  --accentSoft: #141D3D;
+  --work: #5FCD96;
+  --workSoft: #0F2A1F;
+  --study: #F09ACF;
+  --studySoft: #30162A;
+  --errand: #EDBA52;
+  --errandSoft: #2C2109;
+  --danger: #FF8A81;
+  --dangerOn: #3A0B08;
+  --dangerSoft: #341514;
+  --warning: #FFA465;
+  --warningSoft: #301A09;
+  --success: #5FCD96;
+}
+:root {
+  --radius-small: 8px;
+  --radius-medium: 14px;
+  --radius-large: 22px;
+  --radius-sheet: 28px;
+  --radius-pill: 999px;
+  --space-xxs: 2px;
+  --space-xs: 4px;
+  --space-s: 8px;
+  --space-m: 16px;
+  --space-l: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+}
+:root {
+  --font-text: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Inter', system-ui, 'Segoe UI', Roboto, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+  --t-largeTitle: 700 34px/41px;
+  --t-title1: 700 28px/34px;
+  --t-title2: 700 22px/28px;
+  --t-title3: 600 20px/25px;
+  --t-headline: 600 17px/22px;
+  --t-body: 400 17px/22px;
+  --t-callout: 400 16px/21px;
+  --t-subhead: 400 15px/20px;
+  --t-footnote: 400 13px/18px;
+  --t-caption: 500 12px/16px;
+  --t-timer: 600 46px/50px;
+  --t-figure: 600 28px/32px;
+  --motion-fast: 0.15s;
+  --motion-normal: 0.28s;
+  --motion-slow: 0.45s;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+}
+.app {
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.06);
+  --shadow-float: 0 8px 24px rgba(0,0,0,0.16);
+  --shadow-sheet: 0 -8px 32px rgba(0,0,0,0.18);
+}
+.app[data-theme="dark"] {
+  --shadow-card: 0 1px 2px rgba(0,0,0,0.3);
+  --shadow-float: 0 8px 24px rgba(0,0,0,0.5);
+  --shadow-sheet: 0 -8px 32px rgba(0,0,0,0.55);
+}
+.app[data-theme="amoled"] {
+  --shadow-card: 0 0 0 rgba(0,0,0,0);
+  --shadow-float: 0 0 0 rgba(0,0,0,0);
+  --shadow-sheet: 0 0 0 rgba(0,0,0,0);
+}
+
+
+/* ---- 2. Tokens de la PAGE autour du cadre (suit le thème de l'hôte, pas celui de l'app) ---- */
+:root {
+  --pg-bg: #E3E7EF; --pg-panel: #F4F6FA; --pg-fg: #101726; --pg-muted: #4A566C;
+  --pg-line: #C9D0DD; --pg-accent: #2447B8; --pg-accent-on: #FFFFFF; --pg-fill: #D5DBE6;
+  --pg-bezel: #0B0D12; --pg-bezel-edge: #3A4150; --pg-shadow: rgba(16, 23, 38, .22);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --pg-bg: #090C12; --pg-panel: #121823; --pg-fg: #EEF2FA; --pg-muted: #A9B4C9;
+    --pg-line: #2A3345; --pg-accent: #93ABFF; --pg-accent-on: #0A1230; --pg-fill: #1F2838;
+    --pg-bezel: #05060A; --pg-bezel-edge: #3A4150; --pg-shadow: rgba(0, 0, 0, .6);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --pg-bg: #090C12; --pg-panel: #121823; --pg-fg: #EEF2FA; --pg-muted: #A9B4C9;
+  --pg-line: #2A3345; --pg-accent: #93ABFF; --pg-accent-on: #0A1230; --pg-fill: #1F2838;
+  --pg-bezel: #05060A; --pg-bezel-edge: #3A4150; --pg-shadow: rgba(0, 0, 0, .6);
+  color-scheme: dark;
+}
+
+/* ---- 3. Page ---- */
+html, body { height: 100%; }
+body {
+  background: var(--pg-bg); color: var(--pg-fg);
+  font: 400 15px/1.45 var(--font-text);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+*, *::before, *::after { box-sizing: border-box; }
+.page { display: grid; grid-template-columns: 300px minmax(0, 1fr); gap: 40px; max-width: 1040px; margin: 0 auto; padding-block: 24px; align-items: start; }
+.proto { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.proto-brand { display: flex; flex-direction: column; gap: 2px; }
+.proto-brand strong { font: 700 20px/1.2 var(--font-text); letter-spacing: -.01em; }
+.proto-brand span { color: var(--pg-muted); font-size: 13px; }
+.proto-group { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.proto-label { font: 600 11px/1.3 var(--font-text); letter-spacing: .08em; text-transform: uppercase; color: var(--pg-muted); }
+.proto-seg { display: flex; gap: 2px; padding: 2px; border-radius: 11px; background: var(--pg-fill); }
+.proto-seg button { flex: 1; min-width: 0; min-height: 40px; border: 0; border-radius: 9px; background: transparent; color: var(--pg-fg); font: 500 14px/1 var(--font-text); cursor: pointer; padding: 0 6px; }
+.proto-seg button[aria-pressed="true"] { background: var(--pg-panel); font-weight: 600; box-shadow: 0 1px 3px var(--pg-shadow); }
+.proto-select { display: none; width: 100%; min-height: 44px; border: 1px solid var(--pg-line); border-radius: 10px; background: var(--pg-panel); color: var(--pg-fg); font: 500 15px/1.2 var(--font-text); padding: 0 10px; }
+.proto-list { display: flex; flex-direction: column; gap: 14px; }
+.proto-list h3 { margin: 0 0 2px; font: 600 12px/1.3 var(--font-text); color: var(--pg-muted); }
+.proto-list ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+.proto-list button { width: 100%; min-height: 44px; display: flex; align-items: center; text-align: left; border: 0; border-radius: 8px; background: transparent; color: var(--pg-fg); font: 400 15px/1.2 var(--font-text); padding: 0 10px; cursor: pointer; }
+@media (pointer: fine) { .proto-list button { min-height: 34px; } }
+.proto-list button:hover { background: var(--pg-fill); }
+.proto-list button[aria-current="true"] { background: var(--pg-accent); color: var(--pg-accent-on); font-weight: 600; }
+.proto :focus-visible { outline: 2px solid var(--pg-accent); outline-offset: 2px; }
+.proto-note { color: var(--pg-muted); font-size: 12px; margin: 0; }
+
+.stage { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 24px); display: flex; justify-content: center; min-width: 0; }
+.device-wrap { flex: none; }
+.device { width: 414px; height: 868px; padding: 12px; border-radius: 62px; background: var(--pg-bezel); box-shadow: 0 0 0 1.5px var(--pg-bezel-edge), 0 30px 60px -20px var(--pg-shadow); transform-origin: 0 0; }
+.device .app { width: 390px; height: 844px; border-radius: 50px; }
+
+/* tablette / fenêtre étroite : contrôles compacts au-dessus du cadre */
+@media (max-width: 899px) {
+  .page { grid-template-columns: minmax(0, 1fr); gap: 16px; padding-block: 12px; }
+  .proto { flex-direction: row; flex-wrap: wrap; align-items: end; gap: 10px 12px; }
+  .proto-brand, .proto-list, .proto-note { display: none; }
+  .proto-group { flex: 1 1 160px; }
+  .proto-select { display: block; }
+  .proto-seg.is-states { display: none; }
+  .stage { position: static; }
+}
+/* téléphone : plus de cadre, l'app remplit l'écran */
+@media (max-width: 480px) {
+  body { display: flex; flex-direction: column; overflow: hidden; }
+  .page { flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 0; padding-block: 0; max-width: none; margin: 0; width: 100%; }
+  .proto { flex: none; flex-wrap: nowrap; gap: 8px; padding-block: 6px; align-items: center; }
+  .proto-label { display: none; }
+  .proto-group { flex: 1 1 0; }
+  .proto-group.is-theme { flex: 0 0 132px; }
+  .proto-seg button { font-size: 12px; padding: 0 2px; }
+  .proto-seg button .long { display: none; }
+  .stage { flex: 1; min-height: 0; display: flex; margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px))); }
+  .device-wrap { flex: 1; min-width: 0; width: auto !important; height: auto !important; display: flex; }
+  .device { flex: 1; min-width: 0; width: auto; height: auto; padding: 0; border-radius: 0; box-shadow: none; transform: none !important; }
+  .device .app { width: 100%; height: 100%; border-radius: 0; --sb-h: 0px; --tab-h: 58px; --home-h: 0px; }
+  .device .statusbar, .device .island, .device .homebar { display: none; }
+}
+
+/* ==========================================================================
+   4. APP : tout ce qui suit vit dans .app et n'utilise que les tokens du thème
+   ========================================================================== */
+.app {
+  --sb-h: 54px; --tab-h: 83px; --home-h: 34px; --gutter: 16px;
+  position: relative; overflow: hidden; isolation: isolate;
+  background: var(--background); color: var(--textPrimary);
+  font: var(--t-body) var(--font-text); letter-spacing: -.01em;
+  -webkit-font-smoothing: antialiased; color-scheme: light;
+}
+.app[data-theme="dark"], .app[data-theme="amoled"] { color-scheme: dark; }
+:where(.app) :where(button, input, select, textarea) { font: inherit; color: inherit; letter-spacing: inherit; }
+.app button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.app :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+:where(.app) :where(h1, h2, h3, p) { margin: 0; }
+:where(.app) a { color: var(--accent); }
+[hidden] { display: none !important; }
+
+/* chiffres : .num partout où une heure, une durée ou un montant s'affiche */
+.num { font-family: var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.icon { width: 24px; height: 24px; flex: none; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.icon--s { width: 18px; height: 18px; stroke-width: 2; }
+.icon--l { width: 32px; height: 32px; stroke-width: 1.6; }
+.muted { color: var(--textSecondary); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---- chrome iPhone ---- */
+.statusbar { position: absolute; inset: 0 0 auto; height: var(--sb-h); z-index: 30; display: flex; align-items: center; justify-content: space-between; padding: 6px 30px 0 38px; font: 600 16px/1 var(--font-text); background: var(--background); color: var(--textPrimary); }
+.statusbar-right { display: flex; align-items: center; gap: 6px; }
+.statusbar svg { height: 12px; width: auto; fill: currentColor; }
+.island { position: absolute; top: 11px; left: 50%; width: 124px; height: 36px; margin-left: -62px; border-radius: 20px; background: var(--pg-bezel); z-index: 31; }
+.homebar { position: absolute; left: 50%; bottom: 8px; width: 138px; height: 5px; margin-left: -69px; border-radius: 3px; background: var(--textPrimary); z-index: 60; pointer-events: none; }
+.app.is-fullbleed .statusbar { background: transparent; }
+
+/* ---- écrans ---- */
+.screens { position: absolute; inset: var(--sb-h) 0 0; }
+.screen { position: absolute; inset: 0; display: none; flex-direction: column; overflow-x: hidden; overflow-y: auto; overscroll-behavior: contain; padding-bottom: calc(var(--tab-h) + 8px); scrollbar-width: none; }
+.screen::-webkit-scrollbar { display: none; }
+.screen > * { flex-shrink: 0; }
+.screen.is-active { display: flex; animation: screen-in var(--motion-normal) var(--ease); }
+.app.no-tabbar .screen { padding-bottom: calc(var(--home-h) + 8px); }
+.screen[data-fullbleed] { top: calc(-1 * var(--sb-h)); padding-top: var(--sb-h); }
+@keyframes screen-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+.screen-body { display: flex; flex-direction: column; gap: var(--space-l); padding: var(--space-s) var(--gutter) var(--space-l); min-width: 0; }
+
+/* ---- barre de navigation et grand titre ---- */
+.navbar { position: sticky; top: 0; z-index: 20; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; min-height: 44px; padding: 0 8px; background: color-mix(in srgb, var(--background) 86%, transparent); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+.navbar-title { font: var(--t-headline) var(--font-text); text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; grid-column: 2; }
+.navbar-back { justify-self: start; display: inline-flex; align-items: center; gap: 2px; min-height: 44px; padding: 0 8px 0 0; border: 0; background: none; color: var(--accent); font-size: 17px; }
+.navbar-actions { grid-column: 3; justify-self: end; display: flex; align-items: center; }
+.iconbtn { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 0; border-radius: 50%; background: none; color: var(--accent); }
+.iconbtn--tonal { width: 36px; height: 36px; margin: 4px; background: var(--fill); color: var(--textPrimary); position: relative; }
+.iconbtn--tonal::before { content: ""; position: absolute; inset: -4px; }
+.largetitle { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; padding: 4px var(--gutter) 8px; }
+.largetitle h1 { font: var(--t-largeTitle) var(--font-text); letter-spacing: -.025em; text-wrap: balance; }
+.eyebrow { font: 600 12px/16px var(--font-text); letter-spacing: .07em; text-transform: uppercase; color: var(--textSecondary); }
+
+/* ---- sections ---- */
+.section { display: flex; flex-direction: column; gap: var(--space-s); min-width: 0; }
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; padding: 0 4px; }
+.section-title { font: var(--t-title3) var(--font-text); letter-spacing: -.02em; }
+.section-link { border: 0; background: none; color: var(--accent); font-size: 15px; min-height: 44px; margin: -12px 0; padding: 0 4px; }
+.section-foot { padding: 0 4px; font: var(--t-footnote) var(--font-text); color: var(--textSecondary); }
+
+/* ---- carte ---- */
+.card { display: flex; flex-direction: column; gap: 12px; padding: var(--space-m); border-radius: var(--radius-large); background: var(--surface); box-shadow: var(--shadow-card); min-width: 0; }
+.card--outline { background: none; box-shadow: none; border: 1px solid var(--separator); }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.card-title { font: var(--t-title2) var(--font-text); letter-spacing: -.02em; text-wrap: balance; }
+.card-text { font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+/* carte Maintenant : le seul aplat d'accent de l'app, une seule par écran */
+.card--now { background: var(--accent); color: var(--accentOn); box-shadow: var(--shadow-float); gap: 14px; }
+.card--now .eyebrow, .card--now .card-text { color: inherit; opacity: .84; }
+.card--now .btn--primary { background: var(--accentOn); color: var(--accent); }
+.card--now .btn--secondary { background: color-mix(in srgb, var(--accentOn) 16%, transparent); color: var(--accentOn); }
+.card--now .btn--ghost { color: var(--accentOn); text-decoration: underline; text-underline-offset: 3px; }
+.card--now :focus-visible { outline-color: var(--accentOn); }
+.card--now.is-calm { background: var(--surface); color: var(--textPrimary); box-shadow: var(--shadow-card); }
+.card--now.is-calm .eyebrow, .card--now.is-calm .card-text { color: var(--textSecondary); opacity: 1; }
+
+/* ---- liste groupée et lignes ---- */
+.list { display: flex; flex-direction: column; border-radius: var(--radius-medium); background: var(--surface); box-shadow: var(--shadow-card); overflow: hidden; }
+.row { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 52px; padding: 9px var(--space-m); border: 0; background: none; text-align: left; position: relative; text-decoration: none; color: var(--textPrimary); }
+.row + .row::before { content: ""; position: absolute; top: 0; right: 0; left: var(--space-m); height: 1px; background: var(--separator); }
+.row:has(> .row-icon) + .row:has(> .row-icon)::before { left: 60px; }
+button.row:active, a.row:active { background: var(--fill); }
+.row-icon { display: grid; place-items: center; width: 32px; height: 32px; flex: none; border-radius: var(--radius-small); background: var(--fill); color: var(--textPrimary); }
+.row-icon .icon { width: 19px; height: 19px; }
+.row-icon--work { background: var(--workSoft); color: var(--work); }
+.row-icon--study { background: var(--studySoft); color: var(--study); }
+.row-icon--errand { background: var(--errandSoft); color: var(--errand); }
+.row-icon--accent { background: var(--accentSoft); color: var(--accent); }
+.row-icon--danger { background: var(--dangerSoft); color: var(--danger); }
+.row-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 1px; }
+.row-title { font: var(--t-body) var(--font-text); }
+.row-sub { font: var(--t-footnote) var(--font-text); color: var(--textSecondary); }
+.row-value { flex: none; max-width: 50%; text-align: right; font-size: 16px; color: var(--textSecondary); }
+.row-chev { flex: none; width: 16px; height: 16px; color: var(--textTertiary); stroke-width: 2.4; }
+.row--destructive .row-title { color: var(--danger); }
+.row-check { flex: none; color: var(--accent); visibility: hidden; }
+.row[aria-checked="true"] .row-check { visibility: visible; }
+.app[data-density="compact"] .row { min-height: 44px; padding-block: 5px; }
+.app[data-density="compact"] .screen-body { gap: var(--space-m); }
+
+/* ---- pastilles ---- */
+.chip { display: inline-flex; align-items: center; gap: 5px; height: 26px; padding: 0 10px; border-radius: var(--radius-pill); font: 600 13px/1 var(--font-text); white-space: nowrap; background: var(--fill); color: var(--textPrimary); }
+.chip .icon { width: 14px; height: 14px; stroke-width: 2.2; }
+.chip--work { background: var(--workSoft); color: var(--work); }
+.chip--study { background: var(--studySoft); color: var(--study); }
+.chip--errand { background: var(--errandSoft); color: var(--errand); }
+.chip--accent { background: var(--accentSoft); color: var(--accent); }
+.chip--danger { background: var(--dangerSoft); color: var(--danger); }
+.chip--doubt { background: none; color: var(--textSecondary); border: 1.5px dashed var(--textTertiary); }
+.chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.dot-live { width: 8px; height: 8px; border-radius: 50%; background: currentColor; animation: pulse 1.6s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* ---- boutons ---- */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 50px; padding: 0 20px; border: 0; border-radius: var(--radius-medium); font: 600 17px/1.15 var(--font-text); text-align: center; text-decoration: none; transition: transform var(--motion-fast) var(--ease), opacity var(--motion-fast); }
+.btn:active { transform: scale(.98); opacity: .85; }
+.btn[disabled] { opacity: .4; pointer-events: none; }
+.btn--primary { background: var(--accent); color: var(--accentOn); }
+.btn--secondary { background: var(--fill); color: var(--textPrimary); }
+.btn--destructive { background: var(--danger); color: var(--dangerOn); }
+.btn--destructive-soft { background: var(--dangerSoft); color: var(--danger); }
+.btn--ghost { background: none; color: var(--accent); min-height: 44px; padding: 0 8px; font-weight: 500; font-size: 15px; }
+.btn--small { min-height: 44px; padding: 0 14px; font-size: 15px; border-radius: 12px; }
+.btn--block { display: flex; width: 100%; }
+.btn-row { display: flex; gap: 8px; }
+.btn-row > .btn { flex: 1; min-width: 0; padding-inline: 10px; }
+.btn-row--links { justify-content: space-between; margin: -8px -8px -10px; }
+.btn-row--links > .btn { flex: none; }
+.btn-stack { display: flex; flex-direction: column; gap: 8px; }
+.fab-dock { position: sticky; bottom: calc(var(--tab-h) + 16px); height: 0; margin-top: auto; z-index: 15; }
+.app.no-tabbar .fab-dock { bottom: calc(var(--home-h) + 16px); }
+.fab { position: absolute; right: var(--gutter); bottom: 0; display: grid; place-items: center; width: 56px; height: 56px; border: 0; border-radius: 50%; background: var(--accent); color: var(--accentOn); box-shadow: var(--shadow-float); }
+.fab .icon { width: 28px; height: 28px; stroke-width: 2.2; }
+
+/* ---- interrupteur ---- */
+.switch { flex: none; position: relative; width: 51px; height: 31px; padding: 0; border: 0; border-radius: 16px; background: color-mix(in srgb, var(--textTertiary) 42%, var(--fill)); transition: background var(--motion-fast); }
+.switch::before { content: ""; position: absolute; inset: -7px -4px; }
+.switch::after { content: ""; position: absolute; top: 2px; left: 2px; width: 27px; height: 27px; border-radius: 50%; background: var(--surface); box-shadow: 0 1px 3px rgba(0, 0, 0, .25); transition: transform var(--motion-normal) var(--ease); }
+.app[data-theme="dark"] .switch::after, .app[data-theme="amoled"] .switch::after { background: var(--textPrimary); }
+.switch[aria-checked="true"] { background: var(--accent); }
+.switch[aria-checked="true"]::after { transform: translateX(20px); background: var(--accentOn) !important; }
+
+/* ---- contrôle segmenté ---- */
+.segmented { display: flex; gap: 2px; padding: 2px; min-height: 44px; border-radius: 11px; background: var(--fill); }
+.segmented > button { flex: 1; min-width: 0; padding: 0 4px; border: 0; border-radius: 9px; background: none; font: 500 14px/1.1 var(--font-text); color: var(--textPrimary); transition: background var(--motion-fast); }
+.segmented > button[aria-pressed="true"] { background: var(--surface); font-weight: 600; box-shadow: 0 1px 3px rgba(0, 0, 0, .14); }
+.app[data-theme="dark"] .segmented > button[aria-pressed="true"], .app[data-theme="amoled"] .segmented > button[aria-pressed="true"] { background: color-mix(in srgb, var(--textTertiary) 45%, var(--fill)); }
+
+/* ---- champs ---- */
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field-label { font: 600 13px/18px var(--font-text); color: var(--textSecondary); padding: 0 4px; }
+.input { width: 100%; min-height: 50px; padding: 0 14px; border: 1px solid var(--separator); border-radius: var(--radius-medium); background: var(--surface); color: var(--textPrimary); font-size: 17px; }
+.input::placeholder { color: var(--textTertiary); opacity: 1; }
+.input:focus-visible { outline-offset: 0; border-color: var(--accent); }
+.field-help { font: var(--t-footnote) var(--font-text); color: var(--textSecondary); padding: 0 4px; }
+.field.is-invalid .input { border-color: var(--danger); }
+.field.is-invalid .field-help { color: var(--danger); }
+
+/* ---- pastilles de couleur ---- */
+.swatches { display: flex; flex-wrap: wrap; gap: 4px; }
+.swatch { width: 44px; height: 44px; padding: 0; border: 0; border-radius: 50%; background: none; display: grid; place-items: center; }
+.swatch::before { content: ""; width: 30px; height: 30px; border-radius: 50%; background: var(--c); box-shadow: 0 0 0 2px var(--surface), 0 0 0 0 var(--c); transition: box-shadow var(--motion-fast); }
+.swatch[aria-pressed="true"]::before { box-shadow: 0 0 0 3px var(--surface), 0 0 0 5.5px var(--c); }
+
+/* ---- feuille (bottom sheet) ---- */
+.overlay-host { position: absolute; inset: 0; z-index: 50; pointer-events: none; overflow: hidden; }
+.sheet-backdrop { position: absolute; inset: 0; background: rgba(4, 8, 16, .5); opacity: 0; transition: opacity var(--motion-normal); }
+.overlay-host.has-sheet { pointer-events: auto; }
+.overlay-host.has-sheet .sheet-backdrop { opacity: 1; }
+.sheet { position: absolute; inset: auto 0 0; max-height: 88%; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; padding: 8px var(--gutter) calc(var(--home-h) + 16px); border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; background: var(--surfaceRaised); box-shadow: var(--shadow-sheet); transform: translateY(105%); visibility: hidden; transition: transform var(--motion-slow) var(--ease-sheet), visibility 0s var(--motion-slow); }
+.app[data-theme="amoled"] .sheet { border-top: 1px solid var(--separator); }
+.sheet.is-open { transform: none; visibility: visible; transition-delay: 0s; }
+.sheet:focus { outline: none; }
+.sheet-grabber { align-self: center; flex: none; width: 36px; height: 5px; border-radius: 3px; background: var(--separator); }
+.sheet-title { font: var(--t-title2) var(--font-text); letter-spacing: -.02em; text-wrap: balance; }
+.sheet-text { font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+.sheet .list { background: var(--surface); }
+
+/* ---- toast ---- */
+.toast { position: absolute; left: 12px; right: 12px; bottom: calc(var(--tab-h) + 12px); display: flex; align-items: center; gap: 12px; min-height: 52px; padding: 6px 6px 6px 16px; border-radius: var(--radius-medium); background: var(--textPrimary); color: var(--background); font: 500 15px/20px var(--font-text); box-shadow: var(--shadow-float); pointer-events: auto; transform: translateY(20px); opacity: 0; transition: transform var(--motion-normal) var(--ease), opacity var(--motion-normal); }
+.app.no-tabbar .toast { bottom: calc(var(--home-h) + 12px); }
+.toast.is-open { transform: none; opacity: 1; }
+.toast-msg { flex: 1; min-width: 0; padding: 6px 0; }
+.toast-undo { flex: none; min-height: 44px; padding: 0 14px; border: 0; border-radius: 10px; background: color-mix(in srgb, var(--background) 18%, transparent); color: var(--background); font-weight: 600; }
+.toast :focus-visible { outline-color: var(--background); }
+
+/* ---- état vide ---- */
+.empty { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 28px 20px; text-align: center; }
+.empty-icon { display: grid; place-items: center; width: 64px; height: 64px; margin-bottom: 4px; border-radius: 50%; background: var(--fill); color: var(--textSecondary); }
+.empty-title { font: var(--t-title3) var(--font-text); text-wrap: balance; }
+.empty-text { font: var(--t-subhead) var(--font-text); color: var(--textSecondary); max-width: 30ch; text-wrap: pretty; }
+.empty .btn { margin-top: 8px; }
+
+/* ---- bandeau ---- */
+.banner { display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: var(--radius-medium); background: var(--fill); color: var(--textPrimary); }
+.banner > .icon { margin-top: 1px; width: 22px; height: 22px; }
+.banner-main { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+.banner-title { font: 600 15px/20px var(--font-text); }
+.banner-text { font: var(--t-footnote) var(--font-text); }
+.banner-action { align-self: flex-start; min-height: 44px; margin: 0 0 -10px -2px; padding: 0 2px; border: 0; background: none; font: 600 15px/1 var(--font-text); color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.banner--error { background: var(--dangerSoft); }
+.banner--error > .icon, .banner--error .banner-title, .banner--error .banner-action { color: var(--danger); }
+.banner--warning { background: var(--warningSoft); }
+.banner--warning > .icon, .banner--warning .banner-title, .banner--warning .banner-action { color: var(--warning); }
+.banner--info { background: var(--accentSoft); }
+.banner--info > .icon, .banner--info .banner-title, .banner--info .banner-action { color: var(--accent); }
+
+/* ---- squelette de chargement ---- */
+.skeleton { display: block; border-radius: 6px; background: linear-gradient(90deg, var(--fill) 25%, var(--surfaceRaised) 50%, var(--fill) 75%) 0 0 / 200% 100%; animation: shimmer 1.4s linear infinite; color: transparent !important; user-select: none; }
+.skeleton--line { height: 14px; width: 100%; }
+.skeleton--title { height: 24px; width: 60%; }
+.skeleton--block { height: 88px; border-radius: var(--radius-medium); }
+.skeleton--circle { width: 32px; height: 32px; border-radius: 50%; }
+@keyframes shimmer { to { background-position: -200% 0; } }
+
+/* ---- ruban horaire (timeline) ----
+   .timeline style="--from:6;--to:24" ; chaque segment style="--s:8.08;--e:12.03" (heures décimales) */
+.timeline { --from: 6; --to: 24; display: flex; flex-direction: column; gap: 6px; }
+.timeline-track { position: relative; height: 30px; border-radius: 7px; background-color: var(--fill); background-image: linear-gradient(90deg, var(--separator) 1px, transparent 1px); background-size: calc(100% / (var(--to) - var(--from))) 7px; background-repeat: repeat-x; background-position: 0 100%; overflow: hidden; }
+.timeline-seg { position: absolute; top: 0; bottom: 0; left: calc((var(--s) - var(--from)) / (var(--to) - var(--from)) * 100%); width: max(3px, calc((var(--e) - var(--s)) / (var(--to) - var(--from)) * 100%)); background: var(--textTertiary); }
+.timeline-seg--work { background: var(--work); }
+.timeline-seg--study { background: var(--study); }
+.timeline-seg--errand { background: var(--errand); }
+.timeline-seg--planned { background: none; border: 1.5px dashed var(--textTertiary); border-radius: 4px; }
+.timeline-seg--doubt { background: repeating-linear-gradient(135deg, var(--textTertiary) 0 3px, transparent 3px 6px); }
+.timeline-seg.is-live { background-image: linear-gradient(90deg, transparent 60%, color-mix(in srgb, var(--surface) 40%, transparent)); }
+.timeline-now { position: absolute; top: 0; bottom: 0; left: calc((var(--s) - var(--from)) / (var(--to) - var(--from)) * 100%); width: 2px; margin-left: -1px; background: var(--textPrimary); }
+.timeline-axis { display: flex; justify-content: space-between; font: 500 11px/1 var(--font-mono); color: var(--textSecondary); }
+.timeline-legend { display: flex; flex-wrap: wrap; gap: 4px 14px; font: var(--t-footnote) var(--font-text); color: var(--textSecondary); }
+.timeline-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.timeline-legend i { width: 10px; height: 10px; border-radius: 3px; background: var(--textTertiary); }
+.lg-work { background: var(--work) !important; } .lg-study { background: var(--study) !important; } .lg-errand { background: var(--errand) !important; }
+
+/* ---- chiffres clés ---- */
+.stat-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-s); }
+.stat { display: flex; flex-direction: column; gap: 4px; padding: 14px var(--space-m); border-radius: var(--radius-medium); background: var(--surface); box-shadow: var(--shadow-card); min-width: 0; }
+.stat-label { display: flex; align-items: center; gap: 6px; font: 600 13px/18px var(--font-text); color: var(--textSecondary); }
+.stat-label i { width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+.stat--work .stat-label { color: var(--work); } .stat--study .stat-label { color: var(--study); } .stat--errand .stat-label { color: var(--errand); }
+.stat-value { font: var(--t-figure) var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.04em; white-space: nowrap; }
+.stat-value small { font: 500 15px/1 var(--font-text); letter-spacing: 0; color: var(--textSecondary); margin: 0 4px 0 1px; }
+.stat-note { font: var(--t-footnote) var(--font-text); color: var(--textSecondary); }
+.timer { font: var(--t-timer) var(--font-mono); font-variant-numeric: tabular-nums; letter-spacing: -.05em; }
+
+/* ---- jauge ---- */
+.meter { height: 8px; border-radius: 4px; background: var(--fill); overflow: hidden; }
+.meter > i { display: block; height: 100%; width: calc(var(--v, 0) * 1%); border-radius: 4px; background: var(--accent); }
+.meter--work > i { background: var(--work); } .meter--study > i { background: var(--study); } .meter--danger > i { background: var(--danger); }
+
+/* ---- fiabilité et statuts ---- */
+.rel { display: inline-flex; align-items: center; gap: 6px; font: 600 13px/18px var(--font-text); color: var(--textSecondary); white-space: nowrap; }
+.rel-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 12px; }
+.rel-bars i { width: 3px; border-radius: 1px; background: var(--separator); }
+.rel-bars i:nth-child(1) { height: 5px; } .rel-bars i:nth-child(2) { height: 8px; } .rel-bars i:nth-child(3) { height: 12px; }
+.rel--high { color: var(--success); } .rel--high .rel-bars i { background: currentColor; }
+.rel--mid { color: var(--warning); } .rel--mid .rel-bars i:nth-child(-n+2) { background: currentColor; }
+.rel--low { color: var(--danger); } .rel--low .rel-bars i:nth-child(1) { background: currentColor; }
+.status { display: inline-flex; align-items: center; gap: 6px; font: 500 15px/20px var(--font-text); color: var(--textSecondary); white-space: nowrap; }
+.status .icon { width: 18px; height: 18px; stroke-width: 2.2; }
+.status--ok { color: var(--success); } .status--warn { color: var(--warning); } .status--error { color: var(--danger); }
+
+/* ---- barre d'onglets ---- */
+.tabbar { position: absolute; inset: auto 0 0; z-index: 25; height: var(--tab-h); display: flex; padding: 0 4px var(--home-h); border-top: 1px solid var(--separator); background: color-mix(in srgb, var(--surface) 88%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+.app.no-tabbar .tabbar { display: none; }
+.tab { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; background: none; color: var(--textSecondary); font: 500 10.5px/1 var(--font-text); }
+.tab .icon { width: 25px; height: 25px; }
+.tab[aria-current="page"] { color: var(--accent); font-weight: 600; }
+
+/* ---- mouvement ---- */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+.app[data-motion="none"] *, .app[data-motion="none"] *::before, .app[data-motion="none"] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+</style>
+<script>
+/* File d'attente : les fragments d'écran appellent PLT.ready(fn) ; shell_tail exécute tout après l'init. */
+window.PLT = { _q: [], ready: function (fn) { this._q.push(fn); } };
+</script>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <symbol id="i-home" viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></symbol>
+    <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/></symbol>
+    <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 20v-8M12 20V5M19 20v-11M3 20h18"/></symbol>
+    <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-chev-right" viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></symbol>
+    <symbol id="i-chev-left" viewBox="0 0 24 24"><path d="m15 5-7 7 7 7"/></symbol>
+    <symbol id="i-chev-down" viewBox="0 0 24 24"><path d="m5 9 7 7 7-7"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5"/></symbol>
+    <symbol id="i-x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-briefcase" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7M3 13h18"/></symbol>
+    <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5zM4 20.5A2.5 2.5 0 0 0 6.5 21H20v-3"/></symbol>
+    <symbol id="i-cart" viewBox="0 0 24 24"><path d="M3 4h2.5l2.2 10.5h10.2L20 7H6.5"/><circle cx="9" cy="19" r="1.4"/><circle cx="17" cy="19" r="1.4"/></symbol>
+    <symbol id="i-question" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 1-1 1.7M12 17h.01"/></symbol>
+    <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 4 2.5 20h19zM12 10v4.5M12 17.5h.01"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5.5M12 7.5h.01"/></symbol>
+    <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5a2 2 0 0 0 4 0"/></symbol>
+    <symbol id="i-nav" viewBox="0 0 24 24"><path d="M20 4 4 10.5l7 2.5 2.5 7z"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="M7 5v14l12-7z"/></symbol>
+    <symbol id="i-pause" viewBox="0 0 24 24"><path d="M8 5v14M16 5v14"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+    <symbol id="i-pencil" viewBox="0 0 24 24"><path d="m4 20 1-4L16.5 4.500a2.100 2.100 0 0 1 3 3L8 19zM14.500 6.500l3 3"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4.500h6V7M6.500 7l.8 12.500a1.500 1.500 0 0 0 1.500 1.500h6.400a1.500 1.500 0 0 0 1.500-1.500L17.500 7M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-undo" viewBox="0 0 24 24"><path d="M8 5 4 9l4 4M4 9h10a5.500 5.500 0 0 1 0 11H9"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2.5"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+    <symbol id="i-faceid" viewBox="0 0 24 24"><path d="M4 8V6a2 2 0 0 1 2-2h2M16 4h2a2 2 0 0 1 2 2v2M20 16v2a2 2 0 0 1-2 2h-2M8 20H6a2 2 0 0 1-2-2v-2M9 9.500V11M15 9.500V11M12 9.500V13h-1M9 15.500a4.500 4.500 0 0 0 6 0"/></symbol>
+    <symbol id="i-eye-off" viewBox="0 0 24 24"><path d="m3 3 18 18M6.500 6.800C4.300 8.200 2.800 10.400 2 12c1.600 3.200 5 7 10 7 1.700 0 3.200-.4 4.500-1.100M10 5.200c.6-.1 1.300-.2 2-.2 5 0 8.400 3.800 10 7-.5 1-1.200 2.100-2.100 3.100"/></symbol>
+    <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2.500M12 19.500V22M2 12h2.500M19.500 12H22M4.900 4.900l1.800 1.800M17.300 17.300l1.800 1.800M4.900 19.100l1.800-1.800M17.300 6.700l1.800-1.800"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20 14.500A8.500 8.500 0 0 1 9.500 4 8.500 8.500 0 1 0 20 14.500z"/></symbol>
+    <symbol id="i-battery" viewBox="0 0 24 24"><rect x="2" y="8" width="17" height="9" rx="2.5"/><path d="M22 11v3M5.500 11v3"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 4v11M7.500 10.500 12 15l4.500-4.500M4 20h16"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 15V4M7.500 8.500 12 4l4.500 4.500M4 20h16"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M8 6.500 12 3l4 3.500M6 11H5a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-8a1 1 0 0 0-1-1h-1"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l1.500-2.500h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.500"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="8.500" cy="10" r="1.500"/><path d="m21 16-5-5-8 8"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="4" y="4" width="6.500" height="6.500" rx="1.500"/><rect x="13.500" y="4" width="6.500" height="6.500" rx="1.500"/><rect x="4" y="13.500" width="6.500" height="6.500" rx="1.500"/><rect x="13.500" y="13.500" width="6.500" height="6.500" rx="1.500"/></symbol>
+    <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.500 20.500a7.500 7.500 0 0 1 15 0"/></symbol>
+    <symbol id="i-euro" viewBox="0 0 24 24"><path d="M18 6.500a7 7 0 1 0 0 11M4 10.500h9M4 13.500h8"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.500"/><path d="m16 16 4.500 4.500"/></symbol>
+    <symbol id="i-map" viewBox="0 0 24 24"><path d="M3 6.500 9 4l6 2.500L21 4v13.500L15 20l-6-2.500L3 20zM9 4v13.500M15 6.500V20"/></symbol>
+    <symbol id="i-route" viewBox="0 0 24 24"><circle cx="6" cy="18" r="2"/><circle cx="18" cy="6" r="2"/><path d="M8 18h7a3 3 0 0 0 0-6H9a3 3 0 0 1 0-6h7"/></symbol>
+    <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 3 5 13.500h6L10 21l8-10.500h-6z"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 5v5h-5M19.500 10A8 8 0 1 0 20 14"/></symbol>
+    <symbol id="i-wifi-off" viewBox="0 0 24 24"><path d="m3 3 18 18M5 12.500a10 10 0 0 1 4-2.600M14 9.200a10 10 0 0 1 5 3.300M8.500 16a5 5 0 0 1 7 0M12 19.500h.01"/></symbol>
+    <symbol id="i-shield" viewBox="0 0 24 24"><path d="M12 3 4.500 6v5.500c0 4.500 3.200 8 7.500 9.500 4.300-1.500 7.500-5 7.500-9.500V6z"/></symbol>
+    <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3.500 2.600 5.400 5.900.8-4.300 4.100 1 5.900L12 16.900 6.800 19.700l1-5.900-4.300-4.100 5.900-.8z"/></symbol>
+    <symbol id="i-vibrate" viewBox="0 0 24 24"><rect x="8" y="4" width="8" height="16" rx="2"/><path d="M4 9v6M20 9v6"/></symbol>
+    <symbol id="i-sound" viewBox="0 0 24 24"><path d="M4 9.500h3l5-4v13l-5-4H4zM16 9a4.500 4.500 0 0 1 0 6"/></symbol>
+    <symbol id="i-list" viewBox="0 0 24 24"><path d="M8 6h12M8 12h12M8 18h12M4 6h.01M4 12h.01M4 18h.01"/></symbol>
+    <symbol id="i-doc" viewBox="0 0 24 24"><path d="M7 3h7l5 5v12a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1zM14 3v5h5M9 13h6M9 17h6"/></symbol>
+    <symbol id="i-more" viewBox="0 0 24 24"><path d="M5 12h.01M12 12h.01M19 12h.01"/></symbol>
+  </defs>
+</svg>
+
+<div class="page">
+  <aside class="proto" aria-label="Contrôles de la maquette">
+    <div class="proto-brand"><strong>Personal Life Tracker</strong><span>Maquette de l'interface, phase 0</span></div>
+    <div class="proto-group is-theme">
+      <span class="proto-label" id="proto-theme-label">Thème de l'app</span>
+      <div class="proto-seg" role="group" aria-labelledby="proto-theme-label">
+        <button type="button" data-theme-set="light" aria-pressed="true">Clair</button>
+        <button type="button" data-theme-set="dark" aria-pressed="false">Sombre</button>
+        <button type="button" data-theme-set="amoled" aria-pressed="false" aria-label="AMOLED, noir pur">AMOLED</button>
+      </div>
+    </div>
+    <div class="proto-group" id="proto-states-group" hidden>
+      <label class="proto-label" id="proto-states-label" for="proto-states-select">État de cet écran</label>
+      <div class="proto-seg is-states" id="proto-states" role="group" aria-labelledby="proto-states-label"></div>
+      <select class="proto-select" id="proto-states-select"></select>
+    </div>
+    <div class="proto-group">
+      <label class="proto-label" for="proto-screen-select">Écrans</label>
+      <select class="proto-select" id="proto-screen-select"></select>
+      <nav class="proto-list" id="proto-list" aria-label="Tous les écrans"></nav>
+    </div>
+    <p class="proto-note">Maquette cliquable : les données sont des exemples, rien n'est enregistré.</p>
+  </aside>
+
+  <div class="stage">
+    <div class="device-wrap" id="device-wrap">
+      <div class="device" id="device">
+        <div class="app" id="app" data-theme="light">
+          <div class="statusbar" aria-hidden="true">
+            <span>19:10</span>
+            <span class="statusbar-right">
+              <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx=".8"/><rect x="5" y="5.500" width="3" height="6.500" rx=".8"/><rect x="10" y="3" width="3" height="9" rx=".8"/><rect x="15" y="0" width="3" height="12" rx=".8"/></svg>
+              <svg viewBox="0 0 17 12"><path d="M8.500 2.600c2.300 0 4.400.9 6 2.400l1.200-1.300A10.400 10.400 0 0 0 8.500.8C5.700.8 3.200 1.900 1.300 3.700L2.500 5c1.600-1.500 3.700-2.400 6-2.400zm0 3.700c1.300 0 2.500.5 3.400 1.300l1.200-1.300a6.800 6.800 0 0 0-9.200 0l1.200 1.300c.9-.8 2.100-1.300 3.400-1.300zm0 3.500L6.300 12h4.400z" transform="translate(0 -.4)"/></svg>
+              <svg viewBox="0 0 27 12"><rect x=".5" y=".5" width="22" height="11" rx="3.200" fill="none" stroke="currentColor" opacity=".4"/><rect x="2" y="2" width="15" height="8" rx="1.800"/><path d="M24 4v4c.8-.3 1.500-1.100 1.500-2S24.800 4.300 24 4z" opacity=".45"/></svg>
+            </span>
+          </div>
+          <div class="island" aria-hidden="true"></div>
+
+          <main class="screens" id="screens">
+<!-- 10_accueil.html -->
+<section class="screen" id="scr-accueil" data-title="Accueil" data-group="Accueil" data-tab="accueil"
+         data-states="encours:Session en cours,calme:Journée finie,vide:Premier jour">
+
+  <header class="largetitle">
+    <div>
+      <p class="eyebrow">Lundi 16 novembre</p>
+      <h1>Salut Léo</h1>
+    </div>
+    <button type="button" class="iconbtn iconbtn--tonal" data-go="reglages" aria-label="Réglages">
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-sliders"/></svg>
+    </button>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- 1. Carte Maintenant (section 122) : une seule carte, une seule action -->
+    <div data-when="encours">
+      <article class="card card--now" id="acc-now-ask" aria-labelledby="acc-now-ask-t">
+        <div class="card-head">
+          <p class="eyebrow">Maintenant</p>
+          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-pourquoi" style="margin:-12px -8px">Pourquoi cette carte ?</button>
+        </div>
+        <h2 class="card-title" id="acc-now-ask-t">T'es arrivé au taf à <span class="num">17:56</span>, c'est bon ?</h2>
+        <p class="card-text">Je l'ai noté tout seul quand t'es entré dans la zone de la Supérette du Canal.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn--primary" id="acc-now-yes">Oui, c'est bon</button>
+          <button type="button" class="btn btn--secondary" data-go="session">Corriger l'heure</button>
+        </div>
+        <div class="btn-row btn-row--links">
+          <button type="button" class="btn btn--ghost" id="acc-now-later">Pas maintenant</button>
+          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-autres">Voir les autres (3)</button>
+        </div>
+      </article>
+      <article class="card card--now is-calm" id="acc-now-done" hidden>
+        <p class="eyebrow">Maintenant</p>
+        <h2 class="card-title">Rien à faire, profites-en.</h2>
+        <p class="card-text">Je te préviens s'il y a un truc à confirmer. Il en reste 3 pour plus tard.</p>
+        <div class="btn-row btn-row--links">
+          <button type="button" class="btn btn--ghost" data-sheet="sheet-acc-autres">Voir les autres (3)</button>
+        </div>
+      </article>
+    </div>
+
+    <article class="card card--now is-calm" data-when="calme">
+      <p class="eyebrow">Maintenant</p>
+      <h2 class="card-title">Rien à faire, profites-en.</h2>
+      <p class="card-text">Bien joué, 3 h de taf aujourd'hui. Demain : cours à <span class="num">8:00</span>.</p>
+    </article>
+
+    <article class="card card--now" data-when="vide">
+      <p class="eyebrow">Maintenant</p>
+      <h2 class="card-title">On commence par un lieu ?</h2>
+      <p class="card-text">Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Rien ne sort de ton tel.</p>
+      <div class="btn-row">
+        <button type="button" class="btn btn--primary" data-go="lieu-ajout">Ajouter un lieu</button>
+        <button type="button" class="btn btn--secondary" data-toast="OK, je te le repropose demain.">Plus tard</button>
+      </div>
+    </article>
+
+    <!-- 2. Session en cours, durée en direct -->
+    <section class="section" data-when="encours" aria-labelledby="acc-live-t">
+      <article class="card">
+        <div class="card-head">
+          <span class="chip chip--work"><span class="dot-live" aria-hidden="true"></span>Taf en cours</span>
+          <span class="rel rel--high"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>Fiable</span>
+        </div>
+        <div>
+          <h2 class="section-title" id="acc-live-t">Supérette du Canal</h2>
+          <p class="timer" role="timer" aria-label="Durée de la session en cours" data-timer="4447">1:14:07</p>
+        </div>
+        <p class="card-text">Arrivée à <span class="num">17:56</span>, à plus ou moins 3 min. Prévu jusqu'à <span class="num">21:00</span>.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn--secondary" id="acc-stop"><svg class="icon icon--s" aria-hidden="true"><use href="#i-stop"/></svg>Arrêter</button>
+          <button type="button" class="btn btn--secondary" data-go="session"><svg class="icon icon--s" aria-hidden="true"><use href="#i-pencil"/></svg>Corriger</button>
+        </div>
+      </article>
+    </section>
+
+    <!-- 3. Résumé du jour : cours et taf séparés -->
+    <section class="section" aria-labelledby="acc-resume-t">
+      <div class="section-head">
+        <h2 class="section-title" id="acc-resume-t">Aujourd'hui</h2>
+        <button type="button" class="section-link" data-sheet="sheet-acc-bases" data-when="calme">Détail des heures</button>
+      </div>
+      <div class="stat-grid">
+        <div class="stat stat--study">
+          <span class="stat-label"><i aria-hidden="true"></i>Cours</span>
+          <span class="stat-value" data-when="encours calme">3<small>h</small>57</span>
+          <span class="stat-note" data-when="encours calme">1 session, fini à 12:02</span>
+          <span class="stat-value" data-when="vide">0<small>h</small></span>
+          <span class="stat-note" data-when="vide">Pas encore de lieu de cours</span>
+        </div>
+        <div class="stat stat--work">
+          <span class="stat-label"><i aria-hidden="true"></i>Taf</span>
+          <span class="stat-value" data-when="encours" data-timer="4447" data-timer-format="hm">1 h 14</span>
+          <span class="stat-note" data-when="encours">En cours, 3 h prévues</span>
+          <span class="stat-value" data-when="calme">3<small>h</small></span>
+          <span class="stat-note" data-when="calme">Heures pleines, exact 3 h 04</span>
+          <span class="stat-value" data-when="vide">0<small>h</small></span>
+          <span class="stat-note" data-when="vide">Pas encore de lieu de taf</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Chronologie du jour : ruban horaire + sessions -->
+    <section class="section" aria-labelledby="acc-chrono-t">
+      <div class="section-head">
+        <h2 class="section-title" id="acc-chrono-t">Ta journée</h2>
+        <button type="button" class="section-link" data-go="sessions" data-when="encours calme">Tout voir</button>
+      </div>
+
+      <div class="card" data-when="encours calme">
+        <div class="timeline" style="--from:6;--to:24" role="img" data-when="encours"
+             aria-label="Ruban de la journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf depuis 17:56, prévu jusqu'à 21:00.">
+          <div class="timeline-track">
+            <i class="timeline-seg timeline-seg--planned" style="--s:18;--e:21"></i>
+            <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
+            <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
+            <i class="timeline-seg timeline-seg--work is-live" style="--s:17.93;--e:19.17"></i>
+            <i class="timeline-now" style="--s:19.17"></i>
+          </div>
+          <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
+        </div>
+        <div class="timeline" style="--from:6;--to:24" role="img" data-when="calme"
+             aria-label="Ruban de la journée : cours de 8:05 à 12:02, courses de 12:20 à 12:45, taf de 17:56 à 21:00.">
+          <div class="timeline-track">
+            <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
+            <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
+            <i class="timeline-seg timeline-seg--work" style="--s:17.93;--e:21"></i>
+            <i class="timeline-now" style="--s:21.6"></i>
+          </div>
+          <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
+        </div>
+        <div class="timeline-legend" aria-hidden="true">
+          <span><i class="lg-study"></i>Cours</span><span><i class="lg-work"></i>Taf</span><span><i class="lg-errand"></i>Courses</span>
+        </div>
+      </div>
+
+      <div class="list" data-when="encours calme">
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <span class="row-main"><span class="row-title">Cours</span><span class="row-sub">Fac de lettres, <span class="num">08:05</span> à <span class="num">12:02</span></span></span>
+          <span class="row-value num">3 h 57</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main"><span class="row-title">Courses</span><span class="row-sub">Marché du Canal, <span class="num">12:20</span> à <span class="num">12:45</span>. Pas compté.</span></span>
+          <span class="row-value num">25 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Taf</span>
+            <span class="row-sub" data-when="encours">Supérette du Canal, depuis <span class="num">17:56</span></span>
+            <span class="row-sub" data-when="calme">Supérette du Canal, <span class="num">17:56</span> à <span class="num">21:00</span></span>
+          </span>
+          <span class="row-value num" data-when="encours" data-timer="4447" data-timer-format="hm">1 h 14</span>
+          <span class="row-value num" data-when="calme">3 h 04</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+
+      <div class="card card--outline" data-when="vide">
+        <div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <h3 class="empty-title">Rien pour l'instant, profites-en.</h3>
+          <p class="empty-text">Dès que t'arrives quelque part, ta journée se dessine ici, heure par heure.</p>
+        </div>
+        <div class="timeline" style="--from:6;--to:24" role="img" aria-label="Ruban de la journée, vide pour l'instant.">
+          <div class="timeline-track"><i class="timeline-now" style="--s:19.17"></i></div>
+          <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- 5. Ajout rapide -->
+  <div class="fab-dock">
+    <button type="button" class="fab" data-sheet="sheet-acc-ajout" aria-label="Ajouter ou démarrer une session"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+  </div>
+
+  <!-- Feuilles (déplacées par le shell dans la couche des feuilles au chargement) -->
+  <div class="sheet" id="sheet-acc-ajout">
+    <h2 class="sheet-title">Ajouter</h2>
+    <div class="list">
+      <button type="button" class="row" id="acc-start">
+        <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+        <span class="row-main"><span class="row-title">Démarrer une session maintenant</span><span class="row-sub">Si je t'ai pas vu arriver</span></span>
+      </button>
+      <button type="button" class="row" data-go="session-ajout">
+        <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+        <span class="row-main"><span class="row-title">Ajouter une session passée</span><span class="row-sub">Tu choisis le lieu et les heures</span></span>
+        <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+      </button>
+      <button type="button" class="row" data-go="lieu-ajout">
+        <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+        <span class="row-main"><span class="row-title">Ajouter un lieu</span><span class="row-sub">Taf, cours, courses ou chez toi</span></span>
+        <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-acc-pourquoi">
+    <h2 class="sheet-title">Pourquoi cette carte ?</h2>
+    <p class="sheet-text">Je te montre une seule chose à la fois : la plus utile maintenant. Là, ton arrivée au taf attend ton feu vert pour compter dans tes heures.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Ce que j'ai vu</span><span class="row-sub">T'es entré dans la zone de la Supérette du Canal à 17:56, à plus ou moins 3 min.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Pourquoi maintenant</span><span class="row-sub">Tant que c'est pas confirmé, ta session reste marquée à vérifier.</span></span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Si tu l'ignores</span><span class="row-sub">Rien de grave. Je te la repropose plus tard, moins souvent.</span></span></div>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK, compris</button>
+  </div>
+
+  <div class="sheet" id="sheet-acc-autres">
+    <h2 class="sheet-title">3 trucs à confirmer</h2>
+    <div class="list">
+      <button type="button" class="row" data-go="session">
+        <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+        <span class="row-main"><span class="row-title">T'es parti de la fac à 12:02 ?</span><span class="row-sub">Aujourd'hui</span></span>
+        <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+      </button>
+      <button type="button" class="row" data-go="session">
+        <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+        <span class="row-main"><span class="row-title">Tu faisais juste tes courses, non ?</span><span class="row-sub">Marché du Canal, 25 min ce midi</span></span>
+        <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+      </button>
+      <button type="button" class="row" data-go="doute">
+        <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+        <span class="row-main"><span class="row-title">Samedi, fin à 20:38 : je compte 20 h ou 21 h ?</span><span class="row-sub">Zone de doute, c'est toi qui choisis</span></span>
+        <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <div class="sheet" id="sheet-acc-bases">
+    <h2 class="sheet-title">Tes heures de taf aujourd'hui</h2>
+    <p class="sheet-text">Je garde les trois en parallèle. Changer de base ne modifie jamais tes sessions.</p>
+    <div class="list">
+      <div class="row"><span class="row-main"><span class="row-title">Heures pleines</span><span class="row-sub">Utilisée pour tes stats et ton contrat</span></span><span class="row-value num">3 h</span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Exact</span><span class="row-sub">17:56 à 21:00, à la seconde près</span></span><span class="row-value num">3 h 04</span></div>
+      <div class="row"><span class="row-main"><span class="row-title">Planning</span><span class="row-sub">18:00 à 21:00</span></span><span class="row-value num">3 h</span></div>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var ask = document.getElementById('acc-now-ask'), done = document.getElementById('acc-now-done');
+    function answered(yes) { ask.hidden = yes; done.hidden = !yes; }
+    document.getElementById('acc-now-yes').addEventListener('click', function () {
+      answered(true);
+      toast('C\'est noté : arrivée à 17:56.', { undo: function () { answered(false); } });
+    });
+    document.getElementById('acc-now-later').addEventListener('click', function () {
+      answered(true);
+      toast('OK, je te la repropose dans une heure.', { undo: function () { answered(false); } });
+    });
+    document.getElementById('acc-stop').addEventListener('click', function () {
+      setState('accueil', 'calme');
+      toast('Session arrêtée.', { undo: function () { setState('accueil', 'encours'); } });
+    });
+    document.getElementById('acc-start').addEventListener('click', function () {
+      closeSheet();
+      setState('accueil', 'encours');
+      toast('C\'est parti, je compte.');
+    });
+  });
+  </script>
+</section>
+<!-- 90_reglages.html -->
+<section class="screen" id="scr-reglages" data-title="Réglages" data-group="Réglages" data-tab="accueil"
+         data-states="ok:Tout est bon,limite:Localisation limitée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="accueil"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Accueil</button>
+    <h1 class="navbar-title">Réglages</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Statuts détectés : ce dont l'app a besoin pour noter les heures toute seule -->
+    <section class="section" aria-labelledby="reg-statuts-t">
+      <div class="section-head"><h2 class="section-title" id="reg-statuts-t">Ce que je détecte</h2></div>
+
+      <div class="banner banner--error" role="alert" data-when="limite">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Je te vois seulement quand l'app est ouverte</p>
+          <p class="banner-text">Du coup je rate tes arrivées et tes départs. Passe la localisation sur « Toujours » pour que je note tes heures tout seul.</p>
+          <button type="button" class="banner-action" id="reg-fix-loc">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-nav"/></svg></span>
+          <span class="row-main"><span class="row-title">Localisation</span><span class="row-sub">Pour savoir quand t'arrives et quand tu pars</span></span>
+          <span class="status status--ok" data-when="ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Toujours</span>
+          <span class="status status--error" data-when="limite"><svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>App ouverte</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title">Position exacte</span><span class="row-sub">Sans ça, je confonds le taf et le magasin d'à côté</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Activée</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title">Notifications</span><span class="row-sub">Pour te demander de confirmer en un tap</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Autorisées</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+          <span class="row-main"><span class="row-title">Actualisation en arrière-plan</span><span class="row-sub">Pour rattraper ce qui s'est passé écran éteint</span></span>
+          <span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Activée</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-battery"/></svg></span>
+          <span class="row-main"><span class="row-title">Mode économie d'énergie</span><span class="row-sub">Quand il est actif, la détection peut avoir quelques minutes de retard</span></span>
+          <span class="status status--warn"><svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>Actif</span>
+        </div>
+      </div>
+      <p class="section-foot">Tout reste sur ton tel. Pas de compte, pas de serveur.</p>
+    </section>
+
+    <!-- Fonctionnalités -->
+    <section class="section" aria-label="Fonctionnalités">
+      <div class="list">
+        <button type="button" class="row" data-go="fonctionnalites">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span>
+          <span class="row-main"><span class="row-title">Fonctionnalités</span><span class="row-sub">Active seulement ce qui te sert : planning, paie, congés...</span></span>
+          <span class="row-value">7 actives</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Apparence -->
+    <section class="section" aria-labelledby="reg-app-t">
+      <div class="section-head"><h2 class="section-title" id="reg-app-t">Apparence</h2></div>
+      <div class="card">
+        <div class="field">
+          <span class="field-label" id="reg-theme-l">Thème</span>
+          <div class="segmented" role="group" aria-labelledby="reg-theme-l">
+            <button type="button" data-theme-set="auto" aria-pressed="false">Auto</button>
+            <button type="button" data-theme-set="light" aria-pressed="false">Clair</button>
+            <button type="button" data-theme-set="dark" aria-pressed="false">Sombre</button>
+            <button type="button" data-theme-set="amoled" aria-pressed="false">Noir pur</button>
+          </div>
+          <span class="field-help" id="reg-theme-help">Auto suit le réglage de ton iPhone.</span>
+        </div>
+        <div class="field">
+          <span class="field-label" id="reg-accent-l">Couleur d'accent</span>
+          <div class="swatches" role="group" aria-labelledby="reg-accent-l">
+            <button type="button" class="swatch" style="--c:var(--accent)" aria-pressed="true" aria-label="Bleu de travail"></button>
+            <button type="button" class="swatch" style="--c:#0E7C86" aria-pressed="false" aria-label="Canard"></button>
+            <button type="button" class="swatch" style="--c:#3E7B27" aria-pressed="false" aria-label="Sapin"></button>
+            <button type="button" class="swatch" style="--c:#B4630A" aria-pressed="false" aria-label="Ambre"></button>
+            <button type="button" class="swatch" style="--c:#C2410C" aria-pressed="false" aria-label="Brique"></button>
+            <button type="button" class="swatch" style="--c:#B5306B" aria-pressed="false" aria-label="Framboise"></button>
+            <button type="button" class="swatch" style="--c:#7A3FB8" aria-pressed="false" aria-label="Prune"></button>
+            <button type="button" class="swatch" style="--c:#5B6475" aria-pressed="false" aria-label="Ardoise"></button>
+          </div>
+        </div>
+        <div class="field">
+          <span class="field-label" id="reg-dens-l">Densité</span>
+          <div class="segmented" id="reg-density" role="group" aria-labelledby="reg-dens-l">
+            <button type="button" data-value="comfortable" aria-pressed="true">Confortable</button>
+            <button type="button" data-value="compact" aria-pressed="false">Compacte</button>
+          </div>
+        </div>
+      </div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Les couleurs par activité arrivent avec l'app.">
+          <span class="row-main"><span class="row-title">Couleurs des activités</span><span class="row-sub">Taf, cours, courses</span></span>
+          <span class="chip-row" aria-hidden="true"><span class="chip chip--work">Taf</span><span class="chip chip--study">Cours</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Les icônes alternatives arrivent avec l'app.">
+          <span class="row-main"><span class="row-title">Icône de l'app</span><span class="row-sub">3 au choix</span></span>
+          <span class="row-value">Bleu</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">La taille du texte suit celle de ton iPhone, partout.</p>
+    </section>
+
+    <!-- Animations et sensations -->
+    <section class="section" aria-labelledby="reg-anim-t">
+      <div class="section-head"><h2 class="section-title" id="reg-anim-t">Animations et sensations</h2></div>
+      <div class="card">
+        <div class="field">
+          <span class="field-label" id="reg-motion-l">Animations</span>
+          <div class="segmented" id="reg-motion" role="group" aria-labelledby="reg-motion-l">
+            <button type="button" data-value="system" aria-pressed="true">Système</button>
+            <button type="button" data-value="reduced" aria-pressed="false">Réduites</button>
+            <button type="button" data-value="none" aria-pressed="false">Aucune</button>
+          </div>
+          <span class="field-help">Système suit « Réduire les animations » de ton iPhone.</span>
+        </div>
+      </div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-vibrate"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-hapt">Retours haptiques</span><span class="row-sub">Une petite vibration quand tu confirmes</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-hapt"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sound"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-sons">Sons</span><span class="row-sub">Coupés par défaut</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="reg-sons"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-fete">Effets de célébration</span><span class="row-sub">Quand t'atteins un objectif</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-fete"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Suivi -->
+    <section class="section" aria-labelledby="reg-suivi-t">
+      <div class="section-head"><h2 class="section-title" id="reg-suivi-t">Suivi</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="reg-pasauj">Pas aujourd'hui</span><span class="row-sub">Je coupe la détection jusqu'à demain matin</span></span>
+          <button type="button" class="switch" id="reg-pasauj-sw" role="switch" aria-checked="false" aria-labelledby="reg-pasauj"></button>
+        </div>
+        <button type="button" class="row" data-sheet="sheet-reg-base">
+          <span class="row-main"><span class="row-title">Base de calcul des heures</span><span class="row-sub">Ce qui compte pour tes stats et ton contrat</span></span>
+          <span class="row-value" id="reg-base-val">Heures pleines</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Rayon par défaut</span><span class="row-sub">La taille de la zone autour d'un nouveau lieu</span></span>
+          <span class="row-value num">100 m</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Seuil de pause</span><span class="row-sub">En dessous, une sortie compte comme une pause</span></span>
+          <span class="row-value num">15 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Délai avant de valider un départ</span><span class="row-sub">Pour pas couper ta session si tu sors deux minutes</span></span>
+          <span class="row-value num">5 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Mode économie</span><span class="row-sub">Auto : je ralentis quand ta batterie est basse</span></span>
+          <span class="row-value">Auto</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+    </section>
+
+    <!-- Notifications et affichage -->
+    <section class="section" aria-labelledby="reg-aff-t">
+      <div class="section-head"><h2 class="section-title" id="reg-aff-t">Notifications et affichage</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-go="notifications">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title">Notifications</span><span class="row-sub">Par catégorie, heures silencieuses, 6 par jour maximum</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="reg-24h">Format 24 h</span><span class="row-sub">17:56 plutôt que 5:56 PM</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-24h"></button>
+        </div>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Format des durées</span><span class="row-sub">7 h 30 ou 7,5 h</span></span>
+          <span class="row-value num">7 h 30</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Premier jour de la semaine</span></span>
+          <span class="row-value">Lundi</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-main"><span class="row-title">Onglet de démarrage</span></span>
+          <span class="row-value">Accueil</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-eye-off"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-discret">Mode discret</span><span class="row-sub">Masque les montants en euros</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="reg-discret"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sécurité -->
+    <section class="section" aria-labelledby="reg-secu-t">
+      <div class="section-head"><h2 class="section-title" id="reg-secu-t">Sécurité</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Réglage fin : dans l'app.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-faceid"/></svg></span>
+          <span class="row-main"><span class="row-title">Verrouillage Face ID</span><span class="row-sub">Au lancement ou après quelques minutes</span></span>
+          <span class="row-value">Désactivé</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
+          <span class="row-main"><span class="row-title" id="reg-flou">Flou dans le sélecteur d'apps</span><span class="row-sub">Personne ne voit tes heures par-dessus ton épaule</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="reg-flou"></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Données -->
+    <section class="section" aria-labelledby="reg-data-t">
+      <div class="section-head"><h2 class="section-title" id="reg-data-t">Tes données</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-toast="Export prêt : dans l'app, il part dans Fichiers.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-upload"/></svg></span>
+          <span class="row-main"><span class="row-title">Exporter en JSON</span><span class="row-sub">Sessions, lieux et réglages dans un seul fichier</span></span>
+        </button>
+        <button type="button" class="row" data-toast="Import : dans l'app, tu choisis un fichier.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-download"/></svg></span>
+          <span class="row-main"><span class="row-title">Importer un fichier</span><span class="row-sub">Je te montre ce qui change avant de toucher à quoi que ce soit</span></span>
+        </button>
+        <button type="button" class="row" data-toast="Suppression par période : dans l'app.">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="row-main"><span class="row-title">Supprimer une période</span><span class="row-sub">Tu choisis les dates</span></span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row row--destructive" data-sheet="sheet-reg-suppr">
+          <span class="row-icon row-icon--danger"><svg class="icon" aria-hidden="true"><use href="#i-trash"/></svg></span>
+          <span class="row-main"><span class="row-title">Tout supprimer</span><span class="row-sub">Sessions, lieux, planning. Avec double confirmation.</span></span>
+        </button>
+      </div>
+      <button type="button" class="btn btn--secondary btn--block" id="reg-reset">Réinitialiser les réglages</button>
+      <p class="section-foot">Réinitialiser remet les réglages d'origine sans toucher à tes données.</p>
+    </section>
+
+    <p class="section-foot" style="text-align:center">Personal Life Tracker <span class="num">0.1</span>, maquette</p>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-reg-base">
+    <h2 class="sheet-title">Base de calcul des heures</h2>
+    <p class="sheet-text">L'heure exacte reste toujours enregistrée et affichée à côté. Tu peux changer quand tu veux, rien n'est perdu.</p>
+    <div class="list" role="radiogroup" aria-label="Base de calcul" id="reg-base-group">
+      <button type="button" class="row" role="radio" aria-checked="true" data-value="Heures pleines">
+        <span class="row-main"><span class="row-title">Heures pleines</span><span class="row-sub">17:56 compte comme 18 h. Entre :15 et :45, c'est toi qui choisis.</span></span>
+        <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+      </button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Exacte">
+        <span class="row-main"><span class="row-title">Exacte</span><span class="row-sub">À la minute près, sans arrondi.</span></span>
+        <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+      </button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Planning">
+        <span class="row-main"><span class="row-title">Planning</span><span class="row-sub">Les heures prévues, quand t'as un planning.</span></span>
+        <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+      </button>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK</button>
+  </div>
+
+  <div class="sheet" id="sheet-reg-suppr">
+    <h2 class="sheet-title">Tout supprimer ?</h2>
+    <p class="sheet-text">Ça efface tes sessions, tes lieux et ton planning de ce tel. C'est définitif : sans export, impossible de revenir en arrière.</p>
+    <div class="field" id="reg-suppr-field">
+      <label class="field-label" for="reg-suppr-input">Pour confirmer, écris SUPPRIMER</label>
+      <input class="input" id="reg-suppr-input" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="SUPPRIMER">
+    </div>
+    <div class="btn-stack">
+      <button type="button" class="btn btn--destructive btn--block" id="reg-suppr-go" disabled>Tout supprimer</button>
+      <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Garder mes données</button>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var app = document.getElementById('app');
+    document.getElementById('reg-density').addEventListener('change', function (e) {
+      if (e.detail.value === 'compact') app.setAttribute('data-density', 'compact'); else app.removeAttribute('data-density');
+    });
+    document.getElementById('reg-motion').addEventListener('change', function (e) {
+      if (e.detail.value === 'system') app.removeAttribute('data-motion'); else app.setAttribute('data-motion', 'none');
+    });
+    document.getElementById('reg-base-group').addEventListener('change', function (e) {
+      document.getElementById('reg-base-val').textContent = e.detail.value;
+    });
+    document.getElementById('reg-pasauj-sw').addEventListener('change', function (e) {
+      toast(e.detail.checked ? 'Détection en pause jusqu\'à demain 6:00.' : 'Détection relancée.');
+    });
+    document.getElementById('reg-fix-loc').addEventListener('click', function () {
+      setState('reglages', 'ok');
+      toast('Localisation sur « Toujours ». Merci, je gère la suite.', { undo: function () { setState('reglages', 'limite'); } });
+    });
+    document.getElementById('reg-reset').addEventListener('click', function () {
+      var before = PLT.theme().pref;
+      setTheme('auto');
+      toast('Réglages d\'origine remis. Tes données n\'ont pas bougé.', { undo: function () { setTheme(before); } });
+    });
+    var input = document.getElementById('reg-suppr-input'), btn = document.getElementById('reg-suppr-go');
+    input.addEventListener('input', function () { btn.disabled = input.value.trim().toUpperCase() !== 'SUPPRIMER'; });
+    btn.addEventListener('click', function () {
+      closeSheet(); input.value = ''; btn.disabled = true;
+      toast('Dans l\'app, tout serait effacé ici. La maquette ne supprime rien.');
+    });
+  });
+  </script>
+</section>
+          </main>
+
+          <nav class="tabbar" id="tabbar" aria-label="Onglets">
+            <button type="button" class="tab" data-tab="accueil" data-go="accueil"><svg class="icon" aria-hidden="true"><use href="#i-home"/></svg>Accueil</button>
+            <button type="button" class="tab" data-tab="planning" data-go="planning"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg>Planning</button>
+            <button type="button" class="tab" data-tab="lieux" data-go="lieux"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg>Lieux</button>
+            <button type="button" class="tab" data-tab="stats" data-go="stats"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg>Statistiques</button>
+          </nav>
+
+          <div class="overlay-host" id="overlay-host">
+            <div class="sheet-backdrop" id="sheet-backdrop"></div>
+            <div class="toast" id="toast" role="status" aria-live="polite" hidden>
+              <span class="toast-msg" id="toast-msg"></span>
+              <button type="button" class="toast-undo" id="toast-undo" hidden>Annuler</button>
+            </div>
+          </div>
+          <div class="homebar" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==========================================================================
+   JS partagé de la maquette. API publique (voir README) :
+   go(nom)  back(repli)  openSheet(id)  closeSheet()  toast(msg, {undo, duration})
+   setTheme('auto'|'light'|'dark'|'amoled')  setState(nomEcran, etat)
+   PLT.ready(fn)  PLT.onShow(nom, fn)  PLT.fmtHMS(s)  PLT.fmtHM(s)  PLT.store.get/set
+   ========================================================================== */
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var app = $('#app'), host = $('#overlay-host'), tabbar = $('#tabbar'), screensEl = $('#screens');
+  var screens = {}, order = [], stack = [], current = null, showHooks = {};
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem('plt.' + k); return v === null ? d : v; } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem('plt.' + k, v); } catch (e) { /* stockage indisponible : on continue sans */ } }
+  };
+
+  /* ---------- écrans et navigation ---------- */
+  $$('.screen', screensEl).forEach(function (el) {
+    var name = el.id.replace(/^scr-/, '');
+    screens[name] = el; order.push(name);
+  });
+  var home = screens.accueil ? 'accueil' : order[0];
+
+  function show(name) {
+    if (!screens[name]) name = home;
+    var el = screens[name];
+    if (current === name) return;
+    closeSheet(true);
+    order.forEach(function (n) { screens[n].classList.toggle('is-active', n === name); });
+    current = name;
+    el.scrollTop = 0;
+    app.classList.toggle('no-tabbar', el.getAttribute('data-tabbar') === 'hide');
+    app.classList.toggle('is-fullbleed', el.hasAttribute('data-fullbleed'));
+    var tab = el.getAttribute('data-tab') || '';
+    $$('.tab', tabbar).forEach(function (b) {
+      if (b.getAttribute('data-tab') === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    applyState(el);
+    syncPicker();
+    (showHooks[name] || []).forEach(function (fn) { fn(el); });
+    el.dispatchEvent(new CustomEvent('plt:show', { bubbles: true, detail: { name: name } }));
+  }
+  function go(name) {
+    if (!screens[name]) { toast('Cet écran n\'est pas encore dans la maquette.'); return false; }
+    if (current && current !== name) stack.push(current);
+    if (stack.length > 40) stack.shift();
+    if (location.hash.slice(1) === name) show(name); else location.hash = name;
+    return true;
+  }
+  function back(fallback) {
+    var prev = stack.pop() || fallback || home;
+    if (!screens[prev]) prev = home;
+    if (location.hash.slice(1) === prev) show(prev); else location.hash = prev;
+  }
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+
+  /* ---------- états d'un écran (data-states + data-when) ---------- */
+  function statesOf(el) {
+    return (el.getAttribute('data-states') || '').split(',').map(function (s) {
+      var p = s.split(':'); return p[0].trim() ? { id: p[0].trim(), label: (p[1] || p[0]).trim() } : null;
+    }).filter(Boolean);
+  }
+  function applyState(el) {
+    var list = statesOf(el);
+    var state = el.getAttribute('data-state') || (list[0] && list[0].id) || '';
+    if (state) el.setAttribute('data-state', state);
+    $$('[data-when]', el).forEach(function (n) {
+      n.hidden = n.getAttribute('data-when').split(/\s+/).indexOf(state) === -1;
+    });
+  }
+  function setState(name, state) {
+    var el = screens[name]; if (!el) return;
+    el.setAttribute('data-state', state);
+    applyState(el);
+    if (name === current) syncPicker();
+    el.dispatchEvent(new CustomEvent('plt:state', { bubbles: true, detail: { name: name, state: state } }));
+  }
+
+  /* ---------- sélecteur d'écrans et d'états (hors app) ---------- */
+  var listEl = $('#proto-list'), selEl = $('#proto-screen-select');
+  var stGroup = $('#proto-states-group'), stSeg = $('#proto-states'), stSel = $('#proto-states-select');
+  function buildPicker() {
+    var groups = [], byName = {};
+    order.forEach(function (n) {
+      var g = screens[n].getAttribute('data-group') || 'Autres';
+      if (!byName[g]) { byName[g] = []; groups.push(g); }
+      byName[g].push(n);
+    });
+    groups.forEach(function (g) {
+      var box = document.createElement('div'), h = document.createElement('h3'), ul = document.createElement('ul');
+      var og = document.createElement('optgroup');
+      h.textContent = g; og.label = g;
+      byName[g].forEach(function (n) {
+        var title = screens[n].getAttribute('data-title') || n;
+        var li = document.createElement('li'), b = document.createElement('button');
+        b.type = 'button'; b.textContent = title; b.setAttribute('data-go', n); b.setAttribute('data-pick', n);
+        li.appendChild(b); ul.appendChild(li);
+        var o = document.createElement('option'); o.value = n; o.textContent = title; og.appendChild(o);
+      });
+      box.appendChild(h); box.appendChild(ul); listEl.appendChild(box); selEl.appendChild(og);
+    });
+    selEl.addEventListener('change', function () { go(selEl.value); });
+    stSel.addEventListener('change', function () { setState(current, stSel.value); });
+  }
+  function syncPicker() {
+    $$('[data-pick]', listEl).forEach(function (b) {
+      if (b.getAttribute('data-pick') === current) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    selEl.value = current;
+    var el = screens[current], list = statesOf(el), state = el.getAttribute('data-state');
+    stGroup.hidden = list.length < 2;
+    stSeg.textContent = ''; stSel.textContent = '';
+    list.forEach(function (s) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = s.label; b.setAttribute('aria-pressed', String(s.id === state));
+      b.addEventListener('click', function () { setState(current, s.id); });
+      stSeg.appendChild(b);
+      var o = document.createElement('option'); o.value = s.id; o.textContent = s.label; o.selected = s.id === state;
+      stSel.appendChild(o);
+    });
+  }
+
+  /* ---------- thème de l'app ---------- */
+  var themePref = 'auto';
+  var mqDark = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function resolveTheme(pref) {
+    if (pref !== 'auto') return pref;
+    var hostTheme = document.documentElement.getAttribute('data-theme');
+    if (hostTheme === 'dark' || hostTheme === 'light') return hostTheme;
+    return mqDark && mqDark.matches ? 'dark' : 'light';
+  }
+  function setTheme(pref, silent) {
+    if (['auto', 'light', 'dark', 'amoled'].indexOf(pref) === -1) pref = 'auto';
+    themePref = pref;
+    var mode = resolveTheme(pref);
+    app.setAttribute('data-theme', mode);
+    $$('[data-theme-set]').forEach(function (b) {
+      var v = b.getAttribute('data-theme-set');
+      var on = v === pref || (pref === 'auto' && v === mode && !b.closest('.app'));
+      b.setAttribute('aria-pressed', String(on));
+    });
+    if (!silent) store.set('theme', pref);
+    app.dispatchEvent(new CustomEvent('plt:theme', { bubbles: true, detail: { pref: pref, mode: mode } }));
+  }
+  if (mqDark && mqDark.addEventListener) mqDark.addEventListener('change', function () { if (themePref === 'auto') setTheme('auto', true); });
+
+  /* ---------- feuilles ---------- */
+  var openSheetEl = null, sheetOpener = null;
+  function openSheet(id) {
+    var el = document.getElementById(id);
+    if (!el || !el.classList.contains('sheet')) return;
+    if (openSheetEl) closeSheet(true);
+    sheetOpener = document.activeElement;
+    openSheetEl = el;
+    el.removeAttribute('inert');
+    host.classList.add('has-sheet');
+    el.classList.add('is-open');
+    screensEl.setAttribute('inert', ''); tabbar.setAttribute('inert', '');
+    el.scrollTop = 0;
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+    el.dispatchEvent(new CustomEvent('plt:sheet', { bubbles: true, detail: { open: true } }));
+  }
+  function closeSheet(quiet) {
+    if (!openSheetEl) return;
+    var el = openSheetEl; openSheetEl = null;
+    el.classList.remove('is-open'); el.setAttribute('inert', '');
+    host.classList.remove('has-sheet');
+    screensEl.removeAttribute('inert'); tabbar.removeAttribute('inert');
+    if (!quiet && sheetOpener && sheetOpener.focus) { try { sheetOpener.focus({ preventScroll: true }); } catch (e) { /* rien */ } }
+    sheetOpener = null;
+    el.dispatchEvent(new CustomEvent('plt:sheet', { bubbles: true, detail: { open: false } }));
+  }
+  function adoptSheets() {
+    $$('.sheet').forEach(function (el) {
+      host.insertBefore(el, $('#toast'));
+      el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+      el.setAttribute('tabindex', '-1'); el.setAttribute('inert', '');
+      var t = $('.sheet-title', el);
+      if (t) { if (!t.id) t.id = el.id + '-title'; el.setAttribute('aria-labelledby', t.id); }
+      if (!$('.sheet-grabber', el)) { var g = document.createElement('div'); g.className = 'sheet-grabber'; el.insertBefore(g, el.firstChild); }
+    });
+  }
+  $('#sheet-backdrop').addEventListener('click', function () { closeSheet(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && openSheetEl) closeSheet(); });
+
+  /* ---------- toast ---------- */
+  var toastEl = $('#toast'), toastMsg = $('#toast-msg'), toastUndo = $('#toast-undo'), toastTimer = 0, toastUndoFn = null;
+  function hideToast() {
+    clearTimeout(toastTimer);
+    toastEl.classList.remove('is-open'); toastUndoFn = null;
+    toastTimer = setTimeout(function () { toastEl.hidden = true; }, reduceMotion ? 0 : 300);
+  }
+  function toast(msg, opts) {
+    opts = opts || {};
+    clearTimeout(toastTimer);
+    toastMsg.textContent = msg;
+    toastUndoFn = typeof opts.undo === 'function' ? opts.undo : null;
+    toastUndo.hidden = !toastUndoFn;
+    toastUndo.textContent = opts.undoLabel || 'Annuler';
+    toastEl.hidden = false;
+    void toastEl.offsetWidth;
+    toastEl.classList.add('is-open');
+    toastTimer = setTimeout(hideToast, opts.duration || (toastUndoFn ? 6000 : 3200));
+  }
+  toastUndo.addEventListener('click', function () { var fn = toastUndoFn; hideToast(); if (fn) fn(); });
+
+  /* ---------- chronos en direct : <span data-timer="4447"> (secondes écoulées au chargement) ---------- */
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function fmtHMS(s) { s = Math.max(0, Math.floor(s)); return Math.floor(s / 3600) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60); }
+  function fmtHM(s) { s = Math.max(0, Math.floor(s)); var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? h + ' h ' + pad(m) : m + ' min'; }
+  var t0 = Date.now();
+  function tick() {
+    var dt = (Date.now() - t0) / 1000;
+    $$('[data-timer]').forEach(function (el) {
+      if (el.hasAttribute('data-timer-paused')) return;
+      var s = parseFloat(el.getAttribute('data-timer')) + dt;
+      var txt = el.getAttribute('data-timer-format') === 'hm' ? fmtHM(s) : fmtHMS(s);
+      if (el.textContent !== txt) el.textContent = txt;
+    });
+  }
+
+  /* ---------- clics délégués ---------- */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : e.target.parentElement;
+    if (!t) return;
+    var el;
+    if ((el = t.closest('.switch'))) {
+      var on = el.getAttribute('aria-checked') !== 'true';
+      el.setAttribute('aria-checked', String(on));
+      el.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { checked: on } }));
+    }
+    if ((el = t.closest('.segmented > button')) && !el.hasAttribute('data-theme-set')) {
+      $$('button', el.parentElement).forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); });
+      el.parentElement.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: el.getAttribute('data-value') } }));
+    }
+    if ((el = t.closest('[role="radiogroup"] [role="radio"]'))) {
+      $$('[role="radio"]', el.closest('[role="radiogroup"]')).forEach(function (r) { r.setAttribute('aria-checked', String(r === el)); });
+      el.closest('[role="radiogroup"]').dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: el.getAttribute('data-value') } }));
+    }
+    if ((el = t.closest('.swatches > .swatch'))) {
+      $$('.swatch', el.parentElement).forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); });
+    }
+    if ((el = t.closest('[data-theme-set]'))) setTheme(el.getAttribute('data-theme-set'));
+    if ((el = t.closest('[data-sheet-close]'))) closeSheet();
+    if ((el = t.closest('[data-sheet]'))) openSheet(el.getAttribute('data-sheet'));
+    if ((el = t.closest('[data-toast]'))) toast(el.getAttribute('data-toast'));
+    if ((el = t.closest('[data-back]'))) { back(el.getAttribute('data-back')); return; }
+    if ((el = t.closest('[data-go]'))) { e.preventDefault(); go(el.getAttribute('data-go')); }
+  });
+
+  /* ---------- mise à l'échelle du cadre ---------- */
+  var wrap = $('#device-wrap'), device = $('#device');
+  function fit() {
+    if (window.innerWidth <= 480) { wrap.style.width = wrap.style.height = ''; device.style.transform = ''; return; }
+    device.style.transform = ''; wrap.style.width = wrap.style.height = '';
+    var top = wrap.getBoundingClientRect().top + window.scrollY;
+    var stacked = window.innerWidth < 900;
+    var availH = window.innerHeight - (stacked ? top : 48) - (stacked ? 16 : 0);
+    var availW = wrap.parentElement.clientWidth;
+    var s = Math.max(.5, Math.min(1, availH / 868, availW / 414));
+    wrap.style.width = Math.round(414 * s) + 'px'; wrap.style.height = Math.round(868 * s) + 'px';
+    device.style.transform = s < 1 ? 'scale(' + s + ')' : '';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- API publique ---------- */
+  var queue = (window.PLT && window.PLT._q) || [];
+  window.PLT = {
+    ready: function (fn) { try { fn(); } catch (e) { console.error(e); } },
+    onShow: function (name, fn) { (showHooks[name] = showHooks[name] || []).push(fn); },
+    fmtHMS: fmtHMS, fmtHM: fmtHM, store: store,
+    current: function () { return current; },
+    theme: function () { return { pref: themePref, mode: app.getAttribute('data-theme') }; }
+  };
+  window.go = go; window.back = back; window.openSheet = openSheet; window.closeSheet = closeSheet;
+  window.toast = toast; window.setTheme = setTheme; window.setState = setState;
+
+  /* ---------- init ---------- */
+  adoptSheets();
+  buildPicker();
+  order.forEach(function (n) { applyState(screens[n]); });
+  setTheme(store.get('theme', 'auto'), true);
+  queue.forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } });
+  fit();
+  show(location.hash.slice(1) || home);
+  tick(); setInterval(tick, 1000);
+})();
+</script>

@@ -1,0 +1,292 @@
+<script>
+/* ==========================================================================
+   JS partagé de la maquette. API publique (voir README) :
+   go(nom)  back(repli)  openSheet(id)  closeSheet()  toast(msg, {undo, duration})
+   setTheme('auto'|'light'|'dark'|'amoled')  setState(nomEcran, etat)
+   PLT.ready(fn)  PLT.onShow(nom, fn)  PLT.fmtHMS(s)  PLT.fmtHM(s)  PLT.store.get/set
+   ========================================================================== */
+(function () {
+  'use strict';
+  var $ = function (s, r) { return (r || document).querySelector(s); };
+  var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
+  var app = $('#app'), host = $('#overlay-host'), tabbar = $('#tabbar'), screensEl = $('#screens');
+  var screens = {}, order = [], stack = [], current = null, showHooks = {};
+  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var store = {
+    get: function (k, d) { try { var v = localStorage.getItem('plt.' + k); return v === null ? d : v; } catch (e) { return d; } },
+    set: function (k, v) { try { localStorage.setItem('plt.' + k, v); } catch (e) { /* stockage indisponible : on continue sans */ } }
+  };
+
+  /* ---------- écrans et navigation ---------- */
+  $$('.screen', screensEl).forEach(function (el) {
+    var name = el.id.replace(/^scr-/, '');
+    screens[name] = el; order.push(name);
+  });
+  var home = screens.accueil ? 'accueil' : order[0];
+
+  function show(name) {
+    if (!screens[name]) name = home;
+    var el = screens[name];
+    if (current === name) return;
+    closeSheet(true);
+    order.forEach(function (n) { screens[n].classList.toggle('is-active', n === name); });
+    current = name;
+    el.scrollTop = 0;
+    app.classList.toggle('no-tabbar', el.getAttribute('data-tabbar') === 'hide');
+    app.classList.toggle('is-fullbleed', el.hasAttribute('data-fullbleed'));
+    var tab = el.getAttribute('data-tab') || '';
+    $$('.tab', tabbar).forEach(function (b) {
+      if (b.getAttribute('data-tab') === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current');
+    });
+    applyState(el);
+    syncPicker();
+    (showHooks[name] || []).forEach(function (fn) { fn(el); });
+    el.dispatchEvent(new CustomEvent('plt:show', { bubbles: true, detail: { name: name } }));
+  }
+  function go(name) {
+    if (!screens[name]) { toast('Cet écran n\'est pas encore dans la maquette.'); return false; }
+    if (current && current !== name) stack.push(current);
+    if (stack.length > 40) stack.shift();
+    if (location.hash.slice(1) === name) show(name); else location.hash = name;
+    return true;
+  }
+  function back(fallback) {
+    var prev = stack.pop() || fallback || home;
+    if (!screens[prev]) prev = home;
+    if (location.hash.slice(1) === prev) show(prev); else location.hash = prev;
+  }
+  window.addEventListener('hashchange', function () { show(location.hash.slice(1)); });
+
+  /* ---------- états d'un écran (data-states + data-when) ---------- */
+  function statesOf(el) {
+    return (el.getAttribute('data-states') || '').split(',').map(function (s) {
+      var p = s.split(':'); return p[0].trim() ? { id: p[0].trim(), label: (p[1] || p[0]).trim() } : null;
+    }).filter(Boolean);
+  }
+  function applyState(el) {
+    var list = statesOf(el);
+    var state = el.getAttribute('data-state') || (list[0] && list[0].id) || '';
+    if (state) el.setAttribute('data-state', state);
+    $$('[data-when]', el).forEach(function (n) {
+      n.hidden = n.getAttribute('data-when').split(/\s+/).indexOf(state) === -1;
+    });
+  }
+  function setState(name, state) {
+    var el = screens[name]; if (!el) return;
+    el.setAttribute('data-state', state);
+    applyState(el);
+    if (name === current) syncPicker();
+    el.dispatchEvent(new CustomEvent('plt:state', { bubbles: true, detail: { name: name, state: state } }));
+  }
+
+  /* ---------- sélecteur d'écrans et d'états (hors app) ---------- */
+  var listEl = $('#proto-list'), selEl = $('#proto-screen-select');
+  var stGroup = $('#proto-states-group'), stSeg = $('#proto-states'), stSel = $('#proto-states-select');
+  function buildPicker() {
+    var groups = [], byName = {};
+    order.forEach(function (n) {
+      var g = screens[n].getAttribute('data-group') || 'Autres';
+      if (!byName[g]) { byName[g] = []; groups.push(g); }
+      byName[g].push(n);
+    });
+    groups.forEach(function (g) {
+      var box = document.createElement('div'), h = document.createElement('h3'), ul = document.createElement('ul');
+      var og = document.createElement('optgroup');
+      h.textContent = g; og.label = g;
+      byName[g].forEach(function (n) {
+        var title = screens[n].getAttribute('data-title') || n;
+        var li = document.createElement('li'), b = document.createElement('button');
+        b.type = 'button'; b.textContent = title; b.setAttribute('data-go', n); b.setAttribute('data-pick', n);
+        li.appendChild(b); ul.appendChild(li);
+        var o = document.createElement('option'); o.value = n; o.textContent = title; og.appendChild(o);
+      });
+      box.appendChild(h); box.appendChild(ul); listEl.appendChild(box); selEl.appendChild(og);
+    });
+    selEl.addEventListener('change', function () { go(selEl.value); });
+    stSel.addEventListener('change', function () { setState(current, stSel.value); });
+  }
+  function syncPicker() {
+    $$('[data-pick]', listEl).forEach(function (b) {
+      if (b.getAttribute('data-pick') === current) b.setAttribute('aria-current', 'true'); else b.removeAttribute('aria-current');
+    });
+    selEl.value = current;
+    var el = screens[current], list = statesOf(el), state = el.getAttribute('data-state');
+    stGroup.hidden = list.length < 2;
+    stSeg.textContent = ''; stSel.textContent = '';
+    list.forEach(function (s) {
+      var b = document.createElement('button');
+      b.type = 'button'; b.textContent = s.label; b.setAttribute('aria-pressed', String(s.id === state));
+      b.addEventListener('click', function () { setState(current, s.id); });
+      stSeg.appendChild(b);
+      var o = document.createElement('option'); o.value = s.id; o.textContent = s.label; o.selected = s.id === state;
+      stSel.appendChild(o);
+    });
+  }
+
+  /* ---------- thème de l'app ---------- */
+  var themePref = 'auto';
+  var mqDark = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+  function resolveTheme(pref) {
+    if (pref !== 'auto') return pref;
+    var hostTheme = document.documentElement.getAttribute('data-theme');
+    if (hostTheme === 'dark' || hostTheme === 'light') return hostTheme;
+    return mqDark && mqDark.matches ? 'dark' : 'light';
+  }
+  function setTheme(pref, silent) {
+    if (['auto', 'light', 'dark', 'amoled'].indexOf(pref) === -1) pref = 'auto';
+    themePref = pref;
+    var mode = resolveTheme(pref);
+    app.setAttribute('data-theme', mode);
+    $$('[data-theme-set]').forEach(function (b) {
+      var v = b.getAttribute('data-theme-set');
+      var on = v === pref || (pref === 'auto' && v === mode && !b.closest('.app'));
+      b.setAttribute('aria-pressed', String(on));
+    });
+    if (!silent) store.set('theme', pref);
+    app.dispatchEvent(new CustomEvent('plt:theme', { bubbles: true, detail: { pref: pref, mode: mode } }));
+  }
+  if (mqDark && mqDark.addEventListener) mqDark.addEventListener('change', function () { if (themePref === 'auto') setTheme('auto', true); });
+
+  /* ---------- feuilles ---------- */
+  var openSheetEl = null, sheetOpener = null;
+  function openSheet(id) {
+    var el = document.getElementById(id);
+    if (!el || !el.classList.contains('sheet')) return;
+    if (openSheetEl) closeSheet(true);
+    sheetOpener = document.activeElement;
+    openSheetEl = el;
+    el.removeAttribute('inert');
+    host.classList.add('has-sheet');
+    el.classList.add('is-open');
+    screensEl.setAttribute('inert', ''); tabbar.setAttribute('inert', '');
+    el.scrollTop = 0;
+    try { el.focus({ preventScroll: true }); } catch (e) { el.focus(); }
+    el.dispatchEvent(new CustomEvent('plt:sheet', { bubbles: true, detail: { open: true } }));
+  }
+  function closeSheet(quiet) {
+    if (!openSheetEl) return;
+    var el = openSheetEl; openSheetEl = null;
+    el.classList.remove('is-open'); el.setAttribute('inert', '');
+    host.classList.remove('has-sheet');
+    screensEl.removeAttribute('inert'); tabbar.removeAttribute('inert');
+    if (!quiet && sheetOpener && sheetOpener.focus) { try { sheetOpener.focus({ preventScroll: true }); } catch (e) { /* rien */ } }
+    sheetOpener = null;
+    el.dispatchEvent(new CustomEvent('plt:sheet', { bubbles: true, detail: { open: false } }));
+  }
+  function adoptSheets() {
+    $$('.sheet').forEach(function (el) {
+      host.insertBefore(el, $('#toast'));
+      el.setAttribute('role', 'dialog'); el.setAttribute('aria-modal', 'true');
+      el.setAttribute('tabindex', '-1'); el.setAttribute('inert', '');
+      var t = $('.sheet-title', el);
+      if (t) { if (!t.id) t.id = el.id + '-title'; el.setAttribute('aria-labelledby', t.id); }
+      if (!$('.sheet-grabber', el)) { var g = document.createElement('div'); g.className = 'sheet-grabber'; el.insertBefore(g, el.firstChild); }
+    });
+  }
+  $('#sheet-backdrop').addEventListener('click', function () { closeSheet(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && openSheetEl) closeSheet(); });
+
+  /* ---------- toast ---------- */
+  var toastEl = $('#toast'), toastMsg = $('#toast-msg'), toastUndo = $('#toast-undo'), toastTimer = 0, toastUndoFn = null;
+  function hideToast() {
+    clearTimeout(toastTimer);
+    toastEl.classList.remove('is-open'); toastUndoFn = null;
+    toastTimer = setTimeout(function () { toastEl.hidden = true; }, reduceMotion ? 0 : 300);
+  }
+  function toast(msg, opts) {
+    opts = opts || {};
+    clearTimeout(toastTimer);
+    toastMsg.textContent = msg;
+    toastUndoFn = typeof opts.undo === 'function' ? opts.undo : null;
+    toastUndo.hidden = !toastUndoFn;
+    toastUndo.textContent = opts.undoLabel || 'Annuler';
+    toastEl.hidden = false;
+    void toastEl.offsetWidth;
+    toastEl.classList.add('is-open');
+    toastTimer = setTimeout(hideToast, opts.duration || (toastUndoFn ? 6000 : 3200));
+  }
+  toastUndo.addEventListener('click', function () { var fn = toastUndoFn; hideToast(); if (fn) fn(); });
+
+  /* ---------- chronos en direct : <span data-timer="4447"> (secondes écoulées au chargement) ---------- */
+  function pad(n) { return (n < 10 ? '0' : '') + n; }
+  function fmtHMS(s) { s = Math.max(0, Math.floor(s)); return Math.floor(s / 3600) + ':' + pad(Math.floor(s % 3600 / 60)) + ':' + pad(s % 60); }
+  function fmtHM(s) { s = Math.max(0, Math.floor(s)); var h = Math.floor(s / 3600), m = Math.floor(s % 3600 / 60); return h ? h + ' h ' + pad(m) : m + ' min'; }
+  var t0 = Date.now();
+  function tick() {
+    var dt = (Date.now() - t0) / 1000;
+    $$('[data-timer]').forEach(function (el) {
+      if (el.hasAttribute('data-timer-paused')) return;
+      var s = parseFloat(el.getAttribute('data-timer')) + dt;
+      var txt = el.getAttribute('data-timer-format') === 'hm' ? fmtHM(s) : fmtHMS(s);
+      if (el.textContent !== txt) el.textContent = txt;
+    });
+  }
+
+  /* ---------- clics délégués ---------- */
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest ? e.target : e.target.parentElement;
+    if (!t) return;
+    var el;
+    if ((el = t.closest('.switch'))) {
+      var on = el.getAttribute('aria-checked') !== 'true';
+      el.setAttribute('aria-checked', String(on));
+      el.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { checked: on } }));
+    }
+    if ((el = t.closest('.segmented > button')) && !el.hasAttribute('data-theme-set')) {
+      $$('button', el.parentElement).forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); });
+      el.parentElement.dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: el.getAttribute('data-value') } }));
+    }
+    if ((el = t.closest('[role="radiogroup"] [role="radio"]'))) {
+      $$('[role="radio"]', el.closest('[role="radiogroup"]')).forEach(function (r) { r.setAttribute('aria-checked', String(r === el)); });
+      el.closest('[role="radiogroup"]').dispatchEvent(new CustomEvent('change', { bubbles: true, detail: { value: el.getAttribute('data-value') } }));
+    }
+    if ((el = t.closest('.swatches > .swatch'))) {
+      $$('.swatch', el.parentElement).forEach(function (b) { b.setAttribute('aria-pressed', String(b === el)); });
+    }
+    if ((el = t.closest('[data-theme-set]'))) setTheme(el.getAttribute('data-theme-set'));
+    if ((el = t.closest('[data-sheet-close]'))) closeSheet();
+    if ((el = t.closest('[data-sheet]'))) openSheet(el.getAttribute('data-sheet'));
+    if ((el = t.closest('[data-toast]'))) toast(el.getAttribute('data-toast'));
+    if ((el = t.closest('[data-back]'))) { back(el.getAttribute('data-back')); return; }
+    if ((el = t.closest('[data-go]'))) { e.preventDefault(); go(el.getAttribute('data-go')); }
+  });
+
+  /* ---------- mise à l'échelle du cadre ---------- */
+  var wrap = $('#device-wrap'), device = $('#device');
+  function fit() {
+    if (window.innerWidth <= 480) { wrap.style.width = wrap.style.height = ''; device.style.transform = ''; return; }
+    device.style.transform = ''; wrap.style.width = wrap.style.height = '';
+    var top = wrap.getBoundingClientRect().top + window.scrollY;
+    var stacked = window.innerWidth < 900;
+    var availH = window.innerHeight - (stacked ? top : 48) - (stacked ? 16 : 0);
+    var availW = wrap.parentElement.clientWidth;
+    var s = Math.max(.5, Math.min(1, availH / 868, availW / 414));
+    wrap.style.width = Math.round(414 * s) + 'px'; wrap.style.height = Math.round(868 * s) + 'px';
+    device.style.transform = s < 1 ? 'scale(' + s + ')' : '';
+  }
+  window.addEventListener('resize', fit);
+
+  /* ---------- API publique ---------- */
+  var queue = (window.PLT && window.PLT._q) || [];
+  window.PLT = {
+    ready: function (fn) { try { fn(); } catch (e) { console.error(e); } },
+    onShow: function (name, fn) { (showHooks[name] = showHooks[name] || []).push(fn); },
+    fmtHMS: fmtHMS, fmtHM: fmtHM, store: store,
+    current: function () { return current; },
+    theme: function () { return { pref: themePref, mode: app.getAttribute('data-theme') }; }
+  };
+  window.go = go; window.back = back; window.openSheet = openSheet; window.closeSheet = closeSheet;
+  window.toast = toast; window.setTheme = setTheme; window.setState = setState;
+
+  /* ---------- init ---------- */
+  adoptSheets();
+  buildPicker();
+  order.forEach(function (n) { applyState(screens[n]); });
+  setTheme(store.get('theme', 'auto'), true);
+  queue.forEach(function (fn) { try { fn(); } catch (e) { console.error(e); } });
+  fit();
+  show(location.hash.slice(1) || home);
+  tick(); setInterval(tick, 1000);
+})();
+</script>
