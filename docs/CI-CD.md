@@ -31,3 +31,8 @@ Notes de version : section du tag dans CHANGELOG.md (extract_changelog.py), sino
 ## État de vérification de ce kit (honnête)
 Vérifié dans l'environnement de génération (Linux) : syntaxe YAML des workflows, `bash -n` des scripts, scripts Python (exécutés), génération de source AltStore et sa validation, oracles contre une mutation.
 NON vérifié : compilation Swift/XcodeGen, exécution des workflows sur GitHub, noms exacts des simulateurs, runner `macos-latest`, `xcresulttool` (la sous-commande peut varier selon Xcode), ldid, format de source accepté par la version d'AltStore installée, installation sur iPhone. La phase 1 sert à les prouver pour de vrai.
+
+## Publier sans pousser de tag (ajout du 2026-11-16, demandé par l'utilisateur)
+beta.yml et release.yml se déclenchent aussi quand un push de branche modifie `release/BETA_VERSION` ou `release/STABLE_VERSION`.
+Le fichier contient le tag voulu (`v0.0.1-beta.1`, `v0.0.1`). Le workflow crée lui-même le tag et la release sur le commit poussé (`gh release create --target`).
+Pour publier : change la version dans le fichier, commit, push. Le déclenchement par tag marche toujours.
