@@ -14,6 +14,15 @@
       "screenshotURLs": [],
       "versions": [
         {
+          "version": "0.0.1-beta.4",
+          "buildVersion": "4",
+          "date": "2026-11-17T05:51:32Z",
+          "downloadURL": "https://github.com/ElProfessorFRidg/PersonalLifeTracker/releases/download/v0.0.1-beta.4/PersonalLifeTracker-0.0.1-beta.4.ipa",
+          "size": 1335043,
+          "minOSVersion": "17.0",
+          "localizedDescription": "- Étape 3 : classification travail, études, courses avec apprentissage, calibration des lieux, récupération après batterie vide, contrôle de l'horloge, assistant de dépannage.\n- Étape 5 : emploi (employeur, contrat, fin de contrat), paie de base (estimations), onglet Statistiques."
+        },
+        {
           "version": "0.0.1-beta.3",
           "buildVersion": "3",
           "date": "2026-11-16T15:02:27Z",
