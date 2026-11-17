@@ -203,7 +203,7 @@ struct CongesView: View {
                 }
             } else {
                 PLTListGroup {
-                    ForEach(Array(list.enumerated()), id: \.element.uid) { item in
+                    ForEach(Array(list.enumerated()), id: \.offset) { item in
                         leaveRow(item.element, isLast: item.offset == list.count - 1)
                     }
                 }
@@ -233,6 +233,8 @@ struct CongesView: View {
         if let employer = currentEmployer {
             let list: [LeaveEntry] = entries(of: employer)
             let today: Date = calendar.startOfDay(for: Date())
+            let existing: LeaveEntry? = r.entry
+            let deleteAction: (() -> Void)? = deleteHandler(for: existing)
             CongesEditSheet(isNew: r.entry == nil,
                             start: r.entry?.startDay ?? today,
                             end: r.entry?.endDay ?? today,
@@ -244,13 +246,18 @@ struct CongesView: View {
                             onSave: { (s: Date, e: Date, k: LeaveKindChoice, n: String) in
                                 save(existing: r.entry, start: s, end: e, kind: k, note: n, employer: employer)
                             },
-                            onDelete: r.entry == nil ? nil : { delete(r.entry, message: "Congé supprimé") })
+                            onDelete: deleteAction)
         } else {
             EmptyView()
         }
     }
 
     // MARK: Actions
+
+    private func deleteHandler(for entry: LeaveEntry?) -> (() -> Void)? {
+        guard let target = entry else { return nil }
+        return { delete(target, message: "Congé supprimé") }
+    }
 
     private func save(existing: LeaveEntry?, start: Date, end: Date, kind: LeaveKindChoice, note: String, employer: Employer) {
         let s: Date = calendar.startOfDay(for: start)
