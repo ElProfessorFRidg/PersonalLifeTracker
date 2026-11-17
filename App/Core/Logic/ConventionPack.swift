@@ -232,6 +232,7 @@ struct ConventionPack: Codable, Equatable, Identifiable {
 
 enum PackValidationError: Equatable {
     case emptyID
+    case duplicateID(String)
     case emptyName
     case invalidIDCC(String)
     case invalidDate(field: String, value: String)
@@ -248,6 +249,7 @@ enum PackValidationError: Equatable {
     var message: String {
         switch self {
         case .emptyID: return "Le pack n'a pas d'identifiant."
+        case .duplicateID(let v): return "L'identifiant \"\(v)\" existe déjà dans un autre pack."
         case .emptyName: return "Le pack n'a pas de nom."
         case .invalidIDCC(let v): return "Le numéro IDCC \"\(v)\" n'est pas valide (1 à 4 chiffres)."
         case .invalidDate(let field, let value): return "La date \"\(value)\" (\(field)) n'est pas valide, il faut AAAA-MM-JJ."
@@ -397,7 +399,7 @@ enum ConventionPackLoader {
                 continue
             }
             if seen.contains(pack.id) {
-                rejected.append(RejectedPack(fileName: fileName, packID: pack.id, errors: [.emptyID]))
+                rejected.append(RejectedPack(fileName: fileName, packID: pack.id, errors: [.duplicateID(pack.id)]))
                 continue
             }
             seen.insert(pack.id)
@@ -422,7 +424,7 @@ enum ConventionPackLoader {
             let outcome = accept(list, fileName: name)
             for pack in outcome.accepted {
                 if seenIDs.contains(pack.id) {
-                    result.rejected.append(RejectedPack(fileName: name, packID: pack.id, errors: [.emptyID]))
+                    result.rejected.append(RejectedPack(fileName: name, packID: pack.id, errors: [.duplicateID(pack.id)]))
                 } else {
                     seenIDs.insert(pack.id)
                     result.packs.append(pack)

@@ -1,0 +1,50 @@
+{
+  "id": "generic-code-du-travail",
+  "name": "Sans convention (Code du travail, valeurs à vérifier)",
+  "sector": "Autre",
+  "keywords": [
+    "code du travail",
+    "sans convention",
+    "general",
+    "generale",
+    "je ne sais pas",
+    "autre",
+    "droit commun"
+  ],
+  "summary": "Règles générales du Code du travail, utilisées tant que tu n'as pas choisi de convention.",
+  "sourceNote": "Valeurs notées le 2026-11-17 d'après les articles cités du Code du travail, NON relues sur Légifrance par l'app ni par l'agent (aucun accès en ligne). Une convention ou un accord d'entreprise peut prévoir mieux. À vérifier avec ta convention ou ta fiche de paie.",
+  "sourceURLs": [
+    "https://www.legifrance.gouv.fr",
+    "https://code.travail.gouv.fr"
+  ],
+  "toFill": [
+    "Majoration des heures de nuit",
+    "Majoration du dimanche",
+    "Jours fériés autres que le 1er mai",
+    "Heures complémentaires du temps partiel (mets ton seuil à toi dans le seuil hebdomadaire)",
+    "Taux horaire minimal de ta convention"
+  ],
+  "rules": {
+    "publicHoliday": {
+      "scope": "mayFirstOnly",
+      "percent": 100,
+      "source": "Code du travail, article L3133-6 : le 1er mai travaillé donne droit à une indemnité égale au salaire, soit +100 %. Non relu sur Légifrance.",
+      "sourceDate": "2026-11-17"
+    },
+    "overtime": {
+      "weeklyThresholdMinutes": 2100,
+      "bands": [
+        {
+          "overMinutes": 480,
+          "percent": 25
+        },
+        {
+          "percent": 50
+        }
+      ],
+      "source": "Code du travail, articles L3121-27 (durée légale de 35 h par semaine) et L3121-36 (majoration de 25 % pour les 8 premières heures au-delà, puis 50 %). Un accord peut fixer un taux plus bas, au moins 10 %. Non relu sur Légifrance.",
+      "sourceDate": "2026-11-17"
+    },
+    "cumulation": "highest"
+  }
+}

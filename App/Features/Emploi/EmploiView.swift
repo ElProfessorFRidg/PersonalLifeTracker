@@ -57,6 +57,36 @@ struct EmploiView: View {
                 }
             }
         }
+        if modules.isActive("contract_hours") {
+            NavigationLink {
+                ContratHeuresView()
+            } label: {
+                PLTListGroup {
+                    PLTRow(symbol: "clock",
+                           title: "Mes heures au contrat",
+                           subtitle: "Ta semaine face à ton quota, ton historique et tes compteurs",
+                           showsChevron: true,
+                           showsSeparator: false)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Mes heures au contrat")
+        }
+        if modules.isActive("leave") {
+            NavigationLink {
+                CongesView()
+            } label: {
+                PLTListGroup {
+                    PLTRow(symbol: "sun.max",
+                           title: "Congés",
+                           subtitle: "Tes jours de congé et tes absences",
+                           showsChevron: true,
+                           showsSeparator: false)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Congés")
+        }
         if modules.isActive("pay") {
             NavigationLink {
                 PaieView()

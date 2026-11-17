@@ -431,3 +431,58 @@ enum PayCalculator {
         return result
     }
 }
+
+// MARK: - Détail avec règles et primes (étape 6)
+
+/// Résultat d'un mois avec les majorations d'un pack et les primes saisies. Estimation.
+/// `month` reste le calcul de base (heures x taux) : sans règle ni prime, `grossCents == month.grossCents`.
+struct PayDetailResult: Equatable {
+    let month: PayMonthResult
+    let rules: PayRulesResult
+    let premiums: PremiumsResult
+    /// Brut de base (heures x taux).
+    let baseGrossCents: Int
+    /// Brut de base, plus majorations, plus primes brutes.
+    let grossCents: Int
+    /// Brut multiplié par le ratio, plus primes nettes.
+    let netCents: Int
+}
+
+extension PayCalculator {
+
+    /// Estimation du mois avec les règles de convention (surcharges déjà appliquées) et les primes de l'employeur.
+    /// Les heures au-delà du seuil hebdomadaire regardent la semaine ISO entière, y compris les jours du mois d'avant.
+    static func monthDetail(year: Int,
+                            month monthNumber: Int,
+                            sessions: [PaySessionInput],
+                            rates: [PayRateEntry],
+                            base: CalculationBase,
+                            netRatio: Decimal,
+                            rules: ConventionRules,
+                            premiums: [PayPremium],
+                            now: Date,
+                            calendar: Calendar) -> PayDetailResult {
+        let basis: PayMonthResult = PayCalculator.month(year: year, month: monthNumber, sessions: sessions, rates: rates,
+                                                        base: base, netRatio: netRatio, now: now, calendar: calendar)
+        guard let bounds = monthBounds(year: year, month: monthNumber, calendar: calendar) else {
+            return PayDetailResult(month: basis, rules: PayRulesResult.empty, premiums: PremiumsResult.empty,
+                                   baseGrossCents: basis.grossCents, grossCents: basis.grossCents, netCents: basis.netCents)
+        }
+        let weekStart: Date = PayRules.weekStart(of: bounds.start, calendar: calendar)
+        let intervals: [PayInterval] = PayRules.retainedIntervals(sessions: sessions, base: base, now: now, calendar: calendar,
+                                                                  window: (start: weekStart, end: bounds.end))
+        let rateOnDay: (Date) -> Decimal? = { (day: Date) -> Decimal? in
+            return PayCalculator.rate(on: day, rates: rates, calendar: calendar)
+        }
+        let ruleResult: PayRulesResult = PayRules.compute(intervals: intervals, periodStart: bounds.start, periodEnd: bounds.end,
+                                                          rules: rules, rateOnDay: rateOnDay, calendar: calendar)
+        let grossBeforePremiums: Int = basis.grossCents + ruleResult.majorationCents
+        let premiumResult: PremiumsResult = PayRules.premiums(premiums, periodStart: bounds.start, periodEnd: bounds.end,
+                                                              intervals: intervals, segments: ruleResult.segments,
+                                                              grossBaseCents: grossBeforePremiums, calendar: calendar)
+        let gross: Int = grossBeforePremiums + premiumResult.grossCents
+        let net: Int = PayMath.roundedCents(Decimal(gross) * netRatio / 100) + premiumResult.netCents
+        return PayDetailResult(month: basis, rules: ruleResult, premiums: premiumResult,
+                               baseGrossCents: basis.grossCents, grossCents: gross, netCents: net)
+    }
+}

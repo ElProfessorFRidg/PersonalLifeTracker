@@ -148,7 +148,7 @@ struct ContractHoursReport: Equatable {
 
 /// 109 : niveau d'alerte de proximité d'une limite.
 enum QuotaAlertLevel: Equatable {
-    case none
+    case off
     /// Il reste `remainingMinutes` (>0) et un seuil activé est franchi.
     case remaining(minutes: Int)
     case reached
@@ -490,7 +490,7 @@ enum ContractHoursBalance {
                            limitMinutes: Int,
                            thresholdsMinutes: [Int],
                            suppressed: Bool) -> QuotaAlertLevel {
-        if suppressed || limitMinutes <= 0 || thresholdsMinutes.isEmpty { return .none }
+        if suppressed || limitMinutes <= 0 || thresholdsMinutes.isEmpty { return .off }
         let remaining: Int = limitMinutes - doneMinutes
         var crossed: Bool = false
         for t in thresholdsMinutes where t >= 0 {
@@ -498,7 +498,7 @@ enum ContractHoursBalance {
                 crossed = true
             }
         }
-        if !crossed { return .none }
+        if !crossed { return .off }
         if remaining > 0 { return .remaining(minutes: remaining) }
         if remaining == 0 { return .reached }
         return .exceeded(overMinutes: -remaining)
@@ -591,7 +591,7 @@ enum ContractHoursText {
     /// 109 : phrase d'alerte, ton neutre.
     static func alertTitle(_ level: QuotaAlertLevel) -> String {
         switch level {
-        case .none:
+        case .off:
             return ""
         case .remaining(let minutes):
             return "Plus que \(hours(minutes)) avant ton quota de la semaine."
