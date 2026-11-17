@@ -29,7 +29,7 @@ extension ModuleRegistry {
         ModuleDefinition(id: "battery_recovery", title: "Récupération après batterie vide", summary: "Reconstitue ta journée si ton téléphone s'est éteint.", step: 3, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "detection_help", title: "Assistant de dépannage de la détection", summary: "Un assistant pour comprendre pourquoi une détection a raté.", step: 3, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "multi_employer", title: "Plusieurs employeurs", summary: "Gère plusieurs employeurs en même temps.", step: 10, defaultOn: false, requires: ["employment"], isAvailable: false),
-        ModuleDefinition(id: "leave", title: "Congés payés", summary: "Compte tes congés payés acquis et pris.", step: 6, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "leave", title: "Congés payés", summary: "Compte tes congés payés acquis et pris.", step: 6, defaultOn: false, requires: ["employment"], isAvailable: true),
         ModuleDefinition(id: "simulator", title: "Simulateur et semaine en direct", summary: "Simule une semaine pour voir ce que ça donnerait.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
         ModuleDefinition(id: "pay_date", title: "Date de paie attendue", summary: "Te dit quand ta paie devrait arriver.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
         ModuleDefinition(id: "tax_threshold", title: "Seuil fiscal", summary: "Seuil fiscal", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
