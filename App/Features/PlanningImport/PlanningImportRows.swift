@@ -33,7 +33,7 @@ enum PlanningImportFormat {
         guard let s = start, let e = end else { return "Heures à saisir" }
         let from = Formatting.clock(minutesFromMidnight: s % 1440)
         let to = Formatting.clock(minutesFromMidnight: e % 1440)
-        if e > 1440 || (e == 1440 && s > 0 && false) {
+        if e >= 1440 {
             return "\(from) à \(to) le lendemain"
         }
         return "\(from) à \(to)"
