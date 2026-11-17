@@ -32,7 +32,7 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 | core:core_models | Noyau : modèles SwiftData, ModuleRegistry, écran Fonctionnalités | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43877060132 | Modèles, registre (108 modules, tous encore « bientôt »), écran Fonctionnalités, Réglages (thème, devise, base de calcul, export JSON). Build + tests + archive verts en CI. Jamais lancé sur simulateur ni iPhone par quiconque : aucun écran vu. |
 | core:core_places | Noyau : lieux, sessions, saisie manuelle, onglets Accueil et Lieux | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43877060132 | Lieux (carte, rayon), sessions, saisie manuelle, démarrage et arrêt manuel, Accueil, onboarding de base. Logique testée en CI. Écrans jamais vus à l'écran ; permissions et carte NON TESTÉES sur appareil. |
 | core:core_geofence | Géorepérage, arrivée/départ, notifications, diagnostic, annuler partout | 2 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43889057891 | Moteur de détection (logique pure) et règles de notification testés en CI. Géorepérage réel, relance en arrière-plan, notifications et leurs actions : NON TESTÉS, seulement vérifiables sur iPhone. Seuils choisis par l'agent (5 min, 3 min, 6 notifs par jour, silence 22:00 à 04:59), voir notes/core_geofence.md. État du moteur non persisté. |
-| core:core_classify | Classification travail/études/courses, apprentissage, récupération | 3 | NON COMMENCÉ |  |  |
+| core:core_classify | Classification travail/études/courses, apprentissage, récupération | 3 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/core_classify.md. Seuils hors spec choisis par l'agent. |
 | core:core_time_rounding | Heures : timestamp exact + base normalisée + zone de doute (13.1) | 1 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43877060132 | Arrondi, zone de doute, durées, choix utilisateur stocké à part de l'heure exacte : testés en CI. Écran de choix jamais vu à l'écran. Mutation à la main (14 en 15) non faite. |
 
 ## Modules (registre MODULES.md)
@@ -41,8 +41,8 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 |---|---|---|---|---|---|
 | module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | NON COMMENCÉ |  |  |
 | module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | CLVisit, regroupement local, confirmation et exclusion des lieux connus ; notes/place_discovery.md. Tests iOS et terrain NON TESTÉS pour cette modification. |
-| module:employment | Employeurs, contrats, fin de contrat | 5 | NON COMMENCÉ |  |  |
-| module:pay | Salaire, paie, conventions, primes, historique des taux | 5 (base), 6 (conventions, primes) | NON COMMENCÉ |  |  |
+| module:employment | Employeurs, contrats, fin de contrat | 5 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/employment.md. Rappels de fin de contrat calculés mais pas envoyés. |
+| module:pay | Salaire, paie, conventions, primes, historique des taux | 5 (base), 6 (conventions, primes) | EN COURS |  | Base de l'étape 5 testée en CI (heures, brut et net estimés, historique des taux, export). SMIC 12,02 NON VÉRIFIÉ. Conventions et primes (étape 6) pas faites. |
 | module:school_calendar | Calendrier scolaire, vacances, jours fériés | 9 | NON COMMENCÉ |  |  |
 | module:notes | Notes de journée | 9 | NON COMMENCÉ |  |  |
 | module:search | Recherche globale | 10 | NON COMMENCÉ |  |  |
@@ -57,9 +57,9 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 | module:smart_notifications | Notifications qui apprennent (coordinateur) | 10 | NON COMMENCÉ |  |  |
 | module:data_trust | Score de fiabilité des données | 10 | NON COMMENCÉ |  |  |
 | module:undo_safety | Annuler partout et instantanés | 2 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43889057891 | Toast Annuler, instantanés quotidiens, restauration : logique testée en CI. Écrans jamais vus. Pas fait : secousse, annulation des modifications d'heure, restauration sélective. |
-| module:place_calibration | Auto-calibration des lieux | 3 | NON COMMENCÉ |  |  |
-| module:battery_recovery | Récupération après batterie vide | 3 | NON COMMENCÉ |  |  |
-| module:detection_help | Assistant de dépannage de la détection | 3 | NON COMMENCÉ |  |  |
+| module:place_calibration | Auto-calibration des lieux | 3 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/place_calibration.md. Aucune mesure n'est encore enregistrée par la détection : la carte reste vide. |
+| module:battery_recovery | Récupération après batterie vide | 3 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/battery_recovery.md. |
+| module:detection_help | Assistant de dépannage de la détection | 3 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/detection_help.md. |
 | module:multi_employer | Plusieurs employeurs | 10 | NON COMMENCÉ |  |  |
 | module:leave | Congés payés | 6 | NON COMMENCÉ |  |  |
 | module:simulator | Simulateur et semaine en direct | 10 (simulateur), 11 (semaine en direct) | NON COMMENCÉ |  |  |
@@ -132,7 +132,7 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 | module:privacy_shield | Protection à la capture et mode démo | 10 | NON COMMENCÉ |  |  |
 | module:ask_assistant | Demande-moi tout (assistant local) | 11 | NON COMMENCÉ |  |  |
 | module:break_in | Phase de rodage | 10 | NON COMMENCÉ |  |  |
-| module:clock_check | Contrôle de l'horloge | 3 | NON COMMENCÉ |  |  |
+| module:clock_check | Contrôle de l'horloge | 3 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/clock_check.md. |
 | module:age_rules | Règles selon l'âge | 11 | NON COMMENCÉ |  |  |
 | module:last_minute_offer | Demande de dernière minute | 11 | NON COMMENCÉ |  |  |
 | module:school_timetable | Emploi du temps scolaire | 9 | NON COMMENCÉ |  |  |
