@@ -1,0 +1,587 @@
+[
+  {
+    "id": "idcc-2216",
+    "name": "Commerce de détail et de gros à prédominance alimentaire",
+    "idcc": "2216",
+    "sector": "Commerce alimentaire",
+    "keywords": [
+      "supermarche",
+      "supermarché",
+      "alimentaire",
+      "caisse",
+      "hypermarche",
+      "superette",
+      "grande distribution"
+    ],
+    "summary": "Supermarchés, hypermarchés, supérettes",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1517",
+    "name": "Commerce de détail non alimentaire",
+    "idcc": "1517",
+    "sector": "Commerce non alimentaire",
+    "keywords": [
+      "magasin",
+      "vente",
+      "vendeur",
+      "boutique"
+    ],
+    "summary": "Magasins et boutiques non alimentaires",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1483",
+    "name": "Commerce de détail de l'habillement et articles textiles",
+    "idcc": "1483",
+    "sector": "Habillement",
+    "keywords": [
+      "habillement",
+      "vetement",
+      "textile",
+      "mode",
+      "boutique"
+    ],
+    "summary": "Magasins de vêtements et de textile",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1606",
+    "name": "Commerces de détail de bricolage",
+    "idcc": "1606",
+    "sector": "Bricolage",
+    "keywords": [
+      "bricolage",
+      "jardin",
+      "brico"
+    ],
+    "summary": "Magasins de bricolage",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1686",
+    "name": "Commerce de détail de produits culturels et de loisirs",
+    "idcc": "1686",
+    "sector": "Culture et loisirs",
+    "keywords": [
+      "culture",
+      "loisirs",
+      "livre",
+      "librairie",
+      "jeux",
+      "disque"
+    ],
+    "summary": "Livres, jeux, produits culturels et loisirs",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-573",
+    "name": "Commerce de gros",
+    "idcc": "573",
+    "sector": "Commerce de gros",
+    "keywords": [
+      "gros",
+      "grossiste",
+      "entrepot"
+    ],
+    "summary": "Commerce de gros",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1501",
+    "name": "Restauration rapide",
+    "idcc": "1501",
+    "sector": "Restauration rapide",
+    "keywords": [
+      "fast-food",
+      "fast food",
+      "resto",
+      "restauration rapide",
+      "burger",
+      "snack"
+    ],
+    "summary": "Fast-food et restauration rapide",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1979",
+    "name": "Hôtels, cafés, restaurants",
+    "idcc": "1979",
+    "sector": "Hôtels-cafés-restaurants",
+    "keywords": [
+      "hotel",
+      "cafe",
+      "restaurant",
+      "resto",
+      "bar",
+      "serveur",
+      "chr"
+    ],
+    "summary": "Hôtels, cafés et restaurants",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1266",
+    "name": "Restauration de collectivités",
+    "idcc": "1266",
+    "sector": "Restauration collective",
+    "keywords": [
+      "cantine",
+      "collectivite",
+      "restauration collective"
+    ],
+    "summary": "Cantines et restauration collective",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1090",
+    "name": "Commerce et réparation de l'automobile, du cycle et du motocycle",
+    "idcc": "1090",
+    "sector": "Automobile (vente et réparation)",
+    "keywords": [
+      "garage",
+      "vendeur auto",
+      "automobile",
+      "voiture",
+      "concession",
+      "reparation",
+      "moto",
+      "cycle"
+    ],
+    "summary": "Garages, concessions, vente et réparation auto",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1996",
+    "name": "Pharmacie d'officine",
+    "idcc": "1996",
+    "sector": "Pharmacie",
+    "keywords": [
+      "pharmacie",
+      "officine",
+      "preparateur"
+    ],
+    "summary": "Pharmacies d'officine",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-3043",
+    "name": "Propreté et services associés",
+    "idcc": "3043",
+    "sector": "Propreté",
+    "keywords": [
+      "menage",
+      "proprete",
+      "nettoyage",
+      "entretien"
+    ],
+    "summary": "Ménage et nettoyage de locaux",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-16",
+    "name": "Transports routiers et activités auxiliaires du transport",
+    "idcc": "16",
+    "sector": "Transport routier",
+    "keywords": [
+      "transport",
+      "livraison",
+      "routier",
+      "chauffeur",
+      "livreur"
+    ],
+    "summary": "Transport routier et livraison",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1486",
+    "name": "Bureaux d'études techniques, conseil, ingénierie",
+    "idcc": "1486",
+    "sector": "Bureaux d'études et conseil",
+    "keywords": [
+      "bureau d'etudes",
+      "conseil",
+      "ingenierie",
+      "syntec",
+      "informatique"
+    ],
+    "summary": "Bureaux d'études, conseil, ingénierie",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-2098",
+    "name": "Prestataires de services du secteur tertiaire",
+    "idcc": "2098",
+    "sector": "Bureaux d'études et conseil",
+    "keywords": [
+      "tertiaire",
+      "prestataire",
+      "services",
+      "centre d'appel"
+    ],
+    "summary": "Prestataires de services du secteur tertiaire",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-2378",
+    "name": "Travail temporaire",
+    "idcc": "2378",
+    "sector": "Intérim",
+    "keywords": [
+      "interim",
+      "interimaire",
+      "temporaire",
+      "mission"
+    ],
+    "summary": "Intérim",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-2264",
+    "name": "Hospitalisation privée",
+    "idcc": "2264",
+    "sector": "Santé privée",
+    "keywords": [
+      "hopital",
+      "clinique",
+      "hospitalisation",
+      "sante",
+      "infirmier"
+    ],
+    "summary": "Cliniques et hospitalisation privée",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-2511",
+    "name": "Sport",
+    "idcc": "2511",
+    "sector": "Sport et animation",
+    "keywords": [
+      "sport",
+      "salle de sport",
+      "coach",
+      "fitness"
+    ],
+    "summary": "Clubs et salles de sport",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1518",
+    "name": "Animation",
+    "idcc": "1518",
+    "sector": "Sport et animation",
+    "keywords": [
+      "animation",
+      "animateur",
+      "centre de loisirs",
+      "periscolaire"
+    ],
+    "summary": "Animation et centres de loisirs",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1596",
+    "name": "Bâtiment : ouvriers jusqu'à 10 salariés",
+    "idcc": "1596",
+    "sector": "Bâtiment",
+    "keywords": [
+      "batiment",
+      "chantier",
+      "ouvrier",
+      "btp",
+      "macon"
+    ],
+    "summary": "Ouvriers du bâtiment, jusqu'à 10 salariés",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "idcc-1597",
+    "name": "Bâtiment : ouvriers de plus de 10 salariés",
+    "idcc": "1597",
+    "sector": "Bâtiment",
+    "keywords": [
+      "batiment",
+      "chantier",
+      "ouvrier",
+      "btp",
+      "macon"
+    ],
+    "summary": "Ouvriers du bâtiment, plus de 10 salariés",
+    "sourceNote": "Nom et numéro IDCC repris de la liste de la spec (section 22), NON vérifiés sur Légifrance par l'agent. Aucune règle de la convention n'est renseignée : tout est à renseigner. À vérifier avec ta convention ou ta fiche de paie.",
+    "sourceURLs": [
+      "https://www.legifrance.gouv.fr",
+      "https://code.travail.gouv.fr"
+    ],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  },
+  {
+    "id": "custom",
+    "name": "Personnalisée (je saisis mes propres règles)",
+    "sector": "Autre",
+    "keywords": [
+      "personnalisee",
+      "perso",
+      "je ne trouve pas",
+      "manuel",
+      "saisie"
+    ],
+    "summary": "Tu saisis toi-même chaque règle d'après ton contrat ou ta fiche de paie.",
+    "sourceNote": "Aucune valeur : tout vient de toi.",
+    "sourceURLs": [],
+    "toFill": [
+      "Majoration des heures de nuit",
+      "Majoration du dimanche",
+      "Majoration des jours fériés",
+      "Heures au-delà du seuil hebdomadaire",
+      "Taux horaire minimal de ta convention"
+    ],
+    "rules": {}
+  }
+]

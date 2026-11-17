@@ -1,0 +1,4 @@
+## 69. HISTORIQUE DES TAUX HORAIRES (partie du module pay)
+
+Chaque changement de taux (augmentation, nouveau contrat, revalorisation du SMIC) est enregistré avec sa date d'effet. Le calcul de chaque session utilise le taux en vigueur à sa date : les mois passés ne changent jamais rétroactivement. Une correction d'erreur reste possible avec trace dans le journal des modifications (AuditEntry).
+Vue "Mon salaire dans le temps" (Swift Charts) : courbe du taux brut, évolution en pourcentage, comparaison avec le SMIC historique lu dans legal.json (qui contient l'historique des valeurs avec dates d'effet). Quand le SMIC est revalorisé et que l'utilisateur est "au SMIC", l'app propose de mettre à jour son taux à la date d'effet, avec confirmation, jamais en silence. Même logique de versions datées pour les packs de convention et les primes.

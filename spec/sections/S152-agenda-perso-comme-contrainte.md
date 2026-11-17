@@ -1,0 +1,4 @@
+## 152. AGENDA PERSO COMME CONTRAINTE (module calendar_constraints, désactivé par défaut)
+
+Lecture seule du calendrier iOS (EventKit, autorisation demandée à l'activation) pour que les disponibilités (section 94), les plannings proposés (section 110), les demandes de dernière minute (section 142) et la charge (section 99) évitent les rendez-vous de l'utilisateur. L'utilisateur choisit les calendriers inclus, le niveau par calendrier ou par mot-clé (contrainte dure ou souple) et si les événements sur la journée entière comptent. Les anniversaires sont ignorés par défaut.
+Confidentialité : seules les plages horaires et l'identifiant du calendrier sont gardés, les titres ne sont jamais stockés ni exportés, ils ne s'affichent qu'en direct. L'app n'écrit rien dans le calendrier (aucun export vers le calendrier Apple n'est prévu). Peut proposer de bloquer un rendez-vous comme période bloquée (section 114), avec confirmation.

@@ -1,0 +1,4 @@
+## 81. CARNET D'ÉCHANGES DE CRÉNEAUX (module shift_swaps, désactivé par défaut)
+
+Suivi des échanges de créneaux avec les collègues et de qui doit quoi à qui. Entrée : date du créneau, avec qui (nom libre, ou contact du module work_contacts s'il est actif), sens (j'ai pris son créneau, il a pris le mien, échange croisé), statut (prévu, fait, à rendre, rendu, annulé), échéance de "à rendre", note.
+Compteur simple : ce que l'utilisateur doit et ce qu'on lui doit, en créneaux ou en heures. Un remplacement (section 68) peut créer une entrée du carnet en un tap. Quand un échange est confirmé, l'app propose de modifier le planning prévu (copie prévue modifiable, après confirmation, jamais les sessions réelles). Rappel doux avant une échéance "à rendre", désactivable. Le carnet n'a aucune valeur contractuelle ou juridique, n'envoie aucun message et ne parle à personne : c'est un aide-mémoire personnel.

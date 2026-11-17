@@ -1,0 +1,3 @@
+## 112. JOURS FÉRIÉS DE L'ANNÉE (module holiday_outlook, désactivé par défaut)
+
+Récap en début d'année et à la demande : jours fériés de l'année (calculés, section 30) avec leur jour de semaine, ceux qui tombent un jour habituellement travaillé (d'après le planning ou un motif confirmé, jamais supposé), ce que l'utilisateur a fait ce jour-là les années précédentes (travaillé, horaires, durée, d'après l'historique), majoration du pack avec sa source, ponts possibles. Rappel doux avant chaque férié proche. Sans planning ni historique, l'app le dit ("pas encore de planning pour ce jour"). S'appuie sur la détection de motifs (section 107.4).

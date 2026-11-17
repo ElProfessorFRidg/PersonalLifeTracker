@@ -1,0 +1,7 @@
+## 128. ANNULER PARTOUT ET INSTANTANÉS (module undo_safety, proposé et coché par défaut)
+
+Filet de sécurité contre les erreurs de saisie et de correction.
+- Annuler et rétablir : chaque modification de l'utilisateur (session, lieu, planning prévu, contrat, congés, notes, classification) est enregistrée comme opération réversible. Annulation par le geste système (secouer l'iPhone ou le menu Édition), par un bouton, ou depuis la liste "Modifications récentes" (20 dernières sur 7 jours) avec annulation sélective quand il n'y a pas de conflit. Message clair : "Annulé : fin de session de 22:30 remise à 22:00".
+- Instantanés automatiques : copie locale de l'état de la base à la fin de chaque journée et avant les opérations risquées (import, restauration, suppression par période, changement de convention, migration), conservés N jours (défaut 14) avec limite d'espace et indicateur de taille. "Revenir à l'état de ce matin" : aperçu des différences puis restauration complète ou sélective. Toute restauration crée d'abord un instantané de l'état actuel, donc elle est elle-même réversible.
+- Cohérence : une annulation est une nouvelle entrée du journal des modifications (et du journal infalsifiable, section 98, s'il est actif), jamais une réécriture. Instantanés protégés par les protections de données d'iOS, exclus d'iCloud sauf choix.
+- Limite : annuler ne défait pas les effets externes (message déjà envoyé, notification déjà reçue).

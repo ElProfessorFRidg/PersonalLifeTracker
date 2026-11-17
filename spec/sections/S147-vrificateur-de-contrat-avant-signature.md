@@ -1,0 +1,4 @@
+## 147. VÉRIFICATEUR DE CONTRAT AVANT SIGNATURE (module contract_check, exige pay, désactivé par défaut)
+
+Scan local du contrat (Vision). L'app présente une checklist "présent", "absent" ou "à vérifier" pour chaque point, avec la règle de référence et sa source : taux horaire face au minimum du pack et au SMIC à la date, période d'essai, heures et leur répartition, pauses, délai de prévenance (section 129), préavis, indemnité de fin de CDD, durée maximale, mention de la convention et de l'IDCC, congés, majorations.
+Ton neutre : l'app ne dit jamais "illégal" ni "ne signe pas". Elle propose des questions à poser à l'employeur et un brouillon de message, jamais envoyé automatiquement. Rien n'est conservé sauf si l'utilisateur enregistre le rapport dans le journal de contrat (section 72). Aucun conseil juridique, renvoi vers les sources officielles. Distinct du scan d'onboarding de la section 48, qui ne fait que préremplir.

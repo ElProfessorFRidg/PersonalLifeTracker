@@ -1,0 +1,14 @@
+{
+  "sourceName": "Personal Life Tracker",
+  "sourceIdentifier": "io.github.elprofessorfridg.personallifetracker.source",
+  "app": {
+    "name": "Personal Life Tracker",
+    "bundleIdentifier": "io.github.elprofessorfridg.personallifetracker",
+    "developerName": "ElProfessorFRidg",
+    "subtitle": "Suivi auto du travail et des études",
+    "localizedDescription": "App perso, 100% locale, installée via AltStore.",
+    "tintColor": "#2447B8",
+    "iconPath": "altstore/icon.png",
+    "minOSVersion": "17.0"
+  }
+}

@@ -1,0 +1,3 @@
+## 78. ÉQUILIBRE DE LA SEMAINE (module weekly_balance, désactivé par défaut)
+
+Graphique de la semaine (Swift Charts) répartissant les heures éveillées entre cours, travail, trajets et temps libre. Le temps libre est une ESTIMATION : heures non occupées par une activité détectée, en excluant une plage de sommeil configurable (défaut 23 h à 7 h, modifiable). L'app ne suit pas le sommeil et ne traite aucune donnée de santé, et le dit. Objectifs facultatifs (maximum d'heures de travail par semaine, minimum de temps libre). Comparaison avec la semaine précédente, widget possible. Formulations neutres ("cette semaine 14 h de temps libre, 3 h de moins que la précédente"). Sessions incertaines signalées, vacances et congés pris en compte.

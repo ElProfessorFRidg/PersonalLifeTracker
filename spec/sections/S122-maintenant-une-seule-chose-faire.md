@@ -1,0 +1,7 @@
+## 122. MAINTENANT : UNE SEULE CHOSE À FAIRE (module now_card, proposé et coché par défaut)
+
+Carte unique en haut de l'accueil qui montre l'action la plus utile du moment, pour éviter de noyer l'utilisateur sous les bandeaux et notifications.
+- Moteur d'actions (ActionEngine, service du noyau) : chaque module actif déclare des candidats d'action avec titre, urgence (heure limite), importance, durée estimée, coût d'ignorer et action associée en un tap (partir, confirmer une arrivée ou une sortie, importer le planning, répondre "T'as bossé ?", envoyer les heures, badger, confirmer des sessions avant un relevé). Le moteur classe par score (importance fois urgence), filtre selon les contextes de silence (mode vacances, examens, périodes bloquées, "Pas aujourd'hui", heures silencieuses) et renvoie le meilleur candidat.
+- Carte : titre court, bouton principal d'un tap, "Pas maintenant" (report) et lien "Voir les autres (3)". Avec ce module, la carte remplace le bandeau "À confirmer" de la section 47 en regroupant les éléments incertains ("3 trucs à confirmer"). Sans ce module, le bandeau reste.
+- Règles : jamais plus d'une carte, état calme quand rien n'est urgent ("Rien à faire, profites-en"), stabilité (réévaluation sur événement, pas à la seconde), une action ignorée plusieurs fois voit sa priorité baisser, bouton "Pourquoi cette carte ?", accessibilité complète, calcul local déterministe et testable.
+- Le coordinateur de notifications (section 123) s'appuie sur le même moteur.

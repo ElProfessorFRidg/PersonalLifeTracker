@@ -1,0 +1,64 @@
+name: Build and Test
+on:
+  workflow_call:
+    inputs:
+      build_ipa:
+        type: boolean
+        default: false
+      version:
+        description: "App version in x.y.z format (without a suffix)"
+        type: string
+        default: "0.0.0"
+permissions:
+  contents: read
+jobs:
+  build-test:
+    name: Build and Test
+    runs-on: macos-latest
+    timeout-minutes: 60
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Validate repository policies
+        run: |
+          python3 scripts/check_tests_integrity.py
+          python3 scripts/check_progress.py
+          python3 scripts/validate_altstore_source.py --self-test
+      - name: Select latest installed Xcode
+        run: |
+          X=$(ls -d /Applications/Xcode*.app | sort -V | tail -1)
+          echo "Xcode choisi: $X"
+          sudo xcode-select -s "$X/Contents/Developer"
+          xcodebuild -version
+      - name: Install XcodeGen
+        run: brew install xcodegen
+      - name: Generate Xcode project
+        run: xcodegen generate
+      - name: Run simulator tests
+        run: |
+          UDID=$(scripts/pick_simulator.sh)
+          set -o pipefail
+          xcodebuild test -project PersonalLifeTracker.xcodeproj -scheme PersonalLifeTracker \
+            -destination "id=$UDID" -resultBundlePath build/tests.xcresult \
+            CODE_SIGNING_ALLOWED=NO | tail -80
+      - name: Summarize test results
+        if: always()
+        run: |
+          xcrun xcresulttool get test-results summary --path build/tests.xcresult 2>/dev/null | head -60 || echo "xcresult absent"
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tests-xcresult
+          path: build/tests.xcresult
+          if-no-files-found: ignore
+      - name: Build unsigned IPA
+        if: inputs.build_ipa
+        run: scripts/build_ipa.sh "${{ inputs.version }}" "${{ github.run_number }}" PersonalLifeTracker.ipa
+      - name: Upload IPA artifact
+        if: inputs.build_ipa
+        uses: actions/upload-artifact@v4
+        with:
+          name: ipa
+          path: PersonalLifeTracker.ipa
+          if-no-files-found: error

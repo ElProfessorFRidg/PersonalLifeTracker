@@ -1,0 +1,4 @@
+## 149. REJOUER MA JOURNÉE (module day_replay, désactivé par défaut)
+
+Relecture animée d'une journée, avec carte et frise, qui montre ce que l'app a détecté : chaque événement (arrivée, départ, signal de secours, réponse à une notification, saisie, correction) avec son heure, sa source et sa marge d'erreur, et les étapes de décision (exacte, normalisée, doute et choix, section 13).
+Aucune trace GPS continue n'est conservée (section 130) : la carte affiche des repères (lieux, transitions) et non un tracé. Sources : journal des événements de détection (section 52), limité dans le temps (défaut 30 jours), historique des capacités (section 132) et indices d'horloge (section 140). Curseur de lecture, pause, avance pas à pas ; un tap sur un événement permet de corriger son heure en un geste. Sert à comprendre un doute ou à vérifier un total.

@@ -1,0 +1,12 @@
+name: CI
+on:
+  push:
+    branches: [main]
+    paths-ignore: ['**.md', 'notes/**', 'evidence/**']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-test:
+    name: Build and Test
+    uses: ./.github/workflows/_build-test.yml

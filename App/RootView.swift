@@ -1,0 +1,102 @@
+import SwiftUI
+import SwiftData
+
+/// Racine : onboarding au premier lancement, ensuite les quatre onglets. Applique le thème (palette) à tout l'arbre.
+struct RootView: View {
+    @Environment(GeofenceService.self) private var geofence
+    @Environment(AppSettings.self) private var settings
+    @Environment(ModuleStore.self) private var modules
+    @Environment(\.modelContext) private var modelContext
+    @Environment(\.scenePhase) private var scenePhase
+    @State private var undoCenter: UndoCenter = UndoCenter()
+
+    var body: some View {
+        Group {
+            if settings.hasCompletedOnboarding {
+                MainTabView()
+            } else {
+                OnboardingView(onDone: {
+                    settings.hasCompletedOnboarding = true
+                })
+            }
+        }
+        .overlay(alignment: .bottom) {
+            UndoToastView()
+                .padding(.horizontal, Theme.Spacing.m)
+                .padding(.bottom, 64)
+        }
+        .environment(undoCenter)
+        .pltTheme()
+        .onChange(of: modules.isActive("place_discovery"), initial: true) { _, _ in
+            geofence.discovery.refresh()
+        }
+        .onChange(of: modules.isActive("undo_safety"), initial: true) { (_: Bool, isOn: Bool) in
+            undoCenter.isEnabled = isOn
+        }
+        .onChange(of: scenePhase, initial: true) { (_: ScenePhase, phase: ScenePhase) in
+            if phase == .active && modules.isActive("undo_safety") {
+                UndoSnapshots.takeDailySnapshotIfDue(context: modelContext,
+                                                     store: SnapshotStore(directory: SnapshotStore.defaultDirectory()),
+                                                     now: Date(),
+                                                     calendar: Calendar.current)
+            }
+        }
+        .onChange(of: scenePhase, initial: true) { (_: ScenePhase, phase: ScenePhase) in
+            // Sections 131 et 140 : indices datés et contrôle de l'horloge, sans timer ni polling.
+            let recoveryOn: Bool = modules.isActive("battery_recovery")
+            let clockOn: Bool = modules.isActive("clock_check")
+            if !recoveryOn && !clockOn { return }
+            if phase == .active {
+                LifecycleChecks.sceneBecameActive(context: modelContext, batteryRecoveryOn: recoveryOn, clockCheckOn: clockOn)
+            } else if phase == .background {
+                LifecycleChecks.sceneWentToBackground(context: modelContext, batteryRecoveryOn: recoveryOn, clockCheckOn: clockOn)
+            }
+        }
+    }
+}
+
+enum AppTab: Hashable {
+    case accueil
+    case planning
+    case lieux
+    case stats
+}
+
+/// Les 4 onglets de la maquette. Chaque onglet a sa NavigationStack : les écrans de contenu n'en ajoutent pas.
+struct MainTabView: View {
+    @State private var selection: AppTab = .accueil
+    @Environment(GeofenceService.self) private var geofence
+    @Query private var places: [Place]
+
+    /// Signature des lieux surveillés : dès qu'un lieu est ajouté, supprimé, déplacé ou change de rayon, on réenregistre les zones.
+    private var placesSignature: String {
+        return places
+            .map { (place: Place) -> String in "\(place.uid.uuidString)|\(place.latitude)|\(place.longitude)|\(place.radius)" }
+            .sorted()
+            .joined(separator: ";")
+    }
+
+    var body: some View {
+        tabs
+            .onChange(of: placesSignature, initial: false) { (_: String, _: String) in
+                geofence.refreshMonitoredPlaces()
+            }
+    }
+
+    private var tabs: some View {
+        TabView(selection: $selection) {
+            NavigationStack { AccueilView() }
+                .tabItem { Label("Accueil", systemImage: "house") }
+                .tag(AppTab.accueil)
+            NavigationStack { PlanningView() }
+                .tabItem { Label("Planning", systemImage: "calendar") }
+                .tag(AppTab.planning)
+            NavigationStack { LieuxView() }
+                .tabItem { Label("Lieux", systemImage: "mappin.and.ellipse") }
+                .tag(AppTab.lieux)
+            NavigationStack { StatsView() }
+                .tabItem { Label("Statistiques", systemImage: "chart.bar") }
+                .tag(AppTab.stats)
+        }
+    }
+}

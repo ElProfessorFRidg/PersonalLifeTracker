@@ -1,0 +1,93 @@
+<section class="screen" id="scr-onb-lieu" data-title="Premier lieu" data-group="Onboarding" data-tabbar="hide"
+         data-states="saisie:Formulaire,ajoute:Lieu ajouté">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="onb-notifs"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Retour</button>
+    <span class="navbar-title">Étape 6 sur 7</span>
+    <div class="navbar-actions"><button type="button" class="btn btn--ghost btn--small" id="onbz-skip" data-go="onb-fin">Plus tard</button></div>
+  </header>
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 6 sur 7"><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-on"></i><i></i></div>
+
+    <div class="onb-head">
+      <h1 class="onb-h1" data-when="saisie">Ton premier lieu.</h1>
+      <h1 class="onb-h1" data-when="ajoute" hidden>Lieu ajouté.</h1>
+      <p class="onb-lead" data-when="saisie">Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Tu en ajouteras d'autres après.</p>
+      <p class="onb-lead" data-when="ajoute" hidden>Je te préviens quand t'y arrives. Tu pourras ajuster la zone sur la carte plus tard.</p>
+    </div>
+
+    <div class="onb-result" data-when="saisie">
+      <div class="field">
+        <span class="field-label" id="onbz-type-l">C'est quoi comme endroit&nbsp;?</span>
+        <div class="list" role="radiogroup" aria-labelledby="onbz-type-l" id="onbz-type">
+          <button type="button" class="row" role="radio" aria-checked="true" data-value="work">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Mon taf</span><span class="row-sub">Ça compte dans tes heures de travail</span></span>
+            <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+          </button>
+          <button type="button" class="row" role="radio" aria-checked="false" data-value="study">
+            <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+            <span class="row-main"><span class="row-title">Ma fac ou mon lycée</span><span class="row-sub">Ça compte dans tes heures de cours</span></span>
+            <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="field" id="onbz-nom-f">
+        <label class="field-label" for="onbz-nom">Son nom</label>
+        <input class="input" id="onbz-nom" type="text" autocomplete="off" placeholder="Ex. Supérette du Canal">
+        <span class="field-help">Celui que tu veux, c'est pour toi.</span>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="onbz-adr">Où ça se trouve&nbsp;?</label>
+        <input class="input" id="onbz-adr" type="text" autocomplete="off" placeholder="Adresse ou nom du lieu">
+        <span class="field-help">Je trace une zone de <span class="num">100 m</span> autour. Tu pourras la changer.</span>
+      </div>
+    </div>
+
+    <div class="onb-result" data-when="ajoute" hidden>
+      <article class="card" id="onbz-card" aria-live="polite">
+        <div class="card-head"><span class="chip chip--work" id="onbz-chip">Taf</span><span class="status status--ok"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Ajouté</span></div>
+        <h2 class="card-title" id="onbz-card-t">Supérette du Canal</h2>
+        <p class="card-text">Zone de <span class="num">100 m</span>. Je note ton arrivée dès que t'entres dedans.</p>
+      </article>
+      <div class="banner banner--info">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banner-main"><p class="banner-title">Et si je me trompe&nbsp;?</p><p class="banner-text">Je te demande toujours de confirmer avant que ça compte. Tu corriges l'heure en deux taps.</p></div>
+      </div>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" id="onbz-add" data-when="saisie" disabled>Ajouter ce lieu</button>
+      <button type="button" class="btn btn--ghost btn--block" id="onbz-skip2" data-when="saisie" data-go="onb-fin">Je le ferai plus tard</button>
+      <button type="button" class="btn btn--primary btn--block" data-when="ajoute" data-go="onb-fin" hidden>Continuer</button>
+      <button type="button" class="btn btn--ghost btn--block" data-when="ajoute" id="onbz-undo" hidden>Annuler et corriger</button>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var N = 'onb-lieu', el = document.getElementById('scr-onb-lieu');
+    var nom = document.getElementById('onbz-nom'), adr = document.getElementById('onbz-adr'), add = document.getElementById('onbz-add');
+    var type = 'work';
+    function check() { add.disabled = nom.value.trim().length < 2 || adr.value.trim().length < 2; }
+    nom.addEventListener('input', check); adr.addEventListener('input', check);
+    document.getElementById('onbz-type').addEventListener('change', function (e) { type = e.detail.value; });
+    add.addEventListener('click', function () {
+      var chip = document.getElementById('onbz-chip');
+      chip.className = 'chip ' + (type === 'study' ? 'chip--study' : 'chip--work');
+      chip.textContent = type === 'study' ? 'Cours' : 'Taf';
+      document.getElementById('onbz-card-t').textContent = nom.value.trim();
+      PLT.store.set('onb.lieu', nom.value.trim() + '|' + type);
+      setState(N, 'ajoute'); el.scrollTop = 0;
+    });
+    ['onbz-skip', 'onbz-skip2'].forEach(function (id) { document.getElementById(id).addEventListener('click', function () { PLT.store.set('onb.lieu', ''); }); });
+    document.getElementById('onbz-undo').addEventListener('click', function () {
+      PLT.store.set('onb.lieu', ''); setState(N, 'saisie');
+      toast('Lieu retiré, tu peux le refaire.');
+    });
+  });
+  </script>
+</section>

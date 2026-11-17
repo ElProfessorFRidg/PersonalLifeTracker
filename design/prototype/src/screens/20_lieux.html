@@ -1,0 +1,95 @@
+<section class="screen" id="scr-lieux" data-title="Lieux" data-group="Lieux" data-tab="lieux"
+         data-states="liste:Liste,vide:Aucun lieu,refuse:Localisation refusée">
+
+  <header class="largetitle">
+    <div>
+      <p class="eyebrow" data-when="liste refuse">3 lieux</p>
+      <p class="eyebrow" data-when="vide">Aucun lieu</p>
+      <h1>Lieux</h1>
+    </div>
+    <button type="button" class="iconbtn iconbtn--tonal" data-go="lieu-ajout" aria-label="Ajouter un lieu">
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-plus"/></svg>
+    </button>
+  </header>
+
+  <div class="screen-body">
+
+    <div class="banner banner--error" role="alert" data-when="refuse">
+      <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div class="banner-main">
+        <p class="banner-title">Je peux pas te localiser</p>
+        <p class="banner-text">La localisation est refusée pour l'app. Tes lieux sont gardés, mais je ne note plus tes arrivées. Tu peux toujours ajouter tes heures à la main.</p>
+        <button type="button" class="banner-action" id="lx-fix">Ouvrir les réglages iOS</button>
+      </div>
+    </div>
+
+    <section class="section" data-when="liste refuse" aria-labelledby="lx-liste-t">
+      <div class="section-head"><h2 class="section-title" id="lx-liste-t">Tes lieux</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-go="lieu">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Supérette du Canal</span>
+            <span class="row-sub">Taf, rayon <span class="num">100 m</span></span>
+            <span class="row-sub">Dernière visite : aujourd'hui, <span class="num">17:56</span></span>
+          </span>
+          <span class="rel rel--high" data-when="liste"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>Fiable</span>
+          <span class="rel rel--low" data-when="refuse"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>À l'arrêt</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="lieu">
+          <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Fac de lettres</span>
+            <span class="row-sub">Cours, rayon <span class="num">150 m</span></span>
+            <span class="row-sub">Dernière visite : aujourd'hui, <span class="num">08:05</span></span>
+          </span>
+          <span class="rel rel--high" data-when="liste"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>Fiable</span>
+          <span class="rel rel--low" data-when="refuse"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>À l'arrêt</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="lieu">
+          <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Marché du Canal</span>
+            <span class="row-sub">Courses, rayon <span class="num">80 m</span>, pas compté</span>
+            <span class="row-sub">Dernière visite : aujourd'hui, <span class="num">12:20</span></span>
+          </span>
+          <span class="rel rel--mid" data-when="liste"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>À vérifier</span>
+          <span class="rel rel--low" data-when="refuse"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span>À l'arrêt</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot" data-when="liste">La fiabilité dit si je repère bien tes arrivées ici. « À vérifier » veut dire que j'ai hésité quelques fois.</p>
+      <p class="section-foot" data-when="refuse">Sans localisation, la fiabilité ne bouge plus. Elle repart dès que tu la réactives.</p>
+    </section>
+
+    <section class="section" data-when="liste refuse" aria-labelledby="lx-info-t">
+      <div class="section-head"><h2 class="section-title" id="lx-info-t">Comment ça compte</h2></div>
+      <div class="card card--outline">
+        <div class="chip-row" style="margin-bottom:var(--space-s)">
+          <span class="chip chip--work">Taf</span><span class="chip chip--study">Cours</span><span class="chip chip--errand">Courses</span>
+        </div>
+        <p class="card-text">Taf et cours comptent dans tes heures. Les courses sont notées mais jamais comptées, pour pas gonfler ta paie par erreur.</p>
+      </div>
+    </section>
+
+    <div class="card card--outline" data-when="vide">
+      <div class="empty">
+        <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-pin"/></svg></span>
+        <h3 class="empty-title">Aucun lieu pour l'instant.</h3>
+        <p class="empty-text">Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Tout reste sur ton tel.</p>
+        <button type="button" class="btn btn--primary" data-go="lieu-ajout">Ajouter un lieu</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    document.getElementById('lx-fix').addEventListener('click', function () {
+      setState('lieux', 'liste');
+      toast('Localisation réactivée. Je reprends la détection.', { undo: function () { setState('lieux', 'refuse'); } });
+    });
+  });
+  </script>
+</section>

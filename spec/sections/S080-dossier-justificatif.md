@@ -1,0 +1,4 @@
+## 80. DOSSIER JUSTIFICATIF (module proof_pack, désactivé par défaut)
+
+Assemble en un seul PDF, pour une période choisie (mois, année civile, année scolaire), les pièces utiles à un dossier de bourse, une demande de location ou de garant, une déclaration d'impôts ou un litige : relevés d'heures, fiches de paie importées (module pay), contrat et avenants (journal de contrat, s'il est actif), notes choisies.
+L'utilisateur coche les pièces, l'app génère un sommaire. Les montants lus sur les fiches de paie (source primaire) sont clairement distingués des estimations de l'app, étiquetées "estimation". Outil de caviardage simple (rectangle noir sur une zone d'une pièce) avant export, mot de passe PDF facultatif, aperçu, feuille de partage native, jamais d'envoi automatique. L'app ne remplit pas de formulaires officiels et ne donne aucun conseil juridique, fiscal ou administratif. Aucune dépendance externe pour générer le PDF.

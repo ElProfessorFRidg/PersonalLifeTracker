@@ -1,0 +1,69 @@
+name: Release
+# Déclenché par un tag du type v1.2.0 (sans suffixe)
+# ou par un push de branche qui modifie release/STABLE_VERSION (pour publier sans droit de pousser un tag) :
+# le fichier contient le tag à créer, par exemple v0.0.1
+on:
+  push:
+    tags: ['v[0-9]+.[0-9]+.[0-9]+']
+    branches: ['**']
+    paths: ['release/STABLE_VERSION']
+permissions:
+  contents: read
+jobs:
+  prep:
+    name: Prepare Release
+    runs-on: ubuntu-latest
+    outputs:
+      base: ${{ steps.v.outputs.base }}
+      tag: ${{ steps.v.outputs.tag }}
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Resolve release version
+        id: v
+        run: |
+          if [ "$GITHUB_REF_TYPE" = tag ]; then TAG="$GITHUB_REF_NAME"; else TAG="$(tr -d '[:space:]' < release/STABLE_VERSION)"; fi
+          echo "$TAG" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+$' || { echo "::error::tag invalide: '$TAG'"; exit 1; }
+          echo "tag=$TAG" >> "$GITHUB_OUTPUT"; echo "base=${TAG#v}" >> "$GITHUB_OUTPUT"
+  build:
+    name: Build and Test
+    needs: prep
+    uses: ./.github/workflows/_build-test.yml
+    with:
+      build_ipa: true
+      version: ${{ needs.prep.outputs.base }}
+  publish:
+    name: Publish Release
+    needs: [prep, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Download IPA artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ipa
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prep.outputs.tag }}
+        run: |
+          V="${TAG#v}"
+          IPA="PersonalLifeTracker-$V.ipa"; mv PersonalLifeTracker.ipa "$IPA"
+          python3 scripts/extract_changelog.py "$TAG" > release-notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$IPA" --clobber
+          else
+            gh release create "$TAG" "$IPA" --target "$GITHUB_SHA" --latest --title "$TAG" --notes-file release-notes.md
+          fi
+  altstore:
+    name: Publish AltStore Source
+    needs: [prep, publish]
+    permissions:
+      contents: write
+    uses: ./.github/workflows/altstore-source.yml
+    with:
+      tag: ${{ needs.prep.outputs.tag }}
+      channel: stable

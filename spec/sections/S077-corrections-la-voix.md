@@ -1,0 +1,5 @@
+## 77. CORRECTIONS À LA VOIX (module voice_corrections, désactivé par défaut)
+
+Corriger ou compléter par la voix via Siri (App Intents et App Shortcuts) ou par dictée dans l'app : "J'ai fini à 22h30", "J'ai commencé à 18h", "C'était des courses", "Supprime la pause", "Ajoute une note : rush".
+Traitement local : analyseur d'énoncés à règles (avec les outils d'analyse de texte de l'appareil), sans IA distante. Reconnaissance vocale sur l'appareil quand elle est disponible en français (Speech avec reconnaissance locale) ; si elle ne l'est pas, le dire et se rabattre sur la dictée du clavier, sans envoyer l'audio ailleurs sans que l'utilisateur le sache. Permissions micro et reconnaissance vocale demandées seulement à l'activation du module.
+Sécurité : toujours une confirmation avant d'appliquer ("Je mets ta fin de journée à 22:30, c'est bon ?"), sauf réglage explicite "appliquer sans demander", désactivé par défaut. L'heure d'origine est conservée dans le journal des modifications. En cas d'ambiguïté (quelle session, 6 h ou 18 h), poser une question courte plutôt que deviner. Respecter les limites de Siri (phrases enregistrées et formulations proches).

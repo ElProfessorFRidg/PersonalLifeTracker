@@ -1,0 +1,70 @@
+name: Publish AltStore Source
+# Appelé par beta.yml et release.yml (un workflow lancé avec GITHUB_TOKEN ne déclenche pas d'autres workflows).
+# Peut aussi être lancé à la main pour reconstruire la source d'un tag existant.
+on:
+  workflow_call:
+    inputs:
+      tag: { type: string, required: true }
+      channel: { type: string, required: true }
+  workflow_dispatch:
+    inputs:
+      tag: { type: string, required: true }
+      channel:
+        type: choice
+        options: [stable, beta]
+        default: stable
+permissions:
+  contents: write
+concurrency:
+  group: altstore-source
+  cancel-in-progress: false
+jobs:
+  source:
+    name: Publish AltStore Source
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Download release IPA
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          mkdir dl && gh release download "${{ inputs.tag }}" --pattern '*.ipa' --dir dl
+          ls -l dl
+      - name: Prepare AltStore source branch
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if git ls-remote --exit-code --heads origin altstore-source >/dev/null 2>&1; then
+            git fetch origin altstore-source && git worktree add src-branch altstore-source
+          else
+            git worktree add --detach src-branch && cd src-branch && git checkout --orphan altstore-source && git rm -rf . >/dev/null 2>&1 || true
+          fi
+      - name: Generate AltStore source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          IPA=$(ls dl/*.ipa | head -1); SIZE=$(stat -c%s "$IPA"); NAME=$(basename "$IPA")
+          URL="https://github.com/${{ github.repository }}/releases/download/${{ inputs.tag }}/$NAME"
+          python3 scripts/extract_changelog.py "${{ inputs.tag }}" > notes.md
+          python3 scripts/make_altstore_source.py --config altstore/config.json --repo "${{ github.repository }}" \
+            --tag "${{ inputs.tag }}" --ipa-url "$URL" --size "$SIZE" --channel "${{ inputs.channel }}" \
+            --branch-dir src-branch --notes notes.md --build "${{ github.run_number }}"
+          [ -f altstore/icon.png ] && cp altstore/icon.png src-branch/icon.png || echo "pas d'icône (altstore/icon.png)"
+          F=source.json; [ "${{ inputs.channel }}" = beta ] && F=source-beta.json
+          python3 scripts/validate_altstore_source.py "src-branch/$F"
+      - name: Push AltStore source branch
+        run: |
+          cd src-branch
+          git config user.name "github-actions[bot]"; git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --quiet && echo "rien à publier" || git commit -m "altstore: ${{ inputs.tag }} (${{ inputs.channel }})"
+          git push origin HEAD:altstore-source
+      - name: Verify published source
+        run: |
+          F=source.json; [ "${{ inputs.channel }}" = beta ] && F=source-beta.json
+          URL="https://raw.githubusercontent.com/${{ github.repository }}/altstore-source/$F"
+          sleep 10
+          curl -fsS "$URL" -o check.json && python3 scripts/validate_altstore_source.py check.json --check-urls \
+            || echo "::warning::source non joignable : dépôt privé ? la source AltStore exige un dépôt public"
+          echo "Lien AltStore : altstore://source?url=$URL"

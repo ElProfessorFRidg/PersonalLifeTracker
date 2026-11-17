@@ -1,0 +1,192 @@
+<section class="screen" id="scr-onb-modules" data-title="Choix des modules" data-group="Onboarding" data-tabbar="hide"
+         data-states="choix:Réglage conseillé">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="onb-bienvenue"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Retour</button>
+    <span class="navbar-title">Étape 2 sur 7</span>
+  </header>
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 2 sur 7"><i class="is-done"></i><i class="is-on"></i><i></i><i></i><i></i><i></i><i></i></div>
+
+    <div class="onb-head">
+      <h1 class="onb-h1">Qu'est-ce qui t'intéresse&nbsp;?</h1>
+      <p class="onb-lead">Je te propose le réglage qui va à la plupart des gens. Coche ou décoche, tu pourras tout changer dans Réglages, Fonctionnalités.</p>
+    </div>
+
+    <div class="field">
+      <span class="field-label" id="onbm-preset-l">Un préréglage</span>
+      <div class="segmented" id="onbm-preset" role="group" aria-labelledby="onbm-preset-l">
+        <button type="button" data-value="essentiel" aria-pressed="false">Essentiel</button>
+        <button type="button" data-value="complet" aria-pressed="false">Complet</button>
+        <button type="button" data-value="choix" aria-pressed="true">Je choisis</button>
+      </div>
+      <span class="field-help" id="onbm-count" aria-live="polite">11 fonctionnalités en plus sur 16</span>
+    </div>
+
+    <section class="section" aria-labelledby="onbm-noyau-t">
+      <div class="section-head"><h2 class="section-title" id="onbm-noyau-t">Toujours là</h2></div>
+      <div class="list">
+        <div class="row" id="onbm-noyau">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg></span>
+          <span class="row-main"><span class="row-title">Le noyau</span><span class="row-sub">Tes lieux, la détection des arrivées et départs, tes sessions, ta journée et tes stats. Pas désactivable.</span></span>
+          <span class="chip chip--accent">Obligatoire</span>
+        </div>
+      </div>
+      <p class="section-foot">Rien lié à l'argent n'est obligatoire. Tu peux tout décocher en dessous.</p>
+    </section>
+
+    <section class="section" aria-labelledby="onbm-g-taf">
+      <div class="section-head"><h2 class="section-title" id="onbm-g-taf">Ton taf</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-employment-l">Employeurs et contrats</span><span class="row-sub">Où tu bosses, ton contrat, tes horaires prévus</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-employment-l" data-module="employment"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-euro"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-pay-l">Salaire et paie</span><span class="row-sub">Ce que tu gagnes à peu près, selon tes heures. Demande Employeurs.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-pay-l" data-module="pay"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-contract_hours-l">Heures du contrat</span><span class="row-sub">Pour savoir où t'en es par rapport à ton contrat</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-contract_hours-l" data-module="contract_hours"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-leave-l">Congés payés</span><span class="row-sub">Ton solde de congés. Demande Employeurs.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="onbm-leave-l" data-module="leave"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-user"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-multi_employer-l">Plusieurs employeurs</span><span class="row-sub">Si t'as deux jobs ou plus. Demande Employeurs.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="onbm-multi_employer-l" data-module="multi_employer"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="onbm-g-cours">
+      <div class="section-head"><h2 class="section-title" id="onbm-g-cours">Tes cours</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-school_calendar-l">Calendrier scolaire</span><span class="row-sub">Vacances, jours fériés, rentrée</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-school_calendar-l" data-module="school_calendar"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-exam_mode-l">Mode examens</span><span class="row-sub">Un suivi adapté pendant les partiels</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="onbm-exam_mode-l" data-module="exam_mode"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-list"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-study_slots-l">Créneaux de révision</span><span class="row-sub">Je repère tes trous libres pour réviser</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="onbm-study_slots-l" data-module="study_slots"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="onbm-g-planning">
+      <div class="section-head"><h2 class="section-title" id="onbm-g-planning">Ton planning</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-planning_ocr-l">Planning par photo</span><span class="row-sub">Tu prends ton planning en photo, je le lis sur ton tel</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-planning_ocr-l" data-module="planning_ocr"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-search"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-missing_hours-l">Heures manquantes</span><span class="row-sub">Je te dis s'il manque des heures dans ta semaine</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-missing_hours-l" data-module="missing_hours"></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="onbm-g-quotidien">
+      <div class="section-head"><h2 class="section-title" id="onbm-g-quotidien">Au quotidien</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-now_card-l">Carte Maintenant</span><span class="row-sub">Une seule chose à faire à la fois sur l'accueil</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-now_card-l" data-module="now_card"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-notes-l">Notes de journée</span><span class="row-sub">Un mot ou deux sur ta journée</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-notes-l" data-module="notes"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-chart"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-recaps-l">Bilans du mois et de l'année</span><span class="row-sub">Un résumé quand c'est fini</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-recaps-l" data-module="recaps"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-weekly_review-l">Revue de la semaine</span><span class="row-sub">Le dimanche, un coup d'oeil sur ta semaine</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-weekly_review-l" data-module="weekly_review"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-live_activity_widgets-l">Écran verrouillé et widgets</span><span class="row-sub">Ta session en cours sans ouvrir l'app</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="onbm-live_activity_widgets-l" data-module="live_activity_widgets"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbm-travel_departure-l">Pars maintenant</span><span class="row-sub">Je te dis quand partir pour être à l'heure</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="onbm-travel_departure-l" data-module="travel_departure"></button>
+        </div>
+      </div>
+    </section>
+
+    <div class="onb-note" id="onbm-dep" hidden>
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>
+      <p id="onbm-dep-t"></p>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" data-go="onb-loc">Continuer</button>
+      <p class="section-foot onb-foot">Les étapes suivantes s'adaptent à ton choix.</p>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var el = document.getElementById('scr-onb-modules');
+    var sw = Array.prototype.slice.call(el.querySelectorAll('.switch[data-module]'));
+    var preset = document.getElementById('onbm-preset'), count = document.getElementById('onbm-count');
+    var dep = document.getElementById('onbm-dep'), depT = document.getElementById('onbm-dep-t');
+    var defaults = {}; sw.forEach(function (s) { defaults[s.getAttribute('data-module')] = s.getAttribute('aria-checked') === 'true'; });
+    var NEEDS_EMPLOYMENT = ['pay', 'contract_hours', 'leave', 'multi_employer'];
+    function get(id) { return el.querySelector('.switch[data-module="' + id + '"]'); }
+    function put(id, on) { get(id).setAttribute('aria-checked', String(on)); }
+    function pressed(v) { Array.prototype.forEach.call(preset.querySelectorAll('button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-value') === v)); }); }
+    function refresh() {
+      var on = sw.filter(function (s) { return s.getAttribute('aria-checked') === 'true'; });
+      count.textContent = on.length === 0 ? 'Seulement le noyau, rien en plus' : on.length + ' fonctionnalité' + (on.length > 1 ? 's' : '') + ' en plus sur ' + sw.length;
+      PLT.store.set('onb.modules', on.map(function (s) { return s.getAttribute('data-module'); }).join(','));
+    }
+    function note(t) { dep.hidden = !t; depT.textContent = t || ''; }
+    preset.addEventListener('change', function (e) {
+      var v = e.detail.value; note('');
+      sw.forEach(function (s) { var id = s.getAttribute('data-module'); s.setAttribute('aria-checked', String(v === 'complet' ? true : v === 'essentiel' ? false : defaults[id])); });
+      refresh();
+    });
+    el.addEventListener('change', function (e) {
+      var s = e.target.closest ? e.target.closest('.switch[data-module]') : null; if (!s) return;
+      var id = s.getAttribute('data-module'), on = e.detail.checked; pressed('choix'); note('');
+      if (id === 'employment' && !on) {
+        var off = NEEDS_EMPLOYMENT.filter(function (m) { return get(m).getAttribute('aria-checked') === 'true'; });
+        NEEDS_EMPLOYMENT.forEach(function (m) { put(m, false); });
+        if (off.length) note('Sans Employeurs et contrats, je coupe aussi ce qui en dépend (paie, heures du contrat, congés, plusieurs employeurs).');
+      }
+      if (NEEDS_EMPLOYMENT.indexOf(id) !== -1 && on && get('employment').getAttribute('aria-checked') !== 'true') {
+        put('employment', true); note('J\'ai aussi coché Employeurs et contrats, parce que celui-là en a besoin.');
+      }
+      refresh();
+    });
+    refresh();
+  });
+  </script>
+</section>

@@ -1,0 +1,9 @@
+## 19. CYCLE DE VIE DU CONTRAT ET FIN DE CONTRAT (module employment)
+
+Chaque contrat porte : type, date de début, date de fin (si déterminée), période d'essai (durée, date de fin, renouvelable ou non), motif éventuel, nombre de renouvellements.
+Les règles générales (durée de la période d'essai, renouvellement, durée maximale d'un CDD, indemnité de fin de contrat et cas où elle ne s'applique pas, par exemple certains contrats saisonniers ou jobs d'étudiant pendant les vacances, délai de carence entre deux CDD, préavis) ne sont JAMAIS codées en dur. Elles vivent dans Resources/reference/contracts.json avec source officielle et date de vérification. L'agent les recherche sur service-public.fr, Légifrance et code.travail.gouv.fr, et marque "à vérifier" ce qu'il ne peut pas confirmer. Le pack de convention prime sur les règles générales quand il est renseigné.
+Affichage : carte "Mon contrat" avec statut (en période d'essai, en cours, bientôt terminé, terminé), décompte ("Fin de ton CDD dans 23 jours"), et pour un CDD une estimation indicative de l'indemnité de fin de contrat quand elle s'applique.
+Alertes configurables : fin de période d'essai (par exemple 7 et 2 jours avant), fin de CDD ou de saisonnier (14 et 3 jours avant), fin d'alternance ou de stage, anniversaire du contrat.
+Checklist de fin de contrat (cases à cocher, chaque ligne explique à quoi ça sert) : certificat de travail, solde de tout compte, attestation pour France Travail, dernière fiche de paie, relevé des congés non pris, restitution du matériel, export du relevé d'heures final.
+Un contrat terminé est archivé, jamais supprimé : sessions, stats et bilans restent consultables. Créer le contrat suivant d'un tap (renouvellement, passage en CDI) en reprenant les informations.
+Aucun conseil juridique : l'app informe, cite ses sources, invite à vérifier le contrat.

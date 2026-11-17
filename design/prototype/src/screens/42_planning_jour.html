@@ -1,0 +1,172 @@
+<section class="screen" id="scr-planning-jour" data-title="Détail du jour" data-group="Planning" data-tab="planning"
+         data-states="aujourdhui:Aujourd'hui,passe:Jour passé">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="planning"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Planning</button>
+    <h1 class="navbar-title" data-when="aujourdhui">Lundi 16 novembre</h1>
+    <h1 class="navbar-title" data-when="passe">Samedi 14 novembre</h1>
+    <div class="navbar-actions">
+      <button type="button" class="iconbtn" data-sheet="sheet-pj-ajout" aria-label="Ajouter un créneau prévu"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></button>
+    </div>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Ruban prévu contre réel -->
+    <section class="section" aria-labelledby="pj-ruban-t">
+      <div class="section-head"><h2 class="section-title" id="pj-ruban-t">Prévu contre réel</h2></div>
+      <div class="card">
+        <div class="pj-rib">
+          <p class="eyebrow">Prévu</p>
+          <div class="timeline" style="--from:6;--to:24" role="img" data-when="aujourdhui"
+               aria-label="Prévu&nbsp;: cours de 8:00 à 12:00, taf de 18:00 à 21:00.">
+            <div class="timeline-track">
+              <i class="timeline-seg timeline-seg--planned" style="--s:8;--e:12"></i>
+              <i class="timeline-seg timeline-seg--planned" style="--s:18;--e:21"></i>
+            </div>
+          </div>
+          <div class="timeline" style="--from:6;--to:24" role="img" data-when="passe"
+               aria-label="Prévu&nbsp;: taf de 17:00 à 21:00.">
+            <div class="timeline-track">
+              <i class="timeline-seg timeline-seg--planned" style="--s:17;--e:21"></i>
+            </div>
+          </div>
+        </div>
+        <div class="pj-rib">
+          <p class="eyebrow">Réel</p>
+          <div class="timeline" style="--from:6;--to:24" role="img" data-when="aujourdhui"
+               aria-label="Réel&nbsp;: cours de 8:05 à 12:02, courses de 12:20 à 12:45 non comptées, taf depuis 17:56, il est 19:10.">
+            <div class="timeline-track">
+              <i class="timeline-seg timeline-seg--study" style="--s:8.08;--e:12.03"></i>
+              <i class="timeline-seg timeline-seg--errand" style="--s:12.33;--e:12.75"></i>
+              <i class="timeline-seg timeline-seg--work is-live" style="--s:17.93;--e:19.17"></i>
+              <i class="timeline-now" style="--s:19.17"></i>
+            </div>
+            <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
+          </div>
+          <div class="timeline" style="--from:6;--to:24" role="img" data-when="passe"
+               aria-label="Réel&nbsp;: taf de 16:58 à environ 20:38. La fin est à confirmer.">
+            <div class="timeline-track">
+              <i class="timeline-seg timeline-seg--work" style="--s:16.97;--e:20.25"></i>
+              <i class="timeline-seg timeline-seg--doubt" style="--s:20.25;--e:20.75"></i>
+            </div>
+            <div class="timeline-axis" aria-hidden="true"><span>6</span><span>9</span><span>12</span><span>15</span><span>18</span><span>21</span><span>24</span></div>
+          </div>
+        </div>
+        <div class="timeline-legend" aria-hidden="true">
+          <span><i class="lg-study"></i>Cours</span><span><i class="lg-work"></i>Taf</span><span><i class="lg-errand"></i>Courses</span>
+        </div>
+        <p class="card-text">Pointillés&nbsp;: ce qui était prévu. Barres pleines&nbsp;: ce que t'as vraiment fait.</p>
+      </div>
+    </section>
+
+    <!-- Écarts -->
+    <section class="section" aria-labelledby="pj-ecarts-t">
+      <div class="section-head"><h2 class="section-title" id="pj-ecarts-t">Les écarts</h2></div>
+
+      <div class="list" data-when="aujourdhui">
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Cours, Fac de lettres</span>
+            <span class="row-sub">Prévu <span class="num">08:00 à 12:00</span>, fait <span class="num">08:05 à 12:02</span></span>
+            <span class="row-sub">Arrivé 5 min après, parti 2 min avant</span>
+          </span>
+          <span class="row-value num">3 h 57</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Taf, Supérette du Canal</span>
+            <span class="row-sub">Prévu <span class="num">18:00 à 21:00</span>, arrivé <span class="num">17:56</span></span>
+            <span class="row-sub">En cours, prévu jusqu'à <span class="num">21:00</span></span>
+          </span>
+          <span class="row-value num">1 h 14</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="session">
+          <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Courses, Marché du Canal</span>
+            <span class="row-sub"><span class="num">12:20 à 12:45</span>. Rien de prévu, pas compté.</span>
+          </span>
+          <span class="row-value num">25 min</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+
+      <div class="list" data-when="passe">
+        <button type="button" class="row" data-go="doute">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main">
+            <span class="row-title">Taf, Supérette du Canal</span>
+            <span class="row-sub">Prévu <span class="num">17:00 à 21:00</span>, fait <span class="num">16:58 à 20:38</span></span>
+            <span class="row-sub">Parti 22 min avant la fin prévue</span>
+            <span class="chip-row"><span class="chip chip--doubt">Fin à confirmer</span></span>
+          </span>
+          <span class="row-value num">3 h 40</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+
+      <p class="section-foot" data-when="aujourdhui">Le prévu vient de ta photo du <span class="num">9</span> novembre. Les heures réelles viennent de tes sessions confirmées.</p>
+      <p class="section-foot" data-when="passe">Tant que la fin n'est pas confirmée, je compte <span class="num">20 h</span> ou <span class="num">21 h</span> selon ce que tu choisis, jamais les deux.</p>
+    </section>
+
+    <!-- Bilan du jour -->
+    <section class="section" aria-labelledby="pj-bilan-t">
+      <div class="section-head"><h2 class="section-title" id="pj-bilan-t">Pour ce jour</h2></div>
+      <div class="stat-grid">
+        <div class="stat stat--work">
+          <span class="stat-label"><i aria-hidden="true"></i>Taf</span>
+          <span class="stat-value" data-when="aujourdhui">1<small>h</small>14</span>
+          <span class="stat-note" data-when="aujourdhui">sur <span class="num">3 h</span> prévues</span>
+          <span class="stat-value" data-when="passe">3<small>h</small>40</span>
+          <span class="stat-note" data-when="passe">sur <span class="num">4 h</span> prévues, à plus ou moins <span class="num">3 min</span></span>
+        </div>
+        <div class="stat stat--study" data-when="aujourdhui">
+          <span class="stat-label"><i aria-hidden="true"></i>Cours</span>
+          <span class="stat-value">3<small>h</small>57</span>
+          <span class="stat-note">sur <span class="num">4 h</span> prévues</span>
+        </div>
+        <div class="stat" data-when="passe">
+          <span class="stat-label"><i aria-hidden="true"></i>Écart</span>
+          <span class="stat-value">&minus;20<small>min</small></span>
+          <span class="stat-note">par rapport au prévu</span>
+        </div>
+      </div>
+    </section>
+
+    <div class="btn-stack">
+      <button type="button" class="btn btn--secondary btn--block" data-sheet="sheet-pj-ajout"><svg class="icon icon--s" aria-hidden="true"><use href="#i-pencil"/></svg>Changer le prévu de ce jour</button>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet-pj-ajout">
+    <h2 class="sheet-title">Le prévu de ce jour</h2>
+    <p class="sheet-text">Changer le prévu ne touche jamais à tes heures réelles. Ça modifie seulement ce à quoi je les compare.</p>
+    <div class="list">
+      <button type="button" class="row" data-toast="Dans l'app, tu choisis le début, la fin et le lieu.">
+        <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-plus"/></svg></span>
+        <span class="row-main"><span class="row-title">Ajouter un créneau prévu</span><span class="row-sub">Taf, cours ou autre</span></span>
+      </button>
+      <button type="button" class="row" data-toast="Dans l'app, tu corriges l'heure du créneau.">
+        <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pencil"/></svg></span>
+        <span class="row-main"><span class="row-title">Modifier un créneau</span><span class="row-sub">Il sera marqué «&nbsp;corrigé&nbsp;»</span></span>
+      </button>
+      <button type="button" class="row" data-go="planning-photo">
+        <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+        <span class="row-main"><span class="row-title">Réimporter depuis une photo</span><span class="row-sub">Pour toute la semaine</span></span>
+      </button>
+    </div>
+    <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Fermer</button>
+  </div>
+
+  <style>
+    #scr-planning-jour .pj-rib { display: flex; flex-direction: column; gap: 6px; }
+    #scr-planning-jour .row-main { gap: 3px; }
+    #scr-planning-jour .row { align-items: flex-start; padding-block: 12px; }
+    #scr-planning-jour .row .row-chev, #scr-planning-jour .row .row-value { align-self: center; }
+  </style>
+</section>

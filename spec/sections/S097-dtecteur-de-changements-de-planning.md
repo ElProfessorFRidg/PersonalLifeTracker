@@ -1,0 +1,5 @@
+## 97. DÉTECTEUR DE CHANGEMENTS DE PLANNING (module planning_diff, exige planning_ocr, désactivé par défaut)
+
+Compare les versions d'UNE MÊME semaine (planning réimporté, modification manuelle, changement en cours de semaine), jamais deux semaines différentes entre elles (section 91). La comparaison porte sur les créneaux structurés et validés, pas sur le texte OCR brut, pour éviter les faux changements dus à la lecture.
+Affiche un diff lisible : créneau ajouté, supprimé, déplacé. Notification quand un changement touche les 48 prochaines heures ou à l'import : "Ton planning a changé : jeudi 18 h à 22 h est devenu 14 h à 18 h." Actions : "Accepter" (met à jour le prévu et conserve l'ancienne version), "Garder l'ancien", "Voir les détails". Historique des versions consultable (ScheduleVersion).
+Un changement accepté met à jour les notifications déjà programmées (brief, compte à rebours, trajet, check avant de partir) et n'entraîne aucune question d'heures manquantes pour un créneau supprimé officiellement.

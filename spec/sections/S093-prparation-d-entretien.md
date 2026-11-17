@@ -1,0 +1,7 @@
+## 93. PRÉPARATION D'ENTRETIEN (module interview_prep, exige employment et pay, désactivé par défaut)
+
+Prépare, avec des faits tirés des données réelles, un entretien avec le responsable. Trois modèles au choix, sections cochables, sortie en fiche PDF, trame d'entretien et brouillon de message modifiables, jamais envoyés automatiquement.
+- Modèle "Augmentation" : ancienneté, taux actuel et son historique (section 69), écart avec le minimum du pack de convention et avec le SMIC, heures en plus et remplacements pris (section 68), régularité (section 71), expériences et compétences (section 96), responsabilités saisies par l'utilisateur.
+- Modèle "Changement d'heures (avenant)" : quota du contrat, distribution réelle des heures (section 106.6), dépassements ou manques récurrents, remplacements, contraintes de l'utilisateur (cours, révisions, périodes bloquées), proposition chiffrée modifiable ("passer de 13 h à 16 h par semaine", ou "de 13 h à 10 h"). Aucun cadre légal codé en dur, et l'app rappelle qu'un changement d'heures passe par un accord entre les deux parties, à vérifier dans le contrat.
+- Modèle "Fin de période d'essai" : heures faites, régularité, remplacements, notes de journée choisies, formations, points à demander au responsable, questions à poser, échéance de la période d'essai (section 19).
+Ton posé, sans pression, aucune promesse de résultat ni affirmation qu'une demande serait due. Aucune donnée externe obligatoire, l'utilisateur peut saisir ses propres repères. Rien n'est envoyé automatiquement.
