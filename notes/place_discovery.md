@@ -23,4 +23,6 @@ Priorités majeures encore indisponibles dans le registre : emploi du temps scol
 - Recherche du nom, de l’adresse et de la catégorie dans Apple Plans à l’ouverture de la fiche. Recherche multiple facultative depuis la liste. Confirmation manuelle requise dans tous les cas. Sport et Sortie restent des activités personnelles. Le choix Courses avec « J’y travaille aussi » s’appuie sur la durée et le planning daté lorsqu’il est disponible.
 - Les régressions couvrent le vendredi matin et le week-end, le domicile, une école identifiée dans Plans, deux bâtiments proches, les anciens arrêts, les départs seuls après relance, la suppression des suggestions et la classification d’un commerce où l’on travaille aussi.
 
+L’accueil donne accès aux suggestions en attente. L’onboarding et Lieux expliquent les permissions et la recherche d’adresse. Une course courte pendant un horaire habituel de travail et un long service prévu contredisant une habitude de courses repassent par les règles de classification.
+
 Validation locale : contrôles du dépôt et des diffs. Compilation SwiftUI et tests XCTest NON TESTÉS localement (Linux, sans Xcode). Détection réelle en arrière-plan, délais iOS et résultats Plans NON TESTÉS sur iPhone.

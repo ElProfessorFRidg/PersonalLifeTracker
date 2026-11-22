@@ -133,10 +133,18 @@ enum VisitClassifier {
         let weekday: Int = calendar.component(.weekday, from: visit.start)
         let hour: Int = calendar.component(.hour, from: visit.start)
 
+        let matchesPlanning = visit.plannedShifts.contains { shift in
+            let earliest = shift.start.addingTimeInterval(-planningToleranceSeconds)
+            return visit.start >= earliest && visit.start <= shift.end
+        }
+        let shortVisit = visit.durationSeconds.map { $0 < shortVisitSeconds } ?? false
+        let longOnShift = matchesPlanning && (visit.durationSeconds ?? 0) > longVisitSeconds
+
         // Facteur 1 : correction manuelle antérieure dans un contexte similaire.
         // Section 11 : après 3 confirmations concordantes, la classification devient automatique pour ce contexte.
         let evidence: HabitEvidence = habits.evidence(placeKey: visit.placeKey, weekday: weekday, hourBucket: hour, now: now)
-        if let learnedIsWork = evidence.learnedIsWork {
+        if let learnedIsWork = evidence.learnedIsWork,
+           (learnedIsWork ? !shortVisit : !longOnShift) {
             let activity: ActivityType = learnedIsWork ? .work : .shopping
             let label: String = learnedIsWork ? "du travail" : "des courses"
             return ClassificationResult(
@@ -167,14 +175,7 @@ enum VisitClassifier {
 
         // Facteur 2 : créneau du planning.
         if !visit.plannedShifts.isEmpty {
-            var matches: Bool = false
-            for shift in visit.plannedShifts {
-                let earliest: Date = shift.start.addingTimeInterval(-planningToleranceSeconds)
-                if visit.start >= earliest && visit.start <= shift.end {
-                    matches = true
-                }
-            }
-            if matches {
+            if matchesPlanning {
                 net += planningMatchWeight
                 parts.append("Tu arrives pendant un créneau prévu au planning.")
             } else {

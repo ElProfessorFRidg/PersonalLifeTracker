@@ -12,6 +12,8 @@ struct LieuxView: View {
     @Query(sort: \Place.name) private var places: [Place]
     @AppStorage("plt.discovery.automaticMapsLookup") private var automaticMapsLookup = false
     @State private var showsAdd = false
+    @State private var permissions = PermissionRequester()
+    @State private var isRequestingLocation = false
     @State private var locationDenied = false
     @State private var selectedSuggestion: DiscoveredPlace?
 
@@ -76,7 +78,13 @@ struct LieuxView: View {
             if let error = discovery.error {
                 PLTBanner(kind: .error, title: "Découverte des lieux", message: error)
             }
-            if !locationDenied && !discovery.canMonitorVisits {
+            if discovery.needsPermissionRequest {
+                PLTBanner(kind: .info,
+                          title: "Active la découverte de lieux",
+                          message: "Autorise la localisation pour repérer tes arrêts suffisamment longs et te les proposer ici.",
+                          actionTitle: isRequestingLocation ? nil : "Autoriser la localisation",
+                          action: isRequestingLocation ? nil : requestLocation)
+            } else if !locationDenied && !discovery.canMonitorVisits {
                 PLTBanner(kind: .warning,
                           title: "Découverte en pause",
                           message: "Choisis « Toujours » dans Réglages iOS > Life Tracker > Localisation. La découverte pourra reprendre lorsque l'app est en arrière-plan.",
@@ -193,6 +201,16 @@ struct LieuxView: View {
             PlaceFormat.lastVisit($0, now: Date(), calendar: .current)
         }
         return [category, location, last].compactMap { $0 }.joined(separator: "\n")
+    }
+
+    private func requestLocation() {
+        isRequestingLocation = true
+        Task { @MainActor in
+            await permissions.requestLocationAccess()
+            locationDenied = LocationOnce.isDenied()
+            geofence.discovery.refresh()
+            isRequestingLocation = false
+        }
     }
 
     private func openSettings() {

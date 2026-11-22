@@ -12,6 +12,7 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
     private(set) var isMonitoring = false
     private(set) var hasPreciseLocation = false
     private(set) var canMonitorVisits = false
+    private(set) var needsPermissionRequest = false
     @ObservationIgnored private let manager = CLLocationManager()
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let container: ModelContainer
@@ -38,6 +39,7 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
     func refresh() {
         let active = ModuleStore(defaults: defaults).isActive("place_discovery")
         canMonitorVisits = manager.authorizationStatus == .authorizedAlways
+        needsPermissionRequest = manager.authorizationStatus == .notDetermined
         hasPreciseLocation = manager.accuracyAuthorization == .fullAccuracy
         let shouldMonitor = active && canMonitorVisits && hasPreciseLocation
         guard shouldMonitor != isMonitoring else { return }

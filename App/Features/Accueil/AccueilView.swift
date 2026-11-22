@@ -5,9 +5,13 @@ import SwiftData
 /// Garde le bouton Réglages de la barre d'outils.
 struct AccueilView: View {
     @Environment(AppSettings.self) private var settings
+    @Environment(GeofenceService.self) private var geofence
+    @Environment(ModuleStore.self) private var modules
     @Environment(\.modelContext) private var context
     @Environment(\.palette) private var palette
     @Query(sort: \WorkSession.startDate, order: .reverse) private var sessions: [WorkSession]
+    @Query private var places: [Place]
+    let onReviewPlaces: () -> Void
 
     @State private var showStart: Bool = false
     @State private var showAdd: Bool = false
@@ -18,9 +22,10 @@ struct AccueilView: View {
     var body: some View {
         let hasRunning: Bool = sessions.contains { $0.endDate == nil }
         let interval: TimeInterval = hasRunning ? 1 : 30
+        let placeCount = modules.isActive("place_discovery") ? geofence.discovery.suggestions(excluding: places).count : 0
         return PLTScreen(title: "Accueil") {
             TimelineView(.periodic(from: Date(), by: interval)) { timeline in
-                content(now: timeline.date)
+                content(now: timeline.date, placeCount: placeCount)
             }
         }
         .toolbar {
@@ -74,7 +79,7 @@ struct AccueilView: View {
         }
     }
 
-    private func content(now: Date) -> some View {
+    private func content(now: Date, placeCount: Int) -> some View {
         let cal: Calendar = Calendar.current
         let base: CalculationBase = settings.calculationBase
         let running: WorkSession? = sessions.first(where: { $0.endDate == nil })
@@ -115,6 +120,14 @@ struct AccueilView: View {
                     Label("Démarrer", systemImage: "play.fill")
                 }
                 .buttonStyle(.pltPrimary)
+            }
+
+            if placeCount > 0 {
+                PLTListGroup {
+                    PLTRow(symbol: "mappin.and.ellipse", title: placeCount == 1 ? "1 lieu à vérifier" : "\(placeCount) lieux à vérifier",
+                           subtitle: "Vérifie les arrêts détectés et choisis comment les classer.",
+                           showsChevron: true, showsSeparator: false, action: onReviewPlaces)
+                }
             }
 
             todaySection(work: work, study: study, base: base)

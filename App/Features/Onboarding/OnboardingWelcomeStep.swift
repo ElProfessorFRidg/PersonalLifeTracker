@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Étape 1 : ce que fait l'app, 100 % local, feuille "Et mes données ?".
+/// Étape 1 : ce que fait l'app, historique local et feuille "Et mes données ?".
 struct OnboardingWelcomeStep: View {
     @Environment(\.palette) private var palette
     let onContinue: () -> Void
@@ -16,8 +16,8 @@ struct OnboardingWelcomeStep: View {
                                 detail: "Au taf, en cours, aux courses, sans que tu ouvres l'app.")
                 OnboardingPoint(symbol: "chart.bar.fill", title: "Tu vois où passe ton temps",
                                 detail: "Ta journée, ta semaine, tes heures de taf et de cours.")
-                OnboardingPoint(symbol: "lock.fill", title: "100 % sur ton tel",
-                                detail: "Pas de compte, pas de serveur, rien ne part nulle part.")
+                OnboardingPoint(symbol: "lock.fill", title: "Ton historique reste sur ton iPhone",
+                                detail: "Life Tracker fonctionne sans compte.")
             }
             VStack(spacing: Theme.Spacing.s) {
                 Button("C'est parti", action: onContinue)
@@ -41,11 +41,11 @@ private struct OnboardingDataSheet: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: Theme.Spacing.l) {
                     OnboardingTitle(title: "Où vont tes données ?",
-                                    lead: "Nulle part. Tout reste sur ton iPhone, rien n'est envoyé à qui que ce soit.")
+                                    lead: "Ton historique et tes heures restent enregistrés sur ton iPhone.")
                     OnboardingPoint(symbol: "person.crop.circle.badge.xmark", title: "Pas de compte",
                                     detail: "Tu n'as ni mail ni mot de passe à donner.")
-                    OnboardingPoint(symbol: "server.rack", title: "Pas de serveur",
-                                    detail: "Ta position et tes heures ne quittent jamais ton tel.")
+                    OnboardingPoint(symbol: "map", title: "Recherche d’une adresse",
+                                    detail: "Quand tu consultes une suggestion dans Plans, Apple reçoit la position de l’arrêt recherché.")
                     OnboardingPoint(symbol: "hand.raised.fill", title: "Tu gardes la main",
                                     detail: "Tu peux tout exporter ou tout effacer depuis Réglages.")
                     Button("OK, compris") { dismiss() }

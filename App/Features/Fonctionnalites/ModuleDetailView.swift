@@ -121,7 +121,9 @@ struct ModuleDetailView: View {
                        value: "\(module.step)",
                        showsSeparator: false)
             }
-            Text("Tout reste sur ton tel. Rien n'est envoyé nulle part.")
+            Text(module.id == "place_discovery"
+                 ? "L’historique reste sur ton iPhone. Plans reçoit la position des arrêts recherchés pour retrouver leur adresse."
+                 : "Les données de ce module sont stockées sur ton iPhone.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
         }

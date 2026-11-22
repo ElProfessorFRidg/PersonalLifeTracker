@@ -29,15 +29,15 @@ struct OnboardingLocationStep: View {
     private var introView: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.l) {
             OnboardingHero(symbol: "location.fill")
-            OnboardingTitle(title: "J'ai besoin de savoir où t'es.",
-                            lead: "Pour noter tes heures tout seul, je dois voir quand t'arrives au taf et quand t'en pars, même app fermée. Rien ne sort de ton tel.")
+            OnboardingTitle(title: "Détecte tes arrivées",
+                            lead: "La localisation permet de relever tes arrivées au travail ou en cours, même quand l’app est fermée.")
             VStack(alignment: .leading, spacing: Theme.Spacing.m) {
                 OnboardingPoint(symbol: "mappin.and.ellipse", title: "Je repère tes lieux",
-                                detail: "Seulement ceux que t'ajoutes, avec une zone autour.")
+                                detail: "Life Tracker surveille tes lieux enregistrés et te propose de vérifier les nouveaux arrêts.")
                 OnboardingPoint(symbol: "figure.walk.arrival", title: "Je note arrivées et départs",
-                                detail: "Écran éteint, sans que t'ouvres l'app.")
-                OnboardingPoint(symbol: "lock.fill", title: "Rien n'est envoyé",
-                                detail: "Pas de compte, pas de serveur.")
+                                detail: "iOS transmet les événements en arrière-plan. Les suggestions peuvent arriver après ton départ.")
+                OnboardingPoint(symbol: "lock.fill", title: "Historique sur ton iPhone",
+                                detail: "Quand tu consultes une adresse dans Plans, Apple reçoit la position de l’arrêt recherché.")
             }
             PLTCard {
                 Text("Ce qu'iOS va te demander")
@@ -125,7 +125,7 @@ struct OnboardingLocationStep: View {
 
     private func resultTitle(_ level: LocationAccessLevel) -> String {
         switch level {
-        case .always: return "C'est bon, je peux te suivre."
+        case .always: return "Localisation autorisée"
         case .whenInUse: return "Presque, mais pas assez."
         case .notDetermined: return "Pas encore de réponse."
         case .denied, .restricted: return "Localisation refusée."
@@ -134,7 +134,7 @@ struct OnboardingLocationStep: View {
 
     private func resultLead(_ level: LocationAccessLevel) -> String {
         switch level {
-        case .always: return "iOS m'a donné « Toujours ». Je note tes arrivées et tes départs sans que t'aies rien à faire."
+        case .always: return "L’autorisation « Toujours » permet de détecter tes passages en arrière-plan. Garde « Position exacte » activée pour distinguer les lieux proches."
         case .whenInUse: return "Du coup je rate tes arrivées et tes départs. Passe la localisation sur « Toujours » dans les réglages iOS, ça prend dix secondes."
         case .notDetermined: return "Tu peux continuer, je te le redemanderai quand tu voudras."
         case .denied, .restricted: return "Je ne note plus tes arrivées. Tu peux lancer et arrêter tes sessions à la main, ou remettre la localisation quand tu veux."

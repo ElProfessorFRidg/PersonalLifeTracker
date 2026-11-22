@@ -228,6 +228,24 @@ final class ClassificationTests: XCTestCase {
         XCTAssertEqual(after.level, .automatic)
     }
 
+    func testQuickShoppingDuringUsualShiftDoesNotBecomeWork() {
+        var habits = HabitModel()
+        for index in 0..<3 { learn(&habits, "work-\(index)", isWork: true) }
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let result = classify(dual(seconds: 15 * 60, shifts: [shift]), habits: habits)
+        XCTAssertEqual(result.activity, .unknown)
+        XCTAssertTrue(result.needsConfirmation)
+    }
+
+    func testLongPlannedShiftConflictingWithShoppingHabitNeedsReview() {
+        var habits = HabitModel()
+        for index in 0..<3 { learn(&habits, "shopping-\(index)", isWork: false) }
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let result = classify(dual(seconds: 4 * 3600, shifts: [shift]), habits: habits)
+        XCTAssertEqual(result.activity, .work)
+        XCTAssertEqual(result.level, .provisional)
+    }
+
     func testNewAnswersCanFlipALearnedRuleBack() {
         var habits = HabitModel()
         learn(&habits, "a", isWork: false)

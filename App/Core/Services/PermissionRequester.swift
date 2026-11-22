@@ -87,7 +87,9 @@ final class PermissionRequester: NSObject, CLLocationManagerDelegate {
     }
 
     private func handleAuthorization(_ status: CLAuthorizationStatus) {
-        location = PermissionRequester.level(for: status)
+        let level = PermissionRequester.level(for: status)
+        guard level != location else { return }
+        location = level
         resumeLocationWaiters()
     }
 

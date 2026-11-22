@@ -85,7 +85,7 @@ struct MainTabView: View {
 
     private var tabs: some View {
         TabView(selection: $selection) {
-            NavigationStack { AccueilView() }
+            NavigationStack { AccueilView(onReviewPlaces: { selection = .lieux }) }
                 .tabItem { Label("Accueil", systemImage: "house") }
                 .tag(AppTab.accueil)
             NavigationStack { PlanningView() }
