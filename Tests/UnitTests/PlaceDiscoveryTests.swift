@@ -15,9 +15,9 @@ final class PlaceDiscoveryTests: XCTestCase {
 
     func testTwoSeparateDaysProduceOneSuggestionAndThirdAddsEvidence() {
         var candidates: [DiscoveredPlace] = []
-        record(&candidates, hoursAgo: 48)
+        record(&candidates, hoursAgo: 48, duration: 900)
         XCTAssertFalse(PlaceDiscoveryRules.acceptsSuggestion(candidates[0], now: now, calendar: TestCalendar.paris))
-        record(&candidates, hoursAgo: 24)
+        record(&candidates, hoursAgo: 24, duration: 900)
         XCTAssertTrue(PlaceDiscoveryRules.acceptsSuggestion(candidates[0], now: now, calendar: TestCalendar.paris))
         record(&candidates, hoursAgo: 1)
         XCTAssertEqual(candidates.count, 1)
@@ -74,7 +74,7 @@ final class PlaceDiscoveryTests: XCTestCase {
     func testOldVisitsExpireBeforeCounting() {
         var candidates = [DiscoveredPlace(latitude: 48.85, longitude: 2.35,
                                          arrivals: [now.addingTimeInterval(-46 * 86400)])]
-        record(&candidates, hoursAgo: 24)
+        record(&candidates, hoursAgo: 24, duration: 900)
         XCTAssertEqual(candidates[0].arrivals.count, 1)
         XCTAssertFalse(PlaceDiscoveryRules.acceptsSuggestion(candidates[0], now: now, calendar: TestCalendar.paris))
     }
@@ -148,6 +148,11 @@ final class PlaceDiscoveryTests: XCTestCase {
             let morning = makeDate(calendar, 2026, 11, day + 1, 5, 30)
             PlaceDiscoveryRules.record(in: &candidates, latitude: 48.87, longitude: 2.35,
                                        accuracy: 20, arrival: evening, departure: morning, now: now)
+            for hour in [12, 16] {
+                let daytime = makeDate(calendar, 2026, 11, day, hour, 0)
+                PlaceDiscoveryRules.record(in: &candidates, latitude: 48.87, longitude: 2.35,
+                                           accuracy: 20, arrival: daytime, departure: daytime.addingTimeInterval(900), now: now)
+            }
         }
         XCTAssertEqual(candidates.count, 2)
         XCTAssertEqual(candidates.map { PlaceDiscoveryRules.recommendation($0, now: now, calendar: calendar)?.type },

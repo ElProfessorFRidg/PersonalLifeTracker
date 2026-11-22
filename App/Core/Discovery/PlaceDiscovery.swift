@@ -171,6 +171,13 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
         persist()
     }
 
+    func hasIgnoredSuggestions(excluding places: [Place], now: Date = Date()) -> Bool {
+        candidates.contains { candidate in
+            candidate.dismissed && PlaceDiscoveryRules.acceptsSuggestion(candidate, now: now, calendar: .current)
+                && !places.contains { isKnown(candidate.latitude, candidate.longitude, place: $0) }
+        }
+    }
+
     func restoreSuggestions() {
         for index in candidates.indices { candidates[index].dismissed = false }
         persist()

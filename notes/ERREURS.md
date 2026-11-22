@@ -15,3 +15,7 @@ Correction : inspecter unicodeScalars pour les séparateurs, guillemets, CR et L
 Le test existant CRLF est conservé et un cas CR seul est ajouté. Aucun oracle modifié.
 Validation locale : scripts Python et contrôle du diff ; tests Swift/iOS NON TESTÉS localement (Linux sans Swift/Xcode).
 La nouvelle exécution GitHub Actions doit confirmer la correction.
+
+## 2026-11-22 : seuil et activité par défaut dans les tests de lieux
+
+Le [run 50](https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/45068103866) a compilé l’app et exécuté 570 tests. Deux scénarios de découvertes répétées utilisaient un arrêt de 20 minutes, qui est maintenant éligible à lui seul. Les données de test utilisent des arrêts de 15 minutes pour vérifier la répétition et l’expiration indépendamment du seuil d’un arrêt unique. Le troisième test attendait qu’un type de lieu illisible devienne « Taf ». Il vérifie maintenant que ce cas reste personnel et ne peut pas démarrer de session automatique. Le scénario d’un arrêt unique suffisamment long reste couvert séparément.

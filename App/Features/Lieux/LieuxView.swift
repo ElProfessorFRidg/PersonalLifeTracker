@@ -129,7 +129,7 @@ struct LieuxView: View {
                 }
             }
 
-            if discovery.candidates.contains(where: { $0.dismissed }) {
+            if discovery.hasIgnoredSuggestions(excluding: places) {
                 Button("Revoir les lieux ignorés") {
                     discovery.restoreSuggestions()
                 }

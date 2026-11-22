@@ -78,7 +78,7 @@ enum PlaceDiscoveryRules {
         let longVisits = visits.filter { $0.duration >= 2 * 3600 }
         let longDays = Set(longVisits.map { calendar.startOfDay(for: $0.arrival) })
         let nights = Set(visits.compactMap { overnightDay(for: $0, calendar: calendar) })
-        if candidate.context?.category == nil, nights.count >= 3, nights.count * 2 >= visits.count {
+        if candidate.context?.category == nil, nights.count >= 3, nights.count * 2 >= longVisits.count {
             return PlaceRecommendation(type: .domicile, reason: "Plusieurs longues visites couvrent le milieu de la nuit.")
         }
         if let category = candidate.context?.category, category != .courses {

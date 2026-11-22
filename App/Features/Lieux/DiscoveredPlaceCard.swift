@@ -28,7 +28,7 @@ struct DiscoveredPlaceCard: View {
             PLTScreen(title: "Vérifier le lieu") {
                 locationSection(current)
                 if let typeHint {
-                    suggestionSection(typeHint)
+                    suggestionSection(typeHint, venueType: current.context?.category)
                 }
                 visitSection(current)
                 typeSection
@@ -115,7 +115,7 @@ struct DiscoveredPlaceCard: View {
         return "Latitude \(latitude), longitude \(longitude)"
     }
 
-    private func suggestionSection(_ recommendation: PlaceRecommendation) -> some View {
+    private func suggestionSection(_ recommendation: PlaceRecommendation, venueType: PlaceType?) -> some View {
         PLTCard {
             Label("\(recommendation.type.title) possible", systemImage: recommendation.type.symbolName)
                 .font(.headline)
@@ -123,6 +123,14 @@ struct DiscoveredPlaceCard: View {
             Text(recommendation.reason)
                 .font(.subheadline)
                 .foregroundStyle(palette.textSecondary)
+            if recommendation.type == .taf && venueType == .courses && !(type == .courses && alsoWorksHere) {
+                Button("Je travaille et je fais mes courses ici") {
+                    type = .courses
+                    alsoWorksHere = true
+                }
+                .font(.subheadline.weight(.semibold))
+                .frame(minHeight: 44)
+            }
             if type != recommendation.type {
                 Button("Choisir « \(recommendation.type.title) »") {
                     type = recommendation.type

@@ -75,7 +75,8 @@ final class SwiftDataModelsTests: XCTestCase {
     func testUnknownStoredRawValuesFallBackSafely() {
         let place = Place(name: "X", type: .cours)
         place.typeRaw = "inconnu"
-        XCTAssertEqual(place.type, .taf)
+        XCTAssertEqual(place.type, .autre)
+        XCTAssertFalse(DetectionPlace(uid: place.uid, name: place.name, type: place.type).createsSessions)
         let s = WorkSession(activity: .work, start: nov16(9, 0))
         s.activityRaw = "inconnu"
         XCTAssertEqual(s.activity, .unknown)
