@@ -12,6 +12,7 @@ jobs:
     uses: ./.github/workflows/_build-test.yml
     with:
       build_ipa: true
+      version: "0.0.1"
   publish:
     name: Publish Latest Build
     needs: build-test
