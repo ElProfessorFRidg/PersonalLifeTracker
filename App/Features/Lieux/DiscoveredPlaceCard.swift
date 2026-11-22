@@ -142,50 +142,46 @@ struct DiscoveredPlaceCard: View {
     }
 
     private func visitSection(_ current: DiscoveredPlace) -> some View {
-        let visits = discovery.observations(for: current).sorted { $0.arrival > $1.arrival }
-        let count = discovery.visitCount(for: current)
+        let now = Date()
+        let arrivals = PlaceDiscoveryRules.freshArrivals(current, now: now).sorted(by: >)
+        let visits = discovery.observations(for: current, now: now)
+        let count = arrivals.count
         let title = count == 1 ? "1 passage repéré" : "\(count) passages repérés"
 
         return PLTCard {
-            if visits.isEmpty {
-                Text(title).font(.headline)
-                Text("Les heures de ces anciens passages sont incomplètes.")
-                    .font(.footnote)
-                    .foregroundStyle(palette.textSecondary)
-            } else {
-                DisclosureGroup(isExpanded: $showsVisits) {
-                    VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-                        ForEach(visits.prefix(7), id: \.arrival) { visit in
-                            HStack(alignment: .firstTextBaseline) {
-                                Text(PlaceFormat.dayLabel(visit.arrival, now: Date(), calendar: .current))
-                                Spacer(minLength: Theme.Spacing.s)
-                                Text(visitHours(visit))
-                                    .multilineTextAlignment(.trailing)
-                            }
-                            .font(.subheadline)
-                            .accessibilityElement(children: .combine)
+            DisclosureGroup(isExpanded: $showsVisits) {
+                VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+                    ForEach(arrivals, id: \.self) { arrival in
+                        let departure = visits.first { $0.arrival == arrival }?.departure
+                        HStack(alignment: .firstTextBaseline) {
+                            Text(PlaceFormat.dayLabel(arrival, now: now, calendar: .current))
+                            Spacer(minLength: Theme.Spacing.s)
+                            Text(visitHours(arrival: arrival, departure: departure, now: now))
+                                .multilineTextAlignment(.trailing)
                         }
+                        .font(.subheadline)
+                        .accessibilityElement(children: .combine)
                     }
-                    .padding(.top, Theme.Spacing.s)
-                } label: {
-                    Text(title)
-                        .font(.headline)
-                        .frame(minHeight: 44)
                 }
-                .animation(reduceMotion ? nil : .easeInOut(duration: 0.22), value: showsVisits)
+                .padding(.top, Theme.Spacing.s)
+            } label: {
+                Text(title)
+                    .font(.headline)
+                    .frame(minHeight: 44)
             }
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.22), value: showsVisits)
         }
     }
 
-    private func visitHours(_ visit: PlaceVisitObservation) -> String {
+    private func visitHours(arrival: Date, departure: Date?, now: Date) -> String {
         let calendar = Calendar.current
-        let start = Formatting.clock(visit.arrival, calendar: calendar)
-        let departure = visit.departure
+        let start = Formatting.clock(arrival, calendar: calendar)
+        guard let departure else { return "\(start) · Départ inconnu" }
         let end = Formatting.clock(departure, calendar: calendar)
-        if calendar.isDate(visit.arrival, inSameDayAs: departure) {
+        if calendar.isDate(arrival, inSameDayAs: departure) {
             return "\(start) à \(end)"
         }
-        let day = PlaceFormat.dayLabel(departure, now: Date(), calendar: calendar)
+        let day = PlaceFormat.dayLabel(departure, now: now, calendar: calendar)
         return "\(start) à \(end) (\(day))"
     }
 

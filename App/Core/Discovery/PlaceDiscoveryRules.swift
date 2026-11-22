@@ -150,6 +150,13 @@ enum PlaceDiscoveryRules {
             visits[index] = PlaceVisitObservation(arrival: old.arrival,
                                                   departure: max(old.departure, observation.departure),
                                                   accuracy: min(old.accuracy, observation.accuracy))
+        } else if let legacyIndex = candidate.arrivals.firstIndex(where: { arrival in
+            abs(arrival.timeIntervalSince(observation.arrival)) < 10 * 60
+                && !visits.contains { $0.arrival == arrival }
+        }) {
+            // A replay with a departure can complete an arrival recorded by the old app.
+            candidate.arrivals[legacyIndex] = observation.arrival
+            visits.append(observation)
         } else {
             // Core Location may deliver several stops during one stint indoors. Keep only one representative.
             guard !candidate.arrivals.contains(where: { abs($0.timeIntervalSince(observation.arrival)) < 2 * 3600 }) else { return }

@@ -211,6 +211,43 @@ final class PlaceDiscoveryTests: XCTestCase {
     }
 
     @MainActor
+    func testStoredLegacyArrivalCombinesWithNewVisitsAndCanGainDeparture() throws {
+        struct LegacyStop: Encodable {
+            let id: UUID
+            let latitude = 48.85
+            let longitude = 2.35
+            let arrivals: [Date]
+            let dismissed = false
+        }
+
+        let (defaults, name) = makeIsolatedDefaults()
+        defer { defaults.removePersistentDomain(forName: name) }
+        let container = try AppModelContainer.make(inMemory: true)
+        let older = now.addingTimeInterval(-72 * 3600)
+        let replayed = now.addingTimeInterval(-48 * 3600)
+        let legacy = LegacyStop(id: UUID(), arrivals: [older, replayed])
+        defaults.set(try JSONEncoder().encode([legacy]), forKey: "plt.discovery.stops.v1")
+
+        let discovery = PlaceDiscovery(container: container, defaults: defaults)
+        let old = try XCTUnwrap(discovery.suggestions(excluding: [], now: now).first)
+        XCTAssertEqual(old.id, legacy.id)
+        XCTAssertTrue(discovery.observations(for: old, now: now).isEmpty)
+
+        let replayedDeparture = replayed.addingTimeInterval(50 * 60)
+        discovery.recordVisit(latitude: 48.85, longitude: 2.35, accuracy: 20,
+                              arrival: replayed, departure: replayedDeparture, now: now)
+        let newArrival = now.addingTimeInterval(-3600)
+        discovery.recordVisit(latitude: 48.85, longitude: 2.35, accuracy: 25,
+                              arrival: newArrival, departure: newArrival.addingTimeInterval(900), now: now)
+        let restored = PlaceDiscovery(container: container, defaults: defaults)
+        let merged = try XCTUnwrap(restored.suggestions(excluding: [], now: now).first)
+        XCTAssertEqual(merged.id, legacy.id)
+        XCTAssertEqual(merged.arrivals, [older, replayed, newArrival])
+        XCTAssertEqual(restored.observations(for: merged, now: now).map(\.arrival), [replayed, newArrival])
+        XCTAssertEqual(restored.observations(for: merged, now: now).first?.departure, replayedDeparture)
+    }
+
+    @MainActor
     func testArrivalOnlySurvivesRelaunchAndJoinsDepartureOnly() throws {
         let (defaults, name) = makeIsolatedDefaults()
         defer { defaults.removePersistentDomain(forName: name) }

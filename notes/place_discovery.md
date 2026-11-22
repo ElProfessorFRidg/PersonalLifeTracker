@@ -26,3 +26,7 @@ Priorités majeures encore indisponibles dans le registre : emploi du temps scol
 L’accueil donne accès aux suggestions en attente. L’onboarding et Lieux expliquent les permissions et la recherche d’adresse. Une course courte pendant un horaire habituel de travail et un long service prévu contredisant une habitude de courses repassent par les règles de classification.
 
 Validation locale : contrôles du dépôt et des diffs. Compilation SwiftUI et tests XCTest NON TESTÉS localement (Linux, sans Xcode). Détection réelle en arrière-plan, délais iOS et résultats Plans NON TESTÉS sur iPhone.
+
+## Utilisation de l’ancien historique
+
+La clé de stockage des suggestions et le format historique des dates d’arrivée restent lisibles. Les anciens et nouveaux passages se combinent sur la même fiche dans la fenêtre de 45 jours. Les anciens départs absents sont affichés comme inconnus. Si iOS renvoie un passage déjà connu avec un départ, la fiche se complète et le nombre de passages reste identique. Aucun arrêt ou horaire absent des données enregistrées n’est reconstruit.
