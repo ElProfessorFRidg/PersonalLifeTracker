@@ -30,3 +30,7 @@ Validation locale : contrôles du dépôt et des diffs. Compilation SwiftUI et t
 ## Utilisation de l’ancien historique
 
 La clé de stockage des suggestions et le format historique des dates d’arrivée restent lisibles. Les anciens et nouveaux passages se combinent sur la même fiche dans la fenêtre de 45 jours. Les anciens départs absents sont affichés comme inconnus. Si iOS renvoie un passage déjà connu avec un départ, la fiche se complète et le nombre de passages reste identique. Aucun arrêt ou horaire absent des données enregistrées n’est reconstruit.
+
+## Visites récurrentes avec des relevés GPS inégaux
+
+Le regroupement tient compte de la précision des deux relevés, dans un rayon maximal de 85 m. Deux positions précises gardent un rayon plus étroit, et une attribution ambiguë entre deux lieux est écartée. Un départ moins précis peut compléter une arrivée précise si les horaires et lieux désignent un seul passage connu. La fiche se base alors sur la position de l’arrivée. L’écran Lieux indique aussi quand iOS a livré une arrivée récente et que le départ est encore absent.

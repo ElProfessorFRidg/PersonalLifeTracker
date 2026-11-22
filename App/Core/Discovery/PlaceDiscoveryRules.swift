@@ -117,9 +117,12 @@ enum PlaceDiscoveryRules {
         let matches = candidates.indices.compactMap { index -> (Int, Double)? in
             let candidate = candidates[index]
             let meters = distance(latitude, longitude, candidate.latitude, candidate.longitude)
-            let candidateAccuracy = candidate.visits?.map(\.accuracy).min() ?? accuracy
+            let candidateAccuracy = candidate.visits?.map(\.accuracy).min() ?? 35
+            // One precise visit and one noisier fix can still describe the same stop.
+            // Keep separate, nearby buildings when both fixes are precise.
+            let matchingRadius = min(85, max(35, hypot(accuracy, candidateAccuracy)))
             let active = candidate.dismissed || candidate.arrivals.contains { $0 >= cutoff }
-            return active && isSamePlace(distance: meters, accuracy: min(accuracy, candidateAccuracy)) ? (index, meters) : nil
+            return active && meters <= matchingRadius ? (index, meters) : nil
         }.sorted { $0.1 < $1.1 }
         let observation = PlaceVisitObservation(arrival: arrival, departure: departure, accuracy: accuracy)
         if let (index, meters) = matches.first {

@@ -107,6 +107,11 @@ struct LieuxView: View {
                     .foregroundStyle(palette.textSecondary)
             }
 
+            if discovery.isMonitoring && discovery.hasRecentArrivalAwaitingDeparture() {
+                PLTBanner(kind: .info, title: "Arrivée reçue",
+                          message: "iOS a transmis une arrivée. La durée sera disponible après réception du départ.")
+            }
+
             if suggestions.isEmpty {
                 if discovery.isMonitoring {
                     PLTCard {

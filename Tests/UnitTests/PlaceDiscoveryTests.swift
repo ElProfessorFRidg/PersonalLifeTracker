@@ -169,6 +169,26 @@ final class PlaceDiscoveryTests: XCTestCase {
         }.map(\.latitude), [48.85])
     }
 
+    func testNoisierFixesAcrossThreeDaysStillGroupTheSameWorkplace() throws {
+        let calendar = TestCalendar.paris
+        let now = makeDate(calendar, 2026, 11, 23, 12, 0)
+        var candidates: [DiscoveredPlace] = []
+        let fixes: [(day: Int, latitude: Double, accuracy: Double)] = [
+            (20, 48.85, 15), (21, 48.8506, 85), (22, 48.8495, 80)
+        ]
+        for fix in fixes {
+            let start = makeDate(calendar, 2026, 11, fix.day, 8, 0)
+            PlaceDiscoveryRules.record(in: &candidates, latitude: fix.latitude, longitude: 2.35,
+                                       accuracy: fix.accuracy, arrival: start,
+                                       departure: start.addingTimeInterval(5 * 3600), now: now)
+        }
+        let candidate = try XCTUnwrap(candidates.first)
+        XCTAssertEqual(candidates.count, 1)
+        XCTAssertEqual(candidate.arrivals.count, 3)
+        XCTAssertTrue(PlaceDiscoveryRules.acceptsSuggestion(candidate, now: now, calendar: calendar))
+        XCTAssertEqual(PlaceDiscoveryRules.recommendation(candidate, now: now, calendar: calendar)?.type, .taf)
+    }
+
     func testSchoolMapEvidenceWinsOverLongDaytimeVisits() throws {
         var candidates: [DiscoveredPlace] = []
         for hours in [72.0, 48.0, 24.0] {
@@ -266,6 +286,27 @@ final class PlaceDiscoveryTests: XCTestCase {
         let candidate = try XCTUnwrap(restored.suggestions(excluding: [], now: now).first)
         XCTAssertEqual(restored.observations(for: candidate, now: now).map(\.duration), [3600])
         XCTAssertEqual(candidate.latitude, 48.85)
+    }
+
+    @MainActor
+    func testImpreciseDepartureCompletesMatchingAccurateArrivalOnly() throws {
+        let (defaults, name) = makeIsolatedDefaults()
+        defer { defaults.removePersistentDomain(forName: name) }
+        let container = try AppModelContainer.make(inMemory: true)
+        let discovery = PlaceDiscovery(container: container, defaults: defaults)
+        let arrival = now.addingTimeInterval(-5 * 3600)
+        discovery.recordVisit(latitude: 48.85, longitude: 2.35, accuracy: 20,
+                              arrival: arrival, departure: .distantFuture, now: now)
+        XCTAssertTrue(discovery.hasRecentArrivalAwaitingDeparture(now: now))
+        discovery.recordVisit(latitude: 48.8505, longitude: 2.35, accuracy: 150,
+                              arrival: arrival.addingTimeInterval(20 * 60), departure: now, now: now)
+        XCTAssertTrue(discovery.candidates.isEmpty)
+        discovery.recordVisit(latitude: 48.8505, longitude: 2.35, accuracy: 150,
+                              arrival: arrival, departure: now, now: now)
+        let candidate = try XCTUnwrap(discovery.suggestions(excluding: [], now: now).first)
+        XCTAssertEqual(candidate.latitude, 48.85)
+        XCTAssertEqual(discovery.observations(for: candidate, now: now).map(\.duration), [5 * 3600])
+        XCTAssertFalse(discovery.hasRecentArrivalAwaitingDeparture(now: now))
     }
 
     @MainActor

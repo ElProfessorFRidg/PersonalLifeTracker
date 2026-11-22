@@ -16,7 +16,7 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
     @ObservationIgnored private let manager = CLLocationManager()
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let container: ModelContainer
-    @ObservationIgnored private var pending: [PendingPlaceVisit] = []
+    private var pending: [PendingPlaceVisit] = []
     @ObservationIgnored private var lookups: Set<UUID> = []
     private static let key = "plt.discovery.stops.v1"
     private static let pendingKey = "plt.discovery.pending.v1"
@@ -72,19 +72,28 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
 
     func recordVisit(latitude: Double, longitude: Double, accuracy: Double,
                      arrival: Date, departure: Date, now: Date) {
-        guard ModuleStore(defaults: defaults).isActive("place_discovery"),
-              PlaceDiscoveryRules.validFix(latitude: latitude, longitude: longitude, accuracy: accuracy) else { return }
+        guard ModuleStore(defaults: defaults).isActive("place_discovery") else { return }
+        let usableFix = PlaceDiscoveryRules.validFix(latitude: latitude, longitude: longitude, accuracy: accuracy)
+        let canCompleteKnownArrival = departure <= now && arrival != .distantPast && accuracy > 100 && accuracy <= 200
+            && PlaceDiscoveryRules.validFix(latitude: latitude, longitude: longitude, accuracy: 0)
+        guard usableFix || canCompleteKnownArrival else { return }
         let cutoff = now.addingTimeInterval(-PlaceDiscoveryRules.history)
         let oldPendingCount = pending.count
         pending.removeAll { $0.arrival < cutoff }
-        let matchIndex = pending.indices.filter { index in
+        let matchingIndices = pending.indices.filter { index in
             let visit = pending[index]
-            let sameArrival = arrival == .distantPast || abs(visit.arrival.timeIntervalSince(arrival)) < 10 * 60
+            let arrivalDifference = abs(visit.arrival.timeIntervalSince(arrival))
             let meters = PlaceDiscoveryRules.distance(latitude, longitude, visit.latitude, visit.longitude)
             let span = departure.timeIntervalSince(visit.arrival)
-            let plausibleDeparture = departure == .distantFuture || (span > 0 && span <= 3 * 86400)
-            return sameArrival && plausibleDeparture && PlaceDiscoveryRules.isSamePlace(distance: meters, accuracy: max(accuracy, visit.accuracy))
-        }.max { pending[$0].arrival < pending[$1].arrival }
+            guard departure == .distantFuture || (span > 0 && span <= 3 * 86400) else { return false }
+            if !usableFix {
+                return visit.accuracy <= 65 && arrivalDifference < 2 * 60 && meters <= 75
+            }
+            let sameArrival = arrival == .distantPast || arrivalDifference < 10 * 60
+            return sameArrival && PlaceDiscoveryRules.isSamePlace(distance: meters, accuracy: max(accuracy, visit.accuracy))
+        }
+        guard usableFix || matchingIndices.count == 1 else { return }
+        let matchIndex = matchingIndices.max { pending[$0].arrival < pending[$1].arrival }
 
         if departure == .distantFuture {
             guard arrival >= cutoff, arrival <= now else { return }
@@ -135,6 +144,13 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
             if $0.last != $1.last { return $0.last > $1.last }
             return $0.place.id.uuidString < $1.place.id.uuidString
         }.map(\.place)
+    }
+
+    func hasRecentArrivalAwaitingDeparture(now: Date = Date()) -> Bool {
+        pending.contains { visit in
+            let elapsed = now.timeIntervalSince(visit.arrival)
+            return (0...86400).contains(elapsed)
+        }
     }
 
     func observations(for candidate: DiscoveredPlace, now: Date = Date()) -> [PlaceVisitObservation] {
