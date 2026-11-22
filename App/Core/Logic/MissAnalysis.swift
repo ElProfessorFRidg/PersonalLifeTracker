@@ -262,7 +262,7 @@ enum MissAnalysis {
     /// Marge après la fin de la session dans la fenêtre (secondes).
     static let windowAfter: TimeInterval = 5400
 
-    static let arrivalKinds: [String] = ["regionEntered", "arrivalConfirmed", "sessionStarted"]
+    static let arrivalKinds: [String] = ["regionEntered", "arrivalConfirmed", "visitNoted", "sessionStarted"]
     static let departureKinds: [String] = ["regionExited", "departureConfirmed", "sessionStopped"]
 
     /// Fenêtre étudiée autour d'une session.

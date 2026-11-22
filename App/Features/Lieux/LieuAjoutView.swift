@@ -17,7 +17,10 @@ struct LieuAjoutView: View {
     @State private var center: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 48.8566, longitude: 2.3522)
     @State private var radius: Double = PlaceRules.defaultRadius
     @State private var name: String = ""
-    @State private var type: PlaceType = .taf
+    @State private var type: PlaceType?
+    @State private var address: String = ""
+    @State private var positionChosen: Bool = false
+    @State private var showsLocationError: Bool = false
     @State private var alsoWorksHere: Bool = false
     @State private var showsNameError: Bool = false
     @State private var saveFailed: Bool = false
@@ -40,7 +43,7 @@ struct LieuAjoutView: View {
                 mapSection
                 locationFeedback
                 radiusSection
-                if let warning = PlaceRules.overlapWarning(names: overlapNames) {
+                if positionChosen, let warning = PlaceRules.overlapWarning(names: overlapNames) {
                     PLTBanner(kind: .warning, title: "Zones qui se touchent", message: warning)
                 }
                 nameSection
@@ -50,6 +53,7 @@ struct LieuAjoutView: View {
                 }
                 Button("Enregistrer ce lieu") { save() }
                     .buttonStyle(.pltPrimary)
+                    .disabled(type == nil)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -61,6 +65,8 @@ struct LieuAjoutView: View {
                 if case .located(let lat, let lon) = locator.state {
                     let coordinate = CLLocationCoordinate2D(latitude: lat, longitude: lon)
                     center = coordinate
+                    positionChosen = true
+                    showsLocationError = false
                     camera = .region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 700, longitudinalMeters: 700))
                 }
             }
@@ -80,6 +86,10 @@ struct LieuAjoutView: View {
                 }
                 .onMapCameraChange(frequency: .continuous) { mapContext in
                     center = mapContext.region.center
+                    if !positionChosen && camera.positionedByUser {
+                        positionChosen = true
+                        showsLocationError = false
+                    }
                 }
                 // Épingle fixe : le bas de l'épingle est au centre de la carte.
                 Image(systemName: "mappin")
@@ -96,6 +106,11 @@ struct LieuAjoutView: View {
             Text("Déplace la carte pour mettre l'épingle sur ton lieu.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
+            if showsLocationError {
+                Text("Place l'épingle sur la carte ou utilise « Ma position ».")
+                    .font(.footnote)
+                    .foregroundStyle(palette.danger)
+            }
             Button {
                 locator.request()
             } label: {
@@ -165,11 +180,12 @@ struct LieuAjoutView: View {
                 Text(issue.message)
                     .font(.footnote)
                     .foregroundStyle(palette.danger)
-            } else {
-                Text("Un nom court, pour te repérer dans la liste.")
-                    .font(.footnote)
-                    .foregroundStyle(palette.textSecondary)
             }
+            TextField("Adresse (facultative)", text: $address)
+                .textContentType(.fullStreetAddress)
+                .padding(.horizontal, Theme.Spacing.m)
+                .frame(minHeight: 44)
+                .background(palette.surface, in: RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
         }
     }
 
@@ -177,95 +193,19 @@ struct LieuAjoutView: View {
 
     private var typeSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Taf, cours ou courses ?")
-            PLTListGroup {
-                typeRow(.taf, note: "Tes heures comptent dans ton contrat et ta paie", showsSeparator: true)
-                typeRow(.cours, note: "Comptées à part, jamais dans la paie", showsSeparator: true)
-                typeRow(.courses, note: "Notées dans ton historique, mais pas comptées", showsSeparator: false)
-            }
-            if type == .courses {
-                Toggle(isOn: $alsoWorksHere) {
-                    VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                        Text("J'y travaille aussi")
-                            .font(.body)
-                            .foregroundStyle(palette.textPrimary)
-                        Text("Pour un magasin où tu bosses et où tu fais aussi tes courses")
-                            .font(.footnote)
-                            .foregroundStyle(palette.textSecondary)
-                    }
-                }
-                .frame(minHeight: 44)
-                .tint(palette.accent)
-            }
+            PLTSectionHeader(title: "Qu'est-ce que tu y fais ?")
             PLTCard {
-                Text("Travail contre courses")
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(palette.textPrimary)
-                Text(type == .courses && alsoWorksHere
-                     ? "Pour un lieu à double usage, je regarde la durée, ton planning et tes corrections pour deviner. Si j'hésite, je te demande. Une visite de 15 min compte comme des courses, pas comme du taf."
-                     : "Ici, chaque passage compte comme du travail. C'est pour ton vrai lieu de taf.")
-                    .font(.footnote)
-                    .foregroundStyle(palette.textSecondary)
+                PlaceCategoryPicker(type: $type, alsoWorksHere: $alsoWorksHere)
             }
         }
-    }
-
-    private func typeRow(_ rowType: PlaceType, note: String, showsSeparator: Bool) -> some View {
-        let selected: Bool = type == rowType
-        return Button {
-            type = rowType
-        } label: {
-            HStack(spacing: Theme.Spacing.m) {
-                Image(systemName: rowType.symbolName)
-                    .font(.subheadline.weight(.semibold))
-                    .foregroundStyle(rowType.tone.color(palette))
-                    .frame(width: 36, height: 36)
-                    .background(rowType.tone.soft(palette), in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                    Text(rowType.title)
-                        .font(.body)
-                        .foregroundStyle(palette.textPrimary)
-                    Text(note)
-                        .font(.subheadline)
-                        .foregroundStyle(palette.textSecondary)
-                }
-                Spacer(minLength: Theme.Spacing.s)
-                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                    .foregroundStyle(selected ? palette.accent : palette.textTertiary)
-                    .accessibilityHidden(true)
-            }
-            .padding(.horizontal, Theme.Spacing.m)
-            .padding(.vertical, Theme.Spacing.s)
-            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-            .contentShape(Rectangle())
-            .overlay(alignment: .bottom) {
-                if showsSeparator {
-                    Rectangle()
-                        .fill(palette.separator)
-                        .frame(height: 0.5)
-                        .padding(.leading, Theme.Spacing.m)
-                }
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(rowType.title). \(note)")
-        .accessibilityAddTraits(selectedTraits(selected))
-    }
-
-    private func selectedTraits(_ selected: Bool) -> AccessibilityTraits {
-        if selected {
-            return AccessibilityTraits([.isButton, .isSelected])
-        }
-        return AccessibilityTraits.isButton
     }
 
     // MARK: Actions
 
     private func save() {
         showsNameError = true
-        if nameIssue != nil { return }
+        showsLocationError = !positionChosen
+        guard let type, nameIssue == nil, positionChosen else { return }
         guard PlaceRules.isRadiusValid(radius),
               PlaceRules.isValidCoordinate(latitude: center.latitude, longitude: center.longitude) else {
             saveFailed = true
@@ -276,7 +216,7 @@ struct LieuAjoutView: View {
                           latitude: center.latitude,
                           longitude: center.longitude,
                           radius: radius,
-                          address: "",
+                          address: address.trimmingCharacters(in: .whitespacesAndNewlines),
                           alsoWorksHere: type == .courses ? alsoWorksHere : false)
         context.insert(place)
         do {

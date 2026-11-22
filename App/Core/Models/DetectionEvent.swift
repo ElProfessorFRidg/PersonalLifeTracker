@@ -6,6 +6,8 @@ enum DetectionEventKind: String, CaseIterable {
     case regionEntered
     case regionExited
     case arrivalConfirmed
+    case visitNoted
+    case entryRejected
     case departureConfirmed
     case sessionStarted
     case sessionStopped

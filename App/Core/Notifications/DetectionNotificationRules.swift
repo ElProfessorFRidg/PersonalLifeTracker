@@ -64,7 +64,7 @@ enum DetectionNotificationRules {
         switch type {
         case .taf: return withName("au taf", name: name, generic: "taf")
         case .cours: return withName("en cours", name: name, generic: "cours")
-        case .courses, .domicile, .autre: return "à \(name)"
+        case .courses, .domicile, .sport, .sortie, .autre: return "à \(name)"
         }
     }
 
@@ -73,7 +73,7 @@ enum DetectionNotificationRules {
         switch type {
         case .taf: return withName("du taf", name: name, generic: "taf")
         case .cours: return withName("du cours", name: name, generic: "cours")
-        case .courses, .domicile, .autre: return "de \(name)"
+        case .courses, .domicile, .sport, .sortie, .autre: return "de \(name)"
         }
     }
 

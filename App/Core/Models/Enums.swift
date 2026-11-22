@@ -6,6 +6,8 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
     case cours
     case courses
     case domicile
+    case sport
+    case sortie
     case autre
 
     var id: String { rawValue }
@@ -16,6 +18,8 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
         case .cours: return "Cours"
         case .courses: return "Courses"
         case .domicile: return "Domicile"
+        case .sport: return "Sport"
+        case .sortie: return "Sortie"
         case .autre: return "Autre"
         }
     }
@@ -26,7 +30,7 @@ enum PlaceType: String, CaseIterable, Codable, Identifiable {
         case .taf: return .work
         case .cours: return .education
         case .courses: return .shopping
-        case .domicile, .autre: return .personal
+        case .domicile, .sport, .sortie, .autre: return .personal
         }
     }
 }

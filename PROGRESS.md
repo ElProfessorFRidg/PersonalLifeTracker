@@ -40,7 +40,7 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 | ID | Titre | Étape | Statut | Preuve | Note |
 |---|---|---|---|---|---|
 | module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | NON COMMENCÉ |  |  |
-| module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | CLVisit, regroupement local, confirmation et exclusion des lieux connus ; notes/place_discovery.md. Tests iOS et terrain NON TESTÉS pour cette modification. |
+| module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | Arrivées et départs CLVisit rapprochés, liste de suggestions, catégories et adresses via Plans à la demande. Régressions ajoutées. Détails et état des vérifications dans notes/place_discovery.md. |
 | module:employment | Employeurs, contrats, fin de contrat | 5 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/employment.md. Rappels de fin de contrat calculés mais pas envoyés. |
 | module:pay | Salaire, paie, conventions, primes, historique des taux | 5 (base), 6 (conventions, primes) | EN COURS |  | Base de l'étape 5 testée en CI (heures, brut et net estimés, historique des taux, export). SMIC 12,02 NON VÉRIFIÉ. Conventions et primes (étape 6) pas faites. |
 | module:school_calendar | Calendrier scolaire, vacances, jours fériés | 9 | NON COMMENCÉ |  |  |

@@ -4,6 +4,7 @@ import UIKit
 
 /// Réglages (section 49). Poussé depuis Accueil. Prototype : design/prototype/src/screens/90_reglages.html.
 struct ReglagesView: View {
+    @Environment(GeofenceService.self) private var geofence
     @Environment(AppSettings.self) private var settings
     @Environment(ModuleStore.self) private var modules
     @Environment(\.palette) private var palette
@@ -385,6 +386,7 @@ struct ReglagesView: View {
             try context.delete(model: WorkSession.self)
             try context.delete(model: Place.self)
             try context.save()
+            geofence.discovery.clearHistory()
             dataError = nil
             prepareExport()
         } catch {

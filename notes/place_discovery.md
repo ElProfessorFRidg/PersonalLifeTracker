@@ -15,3 +15,12 @@ NON TESTÉ localement : compilation Swift, XCTest et cartes (environnement Linux
 NON TESTÉ sur iPhone : callbacks CLVisit, relance en arrière-plan, précision et délai des propositions. iOS décide du moment de livraison ; aucun délai de découverte garanti.
 
 Priorités majeures encore indisponibles dans le registre : emploi du temps scolaire, planning texte/photo, sauvegarde automatique avec restauration, détection d'heures manquantes, revue hebdomadaire. Les statuts PROGRESS de certains autres modules sont anciens : leur présence dans le code ne suffit pas à prouver leur livraison.
+
+## Mise à jour du 22 novembre 2026
+
+- Les événements d’arrivée peuvent être rapprochés d’un départ seul après relance. Les doublons, trajets courts et positions insuffisamment précises restent exclus. Les anciennes dates gardent leur place dans l’historique sans durée inventée. Les arrêts rapprochés sont regroupés selon la précision et un grand rayon de surveillance ne masque plus systématiquement les bâtiments voisins.
+- Une suggestion est éligible après deux jours distincts de visite, ou après un arrêt récent d’au moins 20 minutes et suffisamment précis. Historique de 45 jours. Les longues nuits répétées donnent un indice de domicile et passent derrière les autres propositions. Les longues présences sur des jours différents peuvent indiquer un emploi, y compris le week-end et tôt le matin. Les simples horaires de journée en semaine laissent le type indéterminé sans autre indice.
+- Recherche du nom, de l’adresse et de la catégorie dans Apple Plans à l’ouverture de la fiche. Recherche multiple facultative depuis la liste. Confirmation manuelle requise dans tous les cas. Sport et Sortie restent des activités personnelles. Le choix Courses avec « J’y travaille aussi » s’appuie sur la durée et le planning daté lorsqu’il est disponible.
+- Les régressions couvrent le vendredi matin et le week-end, le domicile, une école identifiée dans Plans, deux bâtiments proches, les anciens arrêts, les départs seuls après relance, la suppression des suggestions et la classification d’un commerce où l’on travaille aussi.
+
+Validation locale : contrôles du dépôt et des diffs. Compilation SwiftUI et tests XCTest NON TESTÉS localement (Linux, sans Xcode). Détection réelle en arrière-plan, délais iOS et résultats Plans NON TESTÉS sur iPhone.

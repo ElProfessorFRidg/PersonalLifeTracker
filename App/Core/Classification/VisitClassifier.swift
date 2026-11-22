@@ -1,7 +1,7 @@
 import Foundation
 
-/// Un créneau du planning connu pour la semaine (section 11, facteur 2). Vide tant que le module planning n'alimente rien.
-struct PlannedShift: Equatable {
+/// Dates d’un créneau de travail pertinent pour la visite (section 11, facteur 2).
+struct VisitPlannedShift: Equatable {
     let start: Date
     let end: Date
 }
@@ -17,15 +17,15 @@ struct VisitContext {
     let start: Date
     /// Durée connue de la visite en secondes, nil si elle n'est pas finie.
     let durationSeconds: TimeInterval?
-    /// Créneaux prévus connus (vide pour l'instant).
-    let plannedShifts: [PlannedShift]
+    /// Créneaux de travail du planning local pour ce lieu et cette semaine.
+    let plannedShifts: [VisitPlannedShift]
 
     init(placeKey: String,
          placeType: PlaceType,
          alsoWorksHere: Bool,
          start: Date,
          durationSeconds: TimeInterval?,
-         plannedShifts: [PlannedShift] = []) {
+         plannedShifts: [VisitPlannedShift] = []) {
         self.placeKey = placeKey
         self.placeType = placeType
         self.alsoWorksHere = alsoWorksHere
@@ -107,7 +107,7 @@ enum VisitClassifier {
                          now: Date,
                          calendar: Calendar) -> ClassificationResult {
         switch visit.placeType {
-        case .domicile, .autre:
+        case .domicile, .sport, .sortie, .autre:
             return fixed(.personal, "Lieu personnel.")
         case .taf:
             return fixed(.work, "Ce lieu est un lieu de taf.")
