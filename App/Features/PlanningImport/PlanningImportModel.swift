@@ -283,31 +283,29 @@ final class PlanningImportModel {
     func keep(in context: ModelContext) {
         if !canKeep { return }
         let calendar = Calendar.current
-        var existing: [PlannedShift] = []
+        var inserted: [PlannedShift] = []
         do {
-            existing = try context.fetch(FetchDescriptor<PlannedShift>())
-        } catch {
-            existing = []
-        }
-        var added = 0
-        var skipped = 0
-        for draft in drafts {
-            guard let s = draft.startMinutes, let e = draft.endMinutes else { continue }
-            let start = ScheduleTextParser.date(day: draft.day, minutes: s, calendar: calendar)
-            let end = ScheduleTextParser.date(day: draft.day, minutes: e, calendar: calendar)
-            if existing.contains(where: { $0.start == start && $0.end == end }) {
-                skipped += 1
-                continue
+            var existing = try context.fetch(FetchDescriptor<PlannedShift>())
+            var skipped = 0
+            for draft in drafts {
+                guard let s = draft.startMinutes, let e = draft.endMinutes else { continue }
+                let start = ScheduleTextParser.date(day: draft.day, minutes: s, calendar: calendar)
+                let end = ScheduleTextParser.date(day: draft.day, minutes: e, calendar: calendar)
+                if existing.contains(where: { $0.start == start && $0.end == end && $0.activity == .work }) {
+                    skipped += 1
+                    continue
+                }
+                let shift = PlannedShift(start: start, end: end, activity: .work, source: "photo")
+                context.insert(shift)
+                inserted.append(shift)
+                existing.append(shift)
             }
-            context.insert(PlannedShift(start: start, end: end, activity: .work, source: "photo"))
-            added += 1
-        }
-        do {
             try context.save()
             errorMessage = nil
-            phase = .saved(count: added, skipped: skipped)
+            phase = .saved(count: inserted.count, skipped: skipped)
         } catch {
-            errorMessage = "Je n'ai pas pu enregistrer les créneaux. Rien n'a changé, tu peux réessayer."
+            for shift in inserted { context.delete(shift) }
+            errorMessage = "Je n'ai pas pu enregistrer les créneaux. Réessaie dans un instant."
         }
     }
 }
