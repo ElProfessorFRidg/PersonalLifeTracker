@@ -272,7 +272,7 @@ private struct EmployerBlock: View {
                     .frame(width: 12, height: 12)
                     .accessibilityHidden(true)
                 Text(employer.name)
-                    .font(.title3.weight(.semibold))
+                    .font(.title2.weight(.bold))
                     .foregroundStyle(palette.textPrimary)
             }
             if let end = c.endDate {
@@ -289,6 +289,8 @@ private struct EmployerBlock: View {
                     let ratio: Double = ContractRules.progress(start: c.startDate, end: end, now: now, calendar: calendar) ?? 0
                     ProgressView(value: ratio)
                         .tint(tone.color(palette))
+                        .scaleEffect(x: 1, y: 2, anchor: .center)
+                        .padding(.vertical, Theme.Spacing.xxs)
                         .accessibilityLabel("Avancement du contrat")
                         .accessibilityValue("\(Int((ratio * 100).rounded())) pour cent")
                 }
@@ -324,26 +326,24 @@ private struct EmployerBlock: View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Ton contrat")
             PLTListGroup {
-                PLTRow(symbol: "doc.text", title: "Type de contrat", value: c.kind.title, action: edit)
-                PLTRow(symbol: "clock", title: "Heures au contrat", value: EmploiFormat.weeklyHours(c.weeklyHours), action: edit)
-                PLTRow(symbol: "calendar", title: "Date de début", value: EmploiFormat.date(c.startDate), action: edit)
-                PLTRow(symbol: "calendar.badge.clock",
-                       title: "Date de fin",
+                PLTRow(title: "Type de contrat", value: c.kind.title, action: edit)
+                PLTRow(title: "Heures au contrat", subtitle: "Suivi semaine par semaine", value: EmploiFormat.weeklyHours(c.weeklyHours), showsChevron: true, action: edit)
+                PLTRow(title: "Date de début", value: EmploiFormat.date(c.startDate), action: edit)
+                PLTRow(title: "Date de fin",
                        subtitle: c.endDate == nil ? nil : "Contrat à durée déterminée",
                        value: c.endDate.map { (d: Date) -> String in EmploiFormat.date(d) } ?? "Pas de fin",
                        action: edit)
-                PLTRow(symbol: "eurosign.circle",
-                       title: "Taux horaire brut saisi",
+                PLTRow(title: "Taux horaire brut saisi",
                        subtitle: "Facultatif, ta fiche de paie fait foi",
                        value: c.hourlyGrossRate.map { (r: Double) -> String in settings.formatMoney(r) } ?? "Pas renseigné",
+                       showsChevron: true,
                        action: edit)
-                PLTRow(symbol: "mappin.and.ellipse",
-                       title: "Lieux rattachés",
+                PLTRow(title: "Lieux rattachés",
                        value: c.placeUIDs.isEmpty ? "Aucun" : "\(c.placeUIDs.count)",
                        showsSeparator: false,
                        action: edit)
             }
-            Text("Chaque ligne se corrige en deux taps. Un contrat terminé est gardé, jamais supprimé.")
+            Text("Chaque ligne se corrige en deux taps. Un contrat terminé est archivé, jamais supprimé.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
         }

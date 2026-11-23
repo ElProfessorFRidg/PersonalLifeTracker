@@ -24,10 +24,10 @@ struct ReglagesView: View {
 
     var body: some View {
         PLTScreen(title: "Réglages") {
-            setupSection
             detectionSection
-            diagnosticSection
             featuresSection
+            setupSection
+            diagnosticSection
             if modules.isActive("employment") {
                 employmentSection
             }
@@ -80,32 +80,37 @@ struct ReglagesView: View {
                           action: { openIOSSettings() })
             }
             PLTListGroup {
-                PLTRow(symbol: "location.fill",
-                       tone: capabilities.location == .always ? .accent : .danger,
-                       title: "Localisation",
-                       subtitle: "Pour savoir quand t'arrives et quand tu pars",
-                       value: capabilities.location.title)
-                PLTRow(symbol: "scope",
-                       tone: capabilities.hasPreciseLocation == true ? .accent : .neutral,
-                       title: "Position exacte",
-                       subtitle: "Sans ça, je confonds le taf et le magasin d'à côté",
-                       value: preciseTitle)
-                PLTRow(symbol: "bell.fill",
-                       tone: capabilities.notifications == .allowed ? .accent : .neutral,
-                       title: "Notifications",
-                       subtitle: "Pour te demander de confirmer en un tap",
-                       value: capabilities.notifications.title)
-                PLTRow(symbol: "arrow.triangle.2.circlepath",
-                       tone: capabilities.backgroundRefresh == .available ? .accent : .neutral,
-                       title: "Actualisation en arrière-plan",
-                       subtitle: "Pour rattraper ce qui s'est passé écran éteint",
-                       value: capabilities.backgroundRefresh.title)
-                PLTRow(symbol: "battery.50percent",
-                       tone: capabilities.isLowPowerMode ? .danger : .neutral,
-                       title: "Mode économie d'énergie",
-                       subtitle: "Quand il est actif, la détection peut avoir quelques minutes de retard",
-                       value: capabilities.isLowPowerMode ? "Actif" : "Inactif",
-                       showsSeparator: false)
+                StatusRow(symbol: "location.fill",
+                          title: "Localisation",
+                          subtitle: "Pour savoir quand t'arrives et quand tu pars",
+                          statusSymbol: locationStatus.symbol,
+                          statusText: locationStatus.text,
+                          level: locationStatus.level)
+                StatusRow(symbol: "scope",
+                          title: "Position exacte",
+                          subtitle: "Sans ça, je confonds le taf et le magasin d'à côté",
+                          statusSymbol: preciseStatus.symbol,
+                          statusText: preciseStatus.text,
+                          level: preciseStatus.level)
+                StatusRow(symbol: "bell.fill",
+                          title: "Notifications",
+                          subtitle: "Pour te demander de confirmer en un tap",
+                          statusSymbol: notificationStatus.symbol,
+                          statusText: notificationStatus.text,
+                          level: notificationStatus.level)
+                StatusRow(symbol: "arrow.triangle.2.circlepath",
+                          title: "Actualisation en arrière-plan",
+                          subtitle: "Pour rattraper ce qui s'est passé écran éteint",
+                          statusSymbol: backgroundStatus.symbol,
+                          statusText: backgroundStatus.text,
+                          level: backgroundStatus.level)
+                StatusRow(symbol: "battery.50percent",
+                          title: "Mode économie d'énergie",
+                          subtitle: "Quand il est actif, la détection peut avoir quelques minutes de retard",
+                          statusSymbol: capabilities.isLowPowerMode ? "info.circle" : "checkmark",
+                          statusText: capabilities.isLowPowerMode ? "Actif" : "Inactif",
+                          level: capabilities.isLowPowerMode ? .warn : .neutral,
+                          showsSeparator: false)
             }
             Text("Tout reste sur ton tel. Pas de compte, pas de serveur.")
                 .font(.footnote)
@@ -113,9 +118,39 @@ struct ReglagesView: View {
         }
     }
 
-    private var preciseTitle: String {
-        guard let precise = capabilities.hasPreciseLocation else { return "Inconnue" }
-        return precise ? "Exacte" : "Approximative"
+    private var locationStatus: StatusInfo {
+        switch capabilities.location {
+        case .always: return StatusInfo(symbol: "checkmark", text: "Toujours", level: .ok)
+        case .whenInUse: return StatusInfo(symbol: "exclamationmark.triangle.fill", text: "App ouverte", level: .error)
+        case .denied: return StatusInfo(symbol: "exclamationmark.triangle.fill", text: "Refusée", level: .error)
+        case .restricted: return StatusInfo(symbol: "exclamationmark.triangle.fill", text: "Restreinte", level: .error)
+        case .notDetermined: return StatusInfo(symbol: "info.circle", text: "À demander", level: .warn)
+        }
+    }
+
+    private var preciseStatus: StatusInfo {
+        guard let precise = capabilities.hasPreciseLocation else {
+            return StatusInfo(symbol: "info.circle", text: "Inconnue", level: .neutral)
+        }
+        if precise { return StatusInfo(symbol: "checkmark", text: "Activée", level: .ok) }
+        return StatusInfo(symbol: "info.circle", text: "Approximative", level: .warn)
+    }
+
+    private var notificationStatus: StatusInfo {
+        switch capabilities.notifications {
+        case .allowed: return StatusInfo(symbol: "checkmark", text: "Autorisées", level: .ok)
+        case .provisional: return StatusInfo(symbol: "info.circle", text: "En silence", level: .warn)
+        case .denied: return StatusInfo(symbol: "exclamationmark.triangle.fill", text: "Refusées", level: .error)
+        case .notDetermined: return StatusInfo(symbol: "info.circle", text: "À demander", level: .warn)
+        }
+    }
+
+    private var backgroundStatus: StatusInfo {
+        switch capabilities.backgroundRefresh {
+        case .available: return StatusInfo(symbol: "checkmark", text: "Activée", level: .ok)
+        case .denied: return StatusInfo(symbol: "info.circle", text: "Désactivée", level: .warn)
+        case .restricted: return StatusInfo(symbol: "exclamationmark.triangle.fill", text: "Restreinte", level: .error)
+        }
     }
 
     private var locationBannerKind: PLTBannerKind {
@@ -266,32 +301,31 @@ struct ReglagesView: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Apparence")
             PLTCard {
-                HStack {
+                VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
                     Text("Thème")
-                        .font(.body)
-                        .foregroundStyle(palette.textPrimary)
-                    Spacer(minLength: Theme.Spacing.s)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(palette.textSecondary)
                     Picker("Thème", selection: themeBinding) {
                         ForEach(ThemeChoice.allCases) { choice in
                             Text(choice.title).tag(choice)
                         }
                     }
-                    .pickerStyle(.menu)
+                    .pickerStyle(.segmented)
+                    Text("Auto suit le réglage de ton iPhone.")
+                        .font(.footnote)
+                        .foregroundStyle(palette.textSecondary)
                 }
-                .frame(minHeight: 44)
-                HStack {
+                VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
                     Text("Densité")
-                        .font(.body)
-                        .foregroundStyle(palette.textPrimary)
-                    Spacer(minLength: Theme.Spacing.s)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(palette.textSecondary)
                     Picker("Densité", selection: densityBinding) {
                         ForEach(Density.allCases) { d in
                             Text(d.title).tag(d)
                         }
                     }
-                    .pickerStyle(.menu)
+                    .pickerStyle(.segmented)
                 }
-                .frame(minHeight: 44)
                 Toggle("Réduire les animations", isOn: reduceBinding)
                     .font(.body)
                     .frame(minHeight: 44)
@@ -446,5 +480,105 @@ struct ReglagesView: View {
                        showsSeparator: false)
             }
         }
+    }
+}
+
+/// Niveau d'un statut : ok (vert), warn (ambre), error (rouge), neutral (gris).
+enum StatusLevel {
+    case ok
+    case warn
+    case error
+    case neutral
+}
+
+struct StatusInfo {
+    let symbol: String
+    let text: String
+    let level: StatusLevel
+}
+
+/// Pastille de statut : icône + libellé court sur une ligne, comme `status--ok/warn/error` de la maquette.
+struct StatusPill: View {
+    @Environment(\.palette) private var palette
+    let symbol: String
+    let text: String
+    let level: StatusLevel
+
+    private var color: Color {
+        switch level {
+        case .ok: return palette.success
+        case .warn: return palette.warning
+        case .error: return palette.danger
+        case .neutral: return palette.textSecondary
+        }
+    }
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.xs) {
+            Image(systemName: symbol)
+                .font(.caption.weight(.bold))
+                .accessibilityHidden(true)
+            Text(text)
+                .font(.footnote.weight(.semibold))
+                .lineLimit(1)
+        }
+        .foregroundStyle(color)
+        .fixedSize()
+    }
+}
+
+/// Ligne de statut : tuile d'icône, titre, sous-titre, pastille à droite.
+struct StatusRow: View {
+    @Environment(\.palette) private var palette
+    let symbol: String
+    let title: String
+    let subtitle: String
+    let statusSymbol: String
+    let statusText: String
+    let level: StatusLevel
+    let showsSeparator: Bool
+
+    init(symbol: String, title: String, subtitle: String, statusSymbol: String, statusText: String,
+         level: StatusLevel, showsSeparator: Bool = true) {
+        self.symbol = symbol
+        self.title = title
+        self.subtitle = subtitle
+        self.statusSymbol = statusSymbol
+        self.statusText = statusText
+        self.level = level
+        self.showsSeparator = showsSeparator
+    }
+
+    var body: some View {
+        HStack(spacing: Theme.Spacing.m) {
+            Image(systemName: symbol)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(palette.textSecondary)
+                .frame(width: 32, height: 32)
+                .background(palette.fill, in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(palette.textPrimary)
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundStyle(palette.textSecondary)
+            }
+            Spacer(minLength: Theme.Spacing.xs)
+            StatusPill(symbol: statusSymbol, text: statusText, level: level)
+        }
+        .padding(.horizontal, Theme.Spacing.m)
+        .padding(.vertical, Theme.Spacing.s)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .overlay(alignment: .bottom) {
+            if showsSeparator {
+                Rectangle()
+                    .fill(palette.separator)
+                    .frame(height: 0.5)
+                    .padding(.leading, Theme.Spacing.m)
+            }
+        }
+        .accessibilityElement(children: .combine)
     }
 }

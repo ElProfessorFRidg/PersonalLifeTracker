@@ -377,18 +377,18 @@ struct PaieView: View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             HStack {
                 Text(title)
-                    .font(.headline)
+                    .font(.title3.weight(.bold))
                     .foregroundStyle(palette.textPrimary)
                     .accessibilityAddTraits(.isHeader)
                 Spacer(minLength: Theme.Spacing.s)
                 PLTChip("Estimation", kind: .doubt)
             }
             HStack(alignment: .top, spacing: Theme.Spacing.s) {
-                StatTile(label: "Brut estimé", value: amount(d.grossCents),
+                PaieEstimateTile(label: "Brut estimé", value: amount(d.grossCents),
                          note: hoursNote, tone: .work)
                     .accessibilityLabel("Brut estimé, " + amountLabel(d.grossCents))
                     .onTapGesture { if hideAmounts { revealed.toggle() } }
-                StatTile(label: "Net estimé", value: amount(d.netCents),
+                PaieEstimateTile(label: "Net estimé", value: amount(d.netCents),
                          note: "Environ, ratio \(PaieFormat.ratioText(PayPreferences.clampedRatio(netRatioStored)))", tone: .accent)
                     .accessibilityLabel("Net estimé, " + amountLabel(d.netCents))
                     .onTapGesture { if hideAmounts { revealed.toggle() } }
@@ -431,28 +431,24 @@ struct PaieView: View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Comment je l'estime", actionTitle: "Détail du calcul", action: { showCalc = true })
             PLTListGroup {
-                PLTRow(symbol: "clock", tone: .work,
-                       title: "Heures de taf",
+                PLTRow(title: "Heures de taf",
                        subtitle: r.base == .fullHours ? "Heures pleines. Une session à confirmer n'est pas comptée." : "Heure exacte, à la minute près.",
                        value: Formatting.duration(seconds: r.retainedSeconds))
                 ForEach(0..<r.rateLines.count, id: \.self) { i in
                     let line: PayRateLine = r.rateLines[i]
-                    PLTRow(symbol: "eurosign.circle", tone: .accent,
-                           title: "Taux horaire brut \(PaieFormat.rateText(line.hourlyGross, settings: settings))",
+                    PLTRow(title: "Taux horaire brut \(PaieFormat.rateText(line.hourlyGross, settings: settings))",
                            subtitle: "\(Formatting.duration(seconds: line.seconds)) à ce taux",
                            value: amount(line.grossCents))
                 }
                 ForEach(0..<d.rules.lines.count, id: \.self) { i in
                     let line: PayRuleLine = d.rules.lines[i]
-                    PLTRow(symbol: "plus.circle", tone: .accent,
-                           title: PaieRuleText.lineTitle(line, rules: ctx.rules),
+                    PLTRow(title: PaieRuleText.lineTitle(line, rules: ctx.rules),
                            subtitle: "\(Formatting.duration(seconds: line.seconds)) sur \(PaieFormat.rateText(line.hourlyGross, settings: settings)) de l'heure. Source : \(PaieRuleText.source(for: line, rules: ctx.rules))",
                            value: amount(line.majorationCents))
                 }
                 ForEach(0..<d.premiums.lines.count, id: \.self) { i in
                     let line: PremiumLine = d.premiums.lines[i]
-                    PLTRow(symbol: "gift", tone: .accent,
-                           title: line.name,
+                    PLTRow(title: line.name,
                            subtitle: "\(line.kind.title), \(line.quantityText). Saisie par toi, \(line.basis.title.lowercased()).",
                            value: amount(line.cents))
                 }
@@ -720,5 +716,35 @@ struct PaieView: View {
                 }
             }
         }
+    }
+}
+
+
+/// Tuile "Brut estimé / Net estimé" du prototype : libellé en gras, gros montant, note.
+private struct PaieEstimateTile: View {
+    @Environment(\.palette) private var palette
+    let label: String
+    let value: String
+    let note: String
+    let tone: PLTTone
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+            Text(label)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(palette.textSecondary)
+            Text(value)
+                .font(.title.weight(.bold).monospacedDigit())
+                .foregroundStyle(palette.textPrimary)
+                .minimumScaleFactor(0.7)
+                .lineLimit(1)
+            Text(note)
+                .font(.footnote)
+                .foregroundStyle(palette.textSecondary)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Theme.Spacing.m)
+        .background(palette.surface, in: RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+        .accessibilityElement(children: .combine)
     }
 }

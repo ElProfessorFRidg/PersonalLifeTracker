@@ -93,14 +93,16 @@ struct FonctionnalitesView: View {
 
     private func counterLine(active: Int, total: Int) -> some View {
         let soon: Int = ModuleCatalog.comingSoonCount()
-        return VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
-            Text("\(active) actives sur \(total)")
-                .font(.headline.monospacedDigit())
-                .foregroundStyle(palette.textPrimary)
+        let plural: String = active > 1 ? "fonctionnalités actives" : "fonctionnalité active"
+        return VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+            Text("\(active) \(plural) sur \(total). Tu peux changer ça quand tu veux.")
+                .font(.footnote.monospacedDigit())
+                .foregroundStyle(palette.textSecondary)
             Text("\(soon) arrivent bientôt, elles ne sont pas encore utilisables.")
                 .font(.footnote.monospacedDigit())
                 .foregroundStyle(palette.textSecondary)
         }
+        .padding(.horizontal, Theme.Spacing.xs)
         .accessibilityElement(children: .combine)
     }
 
@@ -111,18 +113,16 @@ struct FonctionnalitesView: View {
             PLTSectionHeader(title: "Toujours là")
             PLTListGroup {
                 ForEach(coreItems) { item in
-                    PLTRow(symbol: item.symbol,
-                           tone: .neutral,
-                           title: item.title,
-                           subtitle: item.subtitle,
-                           value: "Toujours",
-                           showsSeparator: item.id != coreItems.last?.id)
-                        .accessibilityValue("Toujours actif, verrouillé")
+                    FonCoreRow(symbol: item.symbol,
+                               title: item.title,
+                               subtitle: item.subtitle,
+                               showsSeparator: item.id != coreItems.last?.id)
                 }
             }
             Text("Ça, tu ne peux pas le couper : sans ça l'app ne note rien. Tout le reste est à toi. Rien sur la paie ou l'argent n'est obligatoire.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
+                .padding(.horizontal, Theme.Spacing.xs)
         }
     }
 
@@ -130,14 +130,43 @@ struct FonctionnalitesView: View {
 
     private func groupSection(_ group: ModuleCatalog.Group) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: group.theme)
+            HStack(alignment: .firstTextBaseline) {
+                Text(group.theme)
+                    .font(.headline)
+                    .foregroundStyle(palette.textPrimary)
+                    .accessibilityAddTraits(.isHeader)
+                Spacer(minLength: Theme.Spacing.s)
+                Text("\(enabledCount(group)) sur \(group.modules.count)")
+                    .font(.subheadline.monospacedDigit())
+                    .foregroundStyle(palette.textSecondary)
+            }
             PLTListGroup {
                 ForEach(group.modules) { module in
                     ModuleRow(module: module,
+                              symbol: FonctionnalitesView.symbol(forTheme: group.theme),
                               isOn: toggleBinding(for: module),
                               showsSeparator: module.id != group.modules.last?.id)
                 }
             }
+        }
+    }
+
+    private func enabledCount(_ group: ModuleCatalog.Group) -> Int {
+        var n: Int = 0
+        for m in group.modules where m.isAvailable && modules.isEnabled(m.id) { n += 1 }
+        return n
+    }
+
+    static func symbol(forTheme theme: String) -> String {
+        switch theme {
+        case "Planning": return "calendar"
+        case "Emploi et paie": return "briefcase.fill"
+        case "Études": return "book.fill"
+        case "Trajets": return "figure.walk"
+        case "Lieux et détection": return "location.fill"
+        case "Confort": return "sun.max.fill"
+        case "Sécurité et données": return "lock.shield.fill"
+        default: return "square.grid.2x2.fill"
         }
     }
 
@@ -159,25 +188,94 @@ struct FonctionnalitesView: View {
     }
 }
 
-/// Une ligne de module : texte qui ouvre le détail, interrupteur à droite.
-struct ModuleRow: View {
+/// Ligne du noyau : tuile d'icône, titre, sous-titre, pastille "Toujours" avec cadenas.
+private struct FonCoreRow: View {
     @Environment(\.palette) private var palette
-    @Environment(\.pltDensity) private var density
 
-    let module: ModuleDefinition
-    let isOn: Binding<Bool>
+    let symbol: String
+    let title: String
+    let subtitle: String
     let showsSeparator: Bool
 
     var body: some View {
+        HStack(spacing: Theme.Spacing.m) {
+            Image(systemName: symbol)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(palette.textSecondary)
+                .frame(width: 32, height: 32)
+                .background(palette.fill, in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                Text(title)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(palette.textPrimary)
+                Text(subtitle)
+                    .font(.caption)
+                    .foregroundStyle(palette.textSecondary)
+                    .lineLimit(2)
+            }
+            Spacer(minLength: Theme.Spacing.xs)
+            HStack(spacing: Theme.Spacing.xs) {
+                Image(systemName: "lock.fill")
+                    .font(.caption2)
+                Text("Toujours")
+                    .font(.footnote.weight(.semibold))
+                    .lineLimit(1)
+            }
+            .foregroundStyle(palette.textSecondary)
+            .fixedSize()
+            .accessibilityHidden(true)
+        }
+        .padding(.horizontal, Theme.Spacing.m)
+        .padding(.vertical, Theme.Spacing.s)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .overlay(alignment: .bottom) {
+            if showsSeparator {
+                Rectangle()
+                    .fill(palette.separator)
+                    .frame(height: 0.5)
+                    .padding(.leading, Theme.Spacing.m)
+            }
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityValue("Toujours actif, verrouillé")
+    }
+}
+
+/// Une ligne de module : tuile d'icône, texte qui ouvre le détail, interrupteur à droite.
+struct ModuleRow: View {
+    @Environment(\.palette) private var palette
+    @Environment(\.pltDensity) private var density
+    @Environment(ModuleStore.self) private var store
+
+    let module: ModuleDefinition
+    let symbol: String
+    let isOn: Binding<Bool>
+    let showsSeparator: Bool
+
+    init(module: ModuleDefinition, symbol: String = "square.grid.2x2.fill", isOn: Binding<Bool>, showsSeparator: Bool) {
+        self.module = module
+        self.symbol = symbol
+        self.isOn = isOn
+        self.showsSeparator = showsSeparator
+    }
+
+    var body: some View {
         let vertical: CGFloat = density == .compact ? Theme.Spacing.xs : Theme.Spacing.s
-        return HStack(spacing: Theme.Spacing.s) {
+        return HStack(spacing: Theme.Spacing.m) {
+            Image(systemName: symbol)
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(palette.accent)
+                .frame(width: 32, height: 32)
+                .background(palette.accentSoft, in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
+                .accessibilityHidden(true)
             NavigationLink {
                 ModuleDetailView(moduleID: module.id)
             } label: {
                 VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
                     HStack(spacing: Theme.Spacing.s) {
                         Text(module.title)
-                            .font(.body)
+                            .font(.subheadline.weight(.semibold))
                             .foregroundStyle(palette.textPrimary)
                             .multilineTextAlignment(.leading)
                         if !module.isAvailable {
@@ -185,9 +283,16 @@ struct ModuleRow: View {
                         }
                     }
                     Text(module.summary)
-                        .font(.subheadline)
+                        .font(.caption)
                         .foregroundStyle(palette.textSecondary)
                         .multilineTextAlignment(.leading)
+                    ForEach(module.requires, id: \.self) { reqID in
+                        let reqOn: Bool = store.isEnabled(reqID)
+                        Text("Demande : \(ModuleRegistry.definition(for: reqID)?.title ?? reqID) (\(reqOn ? "activé" : "désactivé"))")
+                            .font(.caption2.weight(.medium))
+                            .foregroundStyle(reqOn ? palette.textSecondary : palette.warning)
+                            .multilineTextAlignment(.leading)
+                    }
                 }
                 .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
                 .contentShape(Rectangle())

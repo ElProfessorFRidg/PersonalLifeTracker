@@ -19,6 +19,7 @@ struct LieuDetailView: View {
     @State private var camera: MapCameraPosition
     @State private var confirmsDelete: Bool = false
     @State private var isDeleted: Bool = false
+    @State private var showsEdit: Bool = false
 
     init(place: Place) {
         self.place = place
@@ -123,6 +124,29 @@ struct LieuDetailView: View {
             sessionsSection
             deleteSection
         }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button {
+                    showsEdit = true
+                } label: {
+                    Image(systemName: "pencil")
+                        .frame(minWidth: 44, minHeight: 44)
+                }
+                .accessibilityLabel("Modifier le lieu")
+            }
+        }
+        .sheet(isPresented: $showsEdit) {
+            NavigationStack {
+                PLTScreen(title: "Modifier le lieu") {
+                    editForm
+                }
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button("Fermer") { showsEdit = false }
+                    }
+                }
+            }
+        }
         .confirmationDialog("Supprimer ce lieu ?",
                             isPresented: $confirmsDelete,
                             titleVisibility: .visible) {
@@ -143,7 +167,7 @@ struct LieuDetailView: View {
             Marker(place.name, systemImage: place.type.symbolName, coordinate: coordinate)
                 .tint(place.type.tone.color(palette))
         }
-        .frame(height: 200)
+        .frame(height: 150)
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("Aperçu de la carte : \(place.name), zone de \(Int(place.radius.rounded())) mètres")
@@ -154,6 +178,69 @@ struct LieuDetailView: View {
     private var settingsSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Réglage")
+            PLTListGroup {
+                settingRow(title: "Type", subtitle: nil, showsSeparator: true) {
+                    PLTChip(place.type.title, kind: placeChipKind)
+                }
+                if place.type == .courses {
+                    settingRow(title: "J'y travaille aussi", subtitle: nil, showsSeparator: true) {
+                        Text(place.alsoWorksHere ? "Oui" : "Non")
+                            .font(.body)
+                            .foregroundStyle(palette.textPrimary)
+                    }
+                }
+                settingRow(title: "Rayon", subtitle: "La zone autour de l'épingle", showsSeparator: false) {
+                    Text("\(Int(place.radius.rounded())) m")
+                        .font(.body.monospacedDigit())
+                        .foregroundStyle(palette.textPrimary)
+                }
+            }
+            Text(place.type.usageDescription(alsoWorksHere: place.alsoWorksHere))
+                .font(.footnote)
+                .foregroundStyle(palette.textSecondary)
+        }
+    }
+
+    private var placeChipKind: PLTChipKind {
+        return place.type.defaultActivity.chipKind
+    }
+
+    private func settingRow<Trailing: View>(title: String,
+                                            subtitle: String?,
+                                            showsSeparator: Bool,
+                                            @ViewBuilder trailing: () -> Trailing) -> some View {
+        let trailingView: Trailing = trailing()
+        return HStack(spacing: Theme.Spacing.m) {
+            VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                Text(title)
+                    .font(.body)
+                    .foregroundStyle(palette.textPrimary)
+                if let subtitle = subtitle {
+                    Text(subtitle)
+                        .font(.subheadline)
+                        .foregroundStyle(palette.textSecondary)
+                }
+            }
+            Spacer(minLength: Theme.Spacing.s)
+            trailingView
+        }
+        .padding(.horizontal, Theme.Spacing.m)
+        .padding(.vertical, Theme.Spacing.s)
+        .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+        .overlay(alignment: .bottom) {
+            if showsSeparator {
+                Rectangle()
+                    .fill(palette.separator)
+                    .frame(height: 0.5)
+                    .padding(.leading, Theme.Spacing.m)
+            }
+        }
+        .accessibilityElement(children: .combine)
+    }
+
+    /// Formulaire de modification (nom, type, rayon), présenté dans la feuille « Modifier le lieu ».
+    private var editForm: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             VStack(alignment: .leading, spacing: Theme.Spacing.s) {
                 Text("Nom")
                     .font(.subheadline)
@@ -248,7 +335,7 @@ struct LieuDetailView: View {
                     StatTile(label: "Heures", value: Formatting.duration(seconds: stats.seconds),
                              note: stats.hasProvisional ? "Provisoire, il reste un doute à régler" : settings.calculationBase.title,
                              tone: place.type.tone)
-                    StatTile(label: "Visites", value: "\(stats.visits)", note: lastText, tone: place.type.tone)
+                    StatTile(label: "Visites", value: "\(stats.visits)", note: lastText, tone: .neutral)
                 }
             }
         }
@@ -310,7 +397,9 @@ struct LieuDetailView: View {
                         NavigationLink {
                             SessionDetailView(session: session)
                         } label: {
-                            PLTRow(title: PlaceFormat.dayLabel(session.startDate, now: Date(), calendar: Calendar.current),
+                            PLTRow(symbol: place.type.symbolName,
+                                   tone: place.type.tone,
+                                   title: PlaceFormat.dayLabel(session.startDate, now: Date(), calendar: Calendar.current),
                                    subtitle: sessionSubtitle(session),
                                    value: sessionValue(session),
                                    showsChevron: true,
@@ -338,12 +427,13 @@ struct LieuDetailView: View {
     // MARK: Suppression
 
     private var deleteSection: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            Button("Supprimer ce lieu") { confirmsDelete = true }
-                .buttonStyle(.pltDestructive)
-            Text("Tes sessions déjà notées restent dans l'historique.")
-                .font(.footnote)
-                .foregroundStyle(palette.textSecondary)
+        PLTListGroup {
+            PLTRow(symbol: "trash",
+                   tone: .danger,
+                   title: "Supprimer ce lieu",
+                   subtitle: "Tes sessions déjà notées restent dans l'historique",
+                   showsSeparator: false,
+                   action: { confirmsDelete = true })
         }
     }
 

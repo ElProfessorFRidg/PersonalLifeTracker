@@ -61,7 +61,20 @@ struct StatsView: View {
 
     var body: some View {
         let current: StatsResult = result
-        return PLTScreen(title: "Statistiques") {
+        return PLTScreen(title: "Statistiques", hidesNavigationBar: true) {
+            PLTRootHeader(eyebrow: periodTitle, title: "Statistiques") {
+                NavigationLink {
+                    ReglagesView()
+                } label: {
+                    Image(systemName: "slider.horizontal.3")
+                        .font(.body.weight(.semibold))
+                        .foregroundStyle(palette.accent)
+                        .frame(width: 44, height: 44)
+                        .background(Circle().fill(palette.surface))
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel("Réglages")
+            }
             controls
             if current.isEmpty {
                 emptySection
@@ -112,7 +125,7 @@ struct StatsView: View {
             }
 
             Text("Base de calcul")
-                .font(.subheadline)
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(palette.textSecondary)
             Picker("Base de calcul", selection: baseBinding) {
                 ForEach(CalculationBase.allCases) { b in

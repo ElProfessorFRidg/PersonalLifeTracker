@@ -61,6 +61,10 @@ struct LieuAjoutView: View {
                 Button("Enregistrer ce lieu") { save() }
                     .buttonStyle(.pltPrimary)
                     .disabled(type == nil)
+                Button("Annuler") { dismiss() }
+                    .font(.headline)
+                    .foregroundStyle(palette.accent)
+                    .frame(maxWidth: .infinity, minHeight: 44)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -87,7 +91,7 @@ struct LieuAjoutView: View {
 
     private var mapSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Où c'est ?")
+            PLTSectionHeader(title: "Où c'est ?", actionTitle: "Ma position", action: { locator.request() })
             ZStack {
                 Map(position: $camera) {
                     MapCircle(center: center, radius: radius)
@@ -108,8 +112,18 @@ struct LieuAjoutView: View {
                     .offset(y: -14)
                     .allowsHitTesting(false)
                     .accessibilityHidden(true)
+                Text("\(Int(radius.rounded())) m")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(palette.textPrimary)
+                    .padding(.horizontal, Theme.Spacing.s)
+                    .padding(.vertical, Theme.Spacing.xs)
+                    .background(palette.surface, in: Capsule())
+                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomLeading)
+                    .padding(Theme.Spacing.s)
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
             }
-            .frame(height: 280)
+            .frame(height: 220)
             .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
             .accessibilityElement(children: .contain)
             .accessibilityLabel("Carte avec une épingle au centre et un cercle de \(Int(radius.rounded())) mètres autour")
@@ -121,12 +135,6 @@ struct LieuAjoutView: View {
                     .font(.footnote)
                     .foregroundStyle(palette.danger)
             }
-            Button {
-                locator.request()
-            } label: {
-                Label("Ma position", systemImage: "location.fill")
-            }
-            .buttonStyle(.pltSecondary)
         }
     }
 
@@ -156,15 +164,9 @@ struct LieuAjoutView: View {
 
     private var radiusSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            HStack {
-                Text("Rayon")
-                    .font(.headline)
-                    .foregroundStyle(palette.textPrimary)
-                Spacer()
-                Text("\(Int(radius.rounded())) m")
-                    .font(.body.monospacedDigit())
-                    .foregroundStyle(palette.textPrimary)
-            }
+            Text("Rayon : \(Int(radius.rounded())) m")
+                .font(.headline.monospacedDigit())
+                .foregroundStyle(palette.textPrimary)
             Slider(value: $radius, in: PlaceRules.minRadius...PlaceRules.maxRadius, step: 10)
                 .frame(minHeight: 44)
                 .accessibilityLabel("Rayon")
@@ -179,8 +181,8 @@ struct LieuAjoutView: View {
 
     private var nameSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Nom du lieu")
-            TextField("Par exemple : Supérette du Canal", text: $name)
+            PLTSectionHeader(title: "Nom")
+            TextField("Ex. Supérette du Canal", text: $name)
                 .textInputAutocapitalization(.sentences)
                 .padding(.horizontal, Theme.Spacing.m)
                 .frame(minHeight: 44)
@@ -190,6 +192,10 @@ struct LieuAjoutView: View {
                 Text(issue.message)
                     .font(.footnote)
                     .foregroundStyle(palette.danger)
+            } else {
+                Text("Un nom court, pour te repérer dans la liste.")
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
             }
             TextField("Adresse (facultative)", text: $address)
                 .textContentType(.fullStreetAddress)
@@ -203,10 +209,49 @@ struct LieuAjoutView: View {
 
     private var typeSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Qu'est-ce que tu y fais ?")
-            PLTCard {
-                PlaceCategoryPicker(type: $type, alsoWorksHere: $alsoWorksHere)
+            PLTSectionHeader(title: "Taf, cours ou courses ?")
+            PLTListGroup {
+                ForEach(PlaceType.allCases) { (placeType: PlaceType) in
+                    PLTRadioRow(symbol: placeType.symbolName,
+                                tone: placeType.tone,
+                                title: placeType.title,
+                                subtitle: typeExplanation(placeType),
+                                selected: type == placeType,
+                                showsSeparator: placeType != PlaceType.allCases.last,
+                                action: {
+                                    type = placeType
+                                    if placeType != .courses { alsoWorksHere = false }
+                                })
+                }
             }
+            if type == .courses {
+                PLTCard {
+                    Toggle("J'y travaille aussi", isOn: $alsoWorksHere)
+                        .tint(palette.accent)
+                        .frame(minHeight: 44)
+                    Text("Pour un magasin où tu bosses et où tu fais aussi tes courses")
+                        .font(.footnote)
+                        .foregroundStyle(palette.textSecondary)
+                }
+            }
+            if let type = type {
+                PLTCard {
+                    Text(type == .taf ? "Travail contre courses" : "Ce que ça change")
+                        .font(.headline)
+                    Text(type.usageDescription(alsoWorksHere: alsoWorksHere))
+                        .font(.subheadline)
+                        .foregroundStyle(palette.textSecondary)
+                }
+            }
+        }
+    }
+
+    private func typeExplanation(_ placeType: PlaceType) -> String {
+        switch placeType {
+        case .taf: return "Tes heures comptent dans ton contrat et ta paie"
+        case .cours: return "Comptées à part, jamais dans la paie"
+        case .courses: return "Notées dans ton historique, mais pas comptées"
+        case .domicile, .sport, .sortie, .autre: return "Lieu perso, hors des heures de travail"
         }
     }
 
@@ -242,5 +287,93 @@ struct LieuAjoutView: View {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             UIApplication.shared.open(url)
         }
+    }
+}
+
+/// Ligne de choix unique (radio) comme `role="radio"` de la maquette : tuile d'icône, titre, sous-titre, valeur et coche.
+/// À placer dans un PLTListGroup.
+struct PLTRadioRow: View {
+    @Environment(\.palette) private var palette
+    let symbol: String?
+    let tone: PLTTone
+    let title: String
+    let subtitle: String?
+    let value: String?
+    let selected: Bool
+    let showsSeparator: Bool
+    let accessibilityText: String?
+    let action: () -> Void
+
+    init(symbol: String? = nil,
+         tone: PLTTone = .accent,
+         title: String,
+         subtitle: String? = nil,
+         value: String? = nil,
+         selected: Bool,
+         showsSeparator: Bool = true,
+         accessibilityText: String? = nil,
+         action: @escaping () -> Void) {
+        self.symbol = symbol
+        self.tone = tone
+        self.title = title
+        self.subtitle = subtitle
+        self.value = value
+        self.selected = selected
+        self.showsSeparator = showsSeparator
+        self.accessibilityText = accessibilityText
+        self.action = action
+    }
+
+    var body: some View {
+        Button(action: action) {
+            HStack(spacing: Theme.Spacing.m) {
+                if let symbol = symbol {
+                    Image(systemName: symbol)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(tone.color(palette))
+                        .frame(width: 36, height: 36)
+                        .background(tone.soft(palette), in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
+                        .accessibilityHidden(true)
+                }
+                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                    Text(title)
+                        .font(.body)
+                        .foregroundStyle(palette.textPrimary)
+                        .multilineTextAlignment(.leading)
+                    if let subtitle = subtitle {
+                        Text(subtitle)
+                            .font(.subheadline)
+                            .foregroundStyle(palette.textSecondary)
+                            .multilineTextAlignment(.leading)
+                    }
+                }
+                Spacer(minLength: Theme.Spacing.s)
+                if let value = value {
+                    Text(value)
+                        .font(.body.monospacedDigit())
+                        .foregroundStyle(palette.textPrimary)
+                }
+                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(selected ? palette.accent : palette.textTertiary)
+                    .accessibilityHidden(true)
+            }
+            .padding(.horizontal, Theme.Spacing.m)
+            .padding(.vertical, Theme.Spacing.s)
+            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
+            .contentShape(Rectangle())
+            .overlay(alignment: .bottom) {
+                if showsSeparator {
+                    Rectangle()
+                        .fill(palette.separator)
+                        .frame(height: 0.5)
+                        .padding(.leading, Theme.Spacing.m)
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityText ?? [title, subtitle, value].compactMap { $0 }.joined(separator: ", "))
+        .accessibilityAddTraits(selected ? AccessibilityTraits.isSelected : AccessibilityTraits())
     }
 }

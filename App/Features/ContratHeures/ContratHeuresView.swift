@@ -325,17 +325,17 @@ private struct ContractHoursBody: View {
                     }
                 }
                 Text(ContractHoursText.headline(w))
-                    .font(.title3.weight(.semibold).monospacedDigit())
+                    .font(.title2.weight(.bold).monospacedDigit())
                     .foregroundStyle(palette.textPrimary)
                 ContratMeterView(doneMinutes: w.doneMinutes,
                                  plannedRemainingMinutes: w.plannedRemainingMinutes,
                                  quotaMinutes: w.quotaMinutes)
                 ContratLegendView(showsQuota: true, quotaText: "Contrat \(ContractHoursText.hours(w.quotaMinutes))")
                 LazyVGrid(columns: statColumns, spacing: Theme.Spacing.s) {
-                    StatTile(label: "Au contrat", value: ContractHoursText.hours(w.quotaMinutes))
-                    StatTile(label: "Fait", value: ContractHoursText.hours(w.doneMinutes), tone: .work)
-                    StatTile(label: "Encore prévu", value: ContractHoursText.hours(w.plannedRemainingMinutes))
-                    StatTile(label: "Projection", value: ContractHoursText.hours(w.projectedMinutes))
+                    ContratTile(label: "Au contrat", value: ContractHoursText.hours(w.quotaMinutes), tone: .neutral)
+                    ContratTile(label: "Fait", value: ContractHoursText.hours(w.doneMinutes), tone: .work)
+                    ContratTile(label: "Encore prévu", value: ContractHoursText.hours(w.plannedRemainingMinutes), tone: .neutral)
+                    ContratTile(label: "Projection", value: ContractHoursText.hours(w.projectedMinutes), tone: .neutral)
                 }
                 Text(weekNote(w))
                     .font(.footnote)
@@ -576,5 +576,39 @@ private struct ContractHoursBody: View {
                                threshold1h: thresholdBinding(60),
                                thresholdReached: thresholdBinding(0))
         }
+    }
+}
+
+
+/// Tuile de la semaine du prototype : fond neutre, libellé, gros chiffre.
+private struct ContratTile: View {
+    @Environment(\.palette) private var palette
+    let label: String
+    let value: String
+    let tone: PLTTone
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+            HStack(spacing: Theme.Spacing.xs + Theme.Spacing.xxs) {
+                if tone != .neutral {
+                    Circle()
+                        .fill(tone.color(palette))
+                        .frame(width: 8, height: 8)
+                        .accessibilityHidden(true)
+                }
+                Text(label)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(tone == .neutral ? palette.textSecondary : tone.color(palette))
+            }
+            Text(value)
+                .font(.title.weight(.bold).monospacedDigit())
+                .foregroundStyle(palette.textPrimary)
+                .minimumScaleFactor(0.7)
+                .lineLimit(1)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(Theme.Spacing.m)
+        .background(palette.fill, in: RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+        .accessibilityElement(children: .combine)
     }
 }
