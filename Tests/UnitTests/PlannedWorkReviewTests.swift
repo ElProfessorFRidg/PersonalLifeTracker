@@ -25,4 +25,28 @@ final class PlannedWorkReviewTests: XCTestCase {
         XCTAssertFalse(PlannedWorkReview.hasUnloggedWork(holidayShift, sessions: [], leaveDays: [],
                                                         now: nov16(8, 0), calendar: TestCalendar.utc))
     }
+
+    func testPartialShiftOffersOnlyTheUncoveredHoursAndIgnoresShortBreaks() {
+        let shift = PlanSlot(id: UUID(), start: nov16(8, 0), end: nov16(16, 0), activity: .work)
+        let sessions = [
+            RealSlot(start: nov16(12, 0), end: nov16(15, 10), activity: .work),
+            RealSlot(start: nov16(8, 5), end: nov16(9, 35), activity: .work),
+            RealSlot(start: nov16(9, 15), end: nov16(10, 0), activity: .work)
+        ]
+        XCTAssertEqual(PlannedWorkReview.gaps(in: shift, sessions: sessions, leaveDays: [],
+                                             now: nov17(8, 0), calendar: TestCalendar.utc),
+                       [DateInterval(start: nov16(10, 0), end: nov16(12, 0))])
+    }
+
+    func testRunningSessionCoversItsTimeAndPlanningSourceDecodes() {
+        let shift = PlanSlot(id: UUID(), start: nov16(8, 0), end: nov16(12, 0), activity: .work)
+        let active = RealSlot(start: nov16(9, 0), end: nil, activity: .work)
+        XCTAssertEqual(PlannedWorkReview.gaps(in: shift, sessions: [active], leaveDays: [],
+                                             now: nov17(8, 0), calendar: TestCalendar.utc),
+                       [DateInterval(start: nov16(8, 0), end: nov16(9, 0))])
+        let previous = WorkSession(activity: .work, start: nov16(8, 0), source: .manual)
+        XCTAssertEqual(previous.source, .manual)
+        previous.sourceRaw = "planning"
+        XCTAssertEqual(previous.source, .planning)
+    }
 }

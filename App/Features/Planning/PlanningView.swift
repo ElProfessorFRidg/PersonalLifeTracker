@@ -13,7 +13,6 @@ struct PlanningView: View {
     @State private var showAdd: Bool = false
     @State private var showCopy: Bool = false
     @State private var showLeave: Bool = false
-    @State private var shiftToReview: PlannedShift?
 
     private var calendar: Calendar { return PlanningSupport.calendar }
 
@@ -50,7 +49,6 @@ struct PlanningView: View {
         let done: Int = PlanningRules.doneMinutes(weekStarting: weekStart, real: real, now: now, calendar: calendar)
         let nextStart: Date = PlanningRules.shiftWeek(weekStart, by: 1, calendar: calendar)
         let nextEmpty: Bool = weekShifts(nextStart).isEmpty
-        let missing = unloggedShifts(current, sessions: real, now: now)
 
         return PLTScreen(title: "Planning") {
             weekHeader(hasShifts: !current.isEmpty, hasImported: current.contains(where: { $0.sourceRaw == "photo" || $0.sourceRaw == "text" }))
@@ -79,22 +77,7 @@ struct PlanningView: View {
                 }
             }
 
-            if !missing.isEmpty {
-                PLTSectionHeader(title: "Créneaux à vérifier")
-                Text("Tu avais prévu de travailler. Si tu as fait le service, vérifie les horaires avant de l’ajouter.")
-                    .font(.subheadline)
-                    .foregroundStyle(palette.textSecondary)
-                PLTListGroup {
-                    ForEach(missing) { shift in
-                        PLTRow(symbol: "clock.badge.questionmark", tone: .work,
-                               title: PlanningSupport.dayShort(shift.start),
-                               subtitle: PlanningSupport.range(start: shift.start, end: shift.end),
-                               showsChevron: true, showsSeparator: shift.uid != missing.last?.uid) {
-                            shiftToReview = shift
-                        }
-                    }
-                }
-            }
+            PlannedWorkReviewSection(week: weekStart)
 
             PLTSectionHeader(title: "Jour par jour")
             PLTCard {
@@ -145,23 +128,6 @@ struct PlanningView: View {
         }
         .sheet(isPresented: $showLeave) {
             PlanningLeaveView(defaultDay: defaultDay)
-        }
-        .sheet(item: $shiftToReview) { shift in
-            SessionAjoutView(plannedShift: shift)
-        }
-    }
-
-    private func unloggedShifts(_ current: [PlannedShift], sessions: [RealSlot], now: Date) -> [PlannedShift] {
-        if modules.isActive("vacation_mode") { return [] }
-        let leaveDays = leaves.compactMap { leave -> DateInterval? in
-            let start = calendar.startOfDay(for: leave.startDay)
-            let endDay = calendar.startOfDay(for: leave.endDay)
-            guard let end = calendar.date(byAdding: .day, value: 1, to: endDay), end > start else { return nil }
-            return DateInterval(start: start, end: end)
-        }
-        return current.filter {
-            PlannedWorkReview.hasUnloggedWork($0.planSlot, sessions: sessions, leaveDays: leaveDays,
-                                             now: now, calendar: calendar)
         }
     }
 

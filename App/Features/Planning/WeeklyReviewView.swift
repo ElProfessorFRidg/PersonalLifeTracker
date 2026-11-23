@@ -41,9 +41,11 @@ struct WeeklyReviewView: View {
                 .disabled(end > Date())
             }
 
+            PlannedWorkReviewSection(week: week)
+
             if pending.isEmpty {
                 PLTCard {
-                    Label(finished.isEmpty ? "Aucune session terminée" : "Tout est vérifié",
+                    Label(finished.isEmpty ? "Aucune session terminée" : "Sessions enregistrées vérifiées",
                           systemImage: finished.isEmpty ? "calendar" : "checkmark.circle.fill")
                         .font(.headline)
                     if finished.isEmpty {

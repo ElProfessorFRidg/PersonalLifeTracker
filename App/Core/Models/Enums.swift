@@ -62,6 +62,7 @@ enum ActivityType: String, CaseIterable, Codable, Identifiable {
 enum SessionSource: String, CaseIterable, Codable, Identifiable {
     case gps
     case manual
+    case planning
 
     var id: String { rawValue }
 
@@ -69,6 +70,7 @@ enum SessionSource: String, CaseIterable, Codable, Identifiable {
         switch self {
         case .gps: return "Détectée"
         case .manual: return "Saisie à la main"
+        case .planning: return "Issue du planning"
         }
     }
 }

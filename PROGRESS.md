@@ -19,6 +19,10 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 
 Le workflow pull-request.yml produit les IPA en version 0.0.1 comme les bêtas publiées. Le numéro de build reste celui du run GitHub Actions, et l’identifiant de bundle reste identique au projet. Remplacement via AltStore sur appareil NON TESTÉ.
 
+## Tests ciblés de la préversion
+
+Les workflows `_build-test.yml` et `pull-request.yml` permettent à la branche de préversion de la PR #2 d’exécuter les tests du module des heures manquantes. Les autres builds utilisent la suite complète par défaut.
+
 ## Phases
 
 | ID | Titre | Étape | Statut | Preuve | Note |
@@ -53,7 +57,7 @@ Le workflow pull-request.yml produit les IPA en version 0.0.1 comme les bêtas p
 | module:weekly_review | Revue de la semaine | 10 | CODÉ NON TESTÉ |  | File de sessions terminées à vérifier dans Accueil et Planning. Notification dominicale non implémentée. Vérification iOS dans la PR #2. |
 | module:recaps | Bilans mensuels et annuels | 10 | NON COMMENCÉ |  |  |
 | module:live_activity_widgets | Live Activity, widgets, App Intents, contrôles, galerie de widgets | 8 (base, contrôles), 10 (galerie) | NON COMMENCÉ |  |  |
-| module:missing_hours | Détection d'heures manquantes | 10 | NON COMMENCÉ |  |  |
+| module:missing_hours | Détection d'heures manquantes | 10 | CODÉ NON TESTÉ |  | Détection de trous du planning saisi, revue, motifs et saisie préremplie. Rappels automatiques et estimation par contrat non raccordés. |
 | module:contract_hours | Équilibrage des heures du contrat, compteurs, repos compensateur, alerte de quota | 6 | NON COMMENCÉ |  |  |
 | module:pattern_detection | Détection de motifs de planning | 10 | NON COMMENCÉ |  |  |
 | module:schedule_archive | Historique des plannings | 10 | NON COMMENCÉ |  |  |

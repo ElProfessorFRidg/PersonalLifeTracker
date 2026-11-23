@@ -13,6 +13,7 @@ jobs:
     with:
       build_ipa: true
       version: "0.0.1"
+      test_classes: ${{ github.event.pull_request.head.ref == 'fix/place-detection-ux' && 'PlannedWorkReviewTests' || '' }}
   publish:
     name: Publish Latest Build
     needs: build-test
