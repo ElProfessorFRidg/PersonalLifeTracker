@@ -56,6 +56,13 @@ jobs:
           xcodebuild test -project PersonalLifeTracker.xcodeproj -scheme PersonalLifeTracker \
             -destination "id=$UDID" -resultBundlePath build/tests.xcresult \
             CODE_SIGNING_ALLOWED=NO "${scoped_args[@]}" | tail -80
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: screens
+          path: build/screens
+          if-no-files-found: ignore
       - name: Summarize test results
         if: always()
         run: |
