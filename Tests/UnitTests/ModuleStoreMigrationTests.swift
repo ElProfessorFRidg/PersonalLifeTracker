@@ -4,7 +4,7 @@ import XCTest
 final class ModuleStoreMigrationTests: XCTestCase {
     private func freshDefaults(_ name: String) -> UserDefaults {
         let d: UserDefaults = UserDefaults(suiteName: name)!
-        d.removePersonalDomain(name)
+        d.removePersistentDomain(forName: name)
         return d
     }
 
