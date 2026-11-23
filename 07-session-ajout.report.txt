@@ -1,0 +1,2 @@
+07-session-ajout-light.png : 780x2400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+07-session-ajout-dark.png : 780x2400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non

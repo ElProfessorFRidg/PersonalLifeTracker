@@ -1,0 +1,3 @@
+01-accueil-light.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+01-accueil-dark.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+01-accueil-amoled.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non

@@ -1,0 +1,2 @@
+04-lieu-detail-light.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+04-lieu-detail-dark.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non

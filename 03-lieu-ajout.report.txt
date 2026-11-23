@@ -1,0 +1,2 @@
+03-lieu-ajout-light.png : 780x2800 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+03-lieu-ajout-dark.png : 780x2800 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non

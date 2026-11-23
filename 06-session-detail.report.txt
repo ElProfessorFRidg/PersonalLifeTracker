@@ -1,0 +1,2 @@
+06-session-detail-light.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+06-session-detail-dark.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non

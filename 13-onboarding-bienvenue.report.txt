@@ -1,0 +1,2 @@
+13-onboarding-bienvenue-light.png : 780x1688 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+13-onboarding-bienvenue-dark.png : 780x1688 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non

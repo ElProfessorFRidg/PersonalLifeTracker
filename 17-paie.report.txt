@@ -1,0 +1,2 @@
+17-paie-light.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
+17-paie-dark.png : 780x3400 px, image unie (vide) : non, part de jaune interdit : 0 %, rendu sans NavigationStack : non
