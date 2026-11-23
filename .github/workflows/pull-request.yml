@@ -9,6 +9,8 @@ permissions:
 jobs:
   build-test:
     name: Build and Test
+    permissions:
+      contents: write
     uses: ./.github/workflows/_build-test.yml
     with:
       build_ipa: true
