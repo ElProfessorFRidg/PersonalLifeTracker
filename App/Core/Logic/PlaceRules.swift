@@ -110,6 +110,39 @@ enum PlaceRules {
         return others.filter { overlaps(candidate, $0) }.map { $0.name }
     }
 
+    // MARK: Zone englobante
+
+    /// Cercle (centre et rayon) qui contient deux zones. Les centres sont interpolés linéairement : exact à l'échelle d'une ville.
+    struct EnclosingZone: Equatable {
+        let latitude: Double
+        let longitude: Double
+        let radius: Double
+    }
+
+    static func enclosingZone(latitude1: Double, longitude1: Double, radius1: Double,
+                              latitude2: Double, longitude2: Double, radius2: Double) -> EnclosingZone {
+        let d: Double = distanceMeters(latitude1: latitude1, longitude1: longitude1,
+                                       latitude2: latitude2, longitude2: longitude2)
+        if d + radius2 <= radius1 {
+            return EnclosingZone(latitude: latitude1, longitude: longitude1, radius: radius1)
+        }
+        if d + radius1 <= radius2 {
+            return EnclosingZone(latitude: latitude2, longitude: longitude2, radius: radius2)
+        }
+        let enclosingRadius: Double = (d + radius1 + radius2) / 2
+        let t: Double = d > 0 ? (enclosingRadius - radius1) / d : 0
+        return EnclosingZone(latitude: latitude1 + (latitude2 - latitude1) * t,
+                             longitude: longitude1 + (longitude2 - longitude1) * t,
+                             radius: enclosingRadius)
+    }
+
+    /// Rayon arrondi au multiple de 10 m supérieur (une tolérance de 0,5 m évite qu'un 80,0000001 donne 90), puis ramené dans les bornes.
+    static func roundedUpRadius(_ radius: Double) -> Double {
+        if radius.isNaN { return defaultRadius }
+        let steps: Double = ((radius - 0.5) / 10).rounded(.up)
+        return clampRadius(steps * 10)
+    }
+
     /// Phrase d'avertissement, nil s'il n'y a aucun chevauchement.
     static func overlapWarning(names: [String]) -> String? {
         if names.isEmpty { return nil }

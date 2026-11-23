@@ -90,7 +90,13 @@ struct AccueilView: View {
                            onStop: { showStopConfirm = true },
                            onChooseDoubt: { doubtSession = doubtTarget })
 
-            SetupCard()
+            // Group : le ViewBuilder de ce VStack est à 10 enfants (maximum). Les nouvelles cartes vont dans ce groupe.
+            Group {
+                SetupCard()
+                SchoolHomeCards(now: now)
+                PartirMaintenantCard()
+                HeuresManquantesCard()
+            }
 
             if let live = running {
                 AccueilRunningCard(session: live, now: now, onStop: { showStopConfirm = true })
