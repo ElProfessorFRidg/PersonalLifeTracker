@@ -1,0 +1,92 @@
+<section class="screen" id="scr-onb-fin" data-title="C'est prêt" data-group="Onboarding" data-tabbar="hide"
+         data-states="pret:Tout est bon,partiel:Il manque des trucs">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="onb-lieu"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Retour</button>
+    <span class="navbar-title">Étape 7 sur 7</span>
+  </header>
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 7 sur 7"><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i></div>
+
+    <div class="onb-head">
+      <span class="onb-hero onb-hero--ok" aria-hidden="true" data-when="pret"><svg class="icon icon--l" aria-hidden="true"><use href="#i-check"/></svg></span>
+      <span class="onb-hero onb-hero--warn" aria-hidden="true" data-when="partiel" hidden><svg class="icon icon--l" aria-hidden="true"><use href="#i-info"/></svg></span>
+      <h1 class="onb-h1" data-when="pret">C'est prêt, Léo.</h1>
+      <h1 class="onb-h1" data-when="partiel" hidden>C'est prêt, presque.</h1>
+      <p class="onb-lead" data-when="pret">Voilà ce que j'ai compris. Un truc cloche&nbsp;? Corrige-le d'un tap.</p>
+      <p class="onb-lead" data-when="partiel" hidden>Je peux démarrer, mais il manque un réglage pour que je note tes heures tout seul. Corrige-le d'un tap.</p>
+    </div>
+
+    <section class="section" aria-labelledby="onbf-rec-t">
+      <div class="section-head"><h2 class="section-title" id="onbf-rec-t">Voilà ce que j'ai compris</h2></div>
+      <div class="list">
+        <button type="button" class="row" data-go="onb-modules" aria-label="Fonctionnalités, corriger">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span>
+          <span class="row-main"><span class="row-title">Fonctionnalités</span><span class="row-sub" id="onbf-mod">Le noyau et 11 en plus</span></span>
+          <span class="row-value">Corriger</span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="onb-loc" aria-label="Localisation, corriger">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-nav"/></svg></span>
+          <span class="row-main"><span class="row-title">Localisation</span><span class="row-sub">Pour noter tes arrivées et tes départs</span></span>
+          <span class="status status--ok" id="onbf-loc"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Toujours</span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="onb-notifs" aria-label="Notifications, corriger">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title">Notifications</span><span class="row-sub">6 par jour maximum</span></span>
+          <span class="status status--ok" id="onbf-notif"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>Autorisées</span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-go="onb-lieu" aria-label="Premier lieu, corriger">
+          <span class="row-icon row-icon--work" id="onbf-lieu-ic"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title" id="onbf-lieu">Supérette du Canal</span><span class="row-sub" id="onbf-lieu-s">Taf, zone de 100 m</span></span>
+          <span class="row-value">Corriger</span><svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <p class="section-foot">Tout est modifiable ensuite dans Réglages.</p>
+    </section>
+
+    <div class="banner banner--warning" data-when="partiel" hidden>
+      <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+      <div class="banner-main"><p class="banner-title">Je te vois seulement quand l'app est ouverte</p><p class="banner-text">Sans « Toujours », je rate tes arrivées. Corrige-le avec la ligne Localisation, ou fais sans et lance tes sessions à la main.</p></div>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" id="onbf-go">Aller à l'accueil</button>
+      <p class="section-foot onb-foot">Bonne journée, et bon taf.</p>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var N = 'onb-fin';
+    var OK = '<svg class="icon" aria-hidden="true"><use href="#i-check"/></svg>', WARN = '<svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>';
+    function status(id, cls, icon, txt) { var n = document.getElementById(id); n.className = 'status status--' + cls; n.innerHTML = icon + txt; }
+    PLT.onShow(N, function () {
+      var loc = PLT.store.get('onb.loc', 'ok'), notif = PLT.store.get('onb.notif', 'ok');
+      var mods = PLT.store.get('onb.modules', ''), lieu = PLT.store.get('onb.lieu', null);
+      var n = mods ? mods.split(',').length : 11;
+      document.getElementById('onbf-mod').textContent = n === 0 ? 'Seulement le noyau' : 'Le noyau et ' + n + ' en plus';
+      if (loc === 'ok') status('onbf-loc', 'ok', OK, 'Toujours');
+      else if (loc === 'limite') status('onbf-loc', 'error', WARN, 'App ouverte');
+      else status('onbf-loc', 'error', WARN, 'Refusée');
+      if (notif === 'refuse') status('onbf-notif', 'warn', WARN, 'Refusées'); else status('onbf-notif', 'ok', OK, 'Autorisées');
+      if (lieu) {
+        var p = lieu.split('|');
+        document.getElementById('onbf-lieu').textContent = p[0];
+        document.getElementById('onbf-lieu-s').textContent = (p[1] === 'study' ? 'Cours' : 'Taf') + ', zone de 100 m';
+        document.getElementById('onbf-lieu-ic').className = 'row-icon row-icon--' + (p[1] === 'study' ? 'study' : 'work');
+      } else if (lieu === '') {
+        document.getElementById('onbf-lieu').textContent = 'Aucun lieu pour l\'instant';
+        document.getElementById('onbf-lieu-s').textContent = 'Tu en ajoutes un quand tu veux';
+      }
+      setState(N, loc === 'ok' ? 'pret' : 'partiel');
+    });
+    document.getElementById('scr-onb-fin').addEventListener('plt:state', function (e) {
+      var loc = PLT.store.get('onb.loc', 'ok');
+      if (e.detail.state === 'pret') status('onbf-loc', 'ok', OK, 'Toujours');
+      else if (loc === 'ok') status('onbf-loc', 'error', WARN, 'App ouverte');
+    });
+    document.getElementById('onbf-go').addEventListener('click', function () { go('accueil'); });
+  });
+  </script>
+</section>

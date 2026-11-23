@@ -1,0 +1,4 @@
+## 130. AUTO-CALIBRATION DES LIEUX (module place_calibration, proposé et coché par défaut)
+
+Analyse, pour chaque lieu, les écarts constatés lors des arrivées et départs confirmés : décalage systématique entre la position de détection et le centre du lieu, dispersion (bruit GPS), délai de détection. Après un échantillon minimal (défaut 6 arrivées), propose : "Tes arrivées au taf sont détectées en moyenne 80 m plus loin que le lieu, j'ajuste ?" avec aperçu sur la carte (déplacer le centre, changer le rayon, ou diviser en deux zones).
+Détecte aussi les lieux qui se chevauchent et l'usage de la limite de 20 régions surveillées, et propose des priorités. Jamais appliqué sans confirmation. Seules des mesures agrégées (distance, direction, bruit) sont conservées, jamais de traces GPS. Indicateur de qualité par lieu (vert, orange). Liée à l'assistant de dépannage (section 132).

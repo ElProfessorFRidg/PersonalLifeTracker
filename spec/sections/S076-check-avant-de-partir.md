@@ -1,0 +1,4 @@
+## 76. CHECK AVANT DE PARTIR (module departure_checklist, désactivé par défaut)
+
+Listes personnalisables (clés, badge, tenue, sac, carte, chargeur...) par type d'activité (travail, cours) ou par lieu, vides au départ avec des exemples à ajouter. Déclenchement au choix : au départ détecté du domicile, X minutes avant le moment de "Pars maintenant" si ce module est actif, X minutes avant une prise de poste ou de cours connue, ou par bouton. Présentation : notification avec actions puis écran rapide à cases à cocher, "Tout est bon" en un tap.
+Contrainte à respecter : la détection du départ du domicile peut arriver avec un léger délai (géorepérage), donc ne jamais promettre un déclenchement instantané, et préférer l'heure de prise de poste comme déclencheur fiable. Un seul rappel par sortie, aucun rappel pendant le mode vacances ou examens, jamais culpabilisant ("Check rapide avant de partir ?").

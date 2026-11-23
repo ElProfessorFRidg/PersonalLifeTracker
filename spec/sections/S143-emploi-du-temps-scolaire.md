@@ -1,0 +1,4 @@
+## 143. EMPLOI DU TEMPS SCOLAIRE (module school_timetable, proposé et coché par défaut)
+
+Import de l'emploi du temps des cours : photo (même lecture que la section 16), PDF, fichier de calendrier ICS ou saisie à la main. Semaines A/B (ou autre alternance) gérées avec la semaine de départ, en tenant compte des vacances (section 30). Les cours deviennent le "prévu" côté études, comparable au réel détecté ("prévu 8 h, arrivé 7 h 52").
+Quand un cours est annulé ou change (l'utilisateur le marque en un tap, ou réimporte l'emploi du temps et le même moteur de différences que la section 97 montre le changement), l'app propose le créneau libéré : révision (section 34), repos, ou disponibilité à marquer (section 94) si l'utilisateur le souhaite. Jamais de suggestion de manquer un cours, jamais de transmission d'absence à l'établissement, aucune connexion à un système de l'école. Le compteur d'absences facultatif reste celui de la section 115.

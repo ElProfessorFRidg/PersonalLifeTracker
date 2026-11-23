@@ -1,0 +1,150 @@
+<section class="screen" id="scr-ile-dynamique" data-title="Dynamic Island" data-group="Système iOS" data-tabbar="hide" data-fullbleed
+         data-states="encours:Session en cours,pause:En pause,confirmer:À confirmer">
+
+  <header class="di-head">
+    <p class="eyebrow">Maquette iOS</p>
+    <h1 class="di-h1">Dynamic Island</h1>
+    <p class="di-lead" data-when="encours">Même Live Activity que sur l'écran verrouillé, en trois présentations.</p>
+    <p class="di-lead" data-when="pause">Le chrono s'arrête, la pause est dite clairement.</p>
+    <p class="di-lead" data-when="confirmer">Départ pas sûr&nbsp;: elle reste là et te demande, elle ne disparaît pas.</p>
+  </header>
+
+  <div class="di-body">
+
+    <!-- Compacte : icône et durée -->
+    <section class="di-stage" aria-labelledby="di-c-t">
+      <h2 class="di-cap" id="di-c-t">Compacte</h2>
+      <div class="di-scene">
+        <div class="di-pill di-pill--compact" data-when="encours" role="img" aria-label="Dynamic Island compacte : taf en cours depuis 1 h 14">
+          <span class="di-lead-ico"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="di-gap" aria-hidden="true"></span>
+          <span class="di-trail num" data-timer="4447" data-timer-format="hm">1 h 14</span>
+        </div>
+        <div class="di-pill di-pill--compact" data-when="pause" role="img" aria-label="Dynamic Island compacte : taf en pause">
+          <span class="di-lead-ico"><svg class="icon icon--s" aria-hidden="true"><use href="#i-pause"/></svg></span>
+          <span class="di-gap" aria-hidden="true"></span>
+          <span class="di-trail">Pause</span>
+        </div>
+        <div class="di-pill di-pill--compact" data-when="confirmer" role="img" aria-label="Dynamic Island compacte : départ à confirmer">
+          <span class="di-lead-ico di-lead-ico--warn"><svg class="icon icon--s" aria-hidden="true"><use href="#i-question"/></svg></span>
+          <span class="di-gap" aria-hidden="true"></span>
+          <span class="di-trail">À confirmer</span>
+        </div>
+      </div>
+      <p class="di-note">Icône d'activité à gauche, durée à droite. Un tap ouvre l'app.</p>
+    </section>
+
+    <!-- Minimale : quand une autre activité prend la place -->
+    <section class="di-stage" aria-labelledby="di-m-t">
+      <h2 class="di-cap" id="di-m-t">Minimale</h2>
+      <div class="di-scene di-scene--row">
+        <div class="di-pill di-pill--min" data-when="encours" role="img" aria-label="Dynamic Island minimale : taf en cours">
+          <svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>
+        </div>
+        <div class="di-pill di-pill--min" data-when="pause" role="img" aria-label="Dynamic Island minimale : taf en pause">
+          <svg class="icon icon--s" aria-hidden="true"><use href="#i-pause"/></svg>
+        </div>
+        <div class="di-pill di-pill--min di-pill--warn" data-when="confirmer" role="img" aria-label="Dynamic Island minimale : départ à confirmer">
+          <svg class="icon icon--s" aria-hidden="true"><use href="#i-question"/></svg>
+        </div>
+      </div>
+      <p class="di-note">Un seul rond, quand une autre app (un minuteur, de la musique) occupe déjà l'îlot.</p>
+    </section>
+
+    <!-- Étendue : lieu, début, fin prévue, Terminer -->
+    <section class="di-stage" aria-labelledby="di-e-t">
+      <h2 class="di-cap" id="di-e-t">Étendue</h2>
+      <div class="di-scene">
+        <article class="di-pill di-pill--exp" data-when="encours" aria-label="Dynamic Island étendue : taf en cours">
+          <div class="di-exp-top">
+            <span class="di-lead-ico di-lead-ico--big"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <div class="di-exp-t"><p class="di-exp-title">Taf</p><p class="di-exp-sub">Supérette du Canal</p></div>
+            <p class="timer di-exp-timer" role="timer" aria-label="Durée de la session en cours" data-timer="4447">1:14:07</p>
+          </div>
+          <div class="di-meter" role="img" aria-label="40 pour cent de la session prévue"><i style="--v:40"></i></div>
+          <div class="di-exp-times"><span>Arrivée <span class="num">17:56</span></span><span>Fin prévue <span class="num">21:00</span></span></div>
+          <div class="di-btns">
+            <button type="button" class="di-btn" data-toast="Pause lancée. Le chrono s'arrête."><svg class="icon icon--s" aria-hidden="true"><use href="#i-pause"/></svg>Pause</button>
+            <button type="button" class="di-btn di-btn--main" data-toast="Session terminée. Tu peux annuler dans l'app."><svg class="icon icon--s" aria-hidden="true"><use href="#i-stop"/></svg>Terminer</button>
+          </div>
+        </article>
+        <article class="di-pill di-pill--exp" data-when="pause" aria-label="Dynamic Island étendue : taf en pause">
+          <div class="di-exp-top">
+            <span class="di-lead-ico di-lead-ico--big"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg></span>
+            <div class="di-exp-t"><p class="di-exp-title">Taf en pause</p><p class="di-exp-sub">Supérette du Canal</p></div>
+            <p class="timer di-exp-timer" aria-label="Durée du taf avant la pause">1:09:00</p>
+          </div>
+          <div class="di-meter" role="img" aria-label="38 pour cent de la session prévue"><i style="--v:38"></i></div>
+          <div class="di-exp-times"><span>En pause depuis <span class="num">19:05</span></span><span>Fin prévue <span class="num">21:00</span></span></div>
+          <div class="di-btns">
+            <button type="button" class="di-btn di-btn--main" data-toast="C'est reparti, je compte."><svg class="icon icon--s" aria-hidden="true"><use href="#i-play"/></svg>Reprendre</button>
+            <button type="button" class="di-btn" data-toast="Session terminée. Tu peux annuler dans l'app."><svg class="icon icon--s" aria-hidden="true"><use href="#i-stop"/></svg>Terminer</button>
+          </div>
+        </article>
+        <article class="di-pill di-pill--exp" data-when="confirmer" aria-label="Dynamic Island étendue : départ à confirmer">
+          <div class="di-exp-top">
+            <span class="di-lead-ico di-lead-ico--big di-lead-ico--warn"><svg class="icon" aria-hidden="true"><use href="#i-question"/></svg></span>
+            <div class="di-exp-t"><p class="di-exp-title">T'es parti du taf&nbsp;?</p><p class="di-exp-sub">Vers <span class="num">21:00</span>, à plus ou moins <span class="num">3 min</span></p></div>
+          </div>
+          <div class="di-exp-times"><span>Arrivée <span class="num">17:56</span></span><span>Session à vérifier</span></div>
+          <div class="di-btns">
+            <button type="button" class="di-btn di-btn--main" data-toast="C'est noté : départ à 21:00.">Oui, c'est bon</button>
+            <button type="button" class="di-btn" data-toast="Dans l'app, tu choisis l'heure exacte.">Autre heure</button>
+          </div>
+        </article>
+      </div>
+      <p class="di-note" data-when="encours pause">Lieu, début, fin prévue, et les boutons que tu as gardés dans les réglages. Les boutons agissent sans ouvrir l'app.</p>
+      <p class="di-note" data-when="confirmer">Tant que tu réponds pas, la session reste marquée à confirmer. Rien n'est perdu.</p>
+    </section>
+
+    <aside class="di-legend" aria-label="À propos de cet écran">
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>Maquette de la Dynamic Island, pas un écran de l'app. Une Live Activity se démarre app ouverte et dure 8 heures au plus&nbsp;: passé ce délai, l'app propose de relancer l'affichage.</p>
+    </aside>
+  </div>
+
+  <style>
+    #scr-ile-dynamique {
+      --di-on: var(--background);
+      --di-work: var(--workSoft);
+      --di-warn: var(--warningSoft);
+      background:
+        radial-gradient(90% 40% at 85% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 72%),
+        radial-gradient(80% 38% at 0% 60%, color-mix(in srgb, var(--work) 22%, transparent), transparent 72%),
+        var(--background);
+    }
+    .app[data-theme="dark"] #scr-ile-dynamique, .app[data-theme="amoled"] #scr-ile-dynamique { --di-on: var(--textPrimary); --di-work: var(--work); --di-warn: var(--warning); }
+    #scr-ile-dynamique .di-head { padding: 12px var(--gutter) 0; }
+    #scr-ile-dynamique .di-h1 { font: var(--t-title1) var(--font-text); }
+    #scr-ile-dynamique .di-lead { margin-top: 4px; font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+    #scr-ile-dynamique .di-body { display: flex; flex-direction: column; gap: 22px; padding: 18px var(--gutter) var(--space-l); min-width: 0; }
+    #scr-ile-dynamique .di-stage { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    #scr-ile-dynamique .di-cap { font: 600 13px/16px var(--font-text); letter-spacing: .06em; text-transform: uppercase; color: var(--textSecondary); }
+    #scr-ile-dynamique .di-scene { display: flex; justify-content: center; }
+    #scr-ile-dynamique .di-note { font: 400 13px/18px var(--font-text); color: var(--textSecondary); }
+    #scr-ile-dynamique .di-pill { background: var(--pg-bezel); color: var(--di-on); box-shadow: 0 0 0 1px color-mix(in srgb, var(--textPrimary) 16%, transparent); min-width: 0; }
+    #scr-ile-dynamique .di-pill--compact { display: flex; align-items: center; height: 37px; width: 256px; max-width: 100%; border-radius: 19px; padding: 0 12px 0 8px; gap: 0; }
+    #scr-ile-dynamique .di-gap { flex: 1; min-width: 40px; max-width: 124px; height: 100%; }
+    #scr-ile-dynamique .di-trail { flex: none; margin-left: auto; font: 600 14px/1 var(--font-text); color: var(--di-on); white-space: nowrap; padding-left: 6px; }
+    #scr-ile-dynamique .di-trail.num { font-family: var(--font-mono); color: var(--di-work); }
+    #scr-ile-dynamique .di-lead-ico { display: grid; place-items: center; width: 26px; height: 26px; flex: none; color: var(--di-work); }
+    #scr-ile-dynamique .di-lead-ico--warn { color: var(--di-warn); }
+    #scr-ile-dynamique .di-lead-ico--big { width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--di-on) 14%, transparent); }
+    #scr-ile-dynamique .di-pill--min { display: grid; place-items: center; width: 37px; height: 37px; border-radius: 50%; color: var(--di-work); }
+    #scr-ile-dynamique .di-pill--warn { color: var(--di-warn); }
+    #scr-ile-dynamique .di-pill--exp { width: 100%; max-width: 392px; border-radius: 40px; padding: 20px 22px 18px; display: flex; flex-direction: column; gap: 12px; }
+    #scr-ile-dynamique .di-exp-top { display: flex; align-items: center; gap: 12px; }
+    #scr-ile-dynamique .di-exp-t { flex: 1; min-width: 0; }
+    #scr-ile-dynamique .di-exp-title { font: 600 17px/21px var(--font-text); }
+    #scr-ile-dynamique .di-exp-sub { font: 400 13px/17px var(--font-text); color: color-mix(in srgb, var(--di-on) 72%, transparent); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #scr-ile-dynamique .di-exp-timer { font-size: 26px; line-height: 30px; flex: none; color: var(--di-work); }
+    #scr-ile-dynamique .di-meter { height: 6px; border-radius: 3px; background: color-mix(in srgb, var(--di-on) 20%, transparent); overflow: hidden; }
+    #scr-ile-dynamique .di-meter > i { display: block; height: 100%; width: calc(var(--v) * 1%); background: var(--di-work); border-radius: 3px; }
+    #scr-ile-dynamique .di-exp-times { display: flex; justify-content: space-between; gap: 8px; font: 500 13px/17px var(--font-text); color: color-mix(in srgb, var(--di-on) 72%, transparent); }
+    #scr-ile-dynamique .di-btns { display: flex; gap: 10px; }
+    #scr-ile-dynamique .di-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px; min-height: 44px; padding: 0 12px; border: 0; border-radius: 22px; font: 600 15px/1 var(--font-text); background: color-mix(in srgb, var(--di-on) 16%, transparent); color: var(--di-on); }
+    #scr-ile-dynamique .di-btn--main { background: var(--di-on); color: var(--pg-bezel); }
+    #scr-ile-dynamique .di-legend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; background: var(--surface); color: var(--textSecondary); font: 400 12px/17px var(--font-text); }
+    #scr-ile-dynamique .di-legend .icon { margin-top: 1px; }
+  </style>
+</section>

@@ -1,0 +1,3 @@
+## 150. TERMES EXPLIQUÉS (module glossary, proposé et coché par défaut)
+
+Chaque terme technique de l'app (IDCC, heures complémentaires, avenant, période d'essai, repos compensateur, solde de tout compte...) porte une petite icône d'aide qui ouvre une explication de deux phrases en français simple, avec lien vers la source et date de vérification. Écran "Lexique" consultable et recherchable (section 41). Définitions stockées localement (Resources/reference/glossary.json), rédigées par l'agent à partir de sources officielles, "à vérifier" si incertaines. L'icône reste discrète et masquable dans les réglages, sans soulignement envahissant.

@@ -1,0 +1,156 @@
+<section class="screen" id="scr-ecran-verrouille" data-title="Écran verrouillé" data-group="Système iOS" data-tabbar="hide" data-fullbleed
+         data-states="encours:Session en cours,pause:En pause,rien:Rien en cours">
+
+  <div class="lv-top">
+    <p class="lv-date" data-when="encours">
+      <span>lun. 16 nov.</span>
+      <span class="lv-inline" role="img" aria-label="Widget en ligne : taf, encore 1 h 50"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf, encore <span class="num">1 h 50</span></span>
+    </p>
+    <p class="lv-date" data-when="pause">
+      <span>lun. 16 nov.</span>
+      <span class="lv-inline" role="img" aria-label="Widget en ligne : taf en pause depuis 19:05"><svg class="icon icon--s" aria-hidden="true"><use href="#i-pause"/></svg>Taf en pause</span>
+    </p>
+    <p class="lv-date" data-when="rien">
+      <span>lun. 16 nov.</span>
+      <span class="lv-inline" role="img" aria-label="Widget en ligne : prochain cours demain à 8:00"><svg class="icon icon--s" aria-hidden="true"><use href="#i-book"/></svg>Cours demain <span class="num">8:00</span></span>
+    </p>
+    <p class="lv-clock num" aria-label="Il est 19:10">19:10</p>
+  </div>
+
+  <!-- Widgets de l'écran verrouillé : rectangulaire + deux circulaires. Les lieux restent masqués (section 133.6). -->
+  <div class="lv-widgets">
+    <div class="lv-w lv-w--rect" data-when="encours" role="img" aria-label="Widget rectangulaire : taf, encore 1 h 50, fin à 21:00">
+      <p class="lv-w-k"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf en cours</p>
+      <p class="lv-w-big num">encore 1 h 50</p>
+      <div class="meter meter--work" aria-hidden="true"><i style="--v:40"></i></div>
+      <p class="lv-w-s">Fin prévue <span class="num">21:00</span></p>
+    </div>
+    <div class="lv-w lv-w--rect" data-when="pause" role="img" aria-label="Widget rectangulaire : taf en pause depuis 19:05">
+      <p class="lv-w-k"><svg class="icon icon--s" aria-hidden="true"><use href="#i-pause"/></svg>Taf en pause</p>
+      <p class="lv-w-big num">depuis 19:05</p>
+      <div class="meter meter--work" aria-hidden="true"><i style="--v:38"></i></div>
+      <p class="lv-w-s">Fin prévue <span class="num">21:00</span></p>
+    </div>
+    <div class="lv-w lv-w--rect" data-when="rien" role="img" aria-label="Widget rectangulaire : prochain cours demain à 8:00">
+      <p class="lv-w-k"><svg class="icon icon--s" aria-hidden="true"><use href="#i-book"/></svg>Prochain</p>
+      <p class="lv-w-big">Cours demain</p>
+      <p class="lv-w-s"><span class="num">8:00</span>, dans <span class="num">12 h 50</span></p>
+    </div>
+
+    <div class="lv-w lv-w--circ" data-when="encours" role="img" aria-label="Widget circulaire : 40 pour cent de la session faite, reste 1:50">
+      <div class="lv-ring" style="--v:40" aria-hidden="true"></div>
+      <span class="lv-circ-in"><span class="num lv-circ-n">1:50</span><span class="lv-circ-l">reste</span></span>
+    </div>
+    <div class="lv-w lv-w--circ" data-when="pause" role="img" aria-label="Widget circulaire : taf en pause">
+      <div class="lv-ring" style="--v:38" aria-hidden="true"></div>
+      <span class="lv-circ-in"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg><span class="lv-circ-l">pause</span></span>
+    </div>
+    <div class="lv-w lv-w--circ" data-when="rien" role="img" aria-label="Widget circulaire : prochain cours à 8:00">
+      <span class="lv-circ-in"><svg class="icon icon--s" aria-hidden="true"><use href="#i-book"/></svg><span class="num lv-circ-n">8:00</span></span>
+    </div>
+
+    <div class="lv-w lv-w--circ" data-when="encours pause" role="img" aria-label="Widget circulaire : 1 h de taf cette semaine">
+      <span class="lv-circ-in"><span class="num lv-circ-n">1 h</span><span class="lv-circ-l">semaine</span></span>
+    </div>
+    <div class="lv-w lv-w--circ" data-when="rien" role="img" aria-label="Widget circulaire : 4 h cette semaine">
+      <span class="lv-circ-in"><span class="num lv-circ-n">4 h</span><span class="lv-circ-l">semaine</span></span>
+    </div>
+  </div>
+
+  <!-- Live Activity : jamais la source de vérité, juste un affichage (section 44.1) -->
+  <article class="lv-act" data-when="encours" aria-label="Live Activity : taf en cours">
+    <div class="lv-act-head">
+      <span class="lv-act-ico lv-act-ico--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+      <div class="lv-act-t"><p class="lv-act-title">Taf</p><p class="lv-act-sub">Supérette du Canal</p></div>
+      <span class="chip chip--work"><span class="dot-live" aria-hidden="true"></span>En cours</span>
+    </div>
+    <p class="timer lv-timer" role="timer" aria-label="Durée de la session en cours" data-timer="4447">1:14:07</p>
+    <div class="meter meter--work" role="img" aria-label="40 pour cent de la session prévue"><i style="--v:40"></i></div>
+    <div class="lv-act-times">
+      <span>Arrivée <span class="num">17:56</span></span><span class="lv-act-mid">encore <span class="num">1 h 50</span></span><span>Fin <span class="num">21:00</span></span>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn btn--secondary btn--small" data-toast="Pause lancée. Le chrono s'arrête."><svg class="icon icon--s" aria-hidden="true"><use href="#i-pause"/></svg>Pause</button>
+      <button type="button" class="btn btn--secondary btn--small" data-toast="Session terminée. Tu peux annuler dans l'app."><svg class="icon icon--s" aria-hidden="true"><use href="#i-stop"/></svg>Terminer</button>
+    </div>
+  </article>
+
+  <article class="lv-act" data-when="pause" aria-label="Live Activity : taf en pause">
+    <div class="lv-act-head">
+      <span class="lv-act-ico lv-act-ico--work"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg></span>
+      <div class="lv-act-t"><p class="lv-act-title">Taf</p><p class="lv-act-sub">Supérette du Canal</p></div>
+      <span class="chip chip--doubt">En pause</span>
+    </div>
+    <p class="timer lv-timer" aria-label="Durée du taf avant la pause">1:09:00</p>
+    <div class="meter meter--work" role="img" aria-label="38 pour cent de la session prévue"><i style="--v:38"></i></div>
+    <div class="lv-act-times">
+      <span>Pause depuis <span class="num">19:05</span></span><span class="lv-act-mid"><span class="num">5 min</span></span><span>Fin <span class="num">21:00</span></span>
+    </div>
+    <div class="btn-row">
+      <button type="button" class="btn btn--primary btn--small" data-toast="C'est reparti, je compte."><svg class="icon icon--s" aria-hidden="true"><use href="#i-play"/></svg>Reprendre</button>
+      <button type="button" class="btn btn--secondary btn--small" data-toast="Session terminée. Tu peux annuler dans l'app."><svg class="icon icon--s" aria-hidden="true"><use href="#i-stop"/></svg>Terminer</button>
+    </div>
+  </article>
+
+  <div class="lv-empty" data-when="rien">
+    <p class="lv-empty-t">Pas de Live Activity</p>
+    <p class="lv-empty-s">Rien ne tourne, donc rien à afficher ici. Elle apparaît quand tu lances ou confirmes une session.</p>
+  </div>
+
+  <!-- Légende : cet écran est une maquette d'iOS -->
+  <aside class="lv-legend" aria-label="À propos de cet écran">
+    <svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>
+    <p>Maquette de l'écran verrouillé iOS, pas un écran de l'app. Au-dessus de l'heure&nbsp;: widget en ligne. Sous l'heure&nbsp;: un rectangulaire, deux circulaires. En dessous&nbsp;: la Live Activity. Les lieux et montants des widgets restent masqués tant que le tel est verrouillé.</p>
+  </aside>
+
+  <div class="lv-bottom">
+    <button type="button" class="lv-ctl" data-when="encours pause" data-toast="Contrôle Arrêter : la session se termine sans ouvrir l'app." aria-label="Contrôle : arrêter la session"><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg></button>
+    <button type="button" class="lv-ctl" data-when="rien" data-toast="Contrôle Démarrer ma session : ouvre l'app puis lance le suivi." aria-label="Contrôle : démarrer ma session"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></button>
+    <button type="button" class="lv-ctl" data-toast="Appareil photo : réglage du système." aria-label="Appareil photo"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></button>
+  </div>
+
+  <style>
+    #scr-ecran-verrouille {
+      background:
+        radial-gradient(90% 42% at 12% 2%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 72%),
+        radial-gradient(80% 40% at 100% 58%, color-mix(in srgb, var(--work) 24%, transparent), transparent 72%),
+        radial-gradient(70% 30% at 0% 100%, color-mix(in srgb, var(--study) 18%, transparent), transparent 72%),
+        var(--background);
+    }
+    #scr-ecran-verrouille .lv-top { text-align: center; padding: 6px var(--gutter) 0; }
+    #scr-ecran-verrouille .lv-date { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 4px 10px; font: 600 17px/22px var(--font-text); color: var(--textPrimary); }
+    #scr-ecran-verrouille .lv-inline { display: inline-flex; align-items: center; gap: 6px; color: var(--textPrimary); }
+    #scr-ecran-verrouille .lv-clock { font-family: var(--font-text); font-weight: 700; font-size: 84px; line-height: 92px; letter-spacing: -.04em; word-spacing: 0; color: var(--textPrimary); margin-top: 2px; }
+    #scr-ecran-verrouille .lv-widgets { display: flex; justify-content: center; align-items: stretch; gap: 8px; padding: 8px var(--gutter) 0; }
+    #scr-ecran-verrouille .lv-w { position: relative; border-radius: 20px; background: color-mix(in srgb, var(--surface) 78%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); color: var(--textPrimary); min-width: 0; }
+    #scr-ecran-verrouille .lv-w--rect { flex: 1 1 0; max-width: 176px; min-height: 76px; padding: 9px 12px; display: flex; flex-direction: column; justify-content: center; gap: 3px; }
+    #scr-ecran-verrouille .lv-w--circ { flex: none; width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; }
+    #scr-ecran-verrouille .lv-w-k { display: flex; align-items: center; gap: 5px; font: 600 12px/14px var(--font-text); color: var(--work); }
+    #scr-ecran-verrouille .lv-w-big { font: 700 17px/20px var(--font-text); white-space: nowrap; }
+    #scr-ecran-verrouille .lv-w-big.num { font-family: var(--font-mono); font-size: 16px; }
+    #scr-ecran-verrouille .lv-w-s { font: 500 12px/14px var(--font-text); color: var(--textSecondary); }
+    #scr-ecran-verrouille .lv-w .meter { height: 5px; }
+    #scr-ecran-verrouille .lv-ring { position: absolute; inset: 5px; border-radius: 50%; background: conic-gradient(var(--work) calc(var(--v) * 1%), var(--fill) 0);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), var(--textPrimary) calc(100% - 5px)); mask: radial-gradient(farthest-side, transparent calc(100% - 6px), var(--textPrimary) calc(100% - 5px)); }
+    #scr-ecran-verrouille .lv-circ-in { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; text-align: center; }
+    #scr-ecran-verrouille .lv-circ-n { font-size: 17px; line-height: 20px; font-weight: 700; }
+    #scr-ecran-verrouille .lv-circ-l { font: 500 11px/12px var(--font-text); color: var(--textSecondary); }
+    #scr-ecran-verrouille .lv-act { margin: 14px var(--gutter) 0; padding: 14px; border-radius: 26px; display: flex; flex-direction: column; gap: 10px; background: color-mix(in srgb, var(--surface) 86%, transparent); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); box-shadow: var(--shadow-card); color: var(--textPrimary); }
+    #scr-ecran-verrouille .lv-act-head { display: flex; align-items: center; gap: 10px; }
+    #scr-ecran-verrouille .lv-act-ico { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; flex: none; }
+    #scr-ecran-verrouille .lv-act-ico--work { background: var(--workSoft); color: var(--work); }
+    #scr-ecran-verrouille .lv-act-t { flex: 1; min-width: 0; }
+    #scr-ecran-verrouille .lv-act-title { font: 600 17px/20px var(--font-text); }
+    #scr-ecran-verrouille .lv-act-sub { font: 400 13px/16px var(--font-text); color: var(--textSecondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #scr-ecran-verrouille .lv-timer { font-size: 40px; line-height: 44px; }
+    #scr-ecran-verrouille .lv-act-times { display: flex; justify-content: space-between; gap: 8px; font: 500 13px/16px var(--font-text); color: var(--textSecondary); }
+    #scr-ecran-verrouille .lv-act-mid { color: var(--textPrimary); font-weight: 600; }
+    #scr-ecran-verrouille .lv-empty { margin: 14px var(--gutter) 0; padding: 16px; border-radius: 22px; border: 1.5px dashed var(--textTertiary); text-align: center; color: var(--textSecondary); }
+    #scr-ecran-verrouille .lv-empty-t { font: 600 15px/20px var(--font-text); color: var(--textPrimary); }
+    #scr-ecran-verrouille .lv-empty-s { font: 400 13px/18px var(--font-text); margin-top: 2px; }
+    #scr-ecran-verrouille .lv-legend { margin: 14px var(--gutter) 0; display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; background: var(--surface); color: var(--textSecondary); font: 400 12px/17px var(--font-text); }
+    #scr-ecran-verrouille .lv-legend .icon { margin-top: 1px; }
+    #scr-ecran-verrouille .lv-bottom { margin-top: auto; display: flex; justify-content: space-between; padding: 14px 40px 8px; }
+    #scr-ecran-verrouille .lv-ctl { display: grid; place-items: center; width: 50px; height: 50px; border: 0; border-radius: 50%; background: color-mix(in srgb, var(--surface) 82%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); color: var(--textPrimary); }
+  </style>
+</section>

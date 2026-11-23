@@ -1,0 +1,83 @@
+<section class="screen" id="scr-onb-photos" data-title="Permission photos" data-group="Onboarding" data-tabbar="hide"
+         data-states="explique:Intro,ios:Fenêtre iOS,ok:Accordée,refuse:Refusée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="onb-notifs"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Retour</button>
+    <span class="navbar-title">Étape 5 sur 7</span>
+    <div class="navbar-actions"><button type="button" class="btn btn--ghost btn--small" data-go="onb-lieu">Plus tard</button></div>
+  </header>
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 5 sur 7"><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-done"></i><i class="is-on"></i><i></i><i></i></div>
+
+    <div class="onb-head">
+      <span data-when="explique ios"><span class="onb-hero " aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-camera"/></svg></span></span>
+      <span data-when="ok" hidden><span class="onb-hero onb-hero--ok" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-check"/></svg></span></span>
+      <span data-when="refuse" hidden><span class="onb-hero onb-hero--warn" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-alert"/></svg></span></span>
+      <h1 class="onb-h1" data-when="explique ios">Ton planning en photo.</h1>
+      <h1 class="onb-h1" data-when="ok" hidden>C'est bon pour les photos.</h1>
+      <h1 class="onb-h1" data-when="refuse" hidden>Pas de photos, pas de souci.</h1>
+      <p class="onb-lead" data-when="explique ios">Tu prends ton planning en photo, je le lis et je remplis tes horaires. La lecture se fait sur ton tel, la photo ne part nulle part.</p>
+      <p class="onb-lead" data-when="ok" hidden>Quand t'auras un planning, tu pourras le choisir dans tes photos.</p>
+      <p class="onb-lead" data-when="refuse" hidden>Tu pourras toujours taper tes horaires à la main.</p>
+    </div>
+
+    <div class="onb-result" data-when="explique ios">
+      <section class="section" aria-labelledby="onbp-ex-t">
+        <div class="section-head"><h2 class="section-title" id="onbp-ex-t">Ce que je regarde</h2></div>
+        <div class="list">
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg></span><span class="row-main"><span class="row-title">Seulement ce que tu choisis</span><span class="row-sub">Je te conseille «&nbsp;Choisir des photos&nbsp;»&nbsp;: je vois juste la photo du planning.</span></span></div>
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="row-main"><span class="row-title">Lecture sur ton tel</span><span class="row-sub">Aucune photo n'est envoyée, aucun compte.</span></span></div>
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-check"/></svg></span><span class="row-main"><span class="row-title">Tu confirmes chaque ligne</span><span class="row-sub">Je remplis, tu vérifies, rien n'est validé en silence.</span></span></div>
+        </div>
+      </section>
+      <section class="section" aria-labelledby="onbp-non-t">
+        <div class="section-head"><h2 class="section-title" id="onbp-non-t">Et si tu refuses&nbsp;?</h2></div>
+        <div class="card card--outline"><p class="card-text">Rien de grave&nbsp;: tu saisis tes horaires à la main. Tu peux aussi changer d'avis plus tard.</p></div>
+      </section>
+    </div>
+
+    <div class="onb-result" data-when="refuse" hidden>
+      <div class="banner banner--warning">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">L'accès aux photos est coupé</p>
+          <p class="banner-text">Pour le remettre&nbsp;: Réglages iOS, Personal Life Tracker, Photos, puis « Photos sélectionnées ».</p>
+          <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre les Réglages iOS de Personal Life Tracker.">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" data-when="explique" data-act="ios">Continuer</button>
+      <button type="button" class="btn btn--primary btn--block" data-when="ok refuse" data-go="onb-lieu" hidden>Continuer</button>
+      <p class="section-foot onb-foot" data-when="explique">Cette étape n'apparaît que si t'as coché «&nbsp;Planning par photo&nbsp;».</p>
+    </div>
+  </div>
+
+  <div class="onb-ios" data-when="ios">
+    <div class="onb-ios-dlg" role="alertdialog" aria-labelledby="onbp-d1-t" aria-describedby="onbp-d1-m">
+      <div class="onb-ios-txt"><p class="onb-ios-t" id="onbp-d1-t">« Personal Life Tracker » souhaite accéder à tes photos</p><p class="onb-ios-m" id="onbp-d1-m">Pour lire le planning que tu choisis. Tu peux limiter l'accès à quelques photos.</p></div>
+        <button type="button" class="onb-ios-b is-strong" data-act="ok">Choisir des photos…</button>
+        <button type="button" class="onb-ios-b" data-act="ok">Autoriser l'accès à toutes les photos</button>
+        <button type="button" class="onb-ios-b" data-act="refuse">Ne pas autoriser</button>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var N = 'onb-photos', el = document.getElementById('scr-onb-photos');
+    function st(s) {
+      setState(N, s); el.scrollTop = 0;
+      if (['ok', 'refuse'].indexOf(s) !== -1) PLT.store.set('onb.photos', s);
+    }
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-act]'); if (b) st(b.getAttribute('data-act'));
+    });
+    el.addEventListener('plt:state', function () {
+      var s = el.getAttribute('data-state'); el.style.overflowY = (s.indexOf('ios') === 0) ? 'hidden' : '';
+    });
+    PLT.onShow(N, function () { var s = el.getAttribute('data-state') || ''; if (s.indexOf('ios') === 0) st('explique'); });
+  });
+  </script>
+</section>

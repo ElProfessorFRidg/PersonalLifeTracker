@@ -1,0 +1,4 @@
+## 84. PRÉVISION DES PRIMES DE DIMANCHE ET DE FÉRIÉ (module premium_planner, exige pay, désactivé par défaut)
+
+Tableau "Les primes à venir" pour le mois suivant ou une période choisie : liste des dimanches et jours fériés (calculés, section 30) et, pour chacun, le gain supplémentaire estimé si l'utilisateur travaille un créneau type (durée choisie), selon le pack de convention et ses surcharges, avec la majoration appliquée et sa source. L'utilisateur coche les jours où il envisage de travailler et voit le supplément total estimé.
+Utilise le même moteur que le simulateur (section 24), avec la même option "Appliquer au planning prévu" (copie prévue, après confirmation). Signale les conditions ou plafonds du pack ("à vérifier") et les alertes de repos ou de durée maximale. Neutre : l'app ne pousse pas à travailler plus. Estimation indicative, la fiche de paie fait foi, certaines entreprises ont des accords différents. Rien codé en dur, montants masquables.

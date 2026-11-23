@@ -1,0 +1,4 @@
+## 105. TRACE DE RETARD (module delay_log, désactivé par défaut)
+
+En cas de retard imprévu, l'utilisateur peut enregistrer en un tap une trace datée : heure, cause facultative (transport, trafic, panne), heure d'arrivée estimée (si le module de trajet est actif), position approximative, photo facultative (par exemple un panneau d'information transport), stockées localement. Pour la confidentialité, la position est arrondie à un quartier (rayon d'environ 500 m) par défaut, et précise seulement si l'utilisateur le choisit.
+Message prérempli au responsable via le module work_contacts, jamais envoyé automatiquement. Entrée optionnelle dans le journal de contrat (section 72), chaînée par le journal infalsifiable (section 98) si actif, protégée par Face ID si le verrouillage est actif. La trace ne prouve pas la cause du retard, c'est une information personnelle datée. Aucune transmission.

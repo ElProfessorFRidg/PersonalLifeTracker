@@ -1,0 +1,140 @@
+<section class="screen" id="scr-diagnostic" data-title="Dépannage de la détection" data-group="États" data-tab="accueil"
+         data-states="causes:Causes trouvées,riendutout:Rien d'anormal,analyse:Analyse en cours">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="fiabilite"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Fiabilité</button>
+    <h1 class="navbar-title">Pourquoi j'ai raté ça</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Contexte -->
+    <section class="section" aria-labelledby="dia-ctx-t">
+      <article class="card">
+        <div class="card-head">
+          <span class="chip chip--work">Taf</span>
+          <span class="chip chip--doubt">Départ manqué</span>
+        </div>
+        <h2 class="card-title" id="dia-ctx-t">Mercredi 11, Supérette du Canal</h2>
+        <p class="card-text">Arrivée détectée à <span class="num">14:03</span>. Départ jamais détecté&nbsp;: tu l'as corrigé à la main à <span class="num">19:01</span>.</p>
+      </article>
+    </section>
+
+    <!-- Analyse en cours -->
+    <section class="section" data-when="analyse" aria-label="Analyse en cours" aria-busy="true">
+      <div class="card">
+        <span class="skeleton skeleton--title" style="width:70%"></span>
+        <span class="skeleton skeleton--line"></span>
+        <span class="skeleton skeleton--line" style="width:80%"></span>
+      </div>
+      <div class="card">
+        <div class="dia-sk"><span class="skeleton skeleton--circle"></span><span class="dia-sk-t"><span class="skeleton skeleton--line" style="width:60%"></span><span class="skeleton skeleton--line" style="width:85%"></span></span></div>
+        <div class="dia-sk"><span class="skeleton skeleton--circle"></span><span class="dia-sk-t"><span class="skeleton skeleton--line" style="width:50%"></span><span class="skeleton skeleton--line" style="width:75%"></span></span></div>
+        <div class="dia-sk"><span class="skeleton skeleton--circle"></span><span class="dia-sk-t"><span class="skeleton skeleton--line" style="width:65%"></span><span class="skeleton skeleton--line" style="width:70%"></span></span></div>
+      </div>
+      <p class="section-foot">Je relis le journal de détection et les réglages de ce jour-là. Ça reste sur ton tel.</p>
+    </section>
+
+    <!-- Verdict -->
+    <section class="section" data-when="causes riendutout" aria-labelledby="dia-ver-t">
+      <div class="section-head"><h2 class="section-title" id="dia-ver-t">Ce que je pense</h2></div>
+      <div class="banner banner--error" role="status" data-when="causes">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Cause la plus probable&nbsp;: l'actualisation en arrière-plan</p>
+          <p class="banner-text">Elle était coupée à partir de <span class="num">16:05</span>, donc je n'ai pas vu ta sortie. Confiance forte. Le rayon un peu serré du lieu a pu jouer aussi.</p>
+        </div>
+      </div>
+      <div class="banner banner--info" role="status" data-when="riendutout">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Je ne trouve rien d'anormal</p>
+          <p class="banner-text">Tous les réglages étaient bons. Le plus probable&nbsp;: un signal GPS faible dans le bâtiment. Confiance moyenne, je ne peux pas être certain.</p>
+          <button type="button" class="banner-action" data-go="session">Corriger l'heure à la main</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Vérifications -->
+    <section class="section" data-when="causes riendutout" aria-labelledby="dia-chk-t">
+      <div class="section-head"><h2 class="section-title" id="dia-chk-t">Ce que j'ai vérifié</h2></div>
+      <div class="list" id="dia-steps"></div>
+      <p class="section-foot">Chaque point est lu dans l'historique de ton tel pour le jour concerné. Rien n'est changé sans ton tap.</p>
+    </section>
+
+    <!-- Journal du jour -->
+    <section class="section" data-when="causes riendutout" aria-labelledby="dia-log-t">
+      <div class="section-head"><h2 class="section-title" id="dia-log-t">Ce que j'ai vu ce jour-là</h2></div>
+      <div class="list">
+        <div class="row"><span class="row-main"><span class="row-title">Entrée dans la zone du taf</span><span class="row-sub">Reçue avec 6 min de retard</span></span><span class="row-value num">14:03</span></div>
+        <div class="row"><span class="row-main"><span class="row-title">Actualisation en arrière-plan coupée</span><span class="row-sub">Changement de réglage iOS</span></span><span class="row-value num" id="dia-log-bg">16:05</span></div>
+        <div class="row"><span class="row-main"><span class="row-title">Sortie de la zone du taf</span><span class="row-sub">Jamais reçue</span></span><span class="row-value num">19:01</span></div>
+        <div class="row"><span class="row-main"><span class="row-title">Ta correction</span><span class="row-sub">Départ saisi à la main</span></span><span class="row-value num">19:01</span></div>
+      </div>
+    </section>
+
+    <section class="section" data-when="causes riendutout" aria-label="Actions">
+      <div class="btn-stack">
+        <button type="button" class="btn btn--primary btn--block" id="dia-restart">Relancer le suivi</button>
+        <button type="button" class="btn btn--secondary btn--block" data-go="session">Corriger la session</button>
+      </div>
+    </section>
+
+  </div>
+
+  <style>
+    #scr-diagnostic .dia-sk { display: flex; align-items: center; gap: 12px; }
+    #scr-diagnostic .dia-sk-t { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    #scr-diagnostic .dia-step { display: flex; flex-direction: column; align-items: stretch; gap: 8px; padding: 12px var(--space-m); }
+    #scr-diagnostic .dia-step-top { display: flex; align-items: flex-start; gap: 12px; }
+    #scr-diagnostic .dia-step-top .row-main { flex: 1; min-width: 0; }
+    #scr-diagnostic .dia-step .btn { align-self: flex-start; margin-left: 44px; }
+    #scr-diagnostic .dia-step .status { flex: none; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-diagnostic');
+    /* [icône, titre, détail par état, statut par état, bouton de correction] */
+    var STEPS = [
+      ['nav', 'Localisation sur « Toujours »', 'Réglée sur Toujours toute la journée.', 'ok', null],
+      ['pin', 'Position exacte', 'Activée ce jour-là.', 'ok', null],
+      ['refresh', 'Actualisation en arrière-plan', 'Coupée à 16:05. Sans elle, je ne vois pas une sortie quand l\'app dort.', 'error', 'Autoriser l\'actualisation'],
+      ['battery', 'Mode économie d\'énergie', 'Actif de 17:20 à 21:40. La détection peut avoir quelques minutes de retard.', 'warn', 'Ouvrir les réglages iOS'],
+      ['map', 'Rayon du lieu', 'Rayon de 60 m. Ta sortie par l\'arrière du magasin tombe à 75 m.', 'warn', 'Agrandir le rayon de 40 m'],
+      ['bolt', 'Batterie et extinction', 'Aucune extinction ce jour-là.', 'ok', null],
+      ['shield', 'Suivi relancé après fermeture de l\'app', 'Aucun forçage à quitter repéré.', 'ok', null]
+    ];
+    var fixed = {};
+    var LBL = { ok: ['check', 'OK'], warn: ['info', 'À voir'], error: ['alert', 'À régler'] };
+    function el(id) { return document.getElementById(id); }
+    function status(i, state) {
+      if (state === 'riendutout' || fixed[i]) return 'ok';
+      return STEPS[i][3];
+    }
+    function render() {
+      var state = root.getAttribute('data-state') || 'causes', h = '';
+      STEPS.forEach(function (s, i) {
+        var st = status(i, state), l = LBL[st];
+        var fixable = s[4] && st !== 'ok';
+        h += '<div class="row dia-step"><div class="dia-step-top"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-' + s[0] + '"/></svg></span>'
+          + '<span class="row-main"><span class="row-title">' + s[1] + '</span><span class="row-sub">' + (st === 'ok' && s[4] ? (fixed[i] ? 'Réglé à l\'instant.' : 'Tout allait bien ce jour-là.') : s[2]) + '</span></span>'
+          + '<span class="status status--' + st + '"><svg class="icon" aria-hidden="true"><use href="#i-' + l[0] + '"/></svg>' + l[1] + '</span></div>'
+          + (fixable ? '<button type="button" class="btn btn--secondary btn--small" data-fix="' + i + '">' + s[4] + '</button>' : '') + '</div>';
+      });
+      el('dia-steps').innerHTML = h;
+    }
+    root.addEventListener('click', function (e) {
+      var b = e.target.closest ? e.target.closest('[data-fix]') : null;
+      if (!b) return;
+      var i = +b.getAttribute('data-fix');
+      fixed[i] = true; render();
+      toast(STEPS[i][4] + ' : fait.', { undo: function () { delete fixed[i]; render(); } });
+    });
+    el('dia-restart').addEventListener('click', function () { toast('Suivi relancé. Je surveille tes lieux depuis maintenant.'); });
+    root.addEventListener('plt:state', function () { fixed = {}; render(); });
+    PLT.onShow('diagnostic', function () { render(); });
+    render();
+  });
+  </script>
+</section>

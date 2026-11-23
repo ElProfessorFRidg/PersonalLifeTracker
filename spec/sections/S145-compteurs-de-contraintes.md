@@ -1,0 +1,4 @@
+## 145. COMPTEURS DE CONTRAINTES (module constraint_counters, exige employment, désactivé par défaut)
+
+Compte, sur l'année civile ou la période de référence de la convention : dimanches travaillés, jours fériés travaillés, soirées, nuits, week-ends travaillés, maximum de jours consécutifs atteint. Les frontières (début de soirée, de nuit, dimanche, férié) sont évaluées sur la base retenue (section 13.1).
+Comparaison avec les limites ou compensations du pack de convention quand elles existent (sourcées par l'agent dans Resources/reference/contracts.json, "à vérifier") : "Tu as travaillé 14 dimanches cette année, ta convention prévoit ... (source : ...)" ou "pas de limite renseignée". Alertes douces à l'approche d'une limite, compensations liées aux compteurs de la section 106.4. Aucune limite non sourcée n'est affirmée.

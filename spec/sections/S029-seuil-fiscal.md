@@ -1,0 +1,3 @@
+## 29. SEUIL FISCAL (module tax_threshold, exige pay)
+
+Suit le cumul annuel de revenus estimés et le compare à des seuils saisis ou lus dans Resources/reference/tax.json (plafonds liés à l'exonération et au rattachement fiscal d'un étudiant). L'agent recherche et source ces valeurs (service-public.fr, impots.gouv.fr), marque "à vérifier" ce qui est incertain, et indique la date d'effet. Alertes douces à 80 % et 95 % du seuil. Avertissement visible : information indicative, très dépendante de la situation personnelle, pas un conseil fiscal, renvoi vers impots.gouv.fr. L'app ne fait jamais de déclaration. Désactivé par défaut.

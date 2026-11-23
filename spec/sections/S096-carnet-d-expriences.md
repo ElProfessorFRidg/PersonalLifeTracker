@@ -1,0 +1,5 @@
+## 96. CARNET D'EXPÉRIENCES (module experience_log, désactivé par défaut)
+
+Registre des expériences (job, stage, projet, bénévolat) avec poste, employeur ou structure, période, missions (étiquettes : caisse, mise en rayon, accueil, service, livraison...), compétences, outils, résultats chiffrés facultatifs. L'utilisateur peut y ajouter à la main des expériences passées hors de l'app (stage, job d'été).
+Heures cumulées calculées depuis les sessions confirmées ("312 h en caisse sur 8 mois"). Pour un cumul par mission, une étiquette de tâche facultative peut être posée en un tap sur une session ; sans étiquette, le cumul se fait par employeur. Les sessions incertaines sont exclues ou le total est présenté comme "environ".
+Génère des phrases factuelles prêtes à adapter pour un CV, un dossier de candidature (par exemple la rubrique d'activités et de centres d'intérêt) ou une lettre de motivation. Chaque phrase est rattachée à une donnée réelle, ne gonfle rien, et reste modifiable. Export texte ou PDF, tout en local.

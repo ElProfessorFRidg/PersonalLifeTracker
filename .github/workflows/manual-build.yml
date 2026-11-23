@@ -1,0 +1,43 @@
+name: Manual Build
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "App version in x.y.z format"
+        type: string
+        required: true
+        default: "0.0.0"
+permissions:
+  contents: read
+jobs:
+  build:
+    name: Build and Test
+    uses: ./.github/workflows/_build-test.yml
+    with:
+      build_ipa: true
+      version: ${{ inputs.version }}
+  publish:
+    name: Publish Release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download IPA artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ipa
+      - name: Publish build prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          TAG="build-${GITHUB_RUN_ID}"
+          IPA="PersonalLifeTracker-${VERSION}-build-${GITHUB_RUN_NUMBER}.ipa"
+          mv PersonalLifeTracker.ipa "$IPA"
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" "$IPA" --clobber
+          else
+            gh release create "$TAG" "$IPA" --target "$GITHUB_SHA" --prerelease --latest=false               --title "Build $VERSION (#$GITHUB_RUN_NUMBER)"               --notes "Build manuel non signé du commit $GITHUB_SHA. À resigner avec AltStore."
+          fi

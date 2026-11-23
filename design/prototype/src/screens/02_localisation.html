@@ -1,0 +1,126 @@
+<section class="screen" id="scr-onb-loc" data-title="Permission localisation" data-group="Onboarding" data-tabbar="hide"
+         data-states="explique:Intro,ios:iOS 1,ios-toujours:iOS 2,ok:Toujours,limite:Limitée,refuse:Refusée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="onb-modules"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Retour</button>
+    <span class="navbar-title">Étape 3 sur 7</span>
+    <div class="navbar-actions"><button type="button" class="btn btn--ghost btn--small" data-go="onb-notifs">Plus tard</button></div>
+  </header>
+
+  <div class="screen-body onb-body">
+    <div class="onb-steps" role="img" aria-label="Étape 3 sur 7"><i class="is-done"></i><i class="is-done"></i><i class="is-on"></i><i></i><i></i><i></i><i></i></div>
+
+    <div class="onb-head">
+      <span data-when="explique ios ios-toujours"><span class="onb-hero " aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-nav"/></svg></span></span>
+      <span data-when="ok" hidden><span class="onb-hero onb-hero--ok" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-check"/></svg></span></span>
+      <span data-when="limite" hidden><span class="onb-hero onb-hero--warn" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-alert"/></svg></span></span>
+      <span data-when="refuse" hidden><span class="onb-hero onb-hero--err" aria-hidden="true"><svg class="icon icon--l" aria-hidden="true"><use href="#i-alert"/></svg></span></span>
+      <h1 class="onb-h1" data-when="explique ios ios-toujours">J'ai besoin de savoir où t'es.</h1>
+      <h1 class="onb-h1" data-when="ok" hidden>C'est bon, je peux te suivre.</h1>
+      <h1 class="onb-h1" data-when="limite" hidden>Presque, mais pas assez.</h1>
+      <h1 class="onb-h1" data-when="refuse" hidden>Localisation refusée.</h1>
+      <p class="onb-lead" data-when="explique ios ios-toujours">Pour noter tes heures tout seul, je dois voir quand t'arrives au taf et quand t'en pars, même app fermée. Rien ne sort de ton tel.</p>
+      <p class="onb-lead" data-when="ok" hidden>iOS m'a donné « Toujours ». Je note tes arrivées et tes départs sans que t'aies rien à faire.</p>
+    </div>
+
+    <div class="onb-result" data-when="limite" hidden>
+      <div class="banner banner--warning">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Je te vois seulement quand l'app est ouverte</p>
+          <p class="banner-text">Du coup je rate tes arrivées et tes départs. Passe la localisation sur « Toujours » dans les réglages iOS, ça prend dix secondes.</p>
+          <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre les Réglages iOS de Personal Life Tracker.">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="onb-result" data-when="refuse" hidden>
+      <div class="banner banner--error" role="alert">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Sans localisation, je ne vois rien tout seul</p>
+          <p class="banner-text">Je ne note plus tes arrivées. Tu peux lancer et arrêter tes sessions à la main, ou remettre la localisation quand tu veux.</p>
+        </div>
+      </div>
+      <section class="section" aria-labelledby="onbl-fix-t">
+        <div class="section-head"><h2 class="section-title" id="onbl-fix-t">Comment la remettre</h2></div>
+        <div class="card">
+          <ol class="onb-ol">
+            <li><span>Ouvre les réglages iOS de l'app, avec le bouton plus bas.</span></li>
+            <li><span>Touche <strong>Position</strong>.</span></li>
+            <li><span>Choisis <strong>Toujours</strong>.</span></li>
+            <li><span>Laisse <strong>Position exacte</strong> activée.</span></li>
+          </ol>
+        </div>
+        <p class="section-foot">Tu peux aussi le faire plus tard, depuis Réglages, Ce que je détecte.</p>
+      </section>
+    </div>
+
+    <div class="onb-result" data-when="explique ios ios-toujours">
+      <section class="section" aria-labelledby="onbl-fait-t">
+        <div class="section-head"><h2 class="section-title" id="onbl-fait-t">Ce que j'en fais</h2></div>
+        <div class="list">
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span><span class="row-main"><span class="row-title">Je repère tes lieux</span><span class="row-sub">Seulement ceux que t'ajoutes, avec une zone autour.</span></span></div>
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span><span class="row-main"><span class="row-title">Je note arrivées et départs</span><span class="row-sub">Écran éteint, sans que t'ouvres l'app.</span></span></div>
+          <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-shield"/></svg></span><span class="row-main"><span class="row-title">Rien n'est envoyé</span><span class="row-sub">Pas de compte, pas de serveur.</span></span></div>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="onbl-ios-t">
+        <div class="section-head"><h2 class="section-title" id="onbl-ios-t">Ce qu'iOS va te demander</h2></div>
+        <div class="card">
+          <p class="card-text">iOS commence par « Pendant l'utilisation », puis te redemande un peu plus tard. Choisis <strong>Toujours autoriser</strong>, sinon je vois rien quand l'app est fermée.</p>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="onbl-non-t">
+        <div class="section-head"><h2 class="section-title" id="onbl-non-t">Et si tu refuses&nbsp;?</h2></div>
+        <div class="card card--outline">
+          <p class="card-text">Ça marche quand même, mais à la main&nbsp;: tu lances et tu arrêtes tes sessions toi-même, et je rate tes arrivées. Tu peux changer d'avis dans Réglages.</p>
+        </div>
+      </section>
+    </div>
+
+    <div class="onb-cta">
+      <button type="button" class="btn btn--primary btn--block" data-when="explique" data-act="ios">Continuer</button>
+      <button type="button" class="btn btn--primary btn--block" data-when="ok limite" data-go="onb-notifs" hidden>Continuer</button>
+      <button type="button" class="btn btn--primary btn--block" data-when="refuse" data-toast="Dans l'app, ça ouvre les Réglages iOS de Personal Life Tracker." hidden>Ouvrir les réglages iOS</button>
+      <button type="button" class="btn btn--secondary btn--block" data-when="refuse" data-go="onb-notifs" hidden>Continuer sans localisation</button>
+      <p class="section-foot onb-foot" data-when="explique">Rien ne se passe avant que tu touches un bouton d'iOS.</p>
+    </div>
+  </div>
+
+  <div class="onb-ios" data-when="ios">
+    <div class="onb-ios-dlg" role="alertdialog" aria-labelledby="onbl-d1-t" aria-describedby="onbl-d1-m">
+      <div class="onb-ios-txt"><p class="onb-ios-t" id="onbl-d1-t">« Personal Life Tracker » souhaite utiliser ta position</p><p class="onb-ios-m" id="onbl-d1-m">Pour noter tes heures de taf et de cours quand t'arrives et quand tu pars.</p></div>
+        <button type="button" class="onb-ios-b" data-act="limite">Autoriser une fois</button>
+        <button type="button" class="onb-ios-b is-strong" data-act="ios-toujours">Autoriser pendant l'utilisation</button>
+        <button type="button" class="onb-ios-b" data-act="refuse">Ne pas autoriser</button>
+    </div>
+  </div>
+
+  <div class="onb-ios" data-when="ios-toujours">
+    <div class="onb-ios-dlg" role="alertdialog" aria-labelledby="onbl-d2-t" aria-describedby="onbl-d2-m">
+      <div class="onb-ios-txt"><p class="onb-ios-t" id="onbl-d2-t">« Personal Life Tracker » utilise ta position en arrière-plan</p><p class="onb-ios-m" id="onbl-d2-m">Veux-tu continuer à l'autoriser&nbsp;? Sinon, je ne vois pas tes arrivées quand l'app est fermée.</p></div>
+        <button type="button" class="onb-ios-b is-strong" data-act="ok">Changer pour Toujours autoriser</button>
+        <button type="button" class="onb-ios-b" data-act="limite">Garder « Pendant l'utilisation »</button>
+    </div>
+  </div>
+
+  <script>
+  PLT.ready(function () {
+    var N = 'onb-loc', el = document.getElementById('scr-onb-loc');
+    function st(s) {
+      setState(N, s); el.scrollTop = 0;
+      if (['ok', 'limite', 'refuse'].indexOf(s) !== -1) PLT.store.set('onb.loc', s);
+    }
+    el.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-act]'); if (b) st(b.getAttribute('data-act'));
+    });
+    el.addEventListener('plt:state', function () {
+      var s = el.getAttribute('data-state'); el.style.overflowY = (s.indexOf('ios') === 0) ? 'hidden' : '';
+    });
+    PLT.onShow(N, function () { var s = el.getAttribute('data-state') || ''; if (s.indexOf('ios') === 0) st('explique'); });
+  });
+  </script>
+</section>

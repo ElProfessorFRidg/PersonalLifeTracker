@@ -1,0 +1,4 @@
+## 68. MODE REMPLACEMENT (module replacements, désactivé par défaut)
+
+Quand l'utilisateur prend le créneau de quelqu'un d'autre ou fait des heures en plus à la demande, il peut marquer une session ou un créneau comme "remplacement" (bouton sur la session, ou à la confirmation d'une arrivée hors planning : "Tu remplaces quelqu'un ?"). Champs facultatifs : pour qui (nom libre), demandé par, motif.
+Les remplacements sont comptés à part dans les statistiques (heures de remplacement par mois et cumul), n'écrasent jamais le planning prévu, et sont comparés au contrat comme des heures en plus (complémentaires ou supplémentaires selon le pack, si le module pay est actif). Un écart hors planning marqué remplacement n'est pas signalé comme une anomalie. Option : proposer automatiquement "remplacement ?" lors d'une arrivée hors créneau sur un lieu de travail, une seule fois par contexte, avec apprentissage comme en section 11.

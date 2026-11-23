@@ -1,0 +1,49 @@
+name: PR Checks
+on:
+  pull_request:
+concurrency:
+  group: pr-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  build-test:
+    name: Build and Test
+    permissions:
+      contents: write
+    uses: ./.github/workflows/_build-test.yml
+    with:
+      build_ipa: true
+      version: "0.0.1"
+      test_classes: ${{ github.event.pull_request.head.ref == 'fix/place-detection-ux' && 'PlannedWorkReviewTests' || '' }}
+  publish:
+    name: Publish Latest Build
+    needs: build-test
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download IPA artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ipa
+      - name: Publish latest successful PR build
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          COMMIT_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          TAG="pr-${PR_NUMBER}-latest"
+          TITLE="Latest Build (PR #${PR_NUMBER})"
+          printf 'Latest successful build of PR #%s.\n\nSource commit: %s\nCI run: %s/%s/actions/runs/%s\n\nUnsigned IPA; sign with AltStore before installing.\n'             "$PR_NUMBER" "$COMMIT_SHA" "$GITHUB_SERVER_URL" "$GITHUB_REPOSITORY" "$GITHUB_RUN_ID" > release-notes.md
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release upload "$TAG" PersonalLifeTracker.ipa --clobber
+            gh api --method PATCH "repos/$GH_REPO/git/refs/tags/$TAG" -f sha="$COMMIT_SHA" -F force=true
+            gh release edit "$TAG" --title "$TITLE" --notes-file release-notes.md --prerelease --latest=false
+          else
+            gh release create "$TAG" PersonalLifeTracker.ipa --target "$COMMIT_SHA" --prerelease --latest=false               --title "$TITLE" --notes-file release-notes.md
+          fi
+          URL="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/releases/download/$TAG/PersonalLifeTracker.ipa"
+          printf '### Latest Build\n\n[Download IPA](%s)\n\nSource commit: %s\n' "$URL" "$COMMIT_SHA" >> "$GITHUB_STEP_SUMMARY"

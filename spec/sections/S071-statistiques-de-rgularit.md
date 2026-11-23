@@ -1,0 +1,4 @@
+## 71. STATISTIQUES DE RÉGULARITÉ (module regularity, désactivé par défaut)
+
+Mesures factuelles, sans jugement : écart entre heure prévue et heure réelle d'arrivée (médiane et distribution), heure moyenne d'arrivée et de départ par jour de semaine, régularité des horaires, durée moyenne de session, jours de présence par semaine. Tendances sur 4 et 12 semaines, par lieu et par employeur, avec Swift Charts.
+Calcul uniquement sur les sessions confirmées ou non incertaines, avec la taille de l'échantillon affichée et "pas assez de données" sous un seuil (par exemple moins de 5 sessions). Formulations neutres ("tu arrives en moyenne 3 min avant ton créneau"), jamais de mot culpabilisant comme "retard chronique". Pas de score global noté, pas de comparaison avec d'autres personnes. Intégrable aux bilans (section 40) si les deux modules sont actifs.

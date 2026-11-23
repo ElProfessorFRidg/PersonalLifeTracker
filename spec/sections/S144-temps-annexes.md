@@ -1,0 +1,4 @@
+## 144. TEMPS ANNEXES (module extra_time, exige employment, désactivé par défaut)
+
+Briefing avant l'ouverture, habillage, formation obligatoire, rangement après la fermeture, attente imposée : ajout en un tap (bouton sur la session, modèles par employeur comme "briefing 10 min", ou question optionnelle à l'arrivée). Chaque temps annexe est un segment à part, avec ses propres horodatages exacts et sa durée, rattaché à une session sans jamais modifier les horodatages de celle-ci.
+Par employeur et par type : "payé", "non payé" ou "à renseigner" (défaut), et "compte dans le quota : oui ou non". Les règles de rémunération de ces temps varient selon l'entreprise et la convention : l'agent les recherche et les source ("à vérifier"), sans conseil juridique. Ils apparaissent séparément dans le relevé d'heures (section 20.2), alimentent le vrai taux horaire (section 126, temps de préparation) et le vérificateur de fiche de paie (section 92).

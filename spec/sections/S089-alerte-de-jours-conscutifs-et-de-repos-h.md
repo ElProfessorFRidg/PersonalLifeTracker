@@ -1,0 +1,4 @@
+## 89. ALERTE DE JOURS CONSÉCUTIFS ET DE REPOS HEBDOMADAIRE (module rest_alert, exige employment, désactivé par défaut)
+
+Compte les jours consécutifs travaillés (par employeur, et tous employeurs confondus si multi_employer est actif) et vérifie le repos hebdomadaire, en les comparant aux règles du pack de convention et aux règles générales (Resources/reference/contracts.json, sourcées, "à vérifier" si incertaines). Complète le repos quotidien déjà géré par le pack (section 22), la nuit courte (section 33) et les pauses (section 32).
+Alerte douce à l'avance quand le planning prévu ou le réel risque de dépasser : "Tu enchaînes 6 jours, ta convention prévoit un jour de repos par semaine (source : ...)." Seuil d'avertissement personnalisable, désactivable. Les congés posés comptent comme du repos. Sessions incertaines signalées. Si une règle est "à renseigner", l'app le dit et n'affirme rien. Information uniquement, pas un avis juridique.

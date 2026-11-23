@@ -1,0 +1,342 @@
+<section class="screen" id="scr-planning-photo" data-title="Planning par photo" data-group="Planning" data-tab="planning"
+         data-states="resultat:Résultat,analyse:Analyse en cours,rate:Lecture ratée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="planning"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Planning</button>
+    <h1 class="navbar-title">Planning par photo</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- Photo d'origine (dessinée) -->
+    <section class="section" aria-label="Photo du planning">
+      <div class="pp-frame" id="pp-frame">
+        <div class="pp-paper">
+<svg class="pp-svg" viewBox="0 0 320 196" role="img" aria-label="Photo d'un planning papier. La ligne de Léo est surlignée. Lundi 18 à 21, jeudi 18 à 21, samedi 9 à 16, dimanche 10 à 14 avec une tache.">
+<text class="pp-title" x="12" y="20">Planning du 23 au 29 nov.</text>
+<text class="pp-head" x="76.0" y="29" text-anchor="middle">L 23</text>
+<text class="pp-head" x="112.0" y="29" text-anchor="middle">M 24</text>
+<text class="pp-head" x="148.0" y="29" text-anchor="middle">M 25</text>
+<text class="pp-head" x="184.0" y="29" text-anchor="middle">J 26</text>
+<text class="pp-head" x="220.0" y="29" text-anchor="middle">V 27</text>
+<text class="pp-head" x="256.0" y="29" text-anchor="middle">S 28</text>
+<text class="pp-head" x="292.0" y="29" text-anchor="middle">D 29</text>
+<text class="pp-name" x="12" y="53.0">Maëlle</text>
+<text class="pp-cell" x="76.0" y="53.0" text-anchor="middle">9-16</text>
+<text class="pp-cell" x="112.0" y="53.0" text-anchor="middle">9-16</text>
+<text class="pp-cell" x="184.0" y="53.0" text-anchor="middle">9-16</text>
+<text class="pp-cell pp-rest" x="220.0" y="53.0" text-anchor="middle">R</text>
+<text class="pp-cell" x="256.0" y="53.0" text-anchor="middle">9-16</text>
+<rect class="pp-hl" x="6" y="66" width="308" height="26" rx="4"/>
+<text class="pp-name" x="12" y="83.0">Léo</text>
+<text class="pp-cell" x="76.0" y="83.0" text-anchor="middle">18-21</text>
+<text class="pp-cell pp-rest" x="148.0" y="83.0" text-anchor="middle">R</text>
+<text class="pp-cell" x="184.0" y="83.0" text-anchor="middle">18-21</text>
+<text class="pp-cell" x="256.0" y="83.0" text-anchor="middle">9-16</text>
+<text class="pp-cell" x="292.0" y="83.0" text-anchor="middle">10-14</text>
+<text class="pp-name" x="12" y="113.0">Léa</text>
+<text class="pp-cell" x="112.0" y="113.0" text-anchor="middle">18-21</text>
+<text class="pp-cell" x="148.0" y="113.0" text-anchor="middle">18-21</text>
+<text class="pp-cell" x="220.0" y="113.0" text-anchor="middle">18-21</text>
+<text class="pp-cell pp-rest" x="256.0" y="113.0" text-anchor="middle">R</text>
+<text class="pp-name" x="12" y="143.0">Sofiane</text>
+<text class="pp-cell pp-rest" x="76.0" y="143.0" text-anchor="middle">R</text>
+<text class="pp-cell" x="112.0" y="143.0" text-anchor="middle">9-16</text>
+<text class="pp-cell" x="148.0" y="143.0" text-anchor="middle">9-16</text>
+<text class="pp-cell" x="220.0" y="143.0" text-anchor="middle">9-16</text>
+<text class="pp-cell" x="292.0" y="143.0" text-anchor="middle">9-16</text>
+<line class="pp-line" x1="6" x2="314" y1="34" y2="34"/>
+<line class="pp-line" x1="6" x2="314" y1="64" y2="64"/>
+<line class="pp-line" x1="6" x2="314" y1="94" y2="94"/>
+<line class="pp-line" x1="6" x2="314" y1="124" y2="124"/>
+<line class="pp-line" x1="6" x2="314" y1="154" y2="154"/>
+<line class="pp-line" x1="58" x2="58" y1="34" y2="154"/>
+<line class="pp-line" x1="94" x2="94" y1="34" y2="154"/>
+<line class="pp-line" x1="130" x2="130" y1="34" y2="154"/>
+<line class="pp-line" x1="166" x2="166" y1="34" y2="154"/>
+<line class="pp-line" x1="202" x2="202" y1="34" y2="154"/>
+<line class="pp-line" x1="238" x2="238" y1="34" y2="154"/>
+<line class="pp-line" x1="274" x2="274" y1="34" y2="154"/>
+<line class="pp-line" x1="310" x2="310" y1="34" y2="154"/>
+<ellipse class="pp-stain" cx="296.0" cy="80.0" rx="15" ry="9"/>
+<text class="pp-foot" x="12" y="186">R = repos</text>
+</svg>
+          <span class="pp-scan" aria-hidden="true"></span>
+          <span class="pp-glare" aria-hidden="true"></span>
+        </div>
+      </div>
+      <p class="section-foot" data-when="resultat">Ta ligne est surlignée. La photo reste sur ton tel, je ne l'envoie nulle part.</p>
+    </section>
+
+    <!-- État : analyse en cours -->
+    <section class="section" data-when="analyse" aria-labelledby="pp-an-t">
+      <div class="card" role="status">
+        <div>
+          <h2 class="section-title" id="pp-an-t">Je lis ta photo…</h2>
+          <p class="card-text">Ça se passe sur ton tel, ça prend quelques secondes. Rien n'est enregistré tant que t'as pas validé.</p>
+        </div>
+        <div class="meter" role="progressbar" aria-label="Analyse de la photo" aria-valuemin="0" aria-valuemax="100" aria-valuenow="62"><i style="--v:62"></i></div>
+        <span class="skeleton skeleton--line" style="width:80%"></span>
+        <span class="skeleton skeleton--line" style="width:60%"></span>
+        <div class="btn-row btn-row--links">
+          <button type="button" class="btn btn--ghost" id="pp-cancel">Annuler</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- État : lecture ratée -->
+    <section class="section" data-when="rate" aria-labelledby="pp-ko-t">
+      <div class="banner banner--error" role="alert">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title" id="pp-ko-t">J'arrive pas à lire cette photo</p>
+          <p class="banner-text">Elle est floue et un reflet cache une partie du tableau. Rien n'a été enregistré. Tu peux en reprendre une.</p>
+          <button type="button" class="banner-action" id="pp-retake">Reprendre une photo</button>
+        </div>
+      </div>
+      <div class="list" aria-label="Conseils pour une bonne photo">
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg></span><span class="row-main"><span class="row-title">Plus de lumière</span><span class="row-sub">Évite l'ombre de ton tel sur le papier.</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span><span class="row-main"><span class="row-title">Incline un peu le téléphone</span><span class="row-sub">Ça fait disparaître les reflets sur le plastique.</span></span></div>
+        <div class="row"><span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span><span class="row-main"><span class="row-title">Cadre tout le tableau</span><span class="row-sub">Les titres des colonnes doivent rester visibles.</span></span></div>
+      </div>
+      <div class="btn-stack">
+        <button type="button" class="btn btn--secondary btn--block" id="pp-other"><svg class="icon icon--s" aria-hidden="true"><use href="#i-image"/></svg>Choisir une autre image</button>
+        <button type="button" class="btn btn--secondary btn--block" data-go="planning">Saisir à la main</button>
+      </div>
+    </section>
+
+    <!-- État : résultat -->
+    <section class="section" data-when="resultat" aria-labelledby="pp-res-t">
+      <div class="section-head">
+        <h2 class="section-title" id="pp-res-t">Ce que j'ai lu pour Léo</h2>
+        <span class="muted num" id="pp-count" style="font:var(--t-footnote) var(--font-mono)">4 créneaux</span>
+      </div>
+
+      <div class="banner banner--info" role="status">
+        <svg class="icon" aria-hidden="true"><use href="#i-user"/></svg>
+        <div class="banner-main">
+          <p class="banner-title">Deux lignes ressemblent à ton nom</p>
+          <p class="banner-text">J'ai pris «&nbsp;Léo&nbsp;», pas «&nbsp;Léa&nbsp;». Dis-moi si je me suis trompé.</p>
+          <button type="button" class="banner-action" data-sheet="sheet-pp-ligne">Changer de ligne</button>
+        </div>
+      </div>
+
+      <div class="list" id="pp-list">
+        <div class="pp-item" data-h="3" data-open="0" data-id="lun">
+          <div class="pp-top">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Lun. 23 nov.</span><span class="row-sub">Taf <span class="num pp-when">18:00 à 21:00</span></span></span>
+            <span class="rel rel--high"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">Fiable</span>&nbsp;<span class="num">97&nbsp;%</span></span>
+          </div>
+          <div class="pp-actions">
+            <button type="button" class="btn btn--ghost btn--small pp-edit" aria-label="Corriger le lundi 23 novembre">Corriger</button>
+            <button type="button" class="iconbtn iconbtn--tonal pp-del" aria-label="Retirer le lundi 23 novembre"><svg class="icon icon--s" aria-hidden="true"><use href="#i-trash"/></svg></button>
+          </div>
+        </div>
+
+        <div class="pp-item" data-h="3" data-open="0" data-id="jeu">
+          <div class="pp-top">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Jeu. 26 nov.</span><span class="row-sub">Taf <span class="num pp-when">18:00 à 21:00</span></span></span>
+            <span class="rel rel--high"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">Fiable</span>&nbsp;<span class="num">95&nbsp;%</span></span>
+          </div>
+          <div class="pp-actions">
+            <button type="button" class="btn btn--ghost btn--small pp-edit" aria-label="Corriger le jeudi 26 novembre">Corriger</button>
+            <button type="button" class="iconbtn iconbtn--tonal pp-del" aria-label="Retirer le jeudi 26 novembre"><svg class="icon icon--s" aria-hidden="true"><use href="#i-trash"/></svg></button>
+          </div>
+        </div>
+
+        <div class="pp-item" data-h="7" data-open="1" data-id="sam">
+          <div class="pp-top">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Sam. 28 nov.</span><span class="row-sub">Taf <span class="num pp-when">09:00 à 16:00</span></span></span>
+            <span class="rel rel--mid"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">À vérifier</span>&nbsp;<span class="num">71&nbsp;%</span></span>
+          </div>
+          <p class="pp-why">Le 6 ressemble un peu à un 8. Regarde la photo avant de garder.</p>
+          <div class="pp-actions">
+            <button type="button" class="btn btn--secondary btn--small pp-ok" aria-label="C'est bon pour le samedi 28 novembre">C'est bon</button>
+            <button type="button" class="btn btn--ghost btn--small pp-edit" aria-label="Corriger le samedi 28 novembre">Corriger</button>
+            <button type="button" class="iconbtn iconbtn--tonal pp-del" aria-label="Retirer le samedi 28 novembre"><svg class="icon icon--s" aria-hidden="true"><use href="#i-trash"/></svg></button>
+          </div>
+        </div>
+
+        <div class="pp-item" data-h="4" data-open="1" data-id="dim">
+          <div class="pp-top">
+            <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+            <span class="row-main"><span class="row-title">Dim. 29 nov.</span><span class="row-sub">Taf <span class="num pp-when">10:00 à 14:00</span></span></span>
+            <span class="rel rel--low"><span class="rel-bars" aria-hidden="true"><i></i><i></i><i></i></span><span class="pp-reltxt">Incertain</span>&nbsp;<span class="num">38&nbsp;%</span></span>
+          </div>
+          <p class="pp-why">Il y a une tache sur la case. Je devine, donc corrige ou retire.</p>
+          <div class="pp-actions">
+            <button type="button" class="btn btn--secondary btn--small pp-edit" aria-label="Corriger le dimanche 29 novembre">Corriger</button>
+            <button type="button" class="iconbtn iconbtn--tonal pp-del" aria-label="Retirer le dimanche 29 novembre"><svg class="icon icon--s" aria-hidden="true"><use href="#i-trash"/></svg></button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Éditeur en ligne (déplacé sous la ligne ouverte) -->
+      <div class="pp-editor" id="pp-editor" hidden>
+        <div class="field-pair">
+          <div class="field"><label class="field-label" for="pp-ed-start">Début</label><input class="input num" id="pp-ed-start" type="text" inputmode="numeric" autocomplete="off" placeholder="09:00"></div>
+          <div class="field"><label class="field-label" for="pp-ed-end">Fin</label><input class="input num" id="pp-ed-end" type="text" inputmode="numeric" autocomplete="off" placeholder="16:00"></div>
+        </div>
+        <p class="field-help" id="pp-ed-help">Heure au format 09:00.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn--primary btn--small" id="pp-ed-save">Enregistrer</button>
+          <button type="button" class="btn btn--secondary btn--small" id="pp-ed-cancel">Annuler</button>
+        </div>
+      </div>
+
+      <div class="banner" id="pp-total-note" role="status">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banner-main">
+          <p class="banner-text">Avec ces créneaux, ta semaine ferait <span class="num" id="pp-total">17 h</span> pour <span class="num">13 h</span> au contrat. Je te le signale, c'est toi qui décides.</p>
+          <button type="button" class="banner-action" data-go="contrat">Voir mon contrat</button>
+        </div>
+      </div>
+
+      <div class="btn-stack">
+        <button type="button" class="btn btn--primary btn--block" id="pp-confirm" disabled>Garder ces créneaux</button>
+        <p class="field-help" id="pp-left" style="text-align:center">2 créneaux à vérifier avant de continuer.</p>
+        <button type="button" class="btn btn--destructive-soft btn--block" data-sheet="sheet-pp-jeter">Jeter cette lecture</button>
+      </div>
+      <p class="section-foot">Une fois gardés, ces créneaux deviennent ton planning prévu et je les compare à tes heures réelles.</p>
+    </section>
+  </div>
+
+  <!-- Feuilles -->
+  <div class="sheet" id="sheet-pp-ligne">
+    <h2 class="sheet-title">Quelle ligne est la tienne&nbsp;?</h2>
+    <p class="sheet-text">Je ne devine jamais le bon nom tout seul. Choisis la ligne à lire.</p>
+    <div class="list" role="radiogroup" aria-label="Ligne du planning" id="pp-ligne-group">
+      <button type="button" class="row" role="radio" aria-checked="true" data-value="Léo"><span class="row-main"><span class="row-title">Léo</span><span class="row-sub">2e ligne du tableau</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+      <button type="button" class="row" role="radio" aria-checked="false" data-value="Léa"><span class="row-main"><span class="row-title">Léa</span><span class="row-sub">3e ligne du tableau</span></span><svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg></button>
+    </div>
+    <button type="button" class="btn btn--primary btn--block" data-sheet-close>OK</button>
+  </div>
+
+  <div class="sheet" id="sheet-pp-jeter">
+    <h2 class="sheet-title">Jeter cette lecture&nbsp;?</h2>
+    <p class="sheet-text">Les 4 créneaux lus ne sont pas gardés et ton planning ne change pas. Tu pourras réimporter la photo quand tu veux.</p>
+    <div class="btn-stack">
+      <button type="button" class="btn btn--destructive btn--block" id="pp-jeter-go">Jeter la lecture</button>
+      <button type="button" class="btn btn--secondary btn--block" data-sheet-close>Revenir aux créneaux</button>
+    </div>
+  </div>
+
+  <style>
+    #scr-planning-photo .pp-frame { padding: 14px; border-radius: var(--radius-medium); background: var(--fill); overflow: hidden; }
+    #scr-planning-photo .pp-paper { position: relative; border-radius: 4px; background: var(--surfaceRaised); box-shadow: var(--shadow-card); transform: rotate(-1.2deg); overflow: hidden; }
+    #scr-planning-photo .pp-svg { display: block; width: 100%; height: auto; font-family: var(--font-text); }
+    #scr-planning-photo .pp-title { font: 700 12px var(--font-text); fill: var(--textPrimary); }
+    #scr-planning-photo .pp-head { font: 600 8.5px var(--font-text); fill: var(--textSecondary); }
+    #scr-planning-photo .pp-name { font: 600 10px var(--font-text); fill: var(--textPrimary); }
+    #scr-planning-photo .pp-cell { font: 600 9.5px var(--font-mono); fill: var(--textPrimary); }
+    #scr-planning-photo .pp-rest { fill: var(--textSecondary); font-weight: 500; }
+    #scr-planning-photo .pp-line { stroke: var(--separator); stroke-width: 1; }
+    #scr-planning-photo .pp-hl { fill: var(--accentSoft); }
+    #scr-planning-photo .pp-stain { fill: var(--textTertiary); opacity: .35; }
+    #scr-planning-photo .pp-foot { font: 8px var(--font-text); fill: var(--textSecondary); }
+    #scr-planning-photo .pp-scan, #scr-planning-photo .pp-glare { display: none; position: absolute; pointer-events: none; }
+    #scr-planning-photo[data-state="analyse"] .pp-scan { display: block; left: 0; right: 0; top: 0; height: 3px; background: var(--accent); box-shadow: 0 0 12px var(--accent); animation: pp-scan 2.4s var(--ease) infinite alternate; }
+    @keyframes pp-scan { from { top: 4%; } to { top: 96%; } }
+    #scr-planning-photo[data-state="rate"] .pp-svg { filter: blur(2.4px); }
+    #scr-planning-photo[data-state="rate"] .pp-glare { display: block; left: -10%; right: -10%; top: 38%; height: 26%; background: var(--surface); opacity: .85; transform: rotate(-8deg); filter: blur(6px); }
+    .app[data-motion="none"] #scr-planning-photo .pp-scan { animation: none; top: 50%; }
+
+    #scr-planning-photo .pp-item { display: flex; flex-direction: column; gap: 6px; padding: 12px var(--space-m); border-top: 1px solid var(--separator); }
+    #scr-planning-photo .pp-item:first-child { border-top: 0; }
+    #scr-planning-photo .pp-top { display: flex; align-items: center; gap: 12px; }
+    #scr-planning-photo .pp-top .rel { flex: none; flex-wrap: wrap; justify-content: flex-end; max-width: 40%; text-align: right; }
+    #scr-planning-photo .pp-why { margin: 0 0 0 52px; font: var(--t-footnote) var(--font-text); color: var(--textSecondary); }
+    #scr-planning-photo .pp-actions { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin-left: 52px; flex-wrap: wrap; }
+    #scr-planning-photo .pp-item.is-editing { background: var(--accentSoft); }
+    #scr-planning-photo .pp-item.is-gone { display: none; }
+    #scr-planning-photo .pp-editor { display: flex; flex-direction: column; gap: 10px; padding: 14px var(--space-m); border-radius: var(--radius-medium); background: var(--surface); box-shadow: var(--shadow-card); }
+    #scr-planning-photo .field-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    #scr-planning-photo .pp-editor .btn-row { justify-content: flex-start; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var root = document.getElementById('scr-planning-photo');
+    var list = document.getElementById('pp-list'), editor = document.getElementById('pp-editor');
+    var confirmBtn = document.getElementById('pp-confirm'), leftEl = document.getElementById('pp-left');
+    var start = document.getElementById('pp-ed-start'), end = document.getElementById('pp-ed-end'), help = document.getElementById('pp-ed-help');
+    var editing = null;
+
+    function items() { return Array.prototype.slice.call(list.querySelectorAll('.pp-item')); }
+    function hh(s) { var m = /^(\d{1,2}):(\d{2})$/.exec((s || '').trim()); if (!m || +m[1] > 23 || +m[2] > 59) return null; return +m[1] + m[2] / 60; }
+    function fmt(h) { var t = Math.round(h * 60), a = Math.floor(t / 60), b = t % 60; return b ? a + ' h ' + (b < 10 ? '0' : '') + b : a + ' h'; }
+    function refresh() {
+      var vis = items().filter(function (i) { return !i.classList.contains('is-gone'); });
+      var open = vis.filter(function (i) { return i.getAttribute('data-open') === '1'; }).length;
+      var total = vis.reduce(function (a, i) { return a + parseFloat(i.getAttribute('data-h')); }, 0);
+      document.getElementById('pp-count').textContent = vis.length + (vis.length > 1 ? ' créneaux' : ' créneau');
+      document.getElementById('pp-total').textContent = fmt(total);
+      confirmBtn.disabled = open > 0 || vis.length === 0;
+      confirmBtn.textContent = vis.length ? 'Garder ' + (vis.length > 1 ? 'ces ' + vis.length + ' créneaux' : 'ce créneau') : 'Aucun créneau à garder';
+      leftEl.hidden = open === 0 && vis.length > 0;
+      leftEl.textContent = vis.length === 0 ? 'Tout est retiré. Jette la lecture ou reprends une photo.' : open + (open > 1 ? ' créneaux à vérifier' : ' créneau à vérifier') + ' avant de continuer.';
+    }
+    function resolve(item, label) {
+      item.setAttribute('data-open', '0');
+      var why = item.querySelector('.pp-why'); if (why) why.hidden = true;
+      var ok = item.querySelector('.pp-ok'); if (ok) ok.hidden = true;
+      var rel = item.querySelector('.rel');
+      rel.className = 'rel rel--high';
+      rel.querySelector('.pp-reltxt').textContent = label;
+      var pct = rel.querySelector('.num'); if (pct) pct.hidden = true;
+      var ed = item.querySelector('.pp-edit'); ed.className = 'btn btn--ghost btn--small pp-edit';
+    }
+    function closeEditor() { if (editing) editing.classList.remove('is-editing'); editor.hidden = true; editing = null; start.parentNode.parentNode.classList.remove('is-invalid'); }
+
+    list.addEventListener('click', function (e) {
+      var item = e.target.closest('.pp-item'); if (!item) return;
+      if (e.target.closest('.pp-ok')) { resolve(item, 'Confirmé'); refresh(); toast('Gardé tel quel.'); return; }
+      if (e.target.closest('.pp-edit')) {
+        closeEditor(); editing = item; item.classList.add('is-editing');
+        var m = /(\d{2}:\d{2}) à (\d{2}:\d{2})/.exec(item.querySelector('.pp-when').textContent);
+        start.value = m[1]; end.value = m[2];
+        help.textContent = 'Heure au format 09:00.';
+        item.parentNode.insertBefore(editor, item.nextSibling); editor.hidden = false; start.focus(); return;
+      }
+      if (e.target.closest('.pp-del')) {
+        closeEditor(); item.classList.add('is-gone'); refresh();
+        toast('Créneau retiré.', { undo: function () { item.classList.remove('is-gone'); refresh(); } });
+      }
+    });
+    document.getElementById('pp-ed-cancel').addEventListener('click', closeEditor);
+    document.getElementById('pp-ed-save').addEventListener('click', function () {
+      var a = hh(start.value), b = hh(end.value);
+      if (a === null || b === null || b <= a) {
+        help.textContent = a === null || b === null ? 'Écris l\'heure comme 09:00.' : 'La fin doit être après le début.';
+        help.style.color = 'var(--danger)'; return;
+      }
+      help.style.color = '';
+      var item = editing;
+      item.querySelector('.pp-when').textContent = start.value.trim().padStart(5, '0') + ' à ' + end.value.trim().padStart(5, '0');
+      item.setAttribute('data-h', String(b - a));
+      resolve(item, 'Corrigé par toi');
+      closeEditor(); refresh();
+      toast('Corrigé : ' + fmt(b - a) + ' ce jour-là.');
+    });
+    document.getElementById('pp-confirm').addEventListener('click', function () {
+      setState('planning', 'semaine'); go('planning');
+      toast('Planning de la semaine 48 gardé.', { undo: function () { go('planning-photo'); } });
+    });
+    document.getElementById('pp-jeter-go').addEventListener('click', function () {
+      closeSheet(); go('planning');
+      toast('Lecture jetée. Ton planning n\'a pas bougé.');
+    });
+    document.getElementById('pp-ligne-group').addEventListener('change', function (e) {
+      if (e.detail.value === 'Léa') toast('Dans l\'app, je relis la ligne de Léa et tu revérifies.');
+    });
+    document.getElementById('pp-cancel').addEventListener('click', function () { setState('planning-photo', 'resultat'); go('planning'); toast('Analyse annulée.'); });
+    document.getElementById('pp-retake').addEventListener('click', function () { setState('planning-photo', 'analyse'); toast('Dans l\'app, l\'appareil photo s\'ouvre ici.'); });
+    document.getElementById('pp-other').addEventListener('click', function () { setState('planning-photo', 'analyse'); toast('Dans l\'app, tu choisis une image dans Photos ou Fichiers.'); });
+    PLT.onShow('planning-photo', function () { closeEditor(); refresh(); });
+    refresh();
+  });
+  </script>
+</section>

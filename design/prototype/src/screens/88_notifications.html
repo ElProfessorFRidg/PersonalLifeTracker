@@ -1,0 +1,295 @@
+<section class="screen" id="scr-notifications" data-title="Notifications" data-group="Système iOS" data-tabbar="hide"
+         data-states="reglages:Préférences,exemples:Exemples de bannières,refus:Autorisation refusée">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
+    <h1 class="navbar-title">Notifications</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <!-- État : iOS a refusé les notifications -->
+    <section class="section" data-when="refus" aria-labelledby="nt-refus-t">
+      <div class="banner banner--error" role="alert">
+        <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+        <div class="banner-main">
+          <p class="banner-title" id="nt-refus-t">Les notifications sont coupées dans iOS</p>
+          <p class="banner-text">Du coup je peux pas te demander de confirmer une arrivée ou un départ. Tes heures restent notées, mais plus incertaines. Autorise-les dans les réglages de ton iPhone.</p>
+          <button type="button" class="banner-action" id="nt-fix">Ouvrir les réglages iOS</button>
+        </div>
+      </div>
+      <p class="section-foot">Tu peux aussi tout confirmer depuis la carte « Maintenant » de l'accueil.</p>
+    </section>
+
+    <!-- Préférences : par type, heures silencieuses, budget -->
+    <section class="section" data-when="reglages" aria-labelledby="nt-types-t">
+      <div class="section-head"><h2 class="section-title" id="nt-types-t">Ce que je te demande</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t1">Arrivée et départ à confirmer</span><span class="row-sub">Quand je suis pas sûr d'une arrivée ou d'un départ. Essentielle.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t1" data-name="Arrivée et départ"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t2">Taf ou courses&nbsp;?</span><span class="row-sub">Quand je suis pas sûr de ce que tu fais. Utile.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t2" data-name="Taf ou courses"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t3">Heure pleine à choisir</span><span class="row-sub">Quand ta fin tombe entre :15 et :45. Essentielle.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t3" data-name="Heure pleine à choisir"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t4">Pars maintenant</span><span class="row-sub">Avant ta prise de poste, selon ton trajet. Essentielle.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t4" data-name="Pars maintenant"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t5">Relancer l'affichage</span><span class="row-sub">Quand iOS coupe l'écran verrouillé après 8 h. Utile.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t5" data-name="Relancer l'affichage"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-moon"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t6">Nuit courte</span><span class="row-sub">La veille, si tu dors moins de 8 h. Informative.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="true" aria-labelledby="nt-t6" data-name="Nuit courte"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t7">Planning pas encore là</span><span class="row-sub">Une seule relance par semaine. Coupée par défaut.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="nt-t7" data-name="Planning pas encore là"></button>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-t8">Plus qu'une heure</span><span class="row-sub">Avant la fin prévue, si je la connais. Coupée par défaut.</span></span>
+          <button type="button" class="switch" role="switch" aria-checked="false" aria-labelledby="nt-t8" data-name="Plus qu'une heure"></button>
+        </div>
+      </div>
+      <p class="section-foot">Un module coupé ne t'envoie rien. Les trois essentielles, je les garde tant que tu dis pas non.</p>
+    </section>
+
+    <section class="section" data-when="reglages" aria-labelledby="nt-quiet-t">
+      <div class="section-head"><h2 class="section-title" id="nt-quiet-t">Heures silencieuses</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-main"><span class="row-title" id="nt-q">Ne pas me déranger la nuit</span><span class="row-sub">Je garde tout pour le matin</span></span>
+          <button type="button" class="switch" id="nt-q-sw" role="switch" aria-checked="true" aria-labelledby="nt-q"></button>
+        </div>
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
+          <span class="row-main"><span class="row-title">De</span></span>
+          <span class="row-value num">22:00</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+        <button type="button" class="row" data-toast="Réglage fin&nbsp;: dans l'app.">
+          <span class="row-main"><span class="row-title">À</span></span>
+          <span class="row-value num">7:00</span>
+          <svg class="icon row-chev" aria-hidden="true"><use href="#i-chev-right"/></svg>
+        </button>
+      </div>
+      <div class="card">
+        <div class="field">
+          <span class="field-label" id="nt-max-l">Maximum par jour</span>
+          <div class="segmented" id="nt-max" role="group" aria-labelledby="nt-max-l">
+            <button type="button" data-value="3" aria-pressed="false">3</button>
+            <button type="button" data-value="6" aria-pressed="true">6</button>
+            <button type="button" data-value="10" aria-pressed="false">10</button>
+          </div>
+          <span class="field-help">Au-delà, je regroupe ce qui se ressemble en une seule.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" data-when="reglages" aria-labelledby="nt-learn-t">
+      <div class="section-head"><h2 class="section-title" id="nt-learn-t">Notifications qui apprennent</h2></div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-star"/></svg></span>
+          <span class="row-main"><span class="row-title" id="nt-l">Proposer de couper ce que tu ignores</span><span class="row-sub">Tout reste sur ton tel, sans télémétrie</span></span>
+          <button type="button" class="switch" id="nt-l-sw" role="switch" aria-checked="true" aria-labelledby="nt-l"></button>
+        </div>
+      </div>
+      <article class="card" id="nt-prop" aria-labelledby="nt-prop-t">
+        <p class="eyebrow">Proposition</p>
+        <h3 class="card-title" id="nt-prop-t">Tu as ignoré 5 rappels de pause, je les coupe&nbsp;?</h3>
+        <p class="card-text">Je coupe rien sans ton accord. Une proposition par catégorie et par mois, pas plus.</p>
+        <div class="btn-row">
+          <button type="button" class="btn btn--primary" id="nt-prop-cut">Les couper</button>
+          <button type="button" class="btn btn--secondary" id="nt-prop-keep">Les garder</button>
+        </div>
+      </article>
+      <p class="section-foot">« Ignorée » veut dire ni ouverte ni action dans les 24 h. iOS me dit pas si tu l'as juste vue, donc c'est une estimation.</p>
+    </section>
+
+    <!-- Exemples : bannières de l'écran verrouillé -->
+    <section class="section" data-when="exemples" aria-labelledby="nt-ex-t">
+      <div class="section-head"><h2 class="section-title" id="nt-ex-t">Sur ton écran verrouillé</h2></div>
+      <div class="nt-wall">
+        <p class="nt-tag"><svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>Maquette d'iOS, pas un écran de l'app</p>
+
+        <article class="nt-ex" aria-label="Exemple : arrivée détectée">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Arrivée détectée</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">maintenant</span></div>
+            <p class="nt-title">Taf</p>
+            <p class="nt-body">T'es arrivé au taf à <span class="num">17:56</span>, c'est bon&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="C'est noté : arrivée à 17:56.">Oui</button>
+            <button type="button" class="nt-act" data-toast="Dans l'app, tu corriges l'heure d'arrivée.">Corriger</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : arrivée probable">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Arrivée probable, pour lancer le suivi</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">il y a 1 min</span></div>
+            <p class="nt-title">Taf</p>
+            <p class="nt-body">T'es arrivé au taf&nbsp;? Touche pour lancer le suivi.</p>
+          </div>
+          <p class="nt-hint">Le tap ouvre l'app, qui démarre la Live Activity. Rien ne démarre en arrière-plan.</p>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : départ à confirmer">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Départ à confirmer</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">il y a 2 min</span></div>
+            <p class="nt-title">Fac de lettres</p>
+            <p class="nt-body">T'es parti de la fac vers <span class="num">12:02</span>, à plus ou moins <span class="num">3 min</span>. C'est bon&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="C'est noté : départ à 12:02.">Oui</button>
+            <button type="button" class="nt-act" data-toast="Dans l'app, tu choisis l'heure exacte.">Autre heure</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : zone de doute">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Zone de doute, tu choisis l'heure</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">samedi</span></div>
+            <p class="nt-title">Taf, samedi</p>
+            <p class="nt-body">T'as fini à <span class="num">20:38</span>. Je compte <span class="num">20 h</span> ou <span class="num">21 h</span>&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="OK, je compte 20 h.">20 h</button>
+            <button type="button" class="nt-act nt-act--main" data-toast="OK, je compte 21 h.">21 h</button>
+            <button type="button" class="nt-act" data-toast="OK, je te le redemande plus tard.">Plus tard</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : Pars maintenant">
+          <p class="nt-cap"><span class="chip chip--accent">Essentielle</span>Rappel de départ, module trajet</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">17:28</span></div>
+            <p class="nt-title">Pars maintenant</p>
+            <p class="nt-body">Faut y aller, il est <span class="num">17:28</span>. T'as <span class="num">22 min</span> de route et tu prends ton poste à <span class="num">18:00</span>.</p>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : relancer l'affichage">
+          <p class="nt-cap"><span class="chip">Utile</span>Limite de 8 h de la Live Activity</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">il y a 5 min</span></div>
+            <p class="nt-title">Relancer l'affichage&nbsp;?</p>
+            <p class="nt-body">Ton chrono tourne toujours, mais iOS coupe l'affichage. Je le relance&nbsp;?</p>
+          </div>
+          <div class="nt-actions">
+            <button type="button" class="nt-act nt-act--main" data-toast="C'est relancé, même chrono.">Relancer</button>
+            <button type="button" class="nt-act" data-toast="OK, le chrono continue dans l'app.">Pas la peine</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : planning tardif">
+          <p class="nt-cap"><span class="chip">Informative</span>Planning tardif, coupé par défaut</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">dimanche</span></div>
+            <p class="nt-title">Planning</p>
+            <p class="nt-body">Le planning de la semaine prochaine est pas encore là, tu l'as reçu&nbsp;?</p>
+          </div>
+          <div class="nt-actions nt-actions--stack">
+            <button type="button" class="nt-act nt-act--main" data-toast="Dans l'app, tu prends la photo du planning.">Importer une photo</button>
+            <button type="button" class="nt-act" data-toast="OK, je te redemande dans une semaine.">Pas encore reçu</button>
+            <button type="button" class="nt-act" data-toast="OK, pas de planning cette semaine.">Pas cette semaine</button>
+            <button type="button" class="nt-act" data-toast="OK, je te le rappelle plus.">Ne plus me le rappeler</button>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : nuit courte">
+          <p class="nt-cap"><span class="chip">Informative</span>Nuit courte, la veille</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">20:30</span></div>
+            <p class="nt-title">Demain, cours à <span class="num">8:00</span></p>
+            <p class="nt-body">Tu finis à <span class="num">00:30</span>, cours à <span class="num">8:00</span>, ça te fait <span class="num">7 h 30</span> max pour dormir.</p>
+          </div>
+        </article>
+
+        <article class="nt-ex" aria-label="Exemple : plus qu'une heure">
+          <p class="nt-cap"><span class="chip">Informative</span>Compte à rebours, coupé par défaut</p>
+          <div class="nt-banner">
+            <div class="nt-app"><span class="nt-appico" aria-hidden="true"><svg class="icon icon--s"><use href="#i-clock"/></svg></span><span class="nt-appname">Personal Life Tracker</span><span class="nt-when">20:00</span></div>
+            <p class="nt-title">Taf</p>
+            <p class="nt-body">Plus qu'une heure, tu tiens le bon bout.</p>
+          </div>
+        </article>
+      </div>
+      <p class="section-foot">Les boutons apparaissent quand tu appuies longuement sur la notification. Une seule notification à la fois sur un même sujet.</p>
+    </section>
+  </div>
+
+  <style>
+    #scr-notifications .nt-wall { display: flex; flex-direction: column; gap: 22px; padding: 14px 12px 18px; border-radius: var(--radius-large);
+      background:
+        radial-gradient(90% 22% at 12% 0%, color-mix(in srgb, var(--accent) 34%, transparent), transparent 72%),
+        radial-gradient(80% 20% at 100% 45%, color-mix(in srgb, var(--work) 24%, transparent), transparent 72%),
+        radial-gradient(80% 18% at 0% 100%, color-mix(in srgb, var(--study) 20%, transparent), transparent 72%),
+        var(--fill); }
+    #scr-notifications .nt-cap .chip:not([class*="chip--"]) { background: var(--surface); }
+    #scr-notifications .nt-tag { display: flex; align-items: center; gap: 6px; font: 600 12px/16px var(--font-text); color: var(--textPrimary); }
+    #scr-notifications .nt-ex { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+    #scr-notifications .nt-cap { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font: 600 13px/18px var(--font-text); color: var(--textPrimary); }
+    #scr-notifications .nt-banner { padding: 12px 14px; border-radius: 22px; background: color-mix(in srgb, var(--surface) 90%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); box-shadow: var(--shadow-card); display: flex; flex-direction: column; gap: 2px; }
+    #scr-notifications .nt-app { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+    #scr-notifications .nt-appico { display: grid; place-items: center; width: 22px; height: 22px; border-radius: 6px; background: var(--accent); color: var(--accentOn); flex: none; }
+    #scr-notifications .nt-appico .icon { width: 14px; height: 14px; }
+    #scr-notifications .nt-appname { flex: 1; min-width: 0; font: 500 12px/16px var(--font-text); letter-spacing: .03em; text-transform: uppercase; color: var(--textSecondary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    #scr-notifications .nt-when { font: 400 12px/16px var(--font-text); color: var(--textSecondary); flex: none; }
+    #scr-notifications .nt-title { font: 600 15px/20px var(--font-text); }
+    #scr-notifications .nt-body { font: 400 15px/20px var(--font-text); color: var(--textPrimary); }
+    #scr-notifications .nt-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    #scr-notifications .nt-actions--stack { flex-direction: column; }
+    #scr-notifications .nt-act { flex: 1 1 auto; min-height: 44px; padding: 0 16px; border: 0; border-radius: 16px; font: 600 15px/1.15 var(--font-text); background: color-mix(in srgb, var(--surface) 90%, transparent); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); color: var(--textPrimary); text-align: center; }
+    #scr-notifications .nt-act--main { color: var(--accent); }
+    #scr-notifications .nt-hint { font: 400 13px/18px var(--font-text); color: var(--textPrimary); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var scr = document.getElementById('scr-notifications');
+    function title(sw) { return sw.getAttribute('data-name') || 'Cette notification'; }
+    scr.addEventListener('change', function (e) {
+      var sw = e.target.closest ? e.target.closest('.switch') : null;
+      if (!sw || e.detail.checked || !sw.hasAttribute('data-name')) return;
+      toast(title(sw) + '\u00a0: coupée. Tu peux la rallumer ici.', { undo: function () { sw.setAttribute('aria-checked', 'true'); } });
+    });
+    document.getElementById('nt-q-sw').addEventListener('change', function (e) {
+      toast(e.detail.checked ? 'Heures silencieuses de 22:00 à 7:00.' : 'Plus d\'heures silencieuses, je te dérange quand il faut.', { undo: function () { document.getElementById('nt-q-sw').setAttribute('aria-checked', String(!e.detail.checked)); } });
+    });
+    var prop = document.getElementById('nt-prop');
+    document.getElementById('nt-prop-cut').addEventListener('click', function () {
+      prop.hidden = true;
+      toast('Rappels de pause coupés. Tu peux les rallumer ici.', { undo: function () { prop.hidden = false; } });
+    });
+    document.getElementById('nt-prop-keep').addEventListener('click', function () {
+      prop.hidden = true;
+      toast('OK, je les garde. Je te redemande pas avant un mois.', { undo: function () { prop.hidden = false; } });
+    });
+    document.getElementById('nt-l-sw').addEventListener('change', function (e) {
+      prop.hidden = !e.detail.checked;
+    });
+    document.getElementById('nt-fix').addEventListener('click', function () {
+      setState('notifications', 'reglages');
+      toast('Notifications autorisées. Merci, je te préviens quand il faut.', { undo: function () { setState('notifications', 'refus'); } });
+    });
+  });
+  </script>
+</section>

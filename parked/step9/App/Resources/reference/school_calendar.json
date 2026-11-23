@@ -1,0 +1,17 @@
+{
+  "source": "Calendrier scolaire officiel du ministère de l'Éducation nationale (education.gouv.fr), recopié à la main. Dernière vérification contre le site : jamais (aucun accès réseau au moment de l'écriture).",
+  "verificationNote": "À vérifier : ces dates sont indicatives. Compare avec le calendrier officiel de ton académie avant de t'en servir. Les années qui manquent sont vides exprès : ajoute les vacances toi-même dans l'écran Calendrier scolaire. Chaque plage va du premier au dernier jour sans cours, week-ends inclus, la reprise étant le lendemain du dernier jour.",
+  "breaks": [
+    { "id": "2025-toussaint", "name": "Vacances de la Toussaint", "zone": "all", "startDay": "2025-10-18", "endDay": "2025-11-02", "note": "À vérifier. Reprise le lundi 3 novembre 2025." },
+    { "id": "2025-noel", "name": "Vacances de Noël", "zone": "all", "startDay": "2025-12-20", "endDay": "2026-01-04", "note": "À vérifier. Reprise le lundi 5 janvier 2026." },
+    { "id": "2026-hiver-a", "name": "Vacances d'hiver", "zone": "A", "startDay": "2026-02-07", "endDay": "2026-02-22", "note": "À vérifier. Reprise le lundi 23 février 2026." },
+    { "id": "2026-hiver-b", "name": "Vacances d'hiver", "zone": "B", "startDay": "2026-02-14", "endDay": "2026-03-01", "note": "À vérifier. Reprise le lundi 2 mars 2026." },
+    { "id": "2026-hiver-c", "name": "Vacances d'hiver", "zone": "C", "startDay": "2026-02-21", "endDay": "2026-03-08", "note": "À vérifier. Reprise le lundi 9 mars 2026." },
+    { "id": "2026-printemps-a", "name": "Vacances de printemps", "zone": "A", "startDay": "2026-04-04", "endDay": "2026-04-19", "note": "À vérifier. Reprise le lundi 20 avril 2026." },
+    { "id": "2026-printemps-b", "name": "Vacances de printemps", "zone": "B", "startDay": "2026-04-11", "endDay": "2026-04-26", "note": "À vérifier. Reprise le lundi 27 avril 2026." },
+    { "id": "2026-printemps-c", "name": "Vacances de printemps", "zone": "C", "startDay": "2026-04-18", "endDay": "2026-05-03", "note": "À vérifier. Reprise le lundi 4 mai 2026." },
+    { "id": "2026-ete", "name": "Vacances d'été", "zone": "all", "startDay": "2026-07-04", "endDay": "2026-08-31", "note": "À vérifier. Rentrée le mardi 1er septembre 2026." },
+    { "id": "2026-toussaint", "name": "Vacances de la Toussaint", "zone": "all", "startDay": "2026-10-17", "endDay": "2026-11-01", "note": "À vérifier. Reprise le lundi 2 novembre 2026." },
+    { "id": "2026-noel", "name": "Vacances de Noël", "zone": "all", "startDay": "2026-12-19", "endDay": "2027-01-03", "note": "À vérifier. Reprise le lundi 4 janvier 2027." }
+  ]
+}

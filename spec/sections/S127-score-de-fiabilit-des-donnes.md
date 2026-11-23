@@ -1,0 +1,4 @@
+## 127. SCORE DE FIABILITÉ DES DONNÉES (module data_trust, proposé et coché par défaut)
+
+Pour une période (semaine, mois), mesure la qualité des données et non le comportement de l'utilisateur : "Ta semaine est fiable à 92 %". Formule transparente : part des heures confirmées ou détectées avec forte confiance, pénalisée par les sessions incertaines ou reconstituées, les jours attendus sans session, les chevauchements, les horaires incohérents, un planning non importé et des modifications récentes non vérifiées. Bouton "Pourquoi ce score ?" avec la liste des points à régler et une correction en un tap.
+Intégrations : affichée avant la génération ou l'envoi d'un relevé d'heures (section 42), d'un dossier justificatif (section 80) et d'une régularisation (section 108), avec un seuil réglable sous lequel l'app recommande de confirmer d'abord, sans jamais bloquer. Alimente la carte Maintenant (section 122) : "2 sessions à confirmer avant d'envoyer tes heures".

@@ -1,0 +1,142 @@
+<section class="screen" id="scr-lieu-ajout" data-title="Ajouter un lieu" data-group="Lieux" data-tab="lieux"
+         data-states="carte:Carte et nom,erreur:Nom manquant">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="lieux"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Lieux</button>
+    <h1 class="navbar-title">Nouveau lieu</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <section class="section" aria-labelledby="la-carte-t">
+      <div class="section-head"><h2 class="section-title" id="la-carte-t">Où c'est&nbsp;?</h2>
+        <button type="button" class="section-link" id="la-here"><svg class="icon icon--s" aria-hidden="true" style="vertical-align:-3px;margin-right:4px"><use href="#i-nav"/></svg>Ma position</button></div>
+      <div class="la-map" role="img" aria-label="Carte du quartier avec une épingle et un cercle de 100 mètres autour">
+        <svg viewBox="0 0 320 200" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+          <rect width="320" height="200" class="la-ground"/>
+          <path d="M-10 150 C60 130 120 170 200 150 S300 120 340 135 L340 170 C300 155 250 190 200 180 S60 160 -10 180Z" class="la-water"/>
+          <rect x="190" y="14" width="100" height="56" rx="8" class="la-park"/>
+          <g class="la-road"><path d="M0 100 H320"/><path d="M120 0 V200"/><path d="M0 40 L320 70"/><path d="M230 0 V120"/></g>
+          <g class="la-block"><rect x="132" y="108" width="40" height="28" rx="3"/><rect x="20" y="108" width="50" height="30" rx="3"/><rect x="20" y="52" width="70" height="36" rx="3"/><rect x="242" y="84" width="56" height="30" rx="3"/></g>
+          <circle id="la-circle" cx="160" cy="100" r="30" class="la-radius"/>
+          <g class="la-pin" transform="translate(160 100)"><path d="M0 0 C-10 -14 -13 -20 -13 -26 A13 13 0 1 1 13 -26 C13 -20 10 -14 0 0Z"/><circle cx="0" cy="-26" r="5"/></g>
+        </svg>
+        <span class="la-scale num" id="la-scale">100 m</span>
+      </div>
+      <div class="field" style="margin-top:var(--space-m)">
+        <label class="field-label" for="la-radius">Rayon&nbsp;: <span class="num" id="la-radius-val">100 m</span></label>
+        <input type="range" id="la-radius" min="50" max="300" step="10" value="100" aria-valuetext="100 mètres">
+        <span class="field-help">Plus petit = plus précis. Plus grand = tu seras repéré plus tôt. 100 m marche bien pour la plupart des lieux.</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="la-nom-t">
+      <div class="section-head"><h2 class="section-title" id="la-nom-t">Nom</h2></div>
+      <div class="field" id="la-nom-field">
+        <label class="field-label" for="la-nom">Nom du lieu</label>
+        <input class="input" id="la-nom" type="text" placeholder="Ex. Supérette du Canal" autocomplete="off">
+        <span class="field-help" id="la-nom-help">Un nom court, pour te repérer dans la liste.</span>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="la-type-t">
+      <div class="section-head"><h2 class="section-title" id="la-type-t">Taf, cours ou courses&nbsp;?</h2></div>
+      <div class="list" role="radiogroup" aria-label="Type de lieu" id="la-type">
+        <button type="button" class="row" role="radio" aria-checked="true" data-value="Taf">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main"><span class="row-title">Taf</span><span class="row-sub">Tes heures comptent dans ton contrat et ta paie</span></span>
+          <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+        <button type="button" class="row" role="radio" aria-checked="false" data-value="Cours">
+          <span class="row-icon row-icon--study"><svg class="icon" aria-hidden="true"><use href="#i-book"/></svg></span>
+          <span class="row-main"><span class="row-title">Cours</span><span class="row-sub">Comptées à part, jamais dans la paie</span></span>
+          <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+        <button type="button" class="row" role="radio" aria-checked="false" data-value="Courses">
+          <span class="row-icon row-icon--errand"><svg class="icon" aria-hidden="true"><use href="#i-cart"/></svg></span>
+          <span class="row-main"><span class="row-title">Courses</span><span class="row-sub">Notées dans ton historique, mais pas comptées</span></span>
+          <svg class="icon row-check" aria-hidden="true"><use href="#i-check"/></svg>
+        </button>
+      </div>
+      <div class="row la-both">
+        <span class="row-main"><span class="row-title" id="la-both-l">J'y travaille aussi</span><span class="row-sub">Pour un magasin où tu bosses et où tu fais aussi tes courses</span></span>
+        <button type="button" class="switch" id="la-both" role="switch" aria-checked="false" aria-labelledby="la-both-l"></button>
+      </div>
+      <div class="card card--outline" id="la-explain">
+        <h3 class="card-title" style="font:var(--t-headline) var(--font-text)">Travail contre courses</h3>
+        <p class="card-text" id="la-explain-text">Ici, chaque passage compte comme du travail. C'est pour ton vrai lieu de taf.</p>
+        <p class="card-text">Pour un lieu à double usage, je regarde la durée, ton planning et tes corrections pour deviner. Si j'hésite, je te demande. Une visite de 15 min compte comme des courses, pas comme du taf.</p>
+      </div>
+    </section>
+
+    <div class="btn-stack">
+      <button type="button" class="btn btn--primary btn--block" id="la-save">Enregistrer ce lieu</button>
+      <button type="button" class="btn btn--ghost btn--block" data-back="lieux">Annuler</button>
+    </div>
+  </div>
+
+  <style>
+  #scr-lieu-ajout .la-map { position: relative; border-radius: var(--radius-large); overflow: hidden; border: 1px solid var(--separator); height: 220px; background: var(--fill); }
+  #scr-lieu-ajout .la-map svg { width: 100%; height: 100%; display: block; }
+  #scr-lieu-ajout .la-ground { fill: var(--fill); }
+  #scr-lieu-ajout .la-water { fill: var(--accentSoft); }
+  #scr-lieu-ajout .la-park { fill: var(--surfaceRaised); stroke: var(--separator); }
+  #scr-lieu-ajout .la-road path { stroke: var(--surface); stroke-width: 10; fill: none; stroke-linecap: round; }
+  #scr-lieu-ajout .la-block rect { fill: var(--surfaceRaised); stroke: var(--separator); }
+  #scr-lieu-ajout .la-radius { fill: var(--accent); fill-opacity: .16; stroke: var(--accent); stroke-width: 2; stroke-dasharray: 6 4; }
+  #scr-lieu-ajout .la-pin path { fill: var(--accent); stroke: var(--surface); stroke-width: 1.5; }
+  #scr-lieu-ajout .la-pin circle { fill: var(--accentOn); }
+  #scr-lieu-ajout .la-scale { position: absolute; left: 10px; bottom: 10px; padding: 3px 8px; border-radius: var(--radius-pill); background: var(--surface); color: var(--textPrimary); font-size: 12px; border: 1px solid var(--separator); }
+  #scr-lieu-ajout input[type=range] { width: 100%; min-height: 44px; accent-color: var(--accent); }
+  #scr-lieu-ajout .la-both { margin-top: var(--space-s); background: var(--surface); border-radius: var(--radius-medium); }
+  #scr-lieu-ajout #la-explain { margin-top: var(--space-s); }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    var radius = document.getElementById('la-radius'), val = document.getElementById('la-radius-val'),
+        circle = document.getElementById('la-circle'), scale = document.getElementById('la-scale'),
+        nom = document.getElementById('la-nom'), field = document.getElementById('la-nom-field'),
+        help = document.getElementById('la-nom-help'), type = 'Taf';
+    var base = 'Un nom court, pour te repérer dans la liste.';
+    function setRadius() {
+      var m = +radius.value;
+      val.textContent = m + ' m'; scale.textContent = m + ' m';
+      circle.setAttribute('r', String(m * 0.3));
+      radius.setAttribute('aria-valuetext', m + ' mètres');
+    }
+    radius.addEventListener('input', setRadius);
+    function validate(show) {
+      var bad = nom.value.trim() === '';
+      field.classList.toggle('is-invalid', bad && show);
+      help.textContent = bad && show ? 'Il manque un nom. Donne-lui un nom court, par exemple « Supérette du Canal ».' : base;
+      if (bad && show) nom.setAttribute('aria-invalid', 'true'); else nom.removeAttribute('aria-invalid');
+      return !bad;
+    }
+    nom.addEventListener('input', function () { if (field.classList.contains('is-invalid')) validate(true); });
+    document.getElementById('la-type').addEventListener('change', function (e) {
+      type = e.detail.value;
+      var t = document.getElementById('la-explain-text');
+      t.textContent = type === 'Taf' ? 'Ici, chaque passage compte comme du travail. C\'est pour ton vrai lieu de taf.'
+        : type === 'Cours' ? 'Ici, tes heures comptent comme des heures de cours, séparées du taf. Elles n\'entrent jamais dans la paie.'
+        : 'Ici, tes passages sont notés mais jamais comptés dans tes heures. Pratique pour le marché ou le supermarché.';
+    });
+    document.getElementById('la-both').addEventListener('change', function (e) {
+      toast(e.detail.checked ? 'OK, je trierai taf et courses visite par visite.' : 'OK, un seul usage pour ce lieu.');
+    });
+    document.getElementById('la-here').addEventListener('click', function () { toast('Épingle posée sur ta position actuelle.'); });
+    document.getElementById('la-save').addEventListener('click', function () {
+      if (!validate(true)) { nom.focus(); return; }
+      toast('Lieu ajouté : ' + nom.value.trim() + ' (' + type.toLowerCase() + ').', { undo: function () { go('lieu-ajout'); } });
+      go('lieux');
+    });
+    PLT.onShow('lieu-ajout', function (el) {
+      if (el.getAttribute('data-state') === 'erreur') { nom.value = ''; validate(true); } else validate(false);
+    });
+    document.addEventListener('plt:state', function (e) {
+      if (e.detail.name !== 'lieu-ajout') return;
+      if (e.detail.state === 'erreur') { nom.value = ''; validate(true); } else validate(false);
+    });
+  });
+  </script>
+</section>

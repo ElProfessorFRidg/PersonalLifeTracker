@@ -1,0 +1,237 @@
+<section class="screen" id="scr-etats" data-title="Galerie des états" data-group="États" data-tab="accueil"
+         data-states="tout:Tout,vides:Vides,erreurs:Erreurs,chargement:Attente,toasts:Toasts">
+
+  <header class="navbar">
+    <button type="button" class="navbar-back" data-back="reglages"><svg class="icon" aria-hidden="true"><use href="#i-chev-left"/></svg>Réglages</button>
+    <h1 class="navbar-title">États de l'app</h1>
+  </header>
+
+  <div class="screen-body">
+
+    <p class="eta-intro">Tout ce que l'app te montre quand il n'y a rien, quand ça coince ou quand ça charge. L'app marche sans réseau&nbsp;: aucun de ces cas ne parle de connexion.</p>
+
+    <!-- 1. États vides -->
+    <section class="section" data-when="tout vides" aria-labelledby="eta-vide-t">
+      <div class="section-head"><h2 class="section-title" id="eta-vide-t">États vides</h2></div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Lieux, tant qu'aucun lieu n'existe</p>
+        <div class="card"><div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-pin"/></svg></span>
+          <h3 class="empty-title">Aucun lieu pour l'instant.</h3>
+          <p class="empty-text">Ajoute ton taf ou ta fac et je note tes heures tout seul.</p>
+          <button type="button" class="btn btn--primary" data-go="lieu-ajout">Ajouter un lieu</button>
+        </div></div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Accueil et historique, quand rien n'est arrivé</p>
+        <div class="card"><div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <h3 class="empty-title">Rien pour l'instant, profites-en.</h3>
+          <p class="empty-text">Dès que t'arrives quelque part, je te le dis.</p>
+          <button type="button" class="btn btn--secondary" data-go="session-ajout">Ajouter une session</button>
+        </div></div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Un onglet dont le module est coupé (Planning)</p>
+        <div class="card"><div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-calendar"/></svg></span>
+          <h3 class="empty-title">Le planning est désactivé.</h3>
+          <p class="empty-text">Active-le dans les fonctionnalités pour voir tes créneaux ici. Tes données ne bougent pas.</p>
+          <button type="button" class="btn btn--primary" data-go="fonctionnalites">Voir les fonctionnalités</button>
+        </div></div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Recherche sans résultat</p>
+        <div class="card"><div class="empty">
+          <span class="empty-icon"><svg class="icon icon--l" aria-hidden="true"><use href="#i-search"/></svg></span>
+          <h3 class="empty-title">Je ne trouve rien pour « marché ».</h3>
+          <p class="empty-text">Essaie un mot plus court, ou le nom d'un lieu.</p>
+        </div></div>
+      </div>
+    </section>
+
+    <!-- 2. Bandeaux d'erreur -->
+    <section class="section" data-when="tout erreurs" aria-labelledby="eta-err-t">
+      <div class="section-head"><h2 class="section-title" id="eta-err-t">Bandeaux</h2></div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Haut de l'accueil et Réglages, localisation refusée</p>
+        <div class="banner banner--error" role="alert">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">J'ai besoin de savoir où t'es</p>
+            <p class="banner-text">Sans la localisation, je ne peux pas noter tes heures tout seul. Rien ne sort de ton tel.</p>
+            <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre les Réglages iOS.">Ouvrir les réglages iOS</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Haut de l'accueil, localisation approximative</p>
+        <div class="banner banner--warning">
+          <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Ta position est approximative</p>
+            <p class="banner-text">Je risque de confondre le taf et le magasin d'à côté. Active la position exacte.</p>
+            <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre les Réglages iOS.">Activer la position exacte</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Réglages, notifications refusées</p>
+        <div class="banner banner--warning">
+          <svg class="icon" aria-hidden="true"><use href="#i-bell"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Je ne peux plus te demander de confirmer</p>
+            <p class="banner-text">Les notifications sont coupées. Tes sessions douteuses attendront dans l'onglet Accueil.</p>
+            <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre les Réglages iOS.">Autoriser les notifications</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Au moment d'enregistrer, stockage plein</p>
+        <div class="banner banner--error" role="alert">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Ton iPhone n'a plus de place</p>
+            <p class="banner-text">Je n'ai pas pu enregistrer ta dernière session. Libère un peu d'espace, puis réessaie.</p>
+            <button type="button" class="banner-action" id="eta-retry">Réessayer</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Import d'un fichier JSON</p>
+        <div class="banner banner--error" role="alert">
+          <svg class="icon" aria-hidden="true"><use href="#i-alert"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Je n'ai pas pu lire ce fichier</p>
+            <p class="banner-text">Il n'a pas l'air d'une sauvegarde de l'app. Rien n'a été modifié. Choisis un autre fichier.</p>
+            <button type="button" class="banner-action" data-toast="Dans l'app, ça rouvre le sélecteur de fichiers.">Choisir un autre fichier</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Accueil et Fiabilité, horloge modifiée</p>
+        <div class="banner banner--warning" role="alert">
+          <svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">L'heure de ton tel a bougé de 2 h</p>
+            <p class="banner-text">Si c'est volontaire, tout va bien. Sinon, remets l'heure automatique pour que tes sessions restent justes.</p>
+            <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre Date et heure dans iOS.">Régler l'heure automatique</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Fiabilité, dossier de sauvegarde introuvable</p>
+        <div class="banner banner--warning">
+          <svg class="icon" aria-hidden="true"><use href="#i-download"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Je ne retrouve plus ton dossier de sauvegarde</p>
+            <p class="banner-text">La dernière copie date de mardi. Choisis un dossier pour reprendre.</p>
+            <button type="button" class="banner-action" data-toast="Dans l'app, ça ouvre le sélecteur de dossier.">Choisir un dossier</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Accueil après un redémarrage</p>
+        <div class="banner banner--info">
+          <svg class="icon" aria-hidden="true"><use href="#i-battery"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Ton tel s'était éteint mercredi</p>
+            <p class="banner-text">J'ai rattrapé ce que j'ai pu. Vérifie l'arrivée de <span class="num">14:03</span>, elle est approximative.</p>
+            <button type="button" class="banner-action" data-go="doute">Vérifier</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Chargement -->
+    <section class="section" data-when="tout chargement" aria-labelledby="eta-load-t">
+      <div class="section-head"><h2 class="section-title" id="eta-load-t">Chargement</h2></div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Statistiques, le temps du calcul</p>
+        <div class="card" aria-busy="true" aria-label="Chargement des statistiques">
+          <span class="skeleton skeleton--title" style="width:40%"></span>
+          <span class="skeleton skeleton--block"></span>
+          <span class="skeleton skeleton--line"></span>
+          <span class="skeleton skeleton--line" style="width:70%"></span>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Liste des sessions, ouverture de l'historique</p>
+        <div class="card" aria-busy="true" aria-label="Chargement des sessions">
+          <div class="eta-sk"><span class="skeleton skeleton--circle"></span><span class="eta-sk-t"><span class="skeleton skeleton--line" style="width:55%"></span><span class="skeleton skeleton--line" style="width:35%"></span></span></div>
+          <div class="eta-sk"><span class="skeleton skeleton--circle"></span><span class="eta-sk-t"><span class="skeleton skeleton--line" style="width:62%"></span><span class="skeleton skeleton--line" style="width:30%"></span></span></div>
+          <div class="eta-sk"><span class="skeleton skeleton--circle"></span><span class="eta-sk-t"><span class="skeleton skeleton--line" style="width:48%"></span><span class="skeleton skeleton--line" style="width:40%"></span></span></div>
+        </div>
+      </div>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Import d'une sauvegarde, lecture du fichier</p>
+        <div class="banner" aria-busy="true">
+          <svg class="icon" aria-hidden="true"><use href="#i-refresh"/></svg>
+          <div class="banner-main">
+            <p class="banner-title">Je lis ta sauvegarde</p>
+            <p class="banner-text">Ça peut prendre quelques secondes. Ne ferme pas l'app.</p>
+            <span class="skeleton skeleton--line" style="width:100%;margin-top:8px"></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Toasts -->
+    <section class="section" data-when="tout toasts" aria-labelledby="eta-toast-t">
+      <div class="section-head"><h2 class="section-title" id="eta-toast-t">Toasts</h2></div>
+      <p class="section-foot">Toute action destructive ou automatique propose « Annuler ». Touche un bouton pour voir le toast en bas de l'écran.</p>
+
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Après une suppression de session</p>
+        <button type="button" class="btn btn--secondary btn--block" id="eta-t1">Supprimer une session</button>
+      </div>
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Quand l'app agit toute seule (départ ajouté)</p>
+        <button type="button" class="btn btn--secondary btn--block" id="eta-t2">Départ noté automatiquement</button>
+      </div>
+      <div class="eta-item">
+        <p class="eta-where"><span class="chip">Où</span>Confirmation simple, rien à défaire</p>
+        <button type="button" class="btn btn--secondary btn--block" data-toast="Copié dans le presse-papiers.">Copier un résumé</button>
+      </div>
+    </section>
+
+  </div>
+
+  <style>
+    #scr-etats .eta-intro { padding: 0 4px; font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+    #scr-etats .section { gap: var(--space-m); }
+    #scr-etats .eta-item { display: flex; flex-direction: column; gap: 8px; }
+    #scr-etats .eta-where { display: flex; align-items: center; gap: 8px; padding: 0 4px; font: 500 13px/18px var(--font-text); color: var(--textSecondary); }
+    #scr-etats .eta-sk { display: flex; align-items: center; gap: 12px; }
+    #scr-etats .eta-sk-t { flex: 1; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  </style>
+
+  <script>
+  PLT.ready(function () {
+    document.getElementById('eta-retry').addEventListener('click', function () {
+      toast('Toujours pas de place. Libère de l\'espace dans les réglages iOS, puis réessaie.');
+    });
+    document.getElementById('eta-t1').addEventListener('click', function () {
+      toast('Session supprimée.', { undo: function () { toast('Session remise en place.'); } });
+    });
+    document.getElementById('eta-t2').addEventListener('click', function () {
+      toast('J\'ai noté ton départ du taf à 21:03.', { undo: function () { toast('Départ retiré.'); } });
+    });
+  });
+  </script>
+</section>

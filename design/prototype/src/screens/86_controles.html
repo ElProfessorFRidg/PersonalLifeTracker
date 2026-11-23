@@ -1,0 +1,199 @@
+<section class="screen" id="scr-controles" data-title="Contrôles et pile" data-group="Système iOS" data-tabbar="hide" data-fullbleed
+         data-states="rien:Rien en cours,encours:Session en cours,ios17:Sous iOS 17">
+
+  <header class="ct-head">
+    <p class="eyebrow">Maquette iOS</p>
+    <h1 class="ct-h1">Contrôles et pile</h1>
+    <p class="ct-lead" data-when="rien">Rien ne tourne&nbsp;: seul « Démarrer » est à ta portée.</p>
+    <p class="ct-lead" data-when="encours">Une session tourne&nbsp;: « Arrêter » et « Pause » s'allument.</p>
+    <p class="ct-lead" data-when="ios17">Le Centre de contrôle demande iOS 18, il reste d'autres chemins.</p>
+  </header>
+
+  <div class="ct-body">
+
+    <!-- 1. Centre de contrôle (iOS 18) -->
+    <section class="ct-block" aria-labelledby="ct-cc-t" data-when="rien encours">
+      <h2 class="ct-cap" id="ct-cc-t">Centre de contrôle</h2>
+      <div class="ct-panel">
+        <button type="button" class="ct-tile ct-tile--m" data-when="rien" data-toast="Démarrer ma session : ouvre l'app puis lance le suivi, rien ne démarre en cachette.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          <span class="ct-txt"><span class="ct-name">Démarrer ma session</span><span class="ct-stat">Prêt</span></span>
+        </button>
+        <button type="button" class="ct-tile ct-tile--m is-on" data-when="encours" aria-pressed="true" data-toast="Une session tourne déjà. Utilise Arrêter pour la finir.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          <span class="ct-txt"><span class="ct-name">Démarrer ma session</span><span class="ct-stat">Taf en cours</span></span>
+        </button>
+        <button type="button" class="ct-tile ct-tile--m is-off" data-when="rien" aria-disabled="true" data-toast="Rien à arrêter pour l'instant.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg></span>
+          <span class="ct-txt"><span class="ct-name">Arrêter</span><span class="ct-stat">Rien en cours</span></span>
+        </button>
+        <button type="button" class="ct-tile ct-tile--m" data-when="encours" data-toast="Session arrêtée, sans ouvrir l'app. Tu peux annuler dans l'app.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg></span>
+          <span class="ct-txt"><span class="ct-name">Arrêter</span><span class="ct-stat">Taf, <span class="num" data-timer="4447" data-timer-format="hm">1 h 14</span></span></span>
+        </button>
+        <button type="button" class="ct-tile ct-tile--s is-off" data-when="rien" aria-disabled="true" data-toast="Rien à mettre en pause.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg></span>
+          <span class="ct-name">Pause</span>
+        </button>
+        <button type="button" class="ct-tile ct-tile--s" data-when="encours" data-toast="Pause lancée. Le chrono s'arrête.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-pause"/></svg></span>
+          <span class="ct-name">Pause</span>
+        </button>
+        <button type="button" class="ct-tile ct-tile--s" data-toast="Je préviens ton chef que t'as du retard. Il faut le module Contacts du taf.">
+          <span class="ct-ico"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <span class="ct-name">En retard</span>
+        </button>
+        <div class="ct-add" aria-hidden="true"><svg class="icon icon--s"><use href="#i-plus"/></svg>Ajouter un contrôle</div>
+      </div>
+      <p class="ct-note">« Je suis en retard » n'existe que si le module Contacts du taf est actif. Les trois autres sont toujours là.</p>
+    </section>
+
+    <!-- 1 bis. Sous iOS 17 : pas de contrôles du Centre de contrôle -->
+    <section class="ct-block" aria-labelledby="ct-17-t" data-when="ios17">
+      <h2 class="ct-cap" id="ct-17-t">Centre de contrôle</h2>
+      <div class="banner banner--info" role="status">
+        <svg class="icon" aria-hidden="true"><use href="#i-info"/></svg>
+        <div class="banner-main"><p class="banner-title">Les contrôles demandent iOS 18</p>
+          <p class="banner-text">Sur ton iPhone, ils sont absents du Centre de contrôle. « État de l'app » le dit clairement. Tu passes par ces trois chemins.</p></div>
+      </div>
+      <div class="list">
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-grid"/></svg></span>
+          <span class="row-main"><span class="row-title">Widget interactif</span><span class="row-sub">Démarrer, arrêter ou mettre en pause depuis l'écran d'accueil</span></span>
+        </div>
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-bolt"/></svg></span>
+          <span class="row-main"><span class="row-title">Raccourcis et Siri</span><span class="row-sub">« Démarrer ma session », « Arrêter », « Combien d'heures cette semaine&nbsp;? »</span></span>
+        </div>
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-vibrate"/></svg></span>
+          <span class="row-main"><span class="row-title">Bouton Action</span><span class="row-sub">Assigné à un raccourci, un appui et c'est parti</span></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. Écran verrouillé et Bouton Action -->
+    <section class="ct-block" aria-labelledby="ct-lk-t" data-when="rien encours">
+      <h2 class="ct-cap" id="ct-lk-t">Écran verrouillé et Bouton Action</h2>
+      <div class="ct-lock">
+        <div class="ct-lock-btns" aria-label="Contrôles en bas de l'écran verrouillé">
+          <span class="ct-round" data-when="rien" role="img" aria-label="Contrôle démarrer ma session"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          <span class="ct-round" data-when="encours" role="img" aria-label="Contrôle arrêter"><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg></span>
+          <span class="ct-round" role="img" aria-label="Appareil photo"><svg class="icon" aria-hidden="true"><use href="#i-camera"/></svg></span>
+        </div>
+        <div class="ct-action">
+          <span class="ct-action-btn" aria-hidden="true"></span>
+          <p class="ct-action-t"><span data-when="rien">Un appui&nbsp;: démarrer ma session</span><span data-when="encours">Un appui&nbsp;: arrêter ma session</span></p>
+        </div>
+      </div>
+      <p class="ct-note">Le Bouton Action suit ton choix dans Raccourcis. Il ouvre l'app quand le système l'exige, jamais de démarrage caché.</p>
+    </section>
+
+    <!-- 3. Pile intelligente -->
+    <section class="ct-block" aria-labelledby="ct-pile-t">
+      <h2 class="ct-cap" id="ct-pile-t">Pile intelligente</h2>
+      <div class="ct-stack-row">
+        <div class="ct-stack" role="img">
+          <article class="ct-sw" aria-label="Pile intelligente : widget Maintenant">
+            <p class="ct-sw-k" data-when="encours"><svg class="icon icon--s" aria-hidden="true"><use href="#i-briefcase"/></svg>Taf<span class="dot-live" aria-hidden="true"></span></p>
+            <p class="ct-sw-k" data-when="rien ios17"><svg class="icon icon--s" aria-hidden="true"><use href="#i-clock"/></svg>Prochain taf</p>
+            <div>
+              <p class="ct-sw-s" data-when="encours">encore</p>
+              <p class="ct-sw-f num" data-when="encours">1 h 50</p>
+              <p class="ct-sw-s" data-when="rien ios17">dans</p>
+              <p class="ct-sw-f num" data-when="rien ios17">3 h 40</p>
+            </div>
+            <p class="ct-sw-s" data-when="encours">Fin à <span class="num">21:00</span></p>
+            <p class="ct-sw-s" data-when="rien ios17"><span class="num">18:00</span> à <span class="num">21:00</span></p>
+          </article>
+          <span class="ct-dots" aria-hidden="true"><i></i><i class="on"></i><i></i><i></i></span>
+        </div>
+        <p class="ct-stack-t" data-when="encours">Pendant la session, c'est le widget du décompte qui remonte tout seul.</p>
+        <p class="ct-stack-t" data-when="rien ios17">Hors session, c'est le prochain taf. Le décompte reste juste sans rafraîchir en boucle.</p>
+      </div>
+
+      <div class="list">
+        <div class="row">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-route"/></svg></span>
+          <span class="row-main"><span class="row-title">Avant la prise de poste</span><span class="row-sub">« Prochain taf dans 30 min », avec « Pars maintenant » si tu l'as activé</span></span>
+          <span class="row-value num">17:30</span>
+        </div>
+        <div class="row">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-briefcase"/></svg></span>
+          <span class="row-main"><span class="row-title">Pendant la session</span><span class="row-sub">« Encore 1 h 50 », et les boutons Pause et Terminer si tu les gardes</span></span>
+          <span class="row-value num">17:56</span>
+        </div>
+        <div class="row">
+          <span class="row-icon row-icon--work"><svg class="icon" aria-hidden="true"><use href="#i-clock"/></svg></span>
+          <span class="row-main"><span class="row-title">À l'approche de la fin</span><span class="row-sub">Elle remonte quand ça se termine, pour que tu confirmes ou prolonges</span></span>
+          <span class="row-value num">20:30</span>
+        </div>
+        <div class="row">
+          <span class="row-icon"><svg class="icon" aria-hidden="true"><use href="#i-sun"/></svg></span>
+          <span class="row-main"><span class="row-title">Le reste du temps</span><span class="row-sub">Elle se range. Rien à faire, profites-en.</span></span>
+        </div>
+        <div class="row">
+          <span class="row-icon row-icon--accent"><svg class="icon" aria-hidden="true"><use href="#i-play"/></svg></span>
+          <span class="row-main"><span class="row-title">Suggestion « Démarrer ma session »</span><span class="row-sub">Je la propose à iOS au bon moment, c'est lui qui décide de l'afficher</span></span>
+        </div>
+      </div>
+      <p class="ct-note">iOS a le dernier mot sur la pile. Je lui donne seulement les bons moments, quand son API de pertinence existe. Sinon, la pile fait comme d'habitude.</p>
+    </section>
+
+    <aside class="ct-legend" aria-label="À propos de cet écran">
+      <svg class="icon icon--s" aria-hidden="true"><use href="#i-info"/></svg>
+      <p>Maquette du Centre de contrôle et de la pile de widgets d'iOS, pas un écran de l'app. Ces contrôles sont dans l'extension de widgets, sans cible en plus.</p>
+    </aside>
+  </div>
+
+  <style>
+    #scr-controles {
+      background:
+        radial-gradient(90% 38% at 10% 0%, color-mix(in srgb, var(--accent) 30%, transparent), transparent 72%),
+        radial-gradient(80% 36% at 100% 50%, color-mix(in srgb, var(--work) 20%, transparent), transparent 72%),
+        radial-gradient(80% 30% at 0% 100%, color-mix(in srgb, var(--study) 16%, transparent), transparent 72%),
+        var(--background);
+    }
+    #scr-controles .ct-head { padding: 12px var(--gutter) 0; }
+    #scr-controles .ct-h1 { font: var(--t-title1) var(--font-text); }
+    #scr-controles .ct-lead { margin-top: 4px; font: var(--t-subhead) var(--font-text); color: var(--textSecondary); }
+    #scr-controles .ct-body { display: flex; flex-direction: column; gap: 24px; padding: 18px var(--gutter) var(--space-l); min-width: 0; }
+    #scr-controles .ct-block { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+    #scr-controles .ct-cap { font: 600 13px/16px var(--font-text); letter-spacing: .06em; text-transform: uppercase; color: var(--textSecondary); }
+    #scr-controles .ct-note { font: 400 13px/18px var(--font-text); color: var(--textSecondary); }
+    #scr-controles .ct-panel { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; padding: 12px; border-radius: 30px; background: color-mix(in srgb, var(--surface) 70%, transparent); -webkit-backdrop-filter: blur(24px); backdrop-filter: blur(24px); box-shadow: var(--shadow-card); }
+    #scr-controles .ct-tile { display: flex; border: 0; border-radius: 22px; background: var(--surfaceRaised); color: var(--textPrimary); text-align: left; min-width: 0; }
+    #scr-controles .ct-tile--m { grid-column: span 2; align-items: center; gap: 10px; padding: 12px; min-height: 72px; }
+    #scr-controles .ct-tile--s { grid-column: span 1; flex-direction: column; justify-content: space-between; align-items: flex-start; padding: 12px; aspect-ratio: 1; }
+    #scr-controles .ct-ico { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--fill); flex: none; }
+    #scr-controles .ct-txt { display: flex; flex-direction: column; min-width: 0; }
+    #scr-controles .ct-name { font: 600 14px/17px var(--font-text); }
+    #scr-controles .ct-tile--s .ct-name { font-size: 12px; line-height: 14px; }
+    #scr-controles .ct-stat { font: 400 12px/15px var(--font-text); color: var(--textSecondary); }
+    #scr-controles .ct-tile.is-on { background: var(--accent); color: var(--accentOn); }
+    #scr-controles .ct-tile.is-on .ct-ico { background: color-mix(in srgb, var(--accentOn) 18%, transparent); }
+    #scr-controles .ct-tile.is-on .ct-stat { color: var(--accentOn); opacity: .85; }
+    #scr-controles .ct-tile.is-off { color: var(--textTertiary); background: color-mix(in srgb, var(--surfaceRaised) 60%, transparent); }
+    #scr-controles .ct-tile.is-off .ct-stat { color: var(--textTertiary); }
+    #scr-controles .ct-add { grid-column: span 2; display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 22px; border: 1.5px dashed var(--textTertiary); color: var(--textSecondary); font: 500 12px/15px var(--font-text); text-align: center; padding: 6px; }
+    #scr-controles .ct-lock { display: flex; gap: 14px; align-items: stretch; }
+    #scr-controles .ct-lock-btns { flex: 1; display: flex; justify-content: space-between; align-items: center; padding: 14px 22px; border-radius: 26px; background: color-mix(in srgb, var(--surface) 70%, transparent); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
+    #scr-controles .ct-round { display: grid; place-items: center; width: 50px; height: 50px; border-radius: 50%; background: var(--surfaceRaised); color: var(--textPrimary); }
+    #scr-controles .ct-action { flex: 1; display: flex; align-items: center; gap: 10px; padding: 12px; border-radius: 26px; background: var(--surface); min-width: 0; }
+    #scr-controles .ct-action-btn { flex: none; width: 10px; height: 34px; border-radius: 5px; background: var(--accent); }
+    #scr-controles .ct-action-t { font: 500 13px/17px var(--font-text); }
+    #scr-controles .ct-stack-row { display: flex; align-items: center; gap: 16px; }
+    #scr-controles .ct-stack { position: relative; flex: none; width: 150px; padding-right: 18px; }
+    #scr-controles .ct-sw { aspect-ratio: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 12px; border-radius: 22px; background: var(--surface); box-shadow: var(--shadow-float); }
+    #scr-controles .ct-sw-k { display: flex; align-items: center; gap: 5px; font: 600 12px/15px var(--font-text); color: var(--work); }
+    #scr-controles .ct-sw-k .dot-live { margin-left: auto; }
+    #scr-controles .ct-sw-s { font: 400 12px/15px var(--font-text); color: var(--textSecondary); }
+    #scr-controles .ct-sw-f { font: 700 28px/32px var(--font-mono); letter-spacing: -.05em; word-spacing: -.3em; white-space: nowrap; }
+    #scr-controles .ct-dots { position: absolute; right: 0; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; gap: 5px; }
+    #scr-controles .ct-dots i { width: 6px; height: 6px; border-radius: 50%; background: var(--textTertiary); opacity: .6; }
+    #scr-controles .ct-dots i.on { background: var(--textPrimary); opacity: 1; }
+    #scr-controles .ct-stack-t { font: 400 14px/19px var(--font-text); color: var(--textSecondary); min-width: 0; }
+    #scr-controles .ct-legend { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 14px; background: var(--surface); color: var(--textSecondary); font: 400 12px/17px var(--font-text); }
+    #scr-controles .ct-legend .icon { margin-top: 1px; }
+  </style>
+</section>

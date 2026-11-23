@@ -1,0 +1,4 @@
+## 94. GÉNÉRATEUR DE DISPONIBILITÉS (module availability_planner, désactivé par défaut)
+
+Pour une semaine donnée, calcule les créneaux où l'utilisateur peut travailler à partir de ses cours et événements connus de cette semaine, des trajets, des créneaux de révision (module study_slots), de la nuit courte (module short_night) et du repos (module rest_alert) quand ils sont actifs. Pensé pour des semaines toutes différentes (section 91).
+Grille de la semaine : pour chaque créneau, "dispo", "plutôt" ou "pas dispo" (modifiable), jours exclus (congés, examens, vacances de l'app, périodes bloquées), objectif d'heures facultatif (lié à l'épargne si le module savings est actif, sans pousser à travailler plus). Sortie en texte, image ou PDF, partage via la feuille de partage native, jamais envoyée automatiquement. Aucune promesse que l'employeur tiendra compte des disponibilités.

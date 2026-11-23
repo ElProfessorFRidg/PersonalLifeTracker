@@ -1,0 +1,4 @@
+## 113. COMPARAISON AVEC TON PROPRE PASSÉ (module self_compare, désactivé par défaut)
+
+Compare la période en cours avec la moyenne des périodes précédentes : "Ce mois-ci tu as travaillé 12 % de plus que ta moyenne, surtout le samedi." Indicateurs : heures de travail et de cours, jours travaillés, heures de soirée et de week-end, trajets, durée moyenne de session, remplacements. Décomposition par jour, lieu et employeur pour expliquer l'écart.
+N'affiche une comparaison que si l'écart est significatif et l'échantillon suffisant. Sessions incertaines exclues. Compare vacances à vacances et période scolaire à période scolaire quand le calendrier est actif. Vocabulaire neutre, aucun jugement, jamais de comparaison avec d'autres personnes. Peut alimenter les bilans (section 40) et une notification mensuelle facultative.

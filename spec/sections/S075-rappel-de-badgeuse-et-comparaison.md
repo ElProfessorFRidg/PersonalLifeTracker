@@ -1,0 +1,4 @@
+## 75. RAPPEL DE BADGEUSE ET COMPARAISON (module badge_reminder, exige employment, désactivé par défaut)
+
+Par employeur, option "Mon employeur utilise un pointage (badgeuse, appli, feuille)". À l'arrivée détectée ou probable, notification "Pense à badger" (une seule par session, délai configurable, désactivable) et à la fin de session "Pense à badger en partant".
+Comparaison : l'utilisateur peut saisir, quand il le souhaite, l'heure de pointage ou le total d'heures de son employeur pour une journée ou une période (ou les lire sur le planning ou la fiche de paie). L'app compare : "selon l'app 6 h 30, selon ton employeur 6 h 15, écart 15 min". Un écart récurrent est signalé doucement et peut figurer dans le relevé d'heures (section 20.2). L'app ne se connecte à aucun système de pointage et ne remplace pas le pointage officiel. Aucune notification pendant le mode vacances ou examens.
