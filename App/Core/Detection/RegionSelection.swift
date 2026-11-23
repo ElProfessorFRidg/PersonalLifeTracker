@@ -24,6 +24,10 @@ struct RegionFix: Sendable {
         accuracy <= 30 && distance(to: zone) > zone.radius + accuracy + 20
     }
 
+    func clearlyInside(_ zone: PlaceRules.Zone) -> Bool {
+        accuracy <= 30 && distance(to: zone) + accuracy + 15 <= zone.radius
+    }
+
     func favorsHome(_ home: PlaceRules.Zone, over workplace: PlaceRules.Zone) -> Bool {
         let metersToHome = distance(to: home)
         return accuracy <= 30 && metersToHome + accuracy <= min(home.radius, 45)

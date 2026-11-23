@@ -27,6 +27,7 @@ enum DetectionInput: Equatable {
     /// Entrée dans la zone d'un lieu. `accuracy` en mètres, nil si inconnue.
     case entered(place: DetectionPlace, date: Date, accuracy: Double?)
     case exited(place: DetectionPlace, date: Date)
+    case presenceVerified(place: DetectionPlace, date: Date)
     /// Le temps passe : les délais (présence minimale, délai de grâce) sont évalués.
     case tick(date: Date)
 }
@@ -39,6 +40,7 @@ enum DetectionBound: Equatable {
 struct OpenMixedVisit: Codable, Equatable {
     let entered: Date
     let dwellConfirmed: Bool
+    var exited: Date? = nil
 }
 
 /// Ce que le moteur demande à l'extérieur de faire. Les dates sont exactes, jamais arrondies.
@@ -107,7 +109,8 @@ struct DetectionEngine {
             visits[arrival.place.uid] = OpenMixedVisit(entered: arrival.entered, dwellConfirmed: false)
         }
         for arrival in notedVisits.values where arrival.place.isMixedUse {
-            visits[arrival.place.uid] = OpenMixedVisit(entered: arrival.entered, dwellConfirmed: true)
+            visits[arrival.place.uid] = OpenMixedVisit(entered: arrival.entered, dwellConfirmed: true,
+                                                       exited: pendingDepartures[arrival.place.uid]?.exited)
         }
         return visits
     }
@@ -119,6 +122,9 @@ struct DetectionEngine {
             let arrival = PendingArrival(place: place, entered: visit.entered, accuracy: nil)
             if visit.dwellConfirmed {
                 notedVisits[place.uid] = arrival
+                if let exited = visit.exited, exited >= visit.entered, exited <= now {
+                    pendingDepartures[place.uid] = PendingDeparture(place: place, exited: exited)
+                }
             } else {
                 pendingArrivals[place.uid] = arrival
             }
@@ -128,6 +134,7 @@ struct DetectionEngine {
     mutating func discardMixedVisit(for uid: UUID) {
         if pendingArrivals[uid]?.place.isMixedUse == true { pendingArrivals[uid] = nil }
         if notedVisits[uid]?.place.isMixedUse == true { notedVisits[uid] = nil }
+        if pendingDepartures[uid]?.place.isMixedUse == true { pendingDepartures[uid] = nil }
     }
 
     /// À appeler avant chaque événement : l'état réel de la base (une session peut avoir été démarrée ou arrêtée à la main,
@@ -135,8 +142,8 @@ struct DetectionEngine {
     mutating func syncRunningSession(isRunning: Bool, place: DetectionPlace?) {
         isSessionRunning = isRunning
         runningPlace = isRunning ? place : nil
-        if !isRunning {
-            pendingDepartures.removeAll()
+        pendingDepartures = pendingDepartures.filter { _, departure in
+            departure.place.isMixedUse || (isRunning && departure.place.uid == runningPlace?.uid)
         }
     }
 
@@ -144,6 +151,8 @@ struct DetectionEngine {
     var hasPendingWork: Bool {
         return !pendingArrivals.isEmpty || !pendingDepartures.isEmpty
     }
+
+    var placesAwaitingDeparture: [DetectionPlace] { pendingDepartures.values.map(\.place) }
 
     /// Prochaine date où un tick changerait quelque chose, nil s'il n'y a rien à attendre.
     func nextDeadline() -> Date? {
@@ -160,7 +169,7 @@ struct DetectionEngine {
     mutating func handle(_ input: DetectionInput) -> [DetectionDecision] {
         let date: Date
         switch input {
-        case .entered(_, let time, _), .exited(_, let time), .tick(let time): date = time
+        case .entered(_, let time, _), .exited(_, let time), .presenceVerified(_, let time), .tick(let time): date = time
         }
         let cutoff = date.addingTimeInterval(-Self.maxOpenMixedVisitSeconds)
         pendingArrivals = pendingArrivals.filter { !$0.value.place.isMixedUse || $0.value.entered >= cutoff }
@@ -170,6 +179,10 @@ struct DetectionEngine {
             return handleEntered(place: place, date: date, accuracy: accuracy)
         case .exited(let place, let date):
             return handleExited(place: place, date: date)
+        case .presenceVerified(let place, let date):
+            guard let departure = pendingDepartures[place.uid], date >= departure.exited else { return [] }
+            pendingDepartures[place.uid] = nil
+            return [.departureCancelled(place: place, date: date)]
         case .tick(let date):
             return handleTick(now: date)
         }
@@ -209,10 +222,13 @@ struct DetectionEngine {
             decisions.append(contentsOf: promote(arrival))
         }
 
-        if let notedEntry = notedVisits[place.uid] {
-            notedVisits[place.uid] = nil
+        if notedVisits[place.uid] != nil {
             if place.isMixedUse {
-                decisions.append(.visitEnded(place: place, entered: notedEntry.entered, exited: date))
+                if pendingDepartures[place.uid] == nil {
+                    pendingDepartures[place.uid] = PendingDeparture(place: place, exited: date)
+                }
+            } else {
+                notedVisits[place.uid] = nil
             }
             return decisions
         }
@@ -241,6 +257,12 @@ struct DetectionEngine {
             .sorted { $0.exited < $1.exited }
         for departure in departures {
             pendingDepartures[departure.place.uid] = nil
+            if departure.place.isMixedUse {
+                if let arrival = notedVisits.removeValue(forKey: departure.place.uid) {
+                    decisions.append(.visitEnded(place: departure.place, entered: arrival.entered, exited: departure.exited))
+                }
+                continue
+            }
             isSessionRunning = false
             runningPlace = nil
             decisions.append(.stopSession(place: departure.place, date: departure.exited))

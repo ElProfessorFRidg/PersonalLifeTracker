@@ -17,11 +17,13 @@ struct SessionAjoutView: View {
     @State private var endsNextDay: Bool
     @State private var saveFailed: Bool = false
 
-    init() {
+    init(plannedShift: PlannedShift? = nil) {
         let calendar = Calendar.current
         let now = Date()
-        let defaultEnd = calendar.dateInterval(of: .minute, for: now)?.start ?? now
-        let defaultStart = defaultEnd.addingTimeInterval(-3600)
+        let defaultEnd = plannedShift?.end ?? calendar.dateInterval(of: .minute, for: now)?.start ?? now
+        let defaultStart = plannedShift?.start ?? defaultEnd.addingTimeInterval(-3600)
+        _selectedPlaceID = State(initialValue: plannedShift?.placeUID)
+        _activity = State(initialValue: plannedShift?.activity ?? .work)
         _day = State(initialValue: calendar.startOfDay(for: defaultStart))
         _startTime = State(initialValue: defaultStart)
         _endTime = State(initialValue: defaultEnd)

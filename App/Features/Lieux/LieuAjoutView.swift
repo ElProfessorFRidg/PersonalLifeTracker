@@ -25,6 +25,13 @@ struct LieuAjoutView: View {
     @State private var showsNameError: Bool = false
     @State private var saveFailed: Bool = false
 
+    private let locateOnOpen: Bool
+
+    init(locateOnOpen: Bool = false, initialType: PlaceType? = nil) {
+        self.locateOnOpen = locateOnOpen
+        _type = State(initialValue: initialType)
+    }
+
     private var nameIssue: PlaceRules.NameIssue? {
         return PlaceRules.nameIssue(name, existingNames: places.map { $0.name })
     }
@@ -60,6 +67,9 @@ struct LieuAjoutView: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Fermer") { dismiss() }
                 }
+            }
+            .task {
+                if locateOnOpen, case .idle = locator.state { locator.request() }
             }
             .onChange(of: locator.state) {
                 if case .located(let lat, let lon) = locator.state {

@@ -291,6 +291,8 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
     }
 
     private func updateTracking() {
+        manager.desiredAccuracy = engine.placesAwaitingDeparture.isEmpty
+            ? kCLLocationAccuracyHundredMeters : kCLLocationAccuracyNearestTenMeters
         let status: CLAuthorizationStatus = manager.authorizationStatus
         let allowed: Bool = (status == .authorizedAlways || status == .authorizedWhenInUse)
         let wants: Bool = engine.hasPendingWork && allowed
@@ -486,8 +488,18 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         log(.monitoringFailed, detail: "\(identifier ?? "zone") : \(message)")
     }
 
-    private func handleLocationUpdate(date: Date) {
-        tick()
+    private func handleLocationUpdate(date: Date, fix: RegionFix?) {
+        if let fix {
+            for place in engine.placesAwaitingDeparture {
+                guard let model = fetchPlace(uid: place.uid) else { continue }
+                let zone = PlaceRules.Zone(name: model.name, latitude: model.latitude,
+                                           longitude: model.longitude, radius: model.radius)
+                if fix.clearlyInside(zone), !rejectsEntry(for: model, fix: fix) {
+                    feed(.presenceVerified(place: place, date: fix.timestamp))
+                }
+            }
+        }
+        feed(.tick(date: date))
         let total: Int = fetchPlaces().count
         if total > RegionSelection.maxRegions {
             let last: Date = lastRefreshDate ?? Date.distantPast
@@ -560,8 +572,9 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
 
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let now: Date = Date()
+        let fix = recentFix(from: manager, now: now)
         Task { @MainActor [weak self] in
-            self?.handleLocationUpdate(date: now)
+            self?.handleLocationUpdate(date: now, fix: fix)
         }
     }
 

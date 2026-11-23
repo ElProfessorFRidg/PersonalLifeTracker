@@ -12,6 +12,7 @@ struct LieuxView: View {
     @Query(sort: \Place.name) private var places: [Place]
     @AppStorage("plt.discovery.automaticMapsLookup") private var automaticMapsLookup = false
     @State private var showsAdd = false
+    @State private var configureCurrentWorkplace = false
     @State private var permissions = PermissionRequester()
     @State private var isRequestingLocation = false
     @State private var locationDenied = false
@@ -31,6 +32,14 @@ struct LieuxView: View {
                           actionTitle: "Ouvrir les réglages iOS",
                           action: openSettings)
             }
+            if !places.contains(where: { $0.type == .taf || ($0.type == .courses && $0.alsoWorksHere) }) {
+                PLTBanner(kind: .info, title: "Configure ton lieu de travail",
+                          message: "Si tu y es, utilise ta position et vérifie l’épingle. Tu peux l’enregistrer dès ton premier service.",
+                          actionTitle: "Enregistrer mon travail ici") {
+                    configureCurrentWorkplace = true
+                    showsAdd = true
+                }
+            }
             if discoveryActive {
                 discoverySection(suggestions)
             }
@@ -40,6 +49,7 @@ struct LieuxView: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    configureCurrentWorkplace = false
                     showsAdd = true
                 } label: {
                     Image(systemName: "plus")
@@ -49,7 +59,7 @@ struct LieuxView: View {
             }
         }
         .sheet(isPresented: $showsAdd) {
-            LieuAjoutView()
+            LieuAjoutView(locateOnOpen: configureCurrentWorkplace, initialType: configureCurrentWorkplace ? .taf : nil)
         }
         .sheet(item: $selectedSuggestion) { candidate in
             DiscoveredPlaceCard(candidate: candidate, discovery: discovery)
@@ -177,7 +187,10 @@ struct LieuxView: View {
                                   title: "Aucun lieu enregistré",
                                   message: "Ajoute un lieu de travail, de cours ou de sortie pour le retrouver ici.",
                                   actionTitle: "Ajouter un lieu",
-                                  action: { showsAdd = true })
+                                  action: {
+                                      configureCurrentWorkplace = false
+                                      showsAdd = true
+                                  })
                 }
             } else {
                 PLTListGroup {

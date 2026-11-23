@@ -36,3 +36,9 @@ La clé de stockage des suggestions et le format historique des dates d’arriv�
 Le regroupement tient compte de la précision des deux relevés, dans un rayon maximal de 85 m. Deux positions précises gardent un rayon plus étroit, et une attribution ambiguë entre deux lieux est écartée. Un départ moins précis peut compléter une arrivée précise si les horaires et lieux désignent un seul passage connu. La fiche se base alors sur la position de l’arrivée. L’écran Lieux indique aussi quand iOS a livré une arrivée récente et que le départ est encore absent.
 
 Les anciens passages de journée sans départ peuvent compléter les jours de visite connus pour atteindre trois jours distincts et suggérer « Taf possible ». Seules les durées réellement connues peuvent justifier la mention de deux heures. Un passage récent de durée connue inférieure à deux heures ne complète pas ce seuil.
+
+## Première utilisation et mouvements à l’intérieur
+
+L’écran Lieux peut préremplir un nouveau lieu de travail avec la position actuelle après une action explicite. Le nom, la position et la catégorie restent à enregistrer. Un lieu confirmé fonctionne sans historique. Un créneau de travail daté de la semaine affichée peut ouvrir une saisie manuelle préremplie s’il est terminé depuis la veille, récent et sans session qui se chevauche. Les congés saisis et jours fériés sont exclus. Ce contrôle en Planning ne met pas en œuvre les notifications, le suivi des créneaux partiellement renseignés ou l’apprentissage de la section 86.
+
+Les commerces à double usage ont maintenant le même délai de grâce de trois minutes que les lieux de travail. Une nouvelle position précise clairement à l’intérieur de la zone peut annuler le départ en attente, même sans deuxième événement de région. Une réelle sortie conserve son horodatage initial. Les positions intermédiaires et le mouvement à pied ne sont pas enregistrés comme historique. Aucune permission de mouvement n’est demandée.
