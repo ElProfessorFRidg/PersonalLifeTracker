@@ -11,6 +11,7 @@ struct OnboardingProgressBar: View {
             ForEach(0..<max(total, 1), id: \.self) { index in
                 Capsule()
                     .fill(index < number ? palette.accent : palette.fill)
+                    .opacity(index == number - 1 ? 0.55 : 1)
                     .frame(height: 4)
             }
         }
@@ -31,10 +32,12 @@ struct OnboardingHero: View {
     @Environment(\.palette) private var palette
     let symbol: String
     let kind: Kind
+    let isLarge: Bool
 
-    init(symbol: String, kind: Kind = .accent) {
+    init(symbol: String, kind: Kind = .accent, isLarge: Bool = false) {
         self.symbol = symbol
         self.kind = kind
+        self.isLarge = isLarge
     }
 
     private var foreground: Color {
@@ -56,9 +59,9 @@ struct OnboardingHero: View {
 
     var body: some View {
         Image(systemName: symbol)
-            .font(.title)
+            .font(isLarge ? .largeTitle : .title)
             .foregroundStyle(foreground)
-            .frame(width: 64, height: 64)
+            .frame(width: isLarge ? 88 : 64, height: isLarge ? 88 : 64)
             .background(background, in: Circle())
             .accessibilityHidden(true)
     }
@@ -69,18 +72,27 @@ struct OnboardingTitle: View {
     @Environment(\.palette) private var palette
     let title: String
     let lead: String
+    let centered: Bool
+
+    init(title: String, lead: String, centered: Bool = false) {
+        self.title = title
+        self.lead = lead
+        self.centered = centered
+    }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+        VStack(alignment: centered ? .center : .leading, spacing: Theme.Spacing.s) {
             Text(title)
-                .font(.largeTitle.weight(.bold))
+                .font(.title.weight(.bold))
                 .foregroundStyle(palette.textPrimary)
+                .multilineTextAlignment(centered ? .center : .leading)
                 .accessibilityAddTraits(.isHeader)
             Text(lead)
                 .font(.body)
                 .foregroundStyle(palette.textSecondary)
+                .multilineTextAlignment(centered ? .center : .leading)
         }
-        .frame(maxWidth: .infinity, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: centered ? .center : .leading)
     }
 }
 
@@ -94,13 +106,14 @@ struct OnboardingPoint: View {
     var body: some View {
         HStack(alignment: .top, spacing: Theme.Spacing.m) {
             Image(systemName: symbol)
-                .font(.body.weight(.semibold))
+                .font(.subheadline.weight(.semibold))
                 .foregroundStyle(palette.accent)
-                .frame(width: 28)
+                .frame(width: 36, height: 36)
+                .background(palette.accentSoft, in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
                 Text(title)
-                    .font(.headline)
+                    .font(.body.weight(.semibold))
                     .foregroundStyle(palette.textPrimary)
                 Text(detail)
                     .font(.subheadline)

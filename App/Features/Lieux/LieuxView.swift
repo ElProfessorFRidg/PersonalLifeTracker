@@ -24,13 +24,23 @@ struct LieuxView: View {
         let suggestions = discoveryActive ? discovery.suggestions(excluding: places) : []
         let lookupIDs = automaticMapsLookup ? suggestions.map(\.id).sorted { $0.uuidString < $1.uuidString } : []
 
-        PLTScreen(title: "Lieux") {
+        PLTScreen(title: "Lieux", hidesNavigationBar: true) {
+            PLTRootHeader(eyebrow: headerEyebrow, title: "Lieux") {
+                PLTIconButton(systemName: "plus", label: "Ajouter un lieu") {
+                    configureCurrentWorkplace = false
+                    showsAdd = true
+                }
+            }
             if locationDenied {
                 PLTBanner(kind: .error,
                           title: "Localisation désactivée",
                           message: "Réactive la localisation pour détecter tes arrivées dans les lieux enregistrés et trouver de nouveaux lieux.",
                           actionTitle: "Ouvrir les réglages iOS",
                           action: openSettings)
+            }
+            savedPlacesSection
+            if !places.isEmpty {
+                howItCountsSection
             }
             if !places.contains(where: { $0.type == .taf || ($0.type == .courses && $0.alsoWorksHere) }) {
                 PLTBanner(kind: .info, title: "Configure ton lieu de travail",
@@ -43,21 +53,8 @@ struct LieuxView: View {
             if discoveryActive {
                 discoverySection(suggestions)
             }
-            savedPlacesSection
         }
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.22), value: suggestions.map(\.id))
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button {
-                    configureCurrentWorkplace = false
-                    showsAdd = true
-                } label: {
-                    Image(systemName: "plus")
-                        .frame(minWidth: 44, minHeight: 44)
-                }
-                .accessibilityLabel("Ajouter un lieu")
-            }
-        }
         .sheet(isPresented: $showsAdd) {
             LieuAjoutView(locateOnOpen: configureCurrentWorkplace, initialType: configureCurrentWorkplace ? .taf : nil)
         }
@@ -178,14 +175,18 @@ struct LieuxView: View {
                       action: { selectedSuggestion = candidate })
     }
 
+    private var headerEyebrow: String {
+        if places.isEmpty { return "Aucun lieu" }
+        return places.count == 1 ? "1 lieu" : "\(places.count) lieux"
+    }
+
     private var savedPlacesSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Tes lieux")
             if places.isEmpty {
                 PLTCard {
                     PLTEmptyState(symbol: "mappin.and.ellipse",
-                                  title: "Aucun lieu enregistré",
-                                  message: "Ajoute un lieu de travail, de cours ou de sortie pour le retrouver ici.",
+                                  title: "Aucun lieu pour l'instant.",
+                                  message: "Ajoute ton taf ou ta fac. Dès que t'y es, je note tes heures tout seul. Tout reste sur ton tel.",
                                   actionTitle: "Ajouter un lieu",
                                   action: {
                                       configureCurrentWorkplace = false
@@ -193,6 +194,7 @@ struct LieuxView: View {
                                   })
                 }
             } else {
+                PLTSectionHeader(title: "Tes lieux")
                 PLTListGroup {
                     ForEach(places) { place in
                         NavigationLink {
@@ -208,17 +210,35 @@ struct LieuxView: View {
                         .buttonStyle(.plain)
                     }
                 }
+                Text("Touche un lieu pour voir ses sessions et régler son nom, son rayon et son type.")
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
+            }
+        }
+    }
+
+    private var howItCountsSection: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            PLTSectionHeader(title: "Comment ça compte")
+            PLTCard {
+                HStack(spacing: Theme.Spacing.s) {
+                    PLTChip("Taf", kind: .work)
+                    PLTChip("Cours", kind: .study)
+                    PLTChip("Courses", kind: .errand)
+                }
+                Text("Taf et cours comptent dans tes heures. Les courses sont notées mais jamais comptées, pour pas gonfler ta paie par erreur.")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.textSecondary)
             }
         }
     }
 
     private func subtitle(for place: Place) -> String {
         let category = place.alsoWorksHere && place.type == .courses ? "Courses et travail" : place.type.title
-        let location = place.address.isEmpty ? nil : place.address
-        let last = place.sessions.map(\.startDate).max().map {
-            PlaceFormat.lastVisit($0, now: Date(), calendar: .current)
-        }
-        return [category, location, last].compactMap { $0 }.joined(separator: "\n")
+        let notCounted = place.type == .courses && !place.alsoWorksHere ? ", pas compté" : ""
+        let first = "\(category), rayon \(Int(place.radius.rounded())) m\(notCounted)"
+        let last = PlaceFormat.lastVisit(place.sessions.map(\.startDate).max(), now: Date(), calendar: .current)
+        return first + "\n" + last
     }
 
     private func requestLocation() {
