@@ -90,11 +90,14 @@ struct SessionAjoutView: View {
                               message: "La session n'a pas été enregistrée. Réessaie ?")
                 }
                 placeSection
-                activitySection
                 whenSection
                 Button("Enregistrer la session") { save() }
                     .buttonStyle(.pltPrimary)
                     .disabled(!currentErrors.isEmpty)
+                Button("Annuler") { dismiss() }
+                    .font(.headline)
+                    .foregroundStyle(palette.accent)
+                    .frame(maxWidth: .infinity, minHeight: 44)
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -109,49 +112,57 @@ struct SessionAjoutView: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "C'était où et quoi ?")
             PLTListGroup {
-                PLTRow(symbol: "mappin.slash",
-                       tone: .neutral,
-                       title: "Aucun lieu",
-                       value: selectedPlaceID == nil ? "Choisi" : nil,
-                       showsSeparator: !places.isEmpty,
-                       action: { selectedPlaceID = nil })
+                PLTRadioRow(symbol: "mappin.slash",
+                            tone: .neutral,
+                            title: "Aucun lieu",
+                            selected: selectedPlaceID == nil,
+                            showsSeparator: !places.isEmpty,
+                            action: { selectedPlaceID = nil })
                 ForEach(places) { (place: Place) in
-                    PLTRow(symbol: place.type.symbolName,
-                           tone: place.type.tone,
-                           title: place.name,
-                           subtitle: place.type.title,
-                           value: selectedPlaceID == place.uid ? "Choisi" : nil,
-                           action: {
-                               selectedPlaceID = place.uid
-                               activity = place.type.defaultActivity
-                           })
+                    PLTRadioRow(symbol: place.type.symbolName,
+                                tone: place.type.tone,
+                                title: place.name,
+                                subtitle: place.type.title,
+                                selected: selectedPlaceID == place.uid,
+                                showsSeparator: place.id != places.last?.id,
+                                action: {
+                                    selectedPlaceID = place.uid
+                                    activity = place.type.defaultActivity
+                                })
                 }
             }
+            activitySection
         }
+    }
+
+    private var typeChoices: [ActivityType] {
+        let list: [ActivityType] = [.work, .education, .shopping]
+        return list
     }
 
     private var activitySection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Type")
-            PLTCard {
-                HStack {
-                    Text("Type")
-                        .font(.body)
-                        .foregroundStyle(palette.textPrimary)
-                    Spacer(minLength: Theme.Spacing.s)
-                    Picker("Type", selection: $activity) {
-                        ForEach(ActivityType.allCases) { (type: ActivityType) in
-                            Text(type.title).tag(type)
-                        }
-                    }
-                    .pickerStyle(.menu)
-                    .frame(minHeight: 44)
+            Text("Type")
+                .font(.subheadline.weight(.semibold))
+                .foregroundStyle(palette.textPrimary)
+                .padding(.top, Theme.Spacing.xs)
+            Picker("Type", selection: $activity) {
+                ForEach(typeChoices) { (type: ActivityType) in
+                    Text(type.title).tag(type)
                 }
             }
-            Text("Préchoisi selon le lieu. Les courses sont notées mais pas comptées dans tes heures.")
+            .pickerStyle(.segmented)
+            .frame(minHeight: 44)
+            Text("Préchoisi selon le lieu. Les courses sont notées mais pas comptées.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
         }
+    }
+
+    private var durationText: String {
+        let seconds: Int = Int(endDate.timeIntervalSince(startDate))
+        if seconds <= 0 { return "à corriger" }
+        return Formatting.duration(seconds: seconds)
     }
 
     private var whenSection: some View {
@@ -170,6 +181,9 @@ struct SessionAjoutView: View {
             Text("Tu peux entrer l'heure exacte. J'applique les heures pleines après, avec toi si c'est dans la zone de doute.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
+            Text("Durée : \(durationText)")
+                .font(.body.monospacedDigit())
+                .foregroundStyle(palette.textPrimary)
         }
     }
 

@@ -61,11 +61,13 @@ struct SessionsView: View {
     var body: some View {
         PLTScreen(title: "Sessions") {
             if sessions.isEmpty {
-                PLTEmptyState(symbol: "clock",
-                              title: "Aucune session pour l'instant.",
-                              message: "Tes sessions de taf, de cours et de courses apparaîtront ici. Tu peux aussi en ajouter une à la main.",
-                              actionTitle: "Ajouter une session",
-                              action: { showAdd = true })
+                PLTCard {
+                    PLTEmptyState(symbol: "clock",
+                                  title: "Aucune session pour l'instant.",
+                                  message: "Dès que t'arrives à un de tes lieux, ta session apparaît ici. Tu peux aussi en ajouter une à la main.",
+                                  actionTitle: "Ajouter une session",
+                                  action: { showAdd = true })
+                }
             } else {
                 filterBar
                 listContent
@@ -89,30 +91,48 @@ struct SessionsView: View {
 
     // MARK: Filtres
 
-    private var filterBar: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Theme.Spacing.s) {
-                ForEach(SessionFilter.allCases) { f in
-                    filterChip(f)
-                }
-            }
-        }
+    private var segmentFilters: [SessionFilter] {
+        let list: [SessionFilter] = [.all, .work, .education, .shopping]
+        return list
     }
 
-    private func filterChip(_ f: SessionFilter) -> some View {
-        let selected = (filter == f)
-        return Button {
-            filter = f
-        } label: {
-            Text(chipTitle(f))
-                .font(.subheadline.weight(.semibold))
-                .foregroundStyle(selected ? palette.accentOn : palette.textPrimary)
-                .padding(.horizontal, Theme.Spacing.m)
-                .frame(minHeight: 44)
-                .background(selected ? palette.accent : palette.fill, in: Capsule())
+    private var visibleCount: Int {
+        return SessionRules.filter(items, by: filter).count
+    }
+
+    private var filterBar: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            Picker("Filtrer par type", selection: $filter) {
+                ForEach(segmentFilters) { (f: SessionFilter) in
+                    Text(f.title).tag(f)
+                }
+            }
+            .pickerStyle(.segmented)
+            .frame(minHeight: 44)
+            HStack {
+                Button {
+                    filter = (filter == .toConfirm) ? .all : .toConfirm
+                } label: {
+                    let selected: Bool = (filter == .toConfirm)
+                    Text(chipTitle(.toConfirm))
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(selected ? palette.accent : palette.textSecondary)
+                        .padding(.horizontal, Theme.Spacing.m)
+                        .frame(minHeight: 44)
+                        .background(selected ? palette.accentSoft : palette.surface, in: Capsule())
+                        .overlay {
+                            Capsule().strokeBorder(selected ? palette.accent : palette.textSecondary,
+                                                   style: StrokeStyle(lineWidth: 1, dash: selected ? [] : [3, 2]))
+                        }
+                }
+                .buttonStyle(.plain)
+                .accessibilityAddTraits(filter == .toConfirm ? AccessibilityTraits.isSelected : AccessibilityTraits())
+                Spacer(minLength: Theme.Spacing.s)
+                Text(visibleCount > 1 ? "\(visibleCount) sessions" : "\(visibleCount) session")
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
+            }
         }
-        .buttonStyle(.plain)
-        .accessibilityAddTraits(selected ? AccessibilityTraits.isSelected : AccessibilityTraits())
     }
 
     // MARK: Liste
@@ -148,6 +168,9 @@ struct SessionsView: View {
                     }
                 }
             }
+            Text("Les courses sont notées mais jamais comptées dans tes heures.")
+                .font(.footnote)
+                .foregroundStyle(palette.textSecondary)
         }
     }
 }
@@ -170,24 +193,26 @@ private struct SessionRowView: View {
                 .background(session.activity.tone.soft(palette),
                             in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
                 .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
-                Text(SessionDisplay.title(session))
+            VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                Text(session.activity.title)
                     .font(.body)
                     .foregroundStyle(palette.textPrimary)
-                Text(SessionDisplay.rangeText(session))
+                Text(subtitleText)
                     .font(.subheadline.monospacedDigit())
                     .foregroundStyle(palette.textSecondary)
-                HStack(spacing: Theme.Spacing.xs) {
-                    PLTChip(session.activity.title, kind: session.activity.chipKind)
-                    if needs {
-                        PLTChip("À confirmer", kind: .doubt)
-                    }
+                if needs {
+                    PLTChip("À confirmer", kind: .doubt)
+                        .padding(.top, Theme.Spacing.xxs)
                 }
             }
             Spacer(minLength: Theme.Spacing.s)
-            Text(duration)
-                .font(.body.monospacedDigit())
-                .foregroundStyle(palette.textPrimary)
+            if session.isOngoing {
+                PLTChip("En cours", kind: session.activity.chipKind)
+            } else {
+                Text(duration)
+                    .font(.body.monospacedDigit())
+                    .foregroundStyle(palette.textPrimary)
+            }
             Image(systemName: "chevron.right")
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(palette.textTertiary)
@@ -205,6 +230,18 @@ private struct SessionRowView: View {
         }
         .accessibilityElement(children: .combine)
         .accessibilityLabel(accessibilityText(needs: needs, duration: duration))
+    }
+
+    /// "Supérette du Canal, 17:56 à 20:38" ou "Marché du Canal, 12:20 à 12:45. Pas compté."
+    private var subtitleText: String {
+        let range: String = SessionDisplay.rangeText(session)
+        let base: String
+        if let place = session.place {
+            base = "\(place.name), \(range)"
+        } else {
+            base = range
+        }
+        return session.activity == .shopping ? base + ". Pas compté." : base
     }
 
     private func accessibilityText(needs: Bool, duration: String) -> String {

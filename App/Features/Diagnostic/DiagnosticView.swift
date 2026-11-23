@@ -142,12 +142,13 @@ struct DiagnosticView: View {
 
     private func checkRow(_ check: DiagCheck, isLast: Bool) -> some View {
         VStack(alignment: .leading, spacing: 0) {
-            PLTRow(symbol: symbol(for: check),
-                   tone: tone(for: check.status),
-                   title: check.title,
-                   subtitle: check.detail,
-                   value: check.status.title,
-                   showsSeparator: false)
+            StatusRow(symbol: symbol(for: check),
+                      title: check.title,
+                      subtitle: check.detail,
+                      statusSymbol: check.status == .ok ? "checkmark" : "exclamationmark.triangle.fill",
+                      statusText: check.status.title,
+                      level: statusLevel(check.status),
+                      showsSeparator: false)
             .accessibilityLabel("\(check.title), \(check.status.title). \(check.detail)")
             if let fixTitle = check.fixTitle, check.fix != .none {
                 Button(fixTitle) { performFix(check.fix) }
@@ -161,6 +162,14 @@ struct DiagnosticView: View {
                     .frame(height: 0.5)
                     .padding(.leading, Theme.Spacing.m)
             }
+        }
+    }
+
+    private func statusLevel(_ status: DiagStatus) -> StatusLevel {
+        switch status {
+        case .ok: return .ok
+        case .warning: return .warn
+        case .blocking: return .error
         }
     }
 

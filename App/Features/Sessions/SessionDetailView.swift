@@ -37,7 +37,7 @@ struct SessionDetailView: View {
 
     private var content: some View {
         let now = Date()
-        return PLTScreen(title: session.activity.title) {
+        return PLTScreen(title: "Session") {
             headerCard(now: now)
             if session.hasUnresolvedDoubt {
                 doubtBanner
@@ -182,11 +182,44 @@ struct SessionDetailView: View {
     private var editSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Corriger")
-            PLTCard {
-                HStack {
-                    Text("Type")
-                        .font(.body)
-                        .foregroundStyle(palette.textPrimary)
+            PLTListGroup {
+                PLTRow(symbol: "clock",
+                       tone: .accent,
+                       title: "Changer l'arrivée",
+                       subtitle: "Tu gardes l'heure détectée à côté",
+                       showsChevron: true,
+                       action: { editedBound = .start })
+                if !session.isOngoing {
+                    PLTRow(symbol: "clock",
+                           tone: .accent,
+                           title: "Changer le départ",
+                           subtitle: "Tu gardes l'heure détectée à côté",
+                           showsChevron: true,
+                           action: { editedBound = .end })
+                }
+                if session.hasUnresolvedDoubt {
+                    PLTRow(symbol: "questionmark.circle",
+                           tone: .accent,
+                           title: "Choisir l'heure pleine",
+                           subtitle: "Zone de doute à régler",
+                           showsChevron: true,
+                           action: { showDoute = true })
+                }
+                HStack(spacing: Theme.Spacing.m) {
+                    Image(systemName: "arrow.triangle.2.circlepath")
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(palette.accent)
+                        .frame(width: 36, height: 36)
+                        .background(palette.accentSoft, in: RoundedRectangle(cornerRadius: Theme.Radius.small, style: .continuous))
+                        .accessibilityHidden(true)
+                    VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                        Text("Changer le type")
+                            .font(.body)
+                            .foregroundStyle(palette.textPrimary)
+                        Text("Taf, cours ou courses")
+                            .font(.subheadline)
+                            .foregroundStyle(palette.textSecondary)
+                    }
                     Spacer(minLength: Theme.Spacing.s)
                     Picker("Type", selection: activityBinding) {
                         ForEach(ActivityType.allCases) { (type: ActivityType) in
@@ -196,12 +229,9 @@ struct SessionDetailView: View {
                     .pickerStyle(.menu)
                     .frame(minHeight: 44)
                 }
-            }
-            Button("Modifier l'arrivée") { editedBound = .start }
-                .buttonStyle(.pltSecondary)
-            if !session.isOngoing {
-                Button("Modifier le départ") { editedBound = .end }
-                    .buttonStyle(.pltSecondary)
+                .padding(.horizontal, Theme.Spacing.m)
+                .padding(.vertical, Theme.Spacing.s)
+                .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
             }
         }
     }
@@ -255,8 +285,14 @@ struct SessionDetailView: View {
     }
 
     private var deleteSection: some View {
-        Button("Supprimer cette session") { showDeleteDialog = true }
-            .buttonStyle(.pltDestructive)
+        PLTListGroup {
+            PLTRow(symbol: "trash",
+                   tone: .danger,
+                   title: "Supprimer cette session",
+                   subtitle: undoCenter?.isEnabled == true ? "Tu peux annuler juste après" : nil,
+                   showsSeparator: false,
+                   action: { showDeleteDialog = true })
+        }
     }
 
     // MARK: Feuille de correction d'une borne

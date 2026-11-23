@@ -55,9 +55,20 @@ struct DouteView: View {
                     if !endOptions.isEmpty, let end = session.endDate {
                         boundSection(kind: .end, options: endOptions, exact: end, picked: pickedEnd)
                     }
-                    Text("L'heure exacte reste gardée et affichée à côté. Tu choisis seulement l'heure pleine qui compte pour tes totaux.")
-                        .font(.footnote)
-                        .foregroundStyle(palette.textSecondary)
+                    PLTCard {
+                        HStack {
+                            Text("L'heure exacte reste gardée")
+                                .font(.headline)
+                                .foregroundStyle(palette.textPrimary)
+                            Spacer(minLength: Theme.Spacing.s)
+                            Image(systemName: "lock")
+                                .foregroundStyle(palette.textSecondary)
+                                .accessibilityHidden(true)
+                        }
+                        Text("L'heure exacte reste gardée et affichée à côté. Tu choisis seulement l'heure pleine qui compte pour tes totaux.")
+                            .font(.subheadline)
+                            .foregroundStyle(palette.textSecondary)
+                    }
                     Button("Enregistrer mon choix") { save() }
                         .buttonStyle(.pltPrimary)
                         .disabled(!canSave)
@@ -86,21 +97,31 @@ struct DouteView: View {
         let second = options[options.count - 1]
         let verb = (kind == .start) ? "Arrivée" : "Départ"
         let title = "\(verb) à \(exactClock) : \(hourLabel(first.hour)) ou \(hourLabel(second.hour)) ?"
-        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTChip("Zone de doute", kind: .doubt)
-            Text(title)
-                .font(.title3.weight(.semibold))
-                .foregroundStyle(palette.textPrimary)
-                .accessibilityAddTraits(.isHeader)
-            Text("Ça tombe entre :15 et :45, trop loin d'une heure pleine pour que je devine. C'est toi qui choisis.")
-                .font(.subheadline)
-                .foregroundStyle(palette.textSecondary)
-            ForEach(options, id: \.hour) { (option: DoubtOption) in
-                optionRow(kind: kind, option: option, selected: picked == option.hour)
+        let placeTitle: String = session.place.map { "\(session.activity.title), \($0.name)" } ?? session.activity.title
+        return VStack(alignment: .leading, spacing: Theme.Spacing.l) {
+            PLTCard(isNow: true) {
+                Text("ZONE DE DOUTE")
+                    .font(.footnote.weight(.semibold))
+                    .tracking(0.6)
+                    .accessibilityHidden(true)
+                Text(title)
+                    .font(.title3.weight(.semibold))
+                    .accessibilityAddTraits(.isHeader)
+                Text("Ça tombe entre :15 et :45, trop loin d'une heure pleine pour que je devine. C'est toi qui choisis.")
+                    .font(.subheadline)
             }
-            Text("Exact : \(SessionRules.clockWithSeconds(exact, calendar: cal)), gardé tel quel.")
-                .font(.footnote.monospacedDigit())
-                .foregroundStyle(palette.textSecondary)
+            VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+                PLTSectionHeader(title: placeTitle)
+                PLTListGroup {
+                    ForEach(options, id: \.hour) { (option: DoubtOption) in
+                        optionRow(kind: kind, option: option, selected: picked == option.hour,
+                                  isLast: option.hour == options[options.count - 1].hour)
+                    }
+                }
+                Text("Exact : \(SessionRules.clockWithSeconds(exact, calendar: cal)), gardé tel quel.")
+                    .font(.footnote.monospacedDigit())
+                    .foregroundStyle(palette.textSecondary)
+            }
         }
     }
 
@@ -110,49 +131,24 @@ struct DouteView: View {
         return "\(subject) \(option.minutesApart) min \(side)"
     }
 
-    private func optionRow(kind: SessionBoundKind, option: DoubtOption, selected: Bool) -> some View {
+    private func optionRow(kind: SessionBoundKind, option: DoubtOption, selected: Bool, isLast: Bool) -> some View {
         let cal = session.calendar
         let clock = Formatting.clock(option.hour, calendar: cal)
         let position = option.hourIsBeforeExact ? "heure pleine avant" : "heure pleine après"
         let duration = Formatting.duration(seconds: option.resultingSeconds)
-        return Button {
-            switch kind {
-            case .start: pickedStart = option.hour
-            case .end: pickedEnd = option.hour
-            }
-        } label: {
-            HStack(spacing: Theme.Spacing.m) {
-                Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                    .font(.title3)
-                    .foregroundStyle(selected ? palette.accent : palette.textTertiary)
-                    .accessibilityHidden(true)
-                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                    Text("\(clock), \(position)")
-                        .font(.body.monospacedDigit())
-                        .foregroundStyle(palette.textPrimary)
-                    Text(relationText(kind: kind, option: option))
-                        .font(.subheadline)
-                        .foregroundStyle(palette.textSecondary)
-                }
-                Spacer(minLength: Theme.Spacing.s)
-                Text(duration)
-                    .font(.title3.weight(.semibold).monospacedDigit())
-                    .foregroundStyle(palette.textPrimary)
-            }
-            .padding(Theme.Spacing.m)
-            .frame(maxWidth: .infinity, minHeight: 44, alignment: .leading)
-            .background(selected ? palette.accentSoft : palette.surface,
-                        in: RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
-            .overlay {
-                RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous)
-                    .strokeBorder(selected ? palette.accent : Color.clear, lineWidth: 2)
-            }
-            .contentShape(Rectangle())
-        }
-        .buttonStyle(.plain)
-        .accessibilityElement(children: .ignore)
-        .accessibilityLabel("\(clock), \(position), \(relationText(kind: kind, option: option)), durée \(duration)")
-        .accessibilityAddTraits(selected ? AccessibilityTraits.isSelected : AccessibilityTraits())
+        let relation = relationText(kind: kind, option: option)
+        return PLTRadioRow(title: "\(clock), \(position)",
+                           subtitle: relation,
+                           value: duration,
+                           selected: selected,
+                           showsSeparator: !isLast,
+                           accessibilityText: "\(clock), \(position), \(relation), durée \(duration)",
+                           action: {
+                               switch kind {
+                               case .start: pickedStart = option.hour
+                               case .end: pickedEnd = option.hour
+                               }
+                           })
     }
 
     // MARK: Enregistrement
