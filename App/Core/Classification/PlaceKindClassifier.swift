@@ -343,14 +343,8 @@ enum PlaceKindClassifier {
             rawTime[type] = raw
             let capped: Double = type == .domicile ? min(raw, 100) : min(raw, timeOnlyCap)
             if capped <= 0 { continue }
-            let reasons: [PlaceKindReason] = time.sortedReasons(for: type)
-            if let strongest = reasons.first {
-                total.add(type, capped - strongest.points, strongest.text)
-                total.points[type] = capped
-                var list: [PlaceKindReason] = [strongest]
-                list.append(contentsOf: reasons.dropFirst())
-                total.reasons[type] = list
-            }
+            total.points[type] = capped
+            total.reasons[type] = time.sortedReasons(for: type)
         }
 
         var text: PlaceKindTally = PlaceKindTally()
@@ -365,7 +359,7 @@ enum PlaceKindClassifier {
 
         var user: PlaceKindTally = PlaceKindTally()
         nearbyEvidence(&user, hints: signals.nearby)
-        let override: PlaceType? = lessonEvidence(&user, signals: signals, patternKey: pattern.key)
+        let forcedType: PlaceType? = lessonEvidence(&user, signals: signals, patternKey: pattern.key)
         for type in PlaceType.allCases {
             guard let value = user.points[type] else { continue }
             total.points[type] = (total.points[type] ?? 0) + value
@@ -378,7 +372,7 @@ enum PlaceKindClassifier {
         for type in PlaceType.allCases {
             scores[type] = min(100, max(0, total.points[type] ?? 0))
         }
-        if let forced = override {
+        if let forced = forcedType {
             for type in PlaceType.allCases {
                 if type == forced { scores[type] = 100 } else { scores[type] = min(scores[type] ?? 0, 35) }
             }
@@ -401,11 +395,11 @@ enum PlaceKindClassifier {
         var confidence: Int = Int((min(100, best.score) * factor).rounded())
         var leaning: PlaceType? = nil
         if best.score >= leaningAt && margin >= leaningMargin { leaning = best.type }
-        if override != nil { confidence = max(confidence, 95) }
+        if forcedType != nil { confidence = max(confidence, 95) }
 
         var conflict: String? = nil
-        if override == nil, let chosen = leaning {
-            conflict = conflictMessage(time: rawTime, text: text, leaning: chosen)
+        if forcedType == nil && best.score > 0 {
+            conflict = conflictMessage(time: rawTime, text: text, leaning: best.type)
             if conflict != nil { confidence = min(confidence, conflictConfidenceCap) }
         }
 
@@ -581,36 +575,36 @@ enum PlaceKindClassifier {
     fileprivate static func poiHit(raw: String?, category: PlaceType?) -> (type: PlaceType, weight: Double, text: String)? {
         if let raw = raw?.lowercased(), !raw.isEmpty {
             if raw.contains("university") || raw.contains("school") {
-                return (.cours, weightPoiSchool, "Plans indique une école ou une université à cet endroit")
+                return (type: PlaceType.cours, weight: weightPoiSchool, text: "Plans indique une école ou une université à cet endroit")
             }
             if raw.contains("library") {
-                return (.cours, weightPoiLibrary, "Plans indique une bibliothèque à cet endroit")
+                return (type: PlaceType.cours, weight: weightPoiLibrary, text: "Plans indique une bibliothèque à cet endroit")
             }
             if raw.contains("hospital") {
-                return (.taf, weightPoiHospital, "Plans indique un hôpital à cet endroit")
+                return (type: PlaceType.taf, weight: weightPoiHospital, text: "Plans indique un hôpital à cet endroit")
             }
             let errands: [String] = ["store", "foodmarket", "bakery", "pharmacy", "bank", "atm", "postoffice",
                                      "laundry", "gasstation", "evcharger"]
             for word in errands where raw.contains(word) {
-                return (.courses, weightPoiErrand, "Plans indique un commerce ou un service à cet endroit")
+                return (type: PlaceType.courses, weight: weightPoiErrand, text: "Plans indique un commerce ou un service à cet endroit")
             }
             let leisure: [String] = ["restaurant", "cafe", "nightlife", "brewery", "winery", "movietheater",
                                      "theater", "museum", "musicvenue"]
             for word in leisure where raw.contains(word) {
-                return (.sortie, weightPoiLeisure, "Plans indique un lieu de sortie à cet endroit")
+                return (type: PlaceType.sortie, weight: weightPoiLeisure, text: "Plans indique un lieu de sortie à cet endroit")
             }
             let sport: [String] = ["fitness", "stadium", "swimming", "tennis"]
             for word in sport where raw.contains(word) {
-                return (.sport, weightPoiSport, "Plans indique un lieu de sport à cet endroit")
+                return (type: PlaceType.sport, weight: weightPoiSport, text: "Plans indique un lieu de sport à cet endroit")
             }
         }
         // Contexte enregistré avant l'ajout de la catégorie brute : on garde la conversion d'alors.
         guard let category = category else { return nil }
         switch category {
-        case .cours: return (.cours, weightPoiSchool, "Plans indique une école ou une université à cet endroit")
-        case .courses: return (.courses, weightPoiErrand, "Plans indique un commerce ou un service à cet endroit")
-        case .sortie: return (.sortie, weightPoiLeisure, "Plans indique un lieu de sortie à cet endroit")
-        case .sport: return (.sport, weightPoiSport, "Plans indique un lieu de sport à cet endroit")
+        case .cours: return (type: PlaceType.cours, weight: weightPoiSchool, text: "Plans indique une école ou une université à cet endroit")
+        case .courses: return (type: PlaceType.courses, weight: weightPoiErrand, text: "Plans indique un commerce ou un service à cet endroit")
+        case .sortie: return (type: PlaceType.sortie, weight: weightPoiLeisure, text: "Plans indique un lieu de sortie à cet endroit")
+        case .sport: return (type: PlaceType.sport, weight: weightPoiSport, text: "Plans indique un lieu de sport à cet endroit")
         case .taf, .domicile, .autre: return nil
         }
     }

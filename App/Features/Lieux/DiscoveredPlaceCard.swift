@@ -1,9 +1,11 @@
 import SwiftUI
 import MapKit
+import SwiftData
 
 struct DiscoveredPlaceCard: View {
     let candidate: DiscoveredPlace
     let discovery: PlaceDiscovery
+    var contractPlaceUIDs: Set<UUID> = []
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.palette) private var palette
@@ -15,21 +17,21 @@ struct DiscoveredPlaceCard: View {
     @State private var lookupResult: Bool?
     @State private var showsVisits = false
     @State private var lookupAttempt = 0
+    @Query private var places: [Place]
 
     private var currentCandidate: DiscoveredPlace {
-        discovery.candidates.first(where: { $0.id == candidate.id }) ?? candidate
+        discovery.current(candidate)
     }
 
     var body: some View {
         let current = currentCandidate
-        let typeHint = discovery.recommendation(for: current)
+        let decision: PlaceKindDecision = discovery.identification(for: current, places: places,
+                                                                  contractPlaceUIDs: contractPlaceUIDs)
 
         NavigationStack {
             PLTScreen(title: "Vérifier le lieu") {
                 locationSection(current)
-                if let typeHint {
-                    suggestionSection(typeHint, venueType: current.context?.category)
-                }
+                identificationSection(decision, venueType: current.context?.category, current: current)
                 visitSection(current)
                 typeSection
                 if saveFailed {
@@ -40,7 +42,7 @@ struct DiscoveredPlaceCard: View {
                     .buttonStyle(.pltPrimary)
                     .disabled(type == nil)
                 Button("Ignorer ce lieu", role: .destructive) {
-                    discovery.dismiss(current.id)
+                    discovery.dismissSuggestion(current)
                     dismiss()
                 }
                 .font(.subheadline)
@@ -50,6 +52,11 @@ struct DiscoveredPlaceCard: View {
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Fermer") { dismiss() }
+                }
+            }
+            .onAppear {
+                if type == nil, decision.verdict == .confident, let guess = decision.leaning {
+                    type = guess
                 }
             }
             .task(id: lookupAttempt) {
@@ -115,30 +122,69 @@ struct DiscoveredPlaceCard: View {
         return "Latitude \(latitude), longitude \(longitude)"
     }
 
-    private func suggestionSection(_ recommendation: PlaceRecommendation, venueType: PlaceType?) -> some View {
-        PLTCard {
-            Label("\(recommendation.type.title) possible", systemImage: recommendation.type.symbolName)
-                .font(.headline)
-                .foregroundStyle(recommendation.type.tone.color(palette))
-            Text(recommendation.reason)
-                .font(.subheadline)
-                .foregroundStyle(palette.textSecondary)
-            if recommendation.type == .taf && venueType == .courses && !(type == .courses && alsoWorksHere) {
-                Button("Je travaille et je fais mes courses ici") {
-                    type = .courses
-                    alsoWorksHere = true
-                }
-                .font(.subheadline.weight(.semibold))
-                .frame(minHeight: 44)
+    private func identificationSection(_ decision: PlaceKindDecision, venueType: PlaceType?, current: DiscoveredPlace) -> some View {
+        let buildings: Int = current.mergedIDs?.count ?? 1
+        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            if buildings > 1 {
+                PLTBanner(kind: .info, title: "\(buildings) arrêts voisins réunis",
+                          message: "Ces arrêts sont à quelques dizaines de mètres les uns des autres. Je les compte comme un seul lieu, dont la zone couvre tous les bâtiments.")
             }
-            if type != recommendation.type {
-                Button("Choisir « \(recommendation.type.title) »") {
-                    type = recommendation.type
+            if decision.verdict == .confident, let guess = decision.leaning {
+                PLTCard {
+                    Label("\(guess.title) probable", systemImage: guess.symbolName)
+                        .font(.headline)
+                        .foregroundStyle(guess.tone.color(palette))
+                    Text(decision.statement)
+                        .font(.subheadline)
+                        .foregroundStyle(palette.textSecondary)
+                    if guess == .taf && venueType == .courses && !(type == .courses && alsoWorksHere) {
+                        Button("Je travaille et je fais mes courses ici") {
+                            type = .courses
+                            alsoWorksHere = true
+                        }
+                        .font(.subheadline.weight(.semibold))
+                        .frame(minHeight: 44)
+                    }
+                    if type != guess {
+                        Button("Choisir « \(guess.title) »") { type = guess }
+                            .font(.subheadline.weight(.semibold))
+                            .frame(minHeight: 44)
+                    }
                 }
-                .font(.subheadline.weight(.semibold))
-                .frame(minHeight: 44)
+            } else {
+                PLTCard {
+                    Label(decision.question, systemImage: "questionmark.circle")
+                        .font(.headline)
+                    Text(decision.explanation)
+                        .font(.subheadline)
+                        .foregroundStyle(palette.textSecondary)
+                    HStack(spacing: Theme.Spacing.s) {
+                        answerButton("Mon taf", isOn: type == .taf) { type = .taf; alsoWorksHere = false }
+                        answerButton("Mon école", isOn: type == .cours) { type = .cours; alsoWorksHere = false }
+                        answerButton("Autre", isOn: type != nil && type != .taf && type != .cours) {
+                            if type == .taf || type == .cours { type = nil }
+                        }
+                    }
+                    Text("Ta réponse m'aide à ne plus me tromper sur les lieux de ce genre.")
+                        .font(.footnote)
+                        .foregroundStyle(palette.textSecondary)
+                }
             }
         }
+    }
+
+    private func answerButton(_ title: String, isOn: Bool, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(.subheadline.weight(.semibold))
+                .frame(maxWidth: .infinity, minHeight: 44)
+                .foregroundStyle(isOn ? palette.accentOn : palette.accent)
+                .background(isOn ? palette.accent : palette.surface,
+                            in: RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(isOn ? .isSelected : [])
     }
 
     private func visitSection(_ current: DiscoveredPlace) -> some View {

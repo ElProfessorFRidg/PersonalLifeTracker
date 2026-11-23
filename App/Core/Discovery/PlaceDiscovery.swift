@@ -16,6 +16,7 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
     @ObservationIgnored private let manager = CLLocationManager()
     @ObservationIgnored private let defaults: UserDefaults
     @ObservationIgnored private let container: ModelContainer
+    @ObservationIgnored let kindStore: PlaceKindStore
     private var pending: [PendingPlaceVisit] = []
     @ObservationIgnored private var lookups: Set<UUID> = []
     private static let key = "plt.discovery.stops.v1"
@@ -24,6 +25,7 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
     init(container: ModelContainer, defaults: UserDefaults = .standard) {
         self.container = container
         self.defaults = defaults
+        self.kindStore = PlaceKindStore(defaults: defaults)
         super.init()
         do {
             if let data = defaults.data(forKey: Self.key) {
@@ -129,21 +131,101 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
         } catch { self.error = "Lecture des lieux enregistrés impossible." }
     }
 
+    /// Plan complet : suggestions regroupées (deux bâtiments voisins = une seule suggestion), propositions d'agrandir un lieu existant.
+    func suggestionPlan(excluding places: [Place], now: Date = Date()) -> PlaceSuggestionPlan {
+        let calendar: Calendar = Calendar.current
+        let snapshots: [PlaceSnapshot] = places.map { (p: Place) -> PlaceSnapshot in return p.snapshot }
+        return PlaceSuggestionMerge.plan(candidates: candidates, places: snapshots, now: now, calendar: calendar,
+                                         learnedDistance: kindStore.memory.learnedMergeDistance,
+                                         leaning: { (c: DiscoveredPlace) -> PlaceType? in
+                                             return PlaceKindClassifier.leaning(of: c, now: now, calendar: calendar)
+                                         })
+    }
+
     func suggestions(excluding places: [Place], now: Date = Date()) -> [DiscoveredPlace] {
-        let calendar = Calendar.current
-        return candidates.compactMap { candidate -> (place: DiscoveredPlace, home: Bool, count: Int, last: Date)? in
-            guard !candidate.dismissed,
-                  !places.contains(where: { isKnown(candidate.latitude, candidate.longitude, place: $0) }),
-                  PlaceDiscoveryRules.acceptsSuggestion(candidate, now: now, calendar: calendar) else { return nil }
-            let arrivals = PlaceDiscoveryRules.freshArrivals(candidate, now: now)
-            let home = PlaceDiscoveryRules.recommendation(candidate, now: now, calendar: calendar)?.type == .domicile
-            return (candidate, home, arrivals.count, arrivals.max() ?? .distantPast)
-        }.sorted {
-            if $0.home != $1.home { return !$0.home }
-            if $0.count != $1.count { return $0.count > $1.count }
-            if $0.last != $1.last { return $0.last > $1.last }
-            return $0.place.id.uuidString < $1.place.id.uuidString
-        }.map(\.place)
+        return suggestionPlan(excluding: places, now: now).suggestions.map { (i: PlaceSuggestionItem) -> DiscoveredPlace in
+            return i.suggestion
+        }
+    }
+
+    /// Version à jour d'une suggestion (recombine ses arrêts à partir de l'historique courant).
+    func current(_ suggestion: DiscoveredPlace) -> DiscoveredPlace {
+        let ids: [UUID] = suggestion.mergedIDs ?? [suggestion.id]
+        let members: [DiscoveredPlace] = candidates.filter { (c: DiscoveredPlace) -> Bool in return ids.contains(c.id) }
+        guard let combined = PlaceSuggestionMerge.combine(members) else { return suggestion }
+        return combined
+    }
+
+    /// Rayon qui couvre tous les bâtiments réunis dans la suggestion.
+    func suggestedRadius(for suggestion: DiscoveredPlace) -> Double {
+        let ids: [UUID] = suggestion.mergedIDs ?? [suggestion.id]
+        let members: [DiscoveredPlace] = candidates.filter { (c: DiscoveredPlace) -> Bool in return ids.contains(c.id) }
+        return PlaceSuggestionMerge.suggestedRadius(members: members, latitude: suggestion.latitude, longitude: suggestion.longitude)
+    }
+
+    /// Identification (type probable, question ou affirmation) d'une suggestion.
+    func identification(for suggestion: DiscoveredPlace, places: [Place], contractPlaceUIDs: Set<UUID>,
+                        now: Date = Date()) -> PlaceKindDecision {
+        let snapshots: [PlaceSnapshot] = places.map { (p: Place) -> PlaceSnapshot in return p.snapshot }
+        return PlaceKindClassifier.identify(suggestion, places: snapshots, contractPlaceUIDs: contractPlaceUIDs,
+                                            memory: kindStore.memory, now: now, calendar: Calendar.current)
+    }
+
+    /// Refus d'une suggestion : tous ses arrêts sont ignorés, et l'app retient ce qu'elle proposait.
+    func dismissSuggestion(_ suggestion: DiscoveredPlace) {
+        let ids: Set<UUID> = Set(suggestion.mergedIDs ?? [suggestion.id])
+        var changed: Bool = false
+        for index in candidates.indices where ids.contains(candidates[index].id) && !candidates[index].dismissed {
+            candidates[index].dismissed = true
+            changed = true
+        }
+        if changed { persist() }
+        let now: Date = Date()
+        let calendar: Calendar = Calendar.current
+        let decision: PlaceKindDecision = PlaceKindClassifier.identify(suggestion, places: [], contractPlaceUIDs: [],
+                                                                       memory: kindStore.memory, now: now, calendar: calendar)
+        kindStore.recordRefusal(key: "suggestion-" + suggestion.id.uuidString, latitude: suggestion.latitude,
+                                longitude: suggestion.longitude, suggested: decision.leaning,
+                                patternKey: decision.patternKey, now: now)
+    }
+
+    /// Marque des arrêts comme traités sans rien apprendre (lieu agrandi, couvert).
+    func markHandled(_ ids: [UUID]) {
+        var changed: Bool = false
+        for index in candidates.indices where ids.contains(candidates[index].id) && !candidates[index].dismissed {
+            candidates[index].dismissed = true
+            changed = true
+        }
+        if changed { persist() }
+    }
+
+    /// Fusionne pour de bon les arrêts en double dans l'historique (un seul arrêt par groupe). Renvoie le nombre d'arrêts retirés.
+    @discardableResult
+    func consolidateDuplicates(now: Date = Date()) -> Int {
+        let calendar: Calendar = Calendar.current
+        let groups: [[DiscoveredPlace]] = PlaceSuggestionMerge.group(
+            candidates, learnedDistance: kindStore.memory.learnedMergeDistance,
+            leaning: { (c: DiscoveredPlace) -> PlaceType? in
+                return PlaceKindClassifier.leaning(of: c, now: now, calendar: calendar)
+            })
+        var rebuilt: [DiscoveredPlace] = []
+        var removed: Int = 0
+        for members in groups {
+            if members.count > 1, var combined = PlaceSuggestionMerge.combine(members) {
+                combined.mergedIDs = nil
+                combined.arrivals = Array(combined.arrivals.suffix(60))
+                if let list = combined.visits { combined.visits = Array(list.suffix(60)) }
+                rebuilt.append(combined)
+                removed += members.count - 1
+            } else {
+                rebuilt.append(contentsOf: members)
+            }
+        }
+        if removed > 0 {
+            candidates = rebuilt
+            persist()
+        }
+        return removed
     }
 
     func hasRecentArrivalAwaitingDeparture(now: Date = Date()) -> Bool {
@@ -167,7 +249,8 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
 
     @discardableResult
     func enrich(_ candidate: DiscoveredPlace) async -> Bool {
-        guard let current = candidates.first(where: { $0.id == candidate.id && !$0.dismissed }) else { return false }
+        let current: DiscoveredPlace = self.current(candidate)
+        guard candidates.contains(where: { $0.id == current.id && !$0.dismissed }) else { return false }
         if current.context != nil { return true }
         guard lookups.insert(current.id).inserted else { return false }
         defer { lookups.remove(current.id) }
@@ -188,10 +271,7 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
     }
 
     func hasIgnoredSuggestions(excluding places: [Place], now: Date = Date()) -> Bool {
-        candidates.contains { candidate in
-            candidate.dismissed && PlaceDiscoveryRules.acceptsSuggestion(candidate, now: now, calendar: .current)
-                && !places.contains { isKnown(candidate.latitude, candidate.longitude, place: $0) }
-        }
+        return suggestionPlan(excluding: places, now: now).ignoredCount > 0
     }
 
     func restoreSuggestions() {
@@ -210,25 +290,32 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
 
     func confirm(_ candidate: DiscoveredPlace, type: PlaceType, name: String, alsoWorksHere: Bool = false) -> Bool {
         confirmationError = nil
-        guard let candidate = candidates.first(where: { $0.id == candidate.id }) else {
+        guard candidates.contains(where: { $0.id == candidate.id }) else {
             confirmationError = "Ce lieu n’est plus dans les suggestions."
             return false
         }
+        let merged: DiscoveredPlace = current(candidate)
+        let memberIDs: [UUID] = candidate.mergedIDs ?? [candidate.id]
+        let radius: Double = suggestedRadius(for: candidate)
         let context = container.mainContext
         do {
             let places = try context.fetch(FetchDescriptor<Place>())
-            if places.contains(where: { isKnown(candidate.latitude, candidate.longitude, place: $0) }) {
-                dismiss(candidate.id)
+            let snapshots: [PlaceSnapshot] = places.map { (p: Place) -> PlaceSnapshot in return p.snapshot }
+            let assessment: PlaceOverlapAssessment = PlaceSuggestionMerge.assess(
+                latitude: merged.latitude, longitude: merged.longitude, radius: radius, leaning: nil,
+                accuracy: PlaceSuggestionMerge.accuracy(of: merged), places: snapshots)
+            if assessment == .covered {
+                markHandled(memberIDs)
                 return true
             }
             let cleaned = PlaceRules.cleanedName(name)
-            let finalName = cleaned.isEmpty ? (candidate.context?.name ?? type.title) : cleaned
+            let finalName = cleaned.isEmpty ? (merged.context?.name ?? type.title) : cleaned
             if let issue = PlaceRules.nameIssue(finalName, existingNames: places.map(\.name)) {
                 confirmationError = issue.message
                 return false
             }
-            let place = Place(name: finalName, type: type, latitude: candidate.latitude, longitude: candidate.longitude,
-                              radius: PlaceRules.minRadius, address: candidate.context?.address ?? "",
+            let place = Place(name: finalName, type: type, latitude: merged.latitude, longitude: merged.longitude,
+                              radius: radius, address: merged.context?.address ?? "",
                               alsoWorksHere: type == .courses && alsoWorksHere)
             context.insert(place)
             do { try context.save() }
@@ -237,7 +324,14 @@ final class PlaceDiscovery: NSObject, CLLocationManagerDelegate {
                 confirmationError = "Le lieu n’a pas été enregistré. Réessaie."
                 return false
             }
-            dismiss(candidate.id)
+            let now: Date = Date()
+            let decision: PlaceKindDecision = PlaceKindClassifier.identify(
+                merged, places: snapshots, contractPlaceUIDs: [], memory: kindStore.memory,
+                now: now, calendar: Calendar.current)
+            kindStore.recordChoice(key: "suggestion-" + candidate.id.uuidString, latitude: merged.latitude,
+                                   longitude: merged.longitude, chosen: type, suggested: decision.leaning,
+                                   patternKey: decision.patternKey, now: now)
+            markHandled(memberIDs)
             return true
         } catch {
             confirmationError = "Lecture des lieux enregistrés impossible."

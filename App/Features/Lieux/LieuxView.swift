@@ -9,9 +9,14 @@ struct LieuxView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.modelContext) private var context
+    @Environment(UndoCenter.self) private var undoCenter: UndoCenter?
     @Query(sort: \Place.name) private var places: [Place]
+    @Query private var contracts: [Contract]
     @AppStorage("plt.discovery.automaticMapsLookup") private var automaticMapsLookup = false
     @State private var showsAdd = false
+    @State private var showsMerge = false
+    @State private var ignoredAuditIDs: Set<String> = PlaceAuditIgnore.load()
     @State private var configureCurrentWorkplace = false
     @State private var permissions = PermissionRequester()
     @State private var isRequestingLocation = false
@@ -21,7 +26,8 @@ struct LieuxView: View {
     var body: some View {
         let discovery = geofence.discovery
         let discoveryActive = modules.isActive("place_discovery")
-        let suggestions = discoveryActive ? discovery.suggestions(excluding: places) : []
+        let plan: PlaceSuggestionPlan = discoveryActive ? discovery.suggestionPlan(excluding: places) : PlaceSuggestionPlan()
+        let suggestions: [DiscoveredPlace] = plan.suggestions.map { (i: PlaceSuggestionItem) -> DiscoveredPlace in return i.suggestion }
         let lookupIDs = automaticMapsLookup ? suggestions.map(\.id).sorted { $0.uuidString < $1.uuidString } : []
 
         PLTScreen(title: "Lieux", hidesNavigationBar: true) {
@@ -38,6 +44,9 @@ struct LieuxView: View {
                           actionTitle: "Ouvrir les réglages iOS",
                           action: openSettings)
             }
+            if !auditProblems.isEmpty {
+                auditBanner(auditProblems)
+            }
             savedPlacesSection
             if !places.isEmpty {
                 howItCountsSection
@@ -51,15 +60,18 @@ struct LieuxView: View {
                 }
             }
             if discoveryActive {
-                discoverySection(suggestions)
+                discoverySection(suggestions, enlargements: plan.enlargements)
             }
         }
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.22), value: suggestions.map(\.id))
         .sheet(isPresented: $showsAdd) {
             LieuAjoutView(locateOnOpen: configureCurrentWorkplace, initialType: configureCurrentWorkplace ? .taf : nil)
         }
+        .sheet(isPresented: $showsMerge) {
+            LieuFusionView()
+        }
         .sheet(item: $selectedSuggestion) { candidate in
-            DiscoveredPlaceCard(candidate: candidate, discovery: discovery)
+            DiscoveredPlaceCard(candidate: candidate, discovery: discovery, contractPlaceUIDs: contractPlaceUIDs)
         }
         .task(id: lookupIDs) {
             guard automaticMapsLookup else { return }
@@ -77,7 +89,58 @@ struct LieuxView: View {
         }
     }
 
-    private func discoverySection(_ suggestions: [DiscoveredPlace]) -> some View {
+    private var auditProblems: [PlaceAuditProblem] {
+        let now: Date = Date()
+        let calendar: Calendar = Calendar.current
+        let snapshots: [PlaceSnapshot] = places.map { (p: Place) -> PlaceSnapshot in return p.snapshot }
+        let candidates: [DiscoveredPlace] = modules.isActive("place_discovery") ? geofence.discovery.candidates : []
+        let found: [PlaceAuditProblem] = PlaceSuggestionAudit.audit(
+            places: snapshots, candidates: candidates, now: now, calendar: calendar,
+            learnedDistance: geofence.discovery.kindStore.memory.learnedMergeDistance,
+            leaning: { (c: DiscoveredPlace) -> PlaceType? in
+                return PlaceKindClassifier.leaning(of: c, now: now, calendar: calendar)
+            })
+        return found.filter { (p: PlaceAuditProblem) -> Bool in return !ignoredAuditIDs.contains(p.id) }
+    }
+
+    /// Bandeau compact : le problème le plus important, un bouton pour le corriger, un pour l'ignorer.
+    private func auditBanner(_ problems: [PlaceAuditProblem]) -> some View {
+        let first: PlaceAuditProblem? = problems.first
+        let others: Int = max(0, problems.count - 1)
+        return PLTCard {
+            Label(problems.count == 1 ? "À vérifier" : "À vérifier (\(problems.count))", systemImage: "exclamationmark.triangle")
+                .font(.headline)
+                .foregroundStyle(palette.warning)
+                .accessibilityAddTraits(.isHeader)
+            if let problem = first {
+                Text(problem.message)
+                    .font(.subheadline)
+                if others > 0 {
+                    Text(others == 1 ? "Et 1 autre point ensuite." : "Et \(others) autres points ensuite.")
+                        .font(.footnote)
+                        .foregroundStyle(palette.textSecondary)
+                }
+                Button(problem.fixTitle) {
+                    PlaceFixActions.apply(problem.fix, context: context, undo: undoCenter, geofence: geofence)
+                }
+                .buttonStyle(.pltPrimary)
+                Button("Ignorer ce point") {
+                    ignoredAuditIDs.insert(problem.id)
+                    PlaceAuditIgnore.save(ignoredAuditIDs)
+                }
+                .font(.subheadline)
+                .frame(maxWidth: .infinity, minHeight: 44)
+            }
+        }
+    }
+
+    private var contractPlaceUIDs: Set<UUID> {
+        var uids: Set<UUID> = []
+        for contract in contracts { for uid in contract.placeUIDs { uids.insert(uid) } }
+        return uids
+    }
+
+    private func discoverySection(_ suggestions: [DiscoveredPlace], enlargements: [PlaceEnlargeProposal]) -> some View {
         let discovery = geofence.discovery
 
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
@@ -119,8 +182,12 @@ struct LieuxView: View {
                           message: "iOS a transmis une arrivée. La durée sera disponible après réception du départ.")
             }
 
+            ForEach(enlargements, id: \.shape.placeID) { proposal in
+                enlargeCard(proposal)
+            }
+
             if suggestions.isEmpty {
-                if discovery.isMonitoring {
+                if discovery.isMonitoring && enlargements.isEmpty {
                     PLTCard {
                         Label("Aucun nouveau lieu à vérifier", systemImage: "location.magnifyingglass")
                             .font(.subheadline.weight(.semibold))
@@ -153,7 +220,9 @@ struct LieuxView: View {
 
     private func suggestionRow(_ candidate: DiscoveredPlace, lastID: UUID?) -> some View {
         let discovery = geofence.discovery
-        let type = discovery.recommendation(for: candidate)?.type
+        let decision: PlaceKindDecision = discovery.identification(for: candidate, places: places,
+                                                                   contractPlaceUIDs: contractPlaceUIDs)
+        let type: PlaceType? = decision.verdict == .confident ? decision.leaning : nil
         let count = discovery.visitCount(for: candidate)
         let visits = count == 1 ? "1 passage" : "\(count) passages"
         let lastDate = candidate.arrivals.max()
@@ -162,17 +231,60 @@ struct LieuxView: View {
         }
         let title = candidate.context?.name ?? candidate.context?.address ?? recentVisit ?? "Arrêt repéré"
         let address = candidate.context?.name == nil ? nil : candidate.context?.address
-        let subtitle = [address, type.map { "\($0.title) possible" }, visits]
+        let guess: String = type.map { "\($0.title) probable" } ?? "À préciser"
+        let buildings: String? = (candidate.mergedIDs?.count ?? 0) > 1 ? "\(candidate.mergedIDs?.count ?? 0) bâtiments réunis" : nil
+        let subtitle = [address, guess, buildings, visits]
             .compactMap { $0 }
             .joined(separator: " · ")
 
-        return PLTRow(symbol: type?.symbolName ?? "mappin",
+        return PLTRow(symbol: type?.symbolName ?? "questionmark.circle",
                       tone: type?.tone ?? .accent,
                       title: title,
                       subtitle: subtitle,
                       showsChevron: true,
                       showsSeparator: candidate.id != lastID,
                       action: { selectedSuggestion = candidate })
+    }
+
+    private func enlargeCard(_ proposal: PlaceEnlargeProposal) -> some View {
+        let shape: PlaceEnlargeShape = proposal.shape
+        return PLTCard {
+            Label("Agrandir « \(shape.placeName) » ?", systemImage: "arrow.up.left.and.arrow.down.right")
+                .font(.headline)
+            Text("Un arrêt récurrent touche déjà ce lieu. Plutôt que d'ajouter un doublon, j'étends sa zone à \(Int(shape.radius.rounded())) m.")
+                .font(.subheadline)
+                .foregroundStyle(palette.textSecondary)
+            Button("Agrandir ce lieu") { applyEnlargement(proposal) }
+                .buttonStyle(.pltPrimary)
+            Button("Ne pas agrandir") { geofence.discovery.markHandled(proposal.memberIDs) }
+                .font(.subheadline)
+                .frame(maxWidth: .infinity, minHeight: 44)
+        }
+    }
+
+    private func applyEnlargement(_ proposal: PlaceEnlargeProposal) {
+        let shape: PlaceEnlargeShape = proposal.shape
+        guard let place = places.first(where: { $0.uid == shape.placeID }) else { return }
+        let before: (latitude: Double, longitude: Double, radius: Double) = (place.latitude, place.longitude, place.radius)
+        let uid: UUID = place.uid
+        let ctx: ModelContext = context
+        place.latitude = shape.latitude
+        place.longitude = shape.longitude
+        place.radius = PlaceRules.clampRadius(shape.radius)
+        try? context.save()
+        geofence.discovery.markHandled(proposal.memberIDs)
+        geofence.refreshMonitoredPlaces()
+        let service: GeofenceService = geofence
+        undoCenter?.register(message: "Lieu agrandi : \(shape.placeName)") {
+            let all: [Place] = (try? ctx.fetch(FetchDescriptor<Place>())) ?? []
+            if let found = all.first(where: { $0.uid == uid }) {
+                found.latitude = before.latitude
+                found.longitude = before.longitude
+                found.radius = before.radius
+                try? ctx.save()
+                Task { @MainActor in service.refreshMonitoredPlaces() }
+            }
+        }
     }
 
     private var headerEyebrow: String {
@@ -209,6 +321,12 @@ struct LieuxView: View {
                         }
                         .buttonStyle(.plain)
                     }
+                }
+                if places.count >= 2 {
+                    Button("Fusionner deux lieux") { showsMerge = true }
+                        .font(.subheadline.weight(.semibold))
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                        .accessibilityLabel("Fusionner deux lieux")
                 }
                 Text("Touche un lieu pour voir ses sessions et régler son nom, son rayon et son type.")
                     .font(.footnote)

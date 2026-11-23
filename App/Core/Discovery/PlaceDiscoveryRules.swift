@@ -12,6 +12,8 @@ struct DiscoveredPlaceContext: Codable, Equatable {
     let name: String?
     let address: String?
     let category: PlaceType?
+    /// Catégorie Plans brute (MKPointOfInterestCategory.rawValue), absente des anciens contextes.
+    var poi: String? = nil
 }
 
 struct DiscoveredPlace: Codable, Identifiable, Equatable {
@@ -23,7 +25,8 @@ struct DiscoveredPlace: Codable, Identifiable, Equatable {
     // Optional fields preserve the existing on-device discovery history.
     var visits: [PlaceVisitObservation]?
     var context: DiscoveredPlaceContext?
-
+    /// Renseigné seulement sur une suggestion regroupée (jamais lu pour un arrêt stocké) : identifiants des arrêts réunis.
+    var mergedIDs: [UUID]?
 }
 
 struct PlaceRecommendation: Equatable {
@@ -104,7 +107,7 @@ enum PlaceDiscoveryRules {
         return nil
     }
 
-    private static func overnightDay(for visit: PlaceVisitObservation, calendar: Calendar) -> Date? {
+    static func overnightDay(for visit: PlaceVisitObservation, calendar: Calendar) -> Date? {
         guard visit.duration >= 4 * 3600 else { return nil }
         let start = calendar.startOfDay(for: visit.arrival)
         for offset in 0...1 {

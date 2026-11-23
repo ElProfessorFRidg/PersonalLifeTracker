@@ -20,6 +20,7 @@ struct LieuDetailView: View {
     @State private var confirmsDelete: Bool = false
     @State private var isDeleted: Bool = false
     @State private var showsEdit: Bool = false
+    @State private var showsMerge: Bool = false
 
     init(place: Place) {
         self.place = place
@@ -63,8 +64,14 @@ struct LieuDetailView: View {
         return Binding<PlaceType>(
             get: { place.type },
             set: { newValue in
+                let previous: PlaceType = place.type
                 place.type = newValue
                 if newValue != .courses { place.alsoWorksHere = false }
+                if previous != newValue {
+                    PlaceKindStore.shared.recordChoice(key: "place-" + place.uid.uuidString,
+                                                       latitude: place.latitude, longitude: place.longitude,
+                                                       chosen: newValue, suggested: previous, patternKey: nil)
+                }
                 try? context.save()
             })
     }
@@ -122,6 +129,7 @@ struct LieuDetailView: View {
                 loggedVisitsSection
             }
             sessionsSection
+            mergeSection
             deleteSection
         }
         .toolbar {
@@ -134,6 +142,15 @@ struct LieuDetailView: View {
                 }
                 .accessibilityLabel("Modifier le lieu")
             }
+        }
+        .sheet(isPresented: $showsMerge, onDismiss: {
+            // Ce lieu a pu être absorbé par un autre : on quitte l'écran plutôt que d'afficher un lieu supprimé.
+            if place.modelContext == nil {
+                isDeleted = true
+                dismiss()
+            }
+        }) {
+            LieuFusionView(preselected: [place.uid])
         }
         .sheet(isPresented: $showsEdit) {
             NavigationStack {
@@ -422,6 +439,18 @@ struct LieuDetailView: View {
 
     private func sessionValue(_ session: WorkSession) -> String {
         return Formatting.duration(seconds: session.exactSeconds(now: Date()))
+    }
+
+    private var mergeSection: some View {
+        PLTListGroup {
+            PLTRow(symbol: "arrow.triangle.merge",
+                   tone: .accent,
+                   title: "Fusionner avec un autre lieu",
+                   subtitle: "Garde toutes les sessions, tu peux annuler",
+                   showsChevron: true,
+                   showsSeparator: false,
+                   action: { showsMerge = true })
+        }
     }
 
     // MARK: Suppression

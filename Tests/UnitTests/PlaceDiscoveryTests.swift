@@ -358,7 +358,10 @@ final class PlaceDiscoveryTests: XCTestCase {
         try container.mainContext.save()
         let discovery = PlaceDiscovery(container: container, defaults: defaults)
         let arrival = now.addingTimeInterval(-3600)
-        discovery.recordVisit(latitude: 48.85055, longitude: 2.35, accuracy: 20,
+        // Règle de recouvrement (place_identification) : un arrêt à 61 m, donc DANS la zone de 200 m, est couvert et n'est
+        // plus jamais proposé comme nouveau lieu. L'intention du test (une grande zone ne masque pas un autre bâtiment)
+        // est gardée avec un bâtiment à environ 389 m, hors de la zone de 200 m plus les marges.
+        discovery.recordVisit(latitude: 48.8535, longitude: 2.35, accuracy: 20,
                               arrival: arrival, departure: now, now: now)
         let suggestion = try XCTUnwrap(discovery.suggestions(excluding: [existing], now: now).first)
         discovery.clearHistory()

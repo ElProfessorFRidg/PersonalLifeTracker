@@ -12,11 +12,11 @@ enum DiscoveredPlaceLookup {
             let geocoder = CLGeocoder()
             if let placemarks = try? await geocoder.reverseGeocodeLocation(location) {
                 address = placemarks.first.flatMap { formattedAddress($0) }
-                return DiscoveredPlaceContext(name: item?.name, address: address, category: category(item))
+                return DiscoveredPlaceContext(name: item?.name, address: address, category: category(item), poi: item?.pointOfInterestCategory?.rawValue)
             }
         }
         guard !Task.isCancelled, item != nil || address != nil else { return nil }
-        return DiscoveredPlaceContext(name: item?.name, address: address, category: category(item))
+        return DiscoveredPlaceContext(name: item?.name, address: address, category: category(item), poi: item?.pointOfInterestCategory?.rawValue)
     }
 
     private static func nearbyVenue(_ location: CLLocation, accuracy: Double) async -> MKMapItem? {
@@ -28,7 +28,7 @@ enum DiscoveredPlaceLookup {
             let distance = point.distance(from: location)
             return distance <= 80 ? (item, distance) : nil
         }.sorted { $0.1 < $1.1 }
-        guard let nearest = matches.first, category(nearest.0) != nil,
+        guard let nearest = matches.first, nearest.0.pointOfInterestCategory != nil,
               nearest.1 <= min(45, max(25, accuracy)) else { return nil }
         if matches.count > 1 && matches[1].1 - nearest.1 < 18 { return nil }
         return nearest.0
