@@ -24,7 +24,7 @@ struct PersonalLifeTrackerApp: App {
     @MainActor
     private static func openStore() -> OpenStore? {
         do {
-            let container = try AppModelContainer.make()
+            let container = try IntentStore.sharedContainer()
             let notifier = DetectionNotifier(container: container)
             let geofence = GeofenceService(container: container, notifier: notifier)
             geofence.start()
@@ -41,6 +41,7 @@ struct PersonalLifeTrackerApp: App {
         WindowGroup {
             if let store {
                 RootView()
+                    .modifier(SendHoursReminderActivation())
                     .environment(settings)
                     .environment(moduleStore)
                     .environment(store.geofence)

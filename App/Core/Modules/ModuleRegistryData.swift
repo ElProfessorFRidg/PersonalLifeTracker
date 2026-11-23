@@ -41,7 +41,7 @@ extension ModuleRegistry {
         ModuleDefinition(id: "travel_cost", title: "Coût du trajet", summary: "Coût du trajet", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "going_home", title: "Je rentre", summary: "Je rentre", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "savings", title: "Objectifs d'épargne", summary: "Des objectifs d'épargne liés à ta paie estimée.", step: 10, defaultOn: false, requires: ["pay"], isAvailable: false),
-        ModuleDefinition(id: "send_hours_reminder", title: "Rappel d'envoi des heures", summary: "Rappel d'envoi des heures", step: 10, defaultOn: false, requires: ["employment"], isAvailable: false),
+        ModuleDefinition(id: "send_hours_reminder", title: "Rappel d'envoi des heures", summary: "Rappel d'envoi des heures", step: 10, defaultOn: false, requires: ["employment"], isAvailable: true),
         ModuleDefinition(id: "focus", title: "Concentration", summary: "Concentration", step: 11, defaultOn: false, requires: [], isAvailable: false),
     ]
 
@@ -59,7 +59,7 @@ extension ModuleRegistry {
         ModuleDefinition(id: "departure_checklist", title: "Check avant de partir", summary: "Check avant de partir", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "voice_corrections", title: "Corrections à la voix", summary: "Corrections à la voix", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "weekly_balance", title: "Équilibre de la semaine", summary: "Équilibre de la semaine", step: 11, defaultOn: false, requires: [], isAvailable: false),
-        ModuleDefinition(id: "share_summary", title: "Résumé partageable", summary: "Résumé partageable", step: 11, defaultOn: false, requires: [], isAvailable: false),
+        ModuleDefinition(id: "share_summary", title: "Résumé partageable", summary: "Résumé partageable", step: 11, defaultOn: false, requires: [], isAvailable: true),
         ModuleDefinition(id: "proof_pack", title: "Dossier justificatif", summary: "Dossier justificatif", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "shift_swaps", title: "Carnet d'échanges de créneaux", summary: "Carnet d'échanges de créneaux", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "end_of_day_countdown", title: "Compte à rebours de fin de journée", summary: "Compte à rebours de fin de journée", step: 11, defaultOn: false, requires: [], isAvailable: false),

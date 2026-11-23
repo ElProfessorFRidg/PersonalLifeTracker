@@ -9,11 +9,33 @@ struct DemarrerSheet: View {
     @Environment(\.palette) private var palette
     @Query(sort: \Place.name) private var places: [Place]
 
-    @State private var activity: ActivityType = .work
-    @State private var placeUID: UUID?
+    @State private var activity: ActivityType = DemarrerSheet.initialActivity()
+    @State private var placeUID: UUID? = DemarrerSheet.initialPlaceUID()
     @State private var errorMessage: String?
 
     private static let choices: [ActivityType] = [.work, .education]
+
+    /// Dernière activité retenue si elle fait partie des choix, sinon Taf.
+    private static func initialActivity() -> ActivityType {
+        if let last = LastStartStore().activity, choices.contains(last) { return last }
+        return .work
+    }
+
+    private static func initialPlaceUID() -> UUID? {
+        if LastStartStore().activity == nil { return nil }
+        return LastStartStore().placeUID
+    }
+
+    /// Dernier démarrage encore valable : activité connue et lieu (s'il y en avait un) toujours présent.
+    private var lastStart: (activity: ActivityType, place: Place?)? {
+        let store: LastStartStore = LastStartStore()
+        guard let last = store.activity, DemarrerSheet.choices.contains(last) else { return nil }
+        guard let uid = store.placeUID else { return (last, nil) }
+        for place in places where place.uid == uid {
+            return (last, place)
+        }
+        return (last, nil)
+    }
 
     private var matchingPlaces: [Place] {
         return places.filter { $0.type.defaultActivity == activity }
@@ -22,6 +44,15 @@ struct DemarrerSheet: View {
     var body: some View {
         NavigationStack {
             PLTScreen(title: "Démarrer") {
+                if let last = lastStart {
+                    PLTListGroup {
+                        PLTRow(symbol: "arrow.counterclockwise",
+                               title: LastStartStore.rowTitle(activity: last.activity, placeName: last.place?.name),
+                               subtitle: "Un seul geste pour démarrer",
+                               showsSeparator: false,
+                               action: { begin(activity: last.activity, place: last.place) })
+                    }
+                }
                 VStack(alignment: .leading, spacing: Theme.Spacing.s) {
                     PLTSectionHeader(title: "Tu fais quoi ?")
                     Picker("Activité", selection: $activity) {
@@ -81,9 +112,14 @@ struct DemarrerSheet: View {
         for place in matchingPlaces where place.uid == placeUID {
             chosen = place
         }
+        begin(activity: activity, place: chosen)
+    }
+
+    private func begin(activity: ActivityType, place: Place?) {
         let service = SessionService(context: context)
         do {
-            _ = try service.start(activity: activity, place: chosen, now: Date())
+            _ = try service.start(activity: activity, place: place, now: Date())
+            LastStartStore().remember(activity: activity, placeUID: place?.uid)
             dismiss()
         } catch SessionServiceError.alreadyRunning {
             errorMessage = "Une session tourne déjà. Arrête-la avant d'en démarrer une autre."

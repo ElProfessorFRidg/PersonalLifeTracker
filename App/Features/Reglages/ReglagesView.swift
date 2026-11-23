@@ -31,6 +31,9 @@ struct ReglagesView: View {
             if modules.isActive("employment") {
                 employmentSection
             }
+            if modules.isActive("send_hours_reminder") {
+                SendHoursReminderCard()
+            }
             appearanceSection
             preferencesSection
             dataSection

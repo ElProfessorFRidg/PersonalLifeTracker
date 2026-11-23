@@ -24,6 +24,8 @@ struct SessionDetailView: View {
     @State private var showDoute: Bool = false
     @State private var showDeleteDialog: Bool = false
     @State private var isDeleted: Bool = false
+    @State private var duplicateMessage: String? = nil
+    @State private var duplicateFailed: Bool = false
 
     var body: some View {
         if isDeleted {
@@ -47,6 +49,7 @@ struct SessionDetailView: View {
             editSection
             noteSection
             confirmSection
+            duplicateSection
             deleteSection
         }
         .sheet(item: $editedBound) { (bound: EditedBound) in
@@ -281,6 +284,32 @@ struct SessionDetailView: View {
                 HabitLearning.recordFeedback(for: session, store: HabitStore.shared)
             }
             .buttonStyle(.pltPrimary)
+        }
+    }
+
+    private var duplicateSection: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            if let message = duplicateMessage {
+                PLTBanner(kind: duplicateFailed ? .error : .info, title: message)
+            }
+            PLTListGroup {
+                PLTRow(symbol: "plus.square.on.square",
+                       title: "Dupliquer sur aujourd'hui",
+                       subtitle: "Même heure, même lieu, à confirmer",
+                       showsSeparator: false,
+                       action: { duplicateToToday() })
+            }
+        }
+    }
+
+    private func duplicateToToday() {
+        let failure: String? = SessionActions.duplicateToToday(session, all: allSessions, context: context, now: Date())
+        if let failure = failure {
+            duplicateFailed = true
+            duplicateMessage = failure
+        } else {
+            duplicateFailed = false
+            duplicateMessage = "Session dupliquée sur aujourd'hui, à confirmer."
         }
     }
 

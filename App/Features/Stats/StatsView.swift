@@ -6,6 +6,7 @@ import SwiftData
 struct StatsView: View {
     @Environment(\.palette) private var palette
     @Environment(AppSettings.self) private var settings
+    @Environment(ModuleStore.self) private var modules
     @Query(sort: \WorkSession.startDate) private var sessions: [WorkSession]
 
     @State private var period: StatsPeriod = .week
@@ -286,8 +287,21 @@ struct StatsView: View {
         }
     }
 
+    /// Texte partageable de la période affichée (module share_summary).
+    private var shareText: String {
+        return HoursSummaryText.build(period: period, reference: reference, inputs: inputs,
+                                      base: settings.calculationBase, now: Date(), calendar: calendar)
+    }
+
     private var footerSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            if modules.isActive("share_summary") {
+                ShareLink(item: shareText) {
+                    Label("Partager mes heures", systemImage: "square.and.arrow.up")
+                        .frame(maxWidth: .infinity, minHeight: 44)
+                }
+                .accessibilityLabel("Partager mes heures")
+            }
             if unconfirmedCount > 0 {
                 PLTBanner(kind: .info,
                           title: unconfirmedCount == 1 ? "1 session à confirmer n'est pas comptée" : "\(unconfirmedCount) sessions à confirmer ne sont pas comptées",

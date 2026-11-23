@@ -36,14 +36,52 @@ enum SessionDisplay {
     }
 }
 
+/// Actions rapides sur une session (menu contextuel de la liste, détail). Les messages renvoyés sont déjà en français.
+enum SessionActions {
+    /// Duplique une session terminée sur aujourd'hui, à la même heure, non confirmée, même lieu et même activité.
+    /// Retourne un message de refus, nil si la copie est créée.
+    static func duplicateToToday(_ session: WorkSession, all: [WorkSession], context: ModelContext, now: Date) -> String? {
+        var others: [SessionInterval] = []
+        for other in all {
+            let end: Date = other.endDate ?? now
+            if end > other.startDate {
+                others.append(SessionInterval(start: other.startDate, end: end))
+            }
+        }
+        let outcome: SessionDuplicationOutcome = SessionDuplication.planForToday(start: session.startDate, end: session.endDate,
+                                                                                 now: now, others: others, calendar: session.calendar)
+        switch outcome {
+        case .notFinished, .invalid:
+            return outcome.refusalMessage ?? "Impossible de dupliquer cette session."
+        case .ready(let start, let end):
+            let copy: WorkSession = WorkSession(activity: session.activity, start: start, end: end,
+                                                place: session.place, source: .manual, isConfirmed: false, note: "")
+            context.insert(copy)
+            do {
+                try context.save()
+                return nil
+            } catch {
+                context.delete(copy)
+                return "La copie n'a pas été enregistrée. Réessaie."
+            }
+        }
+    }
+}
+
 /// Écran `sessions` : historique groupé par jour. Poussé dans une NavigationStack existante.
 struct SessionsView: View {
     @Environment(\.palette) private var palette
     @Environment(AppSettings.self) private var settings
+    @Environment(\.modelContext) private var context
+    @Environment(UndoCenter.self) private var undoCenter: UndoCenter?
     @Query(sort: \WorkSession.startDate, order: .reverse) private var sessions: [WorkSession]
 
     @State private var filter: SessionFilter = .all
     @State private var showAdd: Bool = false
+    @State private var pendingDelete: WorkSession? = nil
+    @State private var showDeleteDialog: Bool = false
+    @State private var actionMessage: String? = nil
+    @State private var actionFailed: Bool = false
 
     private var items: [SessionListItem] {
         return sessions.map { (s: WorkSession) -> SessionListItem in s.listItem }
@@ -60,6 +98,9 @@ struct SessionsView: View {
 
     var body: some View {
         PLTScreen(title: "Sessions") {
+            if let message = actionMessage {
+                PLTBanner(kind: actionFailed ? .error : .info, title: message)
+            }
             if sessions.isEmpty {
                 PLTCard {
                     PLTEmptyState(symbol: "clock",
@@ -87,6 +128,50 @@ struct SessionsView: View {
         .sheet(isPresented: $showAdd) {
             SessionAjoutView()
         }
+        .confirmationDialog("Supprimer cette session ?", isPresented: $showDeleteDialog, titleVisibility: .visible) {
+            Button("Supprimer", role: .destructive) {
+                if let target = pendingDelete { delete(target) }
+                pendingDelete = nil
+            }
+            Button("Annuler", role: .cancel) { pendingDelete = nil }
+        } message: {
+            Text(undoCenter?.isEnabled == true
+                 ? "Elle disparaît de ton historique et de tes totaux. Tu pourras annuler juste après."
+                 : "Elle disparaît de ton historique et de tes totaux. Tu ne pourras pas la récupérer.")
+        }
+    }
+
+    // MARK: Actions rapides
+
+    private func confirm(_ session: WorkSession) {
+        session.isConfirmed = true
+        try? context.save()
+        HabitLearning.recordFeedback(for: session, store: HabitStore.shared)
+        actionFailed = false
+        actionMessage = "Session confirmée."
+    }
+
+    private func duplicate(_ session: WorkSession) {
+        let failure: String? = SessionActions.duplicateToToday(session, all: sessions, context: context, now: Date())
+        if let failure = failure {
+            actionFailed = true
+            actionMessage = failure
+        } else {
+            actionFailed = false
+            actionMessage = "Session dupliquée sur aujourd'hui, à confirmer."
+        }
+    }
+
+    private func delete(_ session: WorkSession) {
+        let copy: ExportedSession = UndoSnapshots.exportedSession(session)
+        let ctx: ModelContext = context
+        context.delete(session)
+        try? context.save()
+        undoCenter?.register(message: "Session supprimée") {
+            try? UndoSnapshots.restoreSession(copy, context: ctx)
+        }
+        actionFailed = false
+        actionMessage = nil
     }
 
     // MARK: Filtres
@@ -163,12 +248,32 @@ struct SessionsView: View {
                                     SessionRowView(session: session, base: settings.calculationBase, now: now)
                                 }
                                 .buttonStyle(.plain)
+                                .contextMenu {
+                                    if !session.isConfirmed {
+                                        Button {
+                                            confirm(session)
+                                        } label: {
+                                            Label("Confirmer", systemImage: "checkmark.circle")
+                                        }
+                                    }
+                                    Button {
+                                        duplicate(session)
+                                    } label: {
+                                        Label("Dupliquer sur aujourd'hui", systemImage: "plus.square.on.square")
+                                    }
+                                    Button(role: .destructive) {
+                                        pendingDelete = session
+                                        showDeleteDialog = true
+                                    } label: {
+                                        Label("Supprimer", systemImage: "trash")
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
-            Text("Les courses sont notées mais jamais comptées dans tes heures.")
+            Text("Appui long sur une session pour la confirmer, la dupliquer ou la supprimer. Les courses sont notées mais jamais comptées dans tes heures.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
         }

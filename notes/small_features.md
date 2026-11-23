@@ -1,0 +1,27 @@
+# small_features : cinq petites fonctions pratiques
+
+STATUT : NON COMPILÉ, NON TESTÉ (pas de toolchain Swift ici, seule la CI compile).
+
+## Fait
+1. Partager mes heures (module `share_summary`, passé `isAvailable: true`) : `App/Core/Logic/HoursSummaryText.swift` (pur, noms de jours et mois écrits à la main, pas de DateFormatter). Bouton `ShareLink` "Partager mes heures" dans le pied de StatsView, texte de la période affichée, base de calcul de l'utilisateur, "(à confirmer)" si borne en doute sans choix, "(en cours)", jamais d'argent. Tests : `HoursSummaryTextTests` (semaine exacte, heures pleines avec choix et doute, mois, vide, changement d'heure du 29 mars 2026).
+2. Siri, Raccourcis, bouton Action : `App/Core/Intents/LifeTrackerIntents.swift` (`StartWorkIntent`, `StopSessionIntent`, `TodayHoursIntent`, `LifeTrackerShortcuts`, `StartActivityOption` Taf ou Cours, `IntentStore`, `IntentActions`) et `IntentDialogs.swift` (textes purs). Conteneur unique par processus : `IntentStore.sharedContainer()` appelle `AppModelContainer.make()`, et `PersonalLifeTrackerApp.openStore` l'utilise aussi (une ligne changée), donc pas de deuxième conteneur sur le même fichier. Refus polis par texte (déjà en cours, rien à arrêter), jamais d'erreur jetée. Tests : `IntentDialogsTests`.
+3. Mémoire du dernier démarrage : `App/Core/Services/LastStartStore.swift` (UserDefaults, tests `LastStartStoreTests`). `DemarrerSheet` présélectionne la dernière activité et le dernier lieu et affiche en haut la ligne "Comme la dernière fois : Taf, Supérette du Canal" qui démarre en un tap. Les raccourcis Siri lisent et écrivent la même mémoire.
+4. Actions sur les sessions et duplication : `App/Core/Logic/SessionDuplication.swift` (`shifted`, `planForToday`, refus par SessionRules), tests `SessionDuplicationTests` (jour de changement d'heure compris). Dans SessionsView : menu contextuel (appui long) Confirmer, Dupliquer sur aujourd'hui, Supprimer (confirmation puis annulation via UndoCenter comme le détail). SessionDetailView : ligne "Dupliquer sur aujourd'hui". La copie est manuelle, non confirmée, même lieu et même activité, créée par `SessionActions.duplicateToToday` (dans SessionsView.swift).
+5. Rappel mensuel d'envoi des heures (module `send_hours_reminder`, passé `isAvailable: true`, requiert `employment`) : `App/Core/Logic/SendHoursReminderRules.swift` (pur : `fireDate`, `upcomingFireDates`, `nextFireDate`, réglage borné), `App/Core/Services/SendHoursReminderScheduler.swift` (3 prochaines dates programmées, notifications locales sans repeat, texte fixe "C'est le moment d'envoyer tes heures." sans chiffre, `SendHoursReminderActivation` ViewModifier appliqué dans l'App avant les `.environment`), `App/Features/Reglages/SendHoursReminderCard.swift` (jour : dernier jour du mois ou 1 à 28, heure, prochain rappel affiché) branchée dans ReglagesView quand le module est actif. Défaut : dernier jour du mois à 18:00. Tests : `SendHoursReminderRulesTests` (28, 29, 30, 31 jours, changement d'année, jour 31 replié).
+
+## Pas fait ou écart
+- Vrais swipe actions : SessionsView est un ScrollView avec PLTListGroup, pas une `List`, donc `.swipeActions` ne marcherait pas. Remplacé par un menu contextuel (appui long) et une note sous la liste.
+- Duplication : toujours sur aujourd'hui, pas de choix du jour (refus si la copie finit dans le futur ou chevauche une session). Pas de feuille SessionAjoutView préremplie (elle ne prend ni lieu ni activité).
+- Bouton de partage seulement sur Stats, pas sur la carte du jour d'Accueil ni sur Paie.
+- Intents : pas d'entité Lieu, seulement l'activité (Taf ou Cours) ; le lieu est celui du dernier démarrage de même activité.
+- Phrases Siri en français écrites dans le code, sans AppShortcuts.strings ni localisation fr dans project.yml (non modifiable ici) : la reconnaissance Siri en français est NON TESTÉE et peut exiger une localisation fr de l'app. Les raccourcis restent visibles dans l'app Raccourcis.
+- Le rappel est reprogrammé à l'activation de l'app seulement ; 3 occurrences d'avance couvrent trois mois sans ouverture.
+- Une session démarrée par Siri n'a ni notification ni Live Activity (comme le démarrage manuel).
+- Rien lancé : ni build, ni tests, ni snapshots. Pas de PROGRESS.md touché, pas de commit.
+
+## 5 lignes les plus susceptibles de ne pas compiler
+1. `LifeTrackerIntents.swift` : `static let caseDisplayRepresentations: [StartActivityOption: DisplayRepresentation]` et `static let typeDisplayRepresentation` (le protocole AppEnum demande `static var ... { get }`).
+2. `LifeTrackerIntents.swift` : `return .result(dialog: "\(text)")` avec `some IntentResult & ProvidesDialog` (interpolation d'un String dans IntentDialog) et `@MainActor func perform() async throws` sur un AppIntent.
+3. `LifeTrackerIntents.swift` : `LifeTrackerShortcuts.appShortcuts` en result builder avec trois `AppShortcut(intent:phrases:shortTitle:systemImageName:)` et `\(.applicationName)` dans des littéraux (le build valide aussi les phrases).
+4. `StatsView.swift` : `ShareLink(item: shareText) { Label(...).frame(...) }` (init avec label et item String).
+5. `SendHoursReminderScheduler.swift` : `SendHoursReminderActivation: ViewModifier` avec `@Environment(ModuleStore.self)` et `.onChange(of: modules.isActive(...)) { (_: Bool, _: Bool) in ... }` ; en prime `SessionsView.swift` : `.contextMenu` avec `if` et `Button(role: .destructive)` dans un `ForEach` imbriqué.
