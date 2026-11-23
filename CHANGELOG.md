@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## 0.0.1-beta.5
+- Toute l'interface est réalignée sur la maquette validée : en-têtes compacts, ordre des blocs, lignes et pastilles de statut, onboarding.
+- Les modules livrés depuis ta première installation s'activent tout seuls (emploi, paie, planning, etc.).
+- Assistant de configuration sur l'Accueil : détecte ce qui manque et propose « Tout configurer pour moi ».
+- Détection et découverte des lieux améliorées, import de planning par photo ou message.
+
 ## 0.0.1-beta.4
 - Étape 3 : classification travail, études, courses avec apprentissage, calibration des lieux, récupération après batterie vide, contrôle de l'horloge, assistant de dépannage.
 - Étape 5 : emploi (employeur, contrat, fin de contrat), paie de base (estimations), onglet Statistiques.
