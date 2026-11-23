@@ -1,0 +1,3 @@
+# Étape 9 mise de côté (calendrier scolaire, examens, révision, nuit courte, notes, pauses, trajet, heures manquantes)
+Écrit par des sub agents interrompus, NON COMPILÉ, jamais testé. Sorti du build (le dossier n'est pas dans App/ ni Tests/) pour ne pas bloquer la CI pendant le travail sur l'identification des lieux.
+Pour reprendre : remettre chaque fichier à son chemin d'origine (le chemin sous parked/step9/ est le chemin d'origine), puis refaire les petites modifications de ModuleRegistryData.swift (isAvailable: true), AccueilView.swift et ReglagesView.swift (voir l'historique git, commit 60bac51).

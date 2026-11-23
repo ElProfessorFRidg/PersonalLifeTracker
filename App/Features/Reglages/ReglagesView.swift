@@ -241,24 +241,20 @@ struct ReglagesView: View {
 
     private var featuresSection: some View {
         let counts = ModuleCatalog.counts(enabled: modules.enabledIDs)
-        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            NavigationLink {
-                FonctionnalitesView()
-            } label: {
-                PLTListGroup {
-                    PLTRow(symbol: "square.grid.2x2",
-                           title: "Fonctionnalités",
-                           subtitle: "Active seulement ce qui te sert : planning, paie, congés...",
-                           value: "\(counts.active) sur \(counts.total)",
-                           showsChevron: true,
-                           showsSeparator: false)
-                }
+        return NavigationLink {
+            FonctionnalitesView()
+        } label: {
+            PLTListGroup {
+                PLTRow(symbol: "square.grid.2x2",
+                       title: "Fonctionnalités",
+                       subtitle: "Active seulement ce qui te sert : planning, paie, congés...",
+                       value: "\(counts.active) sur \(counts.total)",
+                       showsChevron: true,
+                       showsSeparator: false)
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel("Fonctionnalités, \(counts.active) actives sur \(counts.total)")
-            SchoolSettingsLinks()
-            JournalModuleLinks()
         }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Fonctionnalités, \(counts.active) actives sur \(counts.total)")
     }
 
     // MARK: Emploi (module optionnel)
