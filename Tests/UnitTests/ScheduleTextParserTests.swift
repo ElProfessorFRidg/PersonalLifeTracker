@@ -394,7 +394,8 @@ final class ScheduleTextParserTests: XCTestCase {
         XCTAssertTrue(shift.crossesMidnight)
         XCTAssertEqual(shift.startMinutes, 1320)
         XCTAssertEqual(shift.endMinutes, 1800)
-        XCTAssertEqual(shift.confidence, 0.8, accuracy: 0.0001)
+        // 0,85 : le moteur de lecture applique x0,85 à un créneau qui finit le lendemain (valeur du moteur de la PR 2, la spec n'en fixe pas).
+        XCTAssertEqual(shift.confidence, 0.85, accuracy: 0.0001)
         XCTAssertEqual(shift.level, .mid, "un créneau de nuit se confirme d'un tap")
         XCTAssertEqual(shift.reason, "La fin tombe le lendemain, vérifie.")
         let interval = shift.interval(calendar: TestCalendar.utc)
