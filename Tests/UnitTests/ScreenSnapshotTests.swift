@@ -39,6 +39,7 @@ struct ShotResult {
     let expectedHeight: Int
     let fileWritten: Bool
     let looksBlank: Bool
+    let yellowShare: Double
     let usedWithoutNavigationStack: Bool
 }
 
@@ -62,6 +63,8 @@ final class ScreenSnapshotTests: XCTestCase {
 
     private static let width: CGFloat = 390
     private static let scale: CGFloat = 2
+    private static var retained: [AnyObject] = []
+    private static var retainedContainers: [ModelContainer] = []
 
     // MARK: Tests, un par écran
 
@@ -241,6 +244,7 @@ final class ScreenSnapshotTests: XCTestCase {
             XCTAssertTrue(r.rendered, "\(r.fileName) : ImageRenderer n'a rendu aucune image")
             XCTAssertEqual(r.pixelWidth, r.expectedWidth, "\(r.fileName) : largeur en pixels")
             XCTAssertEqual(r.pixelHeight, r.expectedHeight, "\(r.fileName) : hauteur en pixels")
+            XCTAssertLessThan(r.yellowShare, 0.2, "\(r.fileName) : plus de 20 % de pixels jaunes (panneau interdit d'ImageRenderer)")
             XCTAssertTrue(r.fileWritten, "\(r.fileName) : le PNG n'a pas pu être écrit")
         }
     }
@@ -288,16 +292,26 @@ final class ScreenSnapshotTests: XCTestCase {
             var image: UIImage? = render(screen: screen, navigation: navigation, height: height, theme: theme,
                                          container: container, settings: settings, modules: modules,
                                          geofence: geofence, undo: undo)
-            var blank: Bool = image.map { (i: UIImage) -> Bool in ScreenSnapshotTests.isUniform(i) } ?? true
+            var yellowShare: Double = 0
+            var blank: Bool = true
+            if let first = image {
+                let a: (uniform: Bool, yellowShare: Double) = ScreenSnapshotTests.analyze(first)
+                blank = a.uniform
+                yellowShare = a.yellowShare
+            }
             var withoutNav: Bool = false
             if blank && navigation {
                 let retry: UIImage? = render(screen: content(handles), navigation: false, height: height, theme: theme,
                                              container: container, settings: settings, modules: modules,
                                              geofence: geofence, undo: undo)
-                if let retry = retry, !ScreenSnapshotTests.isUniform(retry) {
-                    image = retry
-                    blank = false
-                    withoutNav = true
+                if let retry = retry {
+                    let a: (uniform: Bool, yellowShare: Double) = ScreenSnapshotTests.analyze(retry)
+                    if !a.uniform && a.yellowShare <= yellowShare {
+                        image = retry
+                        blank = false
+                        yellowShare = a.yellowShare
+                        withoutNav = true
+                    }
                 }
             }
 
@@ -324,20 +338,25 @@ final class ScreenSnapshotTests: XCTestCase {
                                                 expectedHeight: Int(height * ScreenSnapshotTests.scale),
                                                 fileWritten: written,
                                                 looksBlank: blank,
+                                                yellowShare: yellowShare,
                                                 usedWithoutNavigationStack: withoutNav)
             results.append(result)
-            reportLines.append("\(fileName) : \(pixelWidth)x\(pixelHeight) px, image unie (vide) : \(blank ? "oui" : "non"), "
+            reportLines.append("\(fileName) : \(pixelWidth)x\(pixelHeight) px, image unie (vide) : \(blank ? "oui" : "non"), part de jaune interdit : \(Int(yellowShare * 100)) %, "
                                + "rendu sans NavigationStack : \(withoutNav ? "oui" : "non")")
             defaults.removePersistentDomain(forName: suite)
         }
 
         let report: String = reportLines.joined(separator: "\n") + "\n"
         try? report.write(to: directory.appendingPathComponent("\(name).report.txt"), atomically: true, encoding: .utf8)
-        // Garde la base en vie jusqu'ici : les objets du jeu d'exemple en dépendent.
-        withExtendedLifetime(container) {}
+        // Les conteneurs restent vivants jusqu'à la fin du processus : un contexte dont le conteneur a disparu peut planter dans son observateur de sauvegarde.
+        ScreenSnapshotTests.retainedContainers.append(container)
+        ScreenSnapshotTests.retained.append(geofence)
+        ScreenSnapshotTests.retained.append(notifier)
         return results
     }
 
+    /// Rendu par la vraie hiérarchie UIKit : UIHostingController dans une UIWindow, puis drawHierarchy.
+    /// (ImageRenderer ne sait pas dessiner ScrollView, NavigationStack, List, Map : il montre un panneau jaune "interdit".)
     private func render(screen: AnyView,
                         navigation: Bool,
                         height: CGFloat,
@@ -357,12 +376,41 @@ final class ScreenSnapshotTests: XCTestCase {
                 .environment(undo)
                 .modelContainer(container)
                 .environment(\.colorScheme, theme.scheme)
-                .frame(width: ScreenSnapshotTests.width, height: height)
         )
-        let renderer: ImageRenderer<AnyView> = ImageRenderer(content: root)
-        renderer.scale = ScreenSnapshotTests.scale
-        renderer.proposedSize = ProposedViewSize(width: ScreenSnapshotTests.width, height: height)
-        return renderer.uiImage
+        let style: UIUserInterfaceStyle = theme.scheme == .dark ? .dark : .light
+        let frame: CGRect = CGRect(x: 0, y: 0, width: ScreenSnapshotTests.width, height: height)
+        let host: UIHostingController<AnyView> = UIHostingController(rootView: root)
+        host.overrideUserInterfaceStyle = style
+        let scenes: [UIWindowScene] = UIApplication.shared.connectedScenes.compactMap { (s: UIScene) -> UIWindowScene? in s as? UIWindowScene }
+        let window: UIWindow
+        if let scene = scenes.first {
+            window = UIWindow(windowScene: scene)
+        } else {
+            window = UIWindow(frame: frame)
+        }
+        window.frame = frame
+        window.overrideUserInterfaceStyle = style
+        window.rootViewController = host
+        window.makeKeyAndVisible()
+        host.view.frame = frame
+        host.view.setNeedsLayout()
+        host.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.6))
+        host.view.frame = frame
+        host.view.setNeedsLayout()
+        host.view.layoutIfNeeded()
+        RunLoop.main.run(until: Date().addingTimeInterval(0.2))
+
+        let format: UIGraphicsImageRendererFormat = UIGraphicsImageRendererFormat()
+        format.scale = ScreenSnapshotTests.scale
+        format.opaque = true
+        let renderer: UIGraphicsImageRenderer = UIGraphicsImageRenderer(size: frame.size, format: format)
+        let image: UIImage = renderer.image { (_: UIGraphicsImageRendererContext) in
+            host.view.drawHierarchy(in: CGRect(origin: CGPoint.zero, size: frame.size), afterScreenUpdates: true)
+        }
+        window.isHidden = true
+        window.rootViewController = nil
+        return image
     }
 
     // MARK: Fichiers
@@ -392,11 +440,11 @@ final class ScreenSnapshotTests: XCTestCase {
         return URL(fileURLWithPath: NSTemporaryDirectory(), isDirectory: true)
     }
 
-    /// Vrai si l'image réduite ne contient qu'une seule couleur (écran qui n'a rien dessiné).
-    private static func isUniform(_ image: UIImage) -> Bool {
-        guard let cg = image.cgImage else { return true }
-        let w: Int = 48
-        let h: Int = 96
+    /// Analyse d'une image réduite : unie (une seule couleur) et part de pixels jaune "interdit" (#FFCC00 environ).
+    private static func analyze(_ image: UIImage) -> (uniform: Bool, yellowShare: Double) {
+        guard let cg = image.cgImage else { return (true, 0) }
+        let w: Int = 78
+        let h: Int = max(8, Int(Double(w) * Double(cg.height) / Double(max(cg.width, 1))))
         var buffer: [UInt8] = [UInt8](repeating: 0, count: w * h * 4)
         let space: CGColorSpace = CGColorSpaceCreateDeviceRGB()
         let drawn: Bool = buffer.withUnsafeMutableBytes { (ptr: UnsafeMutableRawBufferPointer) -> Bool in
@@ -407,17 +455,21 @@ final class ScreenSnapshotTests: XCTestCase {
             ctx.draw(cg, in: CGRect(x: 0, y: 0, width: w, height: h))
             return true
         }
-        if !drawn { return false }
+        if !drawn { return (false, 0) }
         let r0: Int = Int(buffer[0])
         let g0: Int = Int(buffer[1])
         let b0: Int = Int(buffer[2])
-        var i: Int = 4
+        var uniform: Bool = true
+        var yellow: Int = 0
+        var i: Int = 0
         while i < buffer.count {
-            if abs(Int(buffer[i]) - r0) > 1 || abs(Int(buffer[i + 1]) - g0) > 1 || abs(Int(buffer[i + 2]) - b0) > 1 {
-                return false
-            }
+            let r: Int = Int(buffer[i])
+            let g: Int = Int(buffer[i + 1])
+            let b: Int = Int(buffer[i + 2])
+            if abs(r - r0) > 1 || abs(g - g0) > 1 || abs(b - b0) > 1 { uniform = false }
+            if r > 235 && g > 180 && g < 225 && b < 40 { yellow += 1 }
             i += 4
         }
-        return true
+        return (uniform, Double(yellow) / Double(w * h))
     }
 }

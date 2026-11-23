@@ -44,30 +44,38 @@ enum ScreenSnapshotSeed {
 
         // Aujourd'hui (lundi 16 novembre dans la maquette)
         let ongoing: WorkSession = WorkSession(activity: .work, start: ago(minutes: 74), end: nil,
-                                               place: taf, source: .gps, isConfirmed: true)
+                                               place: nil, source: .gps, isConfirmed: true)
         let morningCourse: WorkSession = WorkSession(activity: .education,
                                                      start: ago(minutes: 11 * 60 + 5), end: ago(minutes: 7 * 60 + 8),
-                                                     place: cours, source: .gps, isConfirmed: true)
+                                                     place: nil, source: .gps, isConfirmed: true)
         let errand: WorkSession = WorkSession(activity: .shopping,
                                               start: ago(minutes: 6 * 60 + 50), end: ago(minutes: 6 * 60 + 25),
-                                              place: courses, source: .gps, isConfirmed: true)
+                                              place: nil, source: .gps, isConfirmed: true)
         context.insert(ongoing)
         context.insert(morningCourse)
         context.insert(errand)
 
         // Jours précédents. Hier : un début à 14:28 tombe dans la zone de doute (écran Doute).
         let doubt: WorkSession = WorkSession(activity: .work, start: day(-1, 14, 28), end: day(-1, 18, 3),
-                                             place: taf, source: .gps, isConfirmed: true)
+                                             place: nil, source: .gps, isConfirmed: true)
         let earlier: [WorkSession] = [
             doubt,
-            WorkSession(activity: .education, start: day(-1, 8, 5), end: day(-1, 11, 58), place: cours, source: .gps),
-            WorkSession(activity: .work, start: day(-2, 17, 58), end: day(-2, 21, 2), place: taf, source: .gps),
-            WorkSession(activity: .education, start: day(-3, 8, 10), end: day(-3, 12, 0), place: cours, source: .gps),
-            WorkSession(activity: .work, start: day(-3, 17, 55), end: day(-3, 21, 0), place: taf, source: .manual),
-            WorkSession(activity: .work, start: day(-5, 18, 0), end: day(-5, 21, 5), place: taf, source: .gps),
-            WorkSession(activity: .education, start: day(-6, 8, 0), end: day(-6, 12, 3), place: cours, source: .gps)
+            WorkSession(activity: .education, start: day(-1, 8, 5), end: day(-1, 11, 58), place: nil, source: .gps),
+            WorkSession(activity: .work, start: day(-2, 17, 58), end: day(-2, 21, 2), place: nil, source: .gps),
+            WorkSession(activity: .education, start: day(-3, 8, 10), end: day(-3, 12, 0), place: nil, source: .gps),
+            WorkSession(activity: .work, start: day(-3, 17, 55), end: day(-3, 21, 0), place: nil, source: .manual),
+            WorkSession(activity: .work, start: day(-5, 18, 0), end: day(-5, 21, 5), place: nil, source: .gps),
+            WorkSession(activity: .education, start: day(-6, 8, 0), end: day(-6, 12, 3), place: nil, source: .gps)
         ]
         for s in earlier { context.insert(s) }
+        // Liens session -> lieu posés seulement une fois tous les objets insérés dans le contexte.
+        ongoing.place = taf
+        morningCourse.place = cours
+        errand.place = courses
+        doubt.place = taf
+        for s in earlier {
+            if s.activity == .education { s.place = cours } else if s.activity == .work { s.place = taf }
+        }
 
         // Employeur, contrat de 13 h par semaine (CDD jusqu'au 9 décembre 2026) et taux horaire
         let employer: Employer = Employer(name: "Supérette du Canal")
@@ -83,11 +91,12 @@ enum ScreenSnapshotSeed {
         let contractStart: Date = calendar.date(from: startParts) ?? today
         let contractEnd: Date = calendar.date(from: endParts) ?? today
         let contract: Contract = Contract(kind: .cdd, startDate: contractStart, endDate: contractEnd,
-                                          weeklyHours: 13, employer: employer)
+                                          weeklyHours: 13, employer: nil)
         contract.hourlyGrossRate = 12.0
         contract.placeUIDs = [taf.uid]
         context.insert(employer)
         context.insert(contract)
+        contract.employer = employer
         context.insert(PayRate(contractUID: contract.uid, effectiveDate: contractStart, hourlyGross: 12.0))
 
         // Planning : 18:00 à 21:00 au taf plusieurs soirs, dont aujourd'hui
