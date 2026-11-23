@@ -18,9 +18,11 @@ struct SessionAjoutView: View {
     @State private var saveFailed: Bool = false
 
     private let source: SessionSource
+    private let suggestedInterval: DateInterval?
 
     init(plannedShift: PlannedShift? = nil, suggestedInterval: DateInterval? = nil) {
         source = plannedShift == nil ? .manual : .planning
+        self.suggestedInterval = suggestedInterval
         let calendar = Calendar.current
         let now = Date()
         let defaultEnd = suggestedInterval?.end ?? plannedShift?.end ?? calendar.dateInterval(of: .minute, for: now)?.start ?? now
@@ -38,10 +40,19 @@ struct SessionAjoutView: View {
     private var calendar: Calendar { return Calendar.current }
 
     private var startDate: Date {
+        if let suggestedInterval, startTime == suggestedInterval.start,
+           calendar.isDate(day, inSameDayAs: suggestedInterval.start) {
+            return suggestedInterval.start
+        }
         return SessionRules.combine(day: day, time: startTime, calendar: calendar)
     }
 
     private var endDate: Date {
+        if let suggestedInterval, endTime == suggestedInterval.end,
+           calendar.isDate(day, inSameDayAs: suggestedInterval.start),
+           endsNextDay == !calendar.isDate(suggestedInterval.start, inSameDayAs: suggestedInterval.end) {
+            return suggestedInterval.end
+        }
         return SessionRules.combine(day: day, time: endTime, dayOffset: endsNextDay ? 1 : 0, calendar: calendar)
     }
 

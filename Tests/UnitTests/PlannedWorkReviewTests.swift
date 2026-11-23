@@ -31,11 +31,11 @@ final class PlannedWorkReviewTests: XCTestCase {
         let sessions = [
             RealSlot(start: nov16(12, 0), end: nov16(15, 10), activity: .work),
             RealSlot(start: nov16(8, 5), end: nov16(9, 35), activity: .work),
-            RealSlot(start: nov16(9, 15), end: nov16(10, 0), activity: .work)
+            RealSlot(start: nov16(9, 15), end: nov16(10, 0, 30), activity: .work)
         ]
         XCTAssertEqual(PlannedWorkReview.gaps(in: shift, sessions: sessions, leaveDays: [],
                                              now: nov17(8, 0), calendar: TestCalendar.utc),
-                       [DateInterval(start: nov16(10, 0), end: nov16(12, 0))])
+                       [DateInterval(start: nov16(10, 0, 30), end: nov16(12, 0))])
     }
 
     func testRunningSessionCoversItsTimeAndPlanningSourceDecodes() {
