@@ -324,6 +324,11 @@ struct PLTRadioRow: View {
         self.action = action
     }
 
+    private var combinedLabel: String {
+        let parts: [String?] = [title, subtitle, value]
+        return parts.compactMap { (part: String?) -> String? in part }.joined(separator: ", ")
+    }
+
     var body: some View {
         Button(action: action) {
             HStack(spacing: Theme.Spacing.m) {
@@ -373,7 +378,7 @@ struct PLTRadioRow: View {
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(accessibilityText ?? [title, subtitle, value].compactMap { $0 }.joined(separator: ", "))
+        .accessibilityLabel(accessibilityText ?? combinedLabel)
         .accessibilityAddTraits(selected ? AccessibilityTraits.isSelected : AccessibilityTraits())
     }
 }

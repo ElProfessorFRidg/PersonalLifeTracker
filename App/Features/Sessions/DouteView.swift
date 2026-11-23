@@ -65,7 +65,7 @@ struct DouteView: View {
                                 .foregroundStyle(palette.textSecondary)
                                 .accessibilityHidden(true)
                         }
-                        Text("L'heure exacte reste gardée et affichée à côté. Tu choisis seulement l'heure pleine qui compte pour tes totaux.")
+                        Text("Tu choisis seulement l'heure pleine qui compte pour tes totaux. L'heure détectée reste enregistrée et affichée à côté.")
                             .font(.subheadline)
                             .foregroundStyle(palette.textSecondary)
                     }
