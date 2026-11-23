@@ -84,12 +84,8 @@ enum PlaceDiscoveryRules {
         if let category = candidate.context?.category, category != .courses {
             return PlaceRecommendation(type: category, reason: "Catégorie du lieu proche dans Apple Plans.")
         }
-        let outsideSchoolPattern = longVisits.contains {
-            calendar.isDateInWeekend($0.arrival) || calendar.component(.hour, from: $0.arrival) < 7
-        }
-        if longDays.count >= 3, longVisits.count * 2 >= visits.count, nights.isEmpty,
-           outsideSchoolPattern || candidate.context?.category == .courses {
-            return PlaceRecommendation(type: .taf, reason: "Plusieurs arrêts d’au moins deux heures, sur des jours différents.")
+        if longDays.count >= 3 {
+            return PlaceRecommendation(type: .taf, reason: "Tu as passé au moins deux heures ici sur trois jours différents.")
         }
         if candidate.context?.category == .courses {
             return PlaceRecommendation(type: .courses, reason: "Commerce proche indiqué par Apple Plans.")

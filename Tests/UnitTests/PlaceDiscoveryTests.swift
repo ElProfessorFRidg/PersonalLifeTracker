@@ -199,17 +199,26 @@ final class PlaceDiscoveryTests: XCTestCase {
         XCTAssertEqual(PlaceDiscoveryRules.recommendation(school, now: now, calendar: TestCalendar.paris)?.type, .cours)
     }
 
-    func testOrdinaryWeekdayVisitsRemainUncategorizedWithoutMapEvidence() {
+    func testThreeLongWeekdayVisitsSuggestWorkEvenWithShortStops() throws {
         let calendar = TestCalendar.paris
-        let now = makeDate(calendar, 2026, 11, 20, 18, 0)
+        let now = makeDate(calendar, 2026, 11, 20, 21, 0)
         var candidates: [DiscoveredPlace] = []
         for day in [16, 17, 18] {
-            let arrival = makeDate(calendar, 2026, 11, day, 8, 15)
-            PlaceDiscoveryRules.record(in: &candidates, latitude: 48.85, longitude: 2.35,
-                                       accuracy: 20, arrival: arrival, departure: arrival.addingTimeInterval(6 * 3600), now: now)
+            for (hour, duration) in [(8, 2 * 3600.0), (16, 900.0), (19, 900.0)] {
+                let arrival = makeDate(calendar, 2026, 11, day, hour, 0)
+                PlaceDiscoveryRules.record(in: &candidates, latitude: 48.85, longitude: 2.35,
+                                           accuracy: 20, arrival: arrival,
+                                           departure: arrival.addingTimeInterval(duration), now: now)
+            }
+            let candidate = try XCTUnwrap(candidates.first)
+            let recommendation = PlaceDiscoveryRules.recommendation(candidate, now: now, calendar: calendar)
+            if day == 18 {
+                XCTAssertEqual(recommendation?.type, .taf)
+            } else {
+                XCTAssertNil(recommendation)
+            }
         }
         XCTAssertEqual(candidates.count, 1)
-        XCTAssertNil(candidates.first.flatMap { PlaceDiscoveryRules.recommendation($0, now: now, calendar: calendar) })
     }
 
     func testLegacyArrivalsDecodeAndStillQualifyWithoutInventedDurations() throws {
