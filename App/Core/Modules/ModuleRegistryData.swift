@@ -4,14 +4,14 @@ import Foundation
 
 extension ModuleRegistry {
     static let group1: [ModuleDefinition] = [
-        ModuleDefinition(id: "planning_ocr", title: "Planning par photo, alerte de planning tardif", summary: "Importe ton planning papier depuis une photo et te prévient quand il tarde.", step: 7, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "planning_ocr", title: "Planning par photo, alerte de planning tardif", summary: "Importe tes horaires à partir d’une photo de ton planning.", step: 7, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "place_discovery", title: "Découverte automatique des lieux", summary: "Repère les endroits où tu passes souvent et te propose de les ajouter.", step: 10, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "employment", title: "Employeurs, contrats, fin de contrat", summary: "Garde tes employeurs, tes contrats et leurs dates de fin.", step: 5, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "pay", title: "Salaire, paie, conventions, primes, historique des taux", summary: "Estime ta paie à partir de tes heures, sans rien envoyer nulle part.", step: 5, defaultOn: true, requires: ["employment"], isAvailable: true),
         ModuleDefinition(id: "school_calendar", title: "Calendrier scolaire, vacances, jours fériés", summary: "Vacances scolaires et jours fériés dans tes semaines.", step: 9, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "notes", title: "Notes de journée", summary: "Une petite note par journée, quand tu veux.", step: 9, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "search", title: "Recherche globale", summary: "Retrouve une session, un lieu ou une note en quelques lettres.", step: 10, defaultOn: true, requires: [], isAvailable: false),
-        ModuleDefinition(id: "weekly_review", title: "Revue de la semaine", summary: "Un point rapide chaque semaine sur ce que tu as fait.", step: 10, defaultOn: true, requires: [], isAvailable: false),
+        ModuleDefinition(id: "weekly_review", title: "Revue de la semaine", summary: "Un point rapide chaque semaine sur ce que tu as fait.", step: 10, defaultOn: true, requires: [], isAvailable: true),
         ModuleDefinition(id: "recaps", title: "Bilans mensuels et annuels", summary: "Bilans du mois et de l'année, prêts à relire.", step: 10, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "live_activity_widgets", title: "Live Activity, widgets, App Intents, contrôles, galerie de widgets", summary: "Écran verrouillé, widgets et raccourcis pour suivre ta session.", step: 8, defaultOn: true, requires: [], isAvailable: false),
         ModuleDefinition(id: "missing_hours", title: "Détection d'heures manquantes", summary: "Te signale les heures qui semblent manquer.", step: 10, defaultOn: true, requires: [], isAvailable: false),
@@ -100,7 +100,7 @@ extension ModuleRegistry {
         ModuleDefinition(id: "low_period_alert", title: "Anticipation des périodes creuses", summary: "Anticipation des périodes creuses", step: 11, defaultOn: false, requires: ["employment"], isAvailable: false),
         ModuleDefinition(id: "vacation_prep", title: "Prêt à partir en vacances", summary: "Prêt à partir en vacances", step: 11, defaultOn: false, requires: [], isAvailable: false),
         ModuleDefinition(id: "team_swaps", title: "Équipe et échanges malins", summary: "Équipe et échanges malins", step: 11, defaultOn: false, requires: ["planning_ocr"], isAvailable: false),
-        ModuleDefinition(id: "planning_text", title: "Planning par texte", summary: "Planning par texte", step: 10, defaultOn: false, requires: ["planning_ocr"], isAvailable: false),
+        ModuleDefinition(id: "planning_text", title: "Planning par texte", summary: "Planning par texte", step: 10, defaultOn: false, requires: ["planning_ocr"], isAvailable: true),
         ModuleDefinition(id: "live_earnings", title: "Compteur de gains en direct", summary: "Compteur de gains en direct", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
         ModuleDefinition(id: "true_hourly_rate", title: "Vrai taux horaire", summary: "Vrai taux horaire", step: 11, defaultOn: false, requires: ["pay"], isAvailable: false),
         ModuleDefinition(id: "notice_check", title: "Délai de prévenance", summary: "Délai de prévenance", step: 11, defaultOn: false, requires: ["planning_ocr", "employment"], isAvailable: false),

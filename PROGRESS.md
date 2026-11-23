@@ -43,14 +43,14 @@ Le workflow pull-request.yml produit les IPA en version 0.0.1 comme les bêtas p
 
 | ID | Titre | Étape | Statut | Preuve | Note |
 |---|---|---|---|---|---|
-| module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | NON COMMENCÉ |  |  |
+| module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | CODÉ NON TESTÉ |  | Import local photo avec vérification manuelle. Alerte de retard non raccordée. Vérification iOS dans la PR #2. |
 | module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | Arrivées et départs CLVisit rapprochés, liste de suggestions, catégories et adresses via Plans à la demande. Régressions ajoutées. Détails et état des vérifications dans notes/place_discovery.md. |
 | module:employment | Employeurs, contrats, fin de contrat | 5 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/employment.md. Rappels de fin de contrat calculés mais pas envoyés. |
 | module:pay | Salaire, paie, conventions, primes, historique des taux | 5 (base), 6 (conventions, primes) | EN COURS |  | Base de l'étape 5 testée en CI (heures, brut et net estimés, historique des taux, export). SMIC 12,02 NON VÉRIFIÉ. Conventions et primes (étape 6) pas faites. |
 | module:school_calendar | Calendrier scolaire, vacances, jours fériés | 9 | NON COMMENCÉ |  |  |
 | module:notes | Notes de journée | 9 | NON COMMENCÉ |  |  |
 | module:search | Recherche globale | 10 | NON COMMENCÉ |  |  |
-| module:weekly_review | Revue de la semaine | 10 | NON COMMENCÉ |  |  |
+| module:weekly_review | Revue de la semaine | 10 | CODÉ NON TESTÉ |  | File de sessions terminées à vérifier dans Accueil et Planning. Notification dominicale non implémentée. Vérification iOS dans la PR #2. |
 | module:recaps | Bilans mensuels et annuels | 10 | NON COMMENCÉ |  |  |
 | module:live_activity_widgets | Live Activity, widgets, App Intents, contrôles, galerie de widgets | 8 (base, contrôles), 10 (galerie) | NON COMMENCÉ |  |  |
 | module:missing_hours | Détection d'heures manquantes | 10 | NON COMMENCÉ |  |  |
@@ -127,7 +127,7 @@ Le workflow pull-request.yml produit les IPA en version 0.0.1 comme les bêtas p
 | module:low_period_alert | Anticipation des périodes creuses | 11 | NON COMMENCÉ |  |  |
 | module:vacation_prep | Prêt à partir en vacances | 11 | NON COMMENCÉ |  |  |
 | module:team_swaps | Équipe et échanges malins | 11 | NON COMMENCÉ |  |  |
-| module:planning_text | Planning par texte | 10 | NON COMMENCÉ |  |  |
+| module:planning_text | Planning par texte | 10 | CODÉ NON TESTÉ |  | Collage d’une semaine datée, un jour par ligne, relecture et correction. Feuille de partage et apprentissage non implémentés. Vérification iOS dans la PR #2. |
 | module:live_earnings | Compteur de gains en direct | 11 | NON COMMENCÉ |  |  |
 | module:true_hourly_rate | Vrai taux horaire | 11 | NON COMMENCÉ |  |  |
 | module:notice_check | Délai de prévenance | 11 | NON COMMENCÉ |  |  |

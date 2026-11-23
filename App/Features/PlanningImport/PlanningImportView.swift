@@ -7,6 +7,8 @@ import UIKit
 struct PlanningImportView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var context
+    @Environment(ModuleStore.self) private var modules
+    @Environment(\.palette) private var palette
     @AppStorage("plt.planning.profileNames") private var profileNames = ""
     @State private var model = PlanningImportModel()
     @State private var selectedPhoto: PhotosPickerItem?
@@ -16,12 +18,19 @@ struct PlanningImportView: View {
     @State private var startText = ""
     @State private var endText = ""
     @State private var editError: String?
+    @State private var message = ""
+    @State private var messageWeek: Date
+    @State private var acceptedSkippedLines = false
+
+    init(week: Date = Date()) {
+        _messageWeek = State(initialValue: week)
+    }
 
     var body: some View {
         PLTScreen(title: "Importer un planning") {
             switch model.phase {
             case .idle:
-                sources
+                importSources
             case .loading:
                 PLTCard {
                     ProgressView("Lecture du planning…", value: model.progress)
@@ -30,7 +39,7 @@ struct PlanningImportView: View {
                 }
             case .failed(let title, let message):
                 PLTBanner(kind: .error, title: title, message: message)
-                sources
+                importSources
             case .result:
                 review
             case .saved(let count, let skipped):
@@ -83,6 +92,44 @@ struct PlanningImportView: View {
                 failImage()
             }
         }
+    }
+
+    @ViewBuilder
+    private var importSources: some View {
+        if modules.isActive("planning_text") {
+            PLTCard {
+                Label("Coller un message", systemImage: "doc.on.clipboard")
+                    .font(.headline)
+                DatePicker("Semaine du planning", selection: $messageWeek, displayedComponents: .date)
+                Text("Colle tes propres horaires, un jour par ligne. Exemple : « Samedi 8h–12h / 14h–18h ».")
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
+                TextEditor(text: $message)
+                    .frame(minHeight: 112)
+                    .padding(Theme.Spacing.xs)
+                    .accessibilityLabel("Texte du planning")
+                    .overlay(RoundedRectangle(cornerRadius: 8).strokeBorder(palette.separator).allowsHitTesting(false))
+                Button("Lire les horaires") {
+                    acceptedSkippedLines = false
+                    model.readMessage(String(message.prefix(12_000)), week: messageWeek)
+                }
+                .buttonStyle(.pltPrimary)
+                .disabled(message.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty || message.count > 12_000)
+                if message.count > 12_000 {
+                    Text("Colle une seule semaine par import.")
+                        .font(.footnote)
+                        .foregroundStyle(palette.danger)
+                }
+            }
+        } else {
+            Button {
+                modules.setEnabled("planning_text", true)
+            } label: {
+                Label("Activer le collage d’un planning", systemImage: "doc.on.clipboard")
+            }
+            .buttonStyle(.pltSecondary)
+        }
+        sources
     }
 
     private var sources: some View {
@@ -153,6 +200,20 @@ struct PlanningImportView: View {
                 }
             }
         }
+        if let week = model.messageWeek {
+            PLTSectionHeader(title: "Semaine du \(PlanningImportFormat.dayLabel(week))")
+        }
+        if !model.skippedMessageLines.isEmpty {
+            PLTCard {
+                Text("Lignes à relire").font(.headline)
+                ForEach(Array(model.skippedMessageLines.enumerated()), id: \.offset) { item in
+                    Text(item.element).font(.subheadline)
+                }
+                if !model.drafts.isEmpty {
+                    Toggle("Importer les lignes reconnues", isOn: $acceptedSkippedLines)
+                }
+            }
+        }
         PLTSectionHeader(title: "Créneaux à vérifier")
         if model.drafts.isEmpty {
             Text(model.needsLineSelection ? "Choisis la ligne qui correspond à ton nom." : "Aucun créneau lisible sur cette ligne.")
@@ -174,8 +235,8 @@ struct PlanningImportView: View {
         }
         Button("Enregistrer les créneaux") { model.keep(in: context) }
             .buttonStyle(.pltPrimary)
-            .disabled(!model.canKeep || editingID != nil)
-        Button("Choisir une autre photo") {
+            .disabled(!model.canKeep || editingID != nil || (!model.skippedMessageLines.isEmpty && !acceptedSkippedLines))
+        Button(model.messageWeek == nil ? "Choisir une autre photo" : "Modifier le message") {
             editingID = nil
             model.reset()
         }

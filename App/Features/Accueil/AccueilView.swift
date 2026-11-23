@@ -122,6 +122,24 @@ struct AccueilView: View {
                 .buttonStyle(.pltPrimary)
             }
 
+            if modules.isActive("weekly_review") {
+                let week = PlanningRules.weekStart(for: now, calendar: cal)
+                let previousWeek = PlanningRules.shiftWeek(week, by: -1, calendar: cal)
+                let unfinished = sessions.filter {
+                    $0.endDate.map { $0 > previousWeek } == true && WeeklyReviewView.needsReview($0)
+                }
+                if let latest = unfinished.first {
+                    NavigationLink {
+                        WeeklyReviewView(week: latest.endDate.map { $0 > week ? now : previousWeek } ?? now)
+                    } label: {
+                        PLTRow(symbol: "checklist", title: "Revoir tes sessions",
+                               subtitle: "Vérifie les horaires et les activités détectés.",
+                               showsChevron: true, showsSeparator: false)
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
             if placeCount > 0 {
                 PLTListGroup {
                     PLTRow(symbol: "mappin.and.ellipse", title: placeCount == 1 ? "1 lieu à vérifier" : "\(placeCount) lieux à vérifier",

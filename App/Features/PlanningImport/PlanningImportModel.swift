@@ -56,6 +56,8 @@ final class PlanningImportModel {
     var phase: PlanningImportPhase = .idle
     var progress: Double = 0
     var image: UIImage? = nil
+    private(set) var messageWeek: Date?
+    private(set) var skippedMessageLines: [String] = []
     var notice: String? = nil
     var errorMessage: String? = nil
     var drafts: [PlanningShiftDraft] = []
@@ -82,6 +84,8 @@ final class PlanningImportModel {
 
     func start(image: UIImage, names: [String], notice: String? = nil) {
         readTask?.cancel()
+        messageWeek = nil
+        skippedMessageLines = []
         self.image = image
         self.names = names
         self.notice = notice
@@ -113,6 +117,25 @@ final class PlanningImportModel {
         }
     }
 
+    func readMessage(_ text: String, week: Date) {
+        reset()
+        let calendar = PlanningSupport.calendar
+        let result = PlanningMessageParser.read(text, week: week, calendar: calendar)
+        messageWeek = PlanningRules.weekStart(for: week, calendar: calendar)
+        skippedMessageLines = result.skippedLines
+        drafts = result.entries.flatMap { entry in
+            entry.ranges.map { range in
+                PlanningShiftDraft(id: UUID(), day: entry.day,
+                                   startMinutes: range.startMinutes, endMinutes: range.endMinutes,
+                                   confidence: range.crossesMidnight ? 0.5 : 1,
+                                   reason: range.crossesMidnight ? "Cette plage finit le lendemain. Vérifie les deux heures." : nil,
+                                   isResolved: false, wasEdited: false)
+            }
+        }.sorted { ($0.day, $0.startMinutes ?? 0) < ($1.day, $1.startMinutes ?? 0) }
+        lineConfirmed = true
+        phase = .result
+    }
+
     func cancelReading() {
         readTask?.cancel()
         readTask = nil
@@ -123,6 +146,8 @@ final class PlanningImportModel {
         readTask?.cancel()
         readTask = nil
         image = nil
+        messageWeek = nil
+        skippedMessageLines = []
         notice = nil
         errorMessage = nil
         parse = nil
@@ -282,10 +307,11 @@ final class PlanningImportModel {
     /// Crée les créneaux prévus (source "photo"). Les créneaux identiques déjà présents ne sont pas doublés.
     func keep(in context: ModelContext) {
         if !canKeep { return }
-        let calendar = Calendar.current
+        let calendar = PlanningSupport.calendar
         var inserted: [PlannedShift] = []
         do {
             var existing = try context.fetch(FetchDescriptor<PlannedShift>())
+            var additions: [PlannedShift] = []
             var skipped = 0
             for draft in drafts {
                 guard let s = draft.startMinutes, let e = draft.endMinutes else { continue }
@@ -295,10 +321,18 @@ final class PlanningImportModel {
                     skipped += 1
                     continue
                 }
-                let shift = PlannedShift(start: start, end: end, activity: .work, source: "photo")
+                if end <= start || existing.contains(where: { $0.activity == .work && $0.start < end && $0.end > start }) {
+                    errorMessage = "Deux créneaux de travail se chevauchent. Vérifie les horaires avant d’enregistrer."
+                    return
+                }
+                let shift = PlannedShift(start: start, end: end, activity: .work,
+                                         source: messageWeek == nil ? "photo" : "text")
+                additions.append(shift)
+                existing.append(shift)
+            }
+            for shift in additions {
                 context.insert(shift)
                 inserted.append(shift)
-                existing.append(shift)
             }
             try context.save()
             errorMessage = nil
