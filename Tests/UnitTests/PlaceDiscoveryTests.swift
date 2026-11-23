@@ -239,6 +239,36 @@ final class PlaceDiscoveryTests: XCTestCase {
         XCTAssertNil(PlaceDiscoveryRules.recommendation(candidate, now: now, calendar: TestCalendar.paris))
     }
 
+    func testThreeLegacyDaytimeArrivalsSuggestWorkWithoutInventingHours() {
+        let calendar = TestCalendar.paris
+        let now = makeDate(calendar, 2026, 11, 23, 12, 0)
+        let arrivals = [20, 21, 22].map { makeDate(calendar, 2026, 11, $0, 8, 0) }
+        let legacy = DiscoveredPlace(latitude: 48.85, longitude: 2.35, arrivals: arrivals)
+        let recommendation = PlaceDiscoveryRules.recommendation(legacy, now: now, calendar: calendar)
+        XCTAssertEqual(recommendation?.type, .taf)
+        XCTAssertTrue(recommendation?.reason.contains("pas d’heure de départ") == true)
+        XCTAssertTrue(PlaceDiscoveryRules.observations(legacy, now: now).isEmpty)
+
+        var evening = legacy
+        evening.arrivals = [20, 21, 22].map { makeDate(calendar, 2026, 11, $0, 21, 0) }
+        XCTAssertNil(PlaceDiscoveryRules.recommendation(evening, now: now, calendar: calendar))
+    }
+
+    func testLegacyArrivalsCombineWithLongVisitsButNotWithKnownShortVisits() {
+        let calendar = TestCalendar.paris
+        let now = makeDate(calendar, 2026, 11, 23, 12, 0)
+        let old = [20, 21].map { makeDate(calendar, 2026, 11, $0, 8, 0) }
+        let arrival = makeDate(calendar, 2026, 11, 22, 8, 0)
+        let legacy = DiscoveredPlace(latitude: 48.85, longitude: 2.35, arrivals: old)
+        let cases: [(TimeInterval, PlaceType?)] = [(900, nil), (7200, .taf)]
+        for (duration, expected) in cases {
+            var candidates = [legacy]
+            PlaceDiscoveryRules.record(in: &candidates, latitude: 48.85, longitude: 2.35,
+                                       accuracy: 20, arrival: arrival, departure: arrival.addingTimeInterval(duration), now: now)
+            XCTAssertEqual(PlaceDiscoveryRules.recommendation(candidates[0], now: now, calendar: calendar)?.type, expected)
+        }
+    }
+
     @MainActor
     func testStoredLegacyArrivalCombinesWithNewVisitsAndCanGainDeparture() throws {
         struct LegacyStop: Encodable {

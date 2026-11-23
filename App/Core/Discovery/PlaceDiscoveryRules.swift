@@ -87,6 +87,17 @@ enum PlaceDiscoveryRules {
         if longDays.count >= 3 {
             return PlaceRecommendation(type: .taf, reason: "Tu as passé au moins deux heures ici sur trois jours différents.")
         }
+        // Older versions only kept arrival timestamps for completed stops.
+        // Treat them as recurring visits, without assuming how long they lasted.
+        let timedArrivals = Set(visits.map(\.arrival))
+        let legacyDays = Set(freshArrivals(candidate, now: now).compactMap { arrival -> Date? in
+            let hour = calendar.component(.hour, from: arrival)
+            guard !timedArrivals.contains(arrival), (5..<19).contains(hour) else { return nil }
+            return calendar.startOfDay(for: arrival)
+        })
+        if nights.isEmpty, longDays.union(legacyDays).count >= 3 {
+            return PlaceRecommendation(type: .taf, reason: "Tu es passé ici sur au moins trois jours. Certains anciens passages n’ont pas d’heure de départ.")
+        }
         if candidate.context?.category == .courses {
             return PlaceRecommendation(type: .courses, reason: "Commerce proche indiqué par Apple Plans.")
         }
