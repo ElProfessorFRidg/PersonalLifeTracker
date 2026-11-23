@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 /// Onglet Accueil (écran `accueil`) : carte Maintenant, session en cours, chiffres du jour, ruban et sessions du jour.
-/// Garde le bouton Réglages de la barre d'outils.
+/// En-tête compact (PLTRootHeader) avec les boutons Ajouter et Réglages.
 struct AccueilView: View {
     @Environment(AppSettings.self) private var settings
     @Environment(GeofenceService.self) private var geofence
@@ -23,29 +23,9 @@ struct AccueilView: View {
         let hasRunning: Bool = sessions.contains { $0.endDate == nil }
         let interval: TimeInterval = hasRunning ? 1 : 30
         let placeCount = modules.isActive("place_discovery") ? geofence.discovery.suggestions(excluding: places).count : 0
-        return PLTScreen(title: "Accueil") {
+        return PLTScreen(title: "Accueil", hidesNavigationBar: true) {
             TimelineView(.periodic(from: Date(), by: interval)) { timeline in
                 content(now: timeline.date, placeCount: placeCount)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    showAdd = true
-                } label: {
-                    Image(systemName: "plus")
-                        .frame(minWidth: 44, minHeight: 44)
-                }
-                .accessibilityLabel("Ajouter")
-            }
-            ToolbarItem(placement: .topBarTrailing) {
-                NavigationLink {
-                    ReglagesView()
-                } label: {
-                    Image(systemName: "gearshape")
-                        .frame(minWidth: 44, minHeight: 44)
-                }
-                .accessibilityLabel("Réglages")
             }
         }
         .sheet(isPresented: $showStart) {
@@ -104,13 +84,13 @@ struct AccueilView: View {
 
             RecoveryCardsSection(now: now, calendar: cal, running: running)
 
-            SetupCard()
-
             AccueilNowCard(decision: decision,
                            running: running,
                            doubtSession: doubtTarget,
                            onStop: { showStopConfirm = true },
                            onChooseDoubt: { doubtSession = doubtTarget })
+
+            SetupCard()
 
             if let live = running {
                 AccueilRunningCard(session: live, now: now, onStop: { showStopConfirm = true })
@@ -156,27 +136,33 @@ struct AccueilView: View {
     }
 
     private func header(now: Date, calendar: Calendar) -> some View {
-        let raw: String = Formatting.dayTitle(now, calendar: calendar)
-        let title: String = raw.prefix(1).uppercased() + String(raw.dropFirst())
-        return VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-            Text(title)
-                .font(.subheadline)
-                .foregroundStyle(palette.textSecondary)
-            Text("Salut !")
-                .font(.title2.weight(.semibold))
-                .foregroundStyle(palette.textPrimary)
+        let eyebrow: String = Formatting.dayTitle(now, calendar: calendar)
+        return PLTRootHeader(eyebrow: eyebrow, title: "Salut !") {
+            PLTIconButton(systemName: "plus", label: "Ajouter") {
+                showAdd = true
+            }
+            NavigationLink {
+                ReglagesView()
+            } label: {
+                Image(systemName: "slider.horizontal.3")
+                    .font(.body.weight(.semibold))
+                    .foregroundStyle(palette.accent)
+                    .frame(width: 44, height: 44)
+                    .background(Circle().fill(palette.surface))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel("Réglages")
         }
-        .accessibilityElement(children: .combine)
     }
 
     private func todaySection(work: ActivityDayTotal, study: ActivityDayTotal, base: CalculationBase) -> some View {
         return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Aujourd'hui")
             HStack(alignment: .top, spacing: Theme.Spacing.s) {
-                StatTile(label: "Taf", value: DaySummary.tileValue(work),
-                         note: DaySummary.tileNote(work, base: base), tone: .work)
                 StatTile(label: "Cours", value: DaySummary.tileValue(study),
                          note: DaySummary.tileNote(study, base: base), tone: .study)
+                StatTile(label: "Taf", value: DaySummary.tileValue(work),
+                         note: DaySummary.tileNote(work, base: base), tone: .work)
             }
         }
     }

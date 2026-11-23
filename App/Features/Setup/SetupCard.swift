@@ -47,42 +47,37 @@ struct SetupCard: View {
     private func card(steps: [SetupStep]) -> some View {
         let progress: SetupProgress = SetupChecklist.progress(of: steps)
         let next: SetupStep? = SetupChecklist.nextStep(in: steps)
-        return PLTCard {
-            HStack(alignment: .firstTextBaseline) {
-                Text("Configuration")
-                    .font(.headline)
-                    .foregroundStyle(palette.textPrimary)
-                Spacer(minLength: Theme.Spacing.s)
-                Text(progress.text)
-                    .font(.subheadline.monospacedDigit())
-                    .foregroundStyle(palette.textSecondary)
-            }
-            ProgressView(value: progress.fraction)
-                .tint(palette.accent)
-            if let step = next {
-                if step.status == .blocked {
-                    PLTBanner(kind: .warning, title: step.title, message: step.why)
-                } else {
-                    Text("Prochaine étape : \(step.title)")
-                        .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(palette.textPrimary)
-                    Text(step.why)
-                        .font(.subheadline)
-                        .foregroundStyle(palette.textSecondary)
-                        .lineLimit(3)
-                }
-            }
+        let rowTitle: String = next?.title ?? "Finir la configuration"
+        let rowSubtitle: String = "Configuration, \(progress.text)"
+        return VStack(alignment: .leading, spacing: 0) {
             NavigationLink {
                 SetupAssistantView()
             } label: {
-                Text("Continuer la configuration")
+                PLTRow(symbol: next?.status == .blocked ? "exclamationmark.triangle" : "checklist",
+                       tone: next?.status == .blocked ? .danger : .accent,
+                       title: rowTitle,
+                       subtitle: rowSubtitle,
+                       showsChevron: true,
+                       showsSeparator: false)
             }
-            .buttonStyle(.pltPrimary)
+            .buttonStyle(.plain)
+            ProgressView(value: progress.fraction)
+                .tint(palette.accent)
+                .padding(.horizontal, Theme.Spacing.m)
+                .padding(.bottom, Theme.Spacing.s)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(palette.surface)
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.medium, style: .continuous))
+        .contextMenu {
             Button("Plus tard") {
                 SetupDismissal().dismiss(blockedIDs: SetupChecklist.blockedPermissionIDs(in: steps))
                 refreshToken += 1
             }
-            .buttonStyle(.pltSecondary)
+        }
+        .accessibilityAction(named: "Plus tard") {
+            SetupDismissal().dismiss(blockedIDs: SetupChecklist.blockedPermissionIDs(in: steps))
+            refreshToken += 1
         }
     }
 }

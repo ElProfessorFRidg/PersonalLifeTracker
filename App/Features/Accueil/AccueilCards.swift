@@ -28,8 +28,11 @@ struct AccueilNowCard: View {
 
     var body: some View {
         PLTCard(isNow: true) {
-            Text("Maintenant")
-                .font(.subheadline.weight(.semibold))
+            Text("MAINTENANT")
+                .font(.footnote.weight(.semibold))
+                .tracking(0.6)
+                .opacity(0.85)
+                .accessibilityLabel("Maintenant")
                 .accessibilityAddTraits(.isHeader)
             switch decision {
             case .confirmRunning:
@@ -49,9 +52,10 @@ struct AccueilNowCard: View {
     private func textBlock(title: String, message: String) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
             Text(title)
-                .font(.title3.weight(.semibold))
+                .font(.title2.weight(.bold))
             Text(message)
-                .font(.body)
+                .font(.subheadline)
+                .opacity(0.9)
         }
     }
 
@@ -117,10 +121,10 @@ struct AccueilRunningCard: View {
                 Spacer(minLength: 0)
             }
             Text(placeName)
-                .font(.headline)
+                .font(.title3.weight(.semibold))
                 .foregroundStyle(palette.textPrimary)
             Text(Formatting.timer(seconds: seconds))
-                .font(.largeTitle.weight(.semibold).monospacedDigit())
+                .font(.system(size: 48, weight: .semibold, design: .default).monospacedDigit())
                 .foregroundStyle(palette.textPrimary)
                 .accessibilityLabel("Durée de la session en cours")
                 .accessibilityValue(Formatting.duration(seconds: seconds))
