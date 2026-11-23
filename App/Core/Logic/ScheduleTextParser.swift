@@ -959,7 +959,7 @@ enum ScheduleTextParser {
                         reasons.append("Moins d'une heure, regarde la photo avant de garder.")
                     }
                     if range.crossesMidnight {
-                        confidence *= 0.85
+                        confidence *= 0.8
                         reasons.append("La fin tombe le lendemain, vérifie.")
                     }
                     if fuzzyName {

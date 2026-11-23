@@ -24,6 +24,8 @@ targets:
         INFOPLIST_KEY_NSLocationWhenInUseUsageDescription: "Pour détecter quand tu arrives au travail ou en cours."
         INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription: "Pour détecter ton arrivée et ton départ même quand l'app est fermée."
         INFOPLIST_KEY_UIBackgroundModes: location
+        INFOPLIST_KEY_NSCameraUsageDescription: "Pour scanner ton planning papier. La photo reste sur ton téléphone."
+        INFOPLIST_KEY_NSPhotoLibraryUsageDescription: "Pour lire ton planning depuis une photo ou une capture d'écran. Rien ne quitte ton téléphone."
   UnitTests:
     type: bundle.unit-test
     platform: iOS

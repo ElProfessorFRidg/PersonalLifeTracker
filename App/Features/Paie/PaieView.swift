@@ -131,6 +131,15 @@ struct PaieView: View {
                                    now: Date(), calendar: calendar)
     }
 
+    private func computeDetail(for contract: Contract, context ctx: PaieRulesContext) -> PayDetailResult {
+        let comps: DateComponents = calendar.dateComponents([.year, .month], from: monthStart)
+        return PayCalculator.monthDetail(year: comps.year ?? 0, month: comps.month ?? 1,
+                                         sessions: inputs(for: contract), rates: entries(for: contract),
+                                         base: settings.calculationBase, netRatio: netRatioDecimal,
+                                         rules: ctx.rules, premiums: ctx.premiums,
+                                         now: Date(), calendar: calendar)
+    }
+
     private var isCurrentMonth: Bool {
         return calendar.isDate(monthStart, equalTo: Date(), toGranularity: .month)
     }
@@ -261,6 +270,8 @@ struct PaieView: View {
 
     private func estimateSections(_ contract: Contract) -> some View {
         let r: PayMonthResult = computeResult(for: contract)
+        let ctx: PaieRulesContext = PaieRulesContext.load(employer: contract.employer)
+        let d: PayDetailResult = computeDetail(for: contract, context: ctx)
         let key: String = "\(r.year)-\(r.month)-\(r.grossCents)-\(r.netCents)-\(r.retainedSeconds)-\(r.exactSeconds)-\(r.sessionCount)-\(r.doubtSessionCount)-\(settings.currencyCode)-\(settings.calculationBase.rawValue)"
         return VStack(alignment: .leading, spacing: Theme.Spacing.l) {
             PLTBanner(kind: .warning,
@@ -271,13 +282,15 @@ struct PaieView: View {
             }
             monthNavigator
             if r.hasAnySession {
-                monthSection(r)
+                monthSection(r, d)
                 flagsSection(r)
-                breakdownSection(r)
+                minimumRateSection(r, ctx)
+                breakdownSection(r, d, ctx)
             } else {
                 emptyMonthSection(r)
             }
             plannedSection(contract, r)
+            conventionSection(contract, ctx)
             ratesSection(contract)
             if r.hasAnySession {
                 exportSection(r)
@@ -355,7 +368,7 @@ struct PaieView: View {
         }
     }
 
-    private func monthSection(_ r: PayMonthResult) -> some View {
+    private func monthSection(_ r: PayMonthResult, _ d: PayDetailResult) -> some View {
         let title: String = isCurrentMonth
             ? "\(PaieFormat.monthTitle(monthStart, calendar: calendar)), au \(calendar.component(.day, from: Date()))"
             : PaieFormat.monthTitle(monthStart, calendar: calendar)
@@ -371,13 +384,13 @@ struct PaieView: View {
                 PLTChip("Estimation", kind: .doubt)
             }
             HStack(alignment: .top, spacing: Theme.Spacing.s) {
-                StatTile(label: "Brut estimé", value: amount(r.grossCents),
+                StatTile(label: "Brut estimé", value: amount(d.grossCents),
                          note: hoursNote, tone: .work)
-                    .accessibilityLabel("Brut estimé, " + amountLabel(r.grossCents))
+                    .accessibilityLabel("Brut estimé, " + amountLabel(d.grossCents))
                     .onTapGesture { if hideAmounts { revealed.toggle() } }
-                StatTile(label: "Net estimé", value: amount(r.netCents),
+                StatTile(label: "Net estimé", value: amount(d.netCents),
                          note: "Environ, ratio \(PaieFormat.ratioText(PayPreferences.clampedRatio(netRatioStored)))", tone: .accent)
-                    .accessibilityLabel("Net estimé, " + amountLabel(r.netCents))
+                    .accessibilityLabel("Net estimé, " + amountLabel(d.netCents))
                     .onTapGesture { if hideAmounts { revealed.toggle() } }
             }
             if hideAmounts {
@@ -414,8 +427,8 @@ struct PaieView: View {
         }
     }
 
-    private func breakdownSection(_ r: PayMonthResult) -> some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+    private func breakdownSection(_ r: PayMonthResult, _ d: PayDetailResult, _ ctx: PaieRulesContext) -> some View {
+        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
             PLTSectionHeader(title: "Comment je l'estime", actionTitle: "Détail du calcul", action: { showCalc = true })
             PLTListGroup {
                 PLTRow(symbol: "clock", tone: .work,
@@ -429,15 +442,111 @@ struct PaieView: View {
                            subtitle: "\(Formatting.duration(seconds: line.seconds)) à ce taux",
                            value: amount(line.grossCents))
                 }
-                PLTRow(title: "Total brut estimé", value: amount(r.grossCents))
+                ForEach(0..<d.rules.lines.count, id: \.self) { i in
+                    let line: PayRuleLine = d.rules.lines[i]
+                    PLTRow(symbol: "plus.circle", tone: .accent,
+                           title: PaieRuleText.lineTitle(line, rules: ctx.rules),
+                           subtitle: "\(Formatting.duration(seconds: line.seconds)) sur \(PaieFormat.rateText(line.hourlyGross, settings: settings)) de l'heure. Source : \(PaieRuleText.source(for: line, rules: ctx.rules))",
+                           value: amount(line.majorationCents))
+                }
+                ForEach(0..<d.premiums.lines.count, id: \.self) { i in
+                    let line: PremiumLine = d.premiums.lines[i]
+                    PLTRow(symbol: "gift", tone: .accent,
+                           title: line.name,
+                           subtitle: "\(line.kind.title), \(line.quantityText). Saisie par toi, \(line.basis.title.lowercased()).",
+                           value: amount(line.cents))
+                }
+                PLTRow(title: "Total brut estimé", value: amount(d.grossCents))
                 PLTRow(title: "Net estimé",
-                       subtitle: "Brut multiplié par le ratio \(PaieFormat.ratioText(PayPreferences.clampedRatio(netRatioStored))), indicatif",
-                       value: amount(r.netCents),
+                       subtitle: "Brut multiplié par le ratio \(PaieFormat.ratioText(PayPreferences.clampedRatio(netRatioStored))), plus les primes nettes. Indicatif",
+                       value: amount(d.netCents),
                        showsSeparator: false)
             }
-            Text("Je ne compte pas encore les majorations (dimanche, soirée), les primes ni les règles de ta convention. Ta fiche de paie les inclut peut-être : l'écart est normal.")
+            ForEach(0..<d.premiums.notCounted.count, id: \.self) { i in
+                Text("Prime non comptée, \(d.premiums.notCounted[i].name) : \(d.premiums.notCounted[i].reason)")
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
+            }
+            if ctx.premiumsLoadFailed {
+                PLTBanner(kind: .warning, title: "Primes illisibles",
+                          message: "Je n'ai pas pu relire tes primes : elles ne sont pas comptées ici.")
+            }
+            Text(rulesFootnote(ctx, d))
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
+        }
+    }
+
+    private func rulesFootnote(_ ctx: PaieRulesContext, _ d: PayDetailResult) -> String {
+        var text: String = "Estimation : heures x taux, plus les majorations de \"\(ctx.pack.name)\" et les primes que tu as saisies."
+        var missing: [String] = []
+        if ctx.rules.night == nil { missing.append("nuit") }
+        if ctx.rules.sunday == nil { missing.append("dimanche") }
+        if ctx.rules.publicHoliday == nil { missing.append("jours fériés") }
+        if ctx.rules.overtime == nil { missing.append("heures au-delà du seuil") }
+        if !missing.isEmpty {
+            text += " Pas de règle renseignée pour : " + missing.joined(separator: ", ") + " (à renseigner)."
+        }
+        if ctx.pack.isUnverified { text += " Les valeurs du pack ne sont pas vérifiées." }
+        text += " " + PaieRuleText.verifyHint
+        return text
+    }
+
+    @ViewBuilder
+    private func minimumRateSection(_ r: PayMonthResult, _ ctx: PaieRulesContext) -> some View {
+        if let m = ctx.rules.minimumRate {
+            let below: Bool = r.rateLines.contains(where: { (l: PayRateLine) -> Bool in
+                PayRules.isBelowMinimum(hourlyGross: l.hourlyGross, rules: ctx.rules)
+            })
+            if below {
+                PLTBanner(kind: .warning,
+                          title: "Ton taux est sous le minimum de la convention",
+                          message: "\(m.label) : \(PayExport.centsText(m.hourlyCents)) € brut par heure. Source : \(m.source) \(PaieRuleText.verifyHint)")
+            }
+        }
+    }
+
+    // MARK: Convention, primes, relevé
+
+    private func conventionSection(_ contract: Contract, _ ctx: PaieRulesContext) -> some View {
+        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            PLTSectionHeader(title: "Convention, primes et relevé")
+            PLTListGroup {
+                if let employer = contract.employer {
+                    NavigationLink {
+                        PaieConventionView(employer: employer)
+                    } label: {
+                        PLTRow(symbol: "doc.text.magnifyingglass", tone: .accent,
+                               title: "Ta convention",
+                               subtitle: ctx.pack.name + (ctx.pack.isUnverified ? ". Valeurs à vérifier." : ""),
+                               showsChevron: true)
+                    }
+                    .buttonStyle(.plain)
+                    NavigationLink {
+                        PaiePrimesView(employer: employer)
+                    } label: {
+                        PLTRow(symbol: "gift", tone: .accent,
+                               title: "Primes et indemnités",
+                               subtitle: ctx.premiums.isEmpty ? "Aucune saisie" : PaieFormat.plural(ctx.premiums.count, "prime saisie par toi", "primes saisies par toi"),
+                               showsChevron: true)
+                    }
+                    .buttonStyle(.plain)
+                } else {
+                    PLTRow(symbol: "briefcase", tone: .neutral,
+                           title: "Ajoute un employeur à ton contrat",
+                           subtitle: "La convention et les primes sont rattachées à l'employeur, dans Emploi.")
+                }
+                NavigationLink {
+                    PaieReleveView(contract: contract)
+                } label: {
+                    PLTRow(symbol: "doc.text", tone: .accent,
+                           title: "Relevé d'heures",
+                           subtitle: "Jour par jour, avec nuit, dimanche et jours fériés. À partager en texte ou en CSV.",
+                           showsChevron: true,
+                           showsSeparator: false)
+                }
+                .buttonStyle(.plain)
+            }
         }
     }
 
@@ -520,7 +629,7 @@ struct PaieView: View {
                            subtitle: "Le fichier n'est pas prêt", showsSeparator: false)
                 }
             }
-            Text("Le fichier dit que c'est une estimation. Le PDF n'est pas encore là. Rien n'est envoyé nulle part.")
+            Text("Le fichier dit que c'est une estimation. Ces deux exports ne contiennent pas les majorations ni les primes : pour ça, utilise le relevé d'heures. Le PDF n'est pas encore là. Rien n'est envoyé nulle part.")
                 .font(.footnote)
                 .foregroundStyle(palette.textSecondary)
         }
