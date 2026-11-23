@@ -78,10 +78,13 @@ struct PLTSectionHeader: View {
 struct PLTScreen<Content: View>: View {
     @Environment(\.palette) private var palette
     private let title: String
+    private let hidesNavigationBar: Bool
     private let content: Content
 
-    init(title: String, @ViewBuilder content: () -> Content) {
+    /// `hidesNavigationBar: true` pour les onglets racine : ils dessinent leur propre `PLTRootHeader`.
+    init(title: String, hidesNavigationBar: Bool = false, @ViewBuilder content: () -> Content) {
         self.title = title
+        self.hidesNavigationBar = hidesNavigationBar
         self.content = content()
     }
 
@@ -96,5 +99,7 @@ struct PLTScreen<Content: View>: View {
         }
         .background(palette.background.ignoresSafeArea())
         .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar(hidesNavigationBar ? .hidden : .automatic, for: .navigationBar)
     }
 }
