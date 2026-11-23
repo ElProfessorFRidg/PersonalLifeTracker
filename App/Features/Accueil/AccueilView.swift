@@ -104,6 +104,8 @@ struct AccueilView: View {
 
             RecoveryCardsSection(now: now, calendar: cal, running: running)
 
+            SetupCard()
+
             AccueilNowCard(decision: decision,
                            running: running,
                            doubtSession: doubtTarget,

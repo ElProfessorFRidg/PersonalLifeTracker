@@ -24,6 +24,7 @@ struct ReglagesView: View {
 
     var body: some View {
         PLTScreen(title: "Réglages") {
+            setupSection
             detectionSection
             diagnosticSection
             featuresSection
@@ -153,6 +154,24 @@ struct ReglagesView: View {
         if let url = URL(string: UIApplication.openSettingsURLString) {
             openURL(url)
         }
+    }
+
+    // MARK: Assistant de configuration
+
+    private var setupSection: some View {
+        NavigationLink {
+            SetupAssistantView()
+        } label: {
+            PLTListGroup {
+                PLTRow(symbol: "wand.and.stars",
+                       title: "Assistant de configuration",
+                       subtitle: "Vérifie ce qui manque et règle-le en quelques taps",
+                       showsChevron: true,
+                       showsSeparator: false)
+            }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Assistant de configuration")
     }
 
     // MARK: Diagnostic et instantanés
