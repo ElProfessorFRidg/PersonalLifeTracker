@@ -19,8 +19,6 @@ jobs:
   build-test:
     name: Build and Test
     runs-on: macos-latest
-    permissions:
-      contents: write
     timeout-minutes: 60
     steps:
       - name: Check out repository
