@@ -39,6 +39,7 @@ struct PlanningImportView: View {
                 }
             case .failed(let title, let message):
                 PLTBanner(kind: .error, title: title, message: message)
+                if model.image != nil { rotatePhotoButton }
                 importSources
             case .result:
                 review
@@ -158,6 +159,16 @@ struct PlanningImportView: View {
         }
     }
 
+    private var rotatePhotoButton: some View {
+        Button {
+            editingID = nil
+            model.rotatePhoto()
+        } label: {
+            Label("Pivoter la photo", systemImage: "rotate.right")
+        }
+        .buttonStyle(.pltSecondary)
+    }
+
     @ViewBuilder
     private var review: some View {
         if let image = model.image {
@@ -166,6 +177,14 @@ struct PlanningImportView: View {
                 .scaledToFit()
                 .frame(maxWidth: .infinity, maxHeight: 260)
                 .accessibilityLabel("Photo du planning d’origine")
+            rotatePhotoButton
+        }
+        if let warnings = model.parse?.warnings, !warnings.isEmpty {
+            PLTCard {
+                ForEach(warnings, id: \.self) { warning in
+                    Text(warning).font(.subheadline)
+                }
+            }
         }
         if let notice = model.notice { Text(notice).font(.footnote) }
         if let parse = model.parse, !parse.rowNames.isEmpty {

@@ -82,7 +82,7 @@ final class PlanningImportModel {
 
     // MARK: - Lecture
 
-    func start(image: UIImage, names: [String], notice: String? = nil) {
+    func start(image: UIImage, names: [String], notice: String? = nil, triesOtherOrientations: Bool = true) {
         readTask?.cancel()
         messageWeek = nil
         skippedMessageLines = []
@@ -109,12 +109,53 @@ final class PlanningImportModel {
                     }
                 }
                 if Task.isCancelled { return }
-                self?.finishReading(found)
+                guard let self else { return }
+                let initial = ScheduleTextParser.parse(lines: found, options: self.orientationOptions)
+                if triesOtherOrientations && (initial.rowNames.isEmpty || (cgImage.height > cgImage.width && initial.shifts.isEmpty)) {
+                    let orientations: [UIImage.Orientation] = [.left, .right]
+                    var bestLines = found
+                    var bestImage = image
+                    var best = initial
+                    for orientation in orientations {
+                        if Task.isCancelled { return }
+                        let rotated = UIImage(cgImage: cgImage, scale: 1, orientation: orientation)
+                        guard let upright = ScheduleOCR.normalizedImage(rotated),
+                              let candidateLines = try? await ScheduleOCR.recognizeLines(in: upright) else { continue }
+                        let candidate = ScheduleTextParser.parse(lines: candidateLines, options: self.orientationOptions)
+                        if self.orientationRank(candidate) > self.orientationRank(best) {
+                            best = candidate
+                            bestLines = candidateLines
+                            bestImage = UIImage(cgImage: upright)
+                        }
+                        if best.shifts.count >= 2, best.unreadable.isEmpty { break }
+                    }
+                    if Task.isCancelled { return }
+                    self.image = bestImage
+                    self.finishReading(bestLines)
+                } else {
+                    self.finishReading(found)
+                }
             } catch {
                 if Task.isCancelled { return }
                 self?.failReading()
             }
         }
+    }
+
+    private var orientationOptions: ScheduleParseOptions {
+        ScheduleParseOptions(names: names, referenceDate: Date(), calendar: PlanningSupport.calendar)
+    }
+
+    private func orientationRank(_ result: ScheduleParseResult) -> Int {
+        guard !result.rowNames.isEmpty else { return 0 }
+        let matchingRow = result.chosenRowIndex == nil ? 0 : 1000
+        return matchingRow + min(40, result.rowNames.count) + result.shifts.count * 100
+    }
+
+    func rotatePhoto() {
+        guard let image, let normalized = ScheduleOCR.normalizedImage(image) else { return }
+        let rotated = UIImage(cgImage: normalized, scale: 1, orientation: .right)
+        start(image: rotated, names: names, notice: notice, triesOtherOrientations: false)
     }
 
     func readMessage(_ text: String, week: Date) {
