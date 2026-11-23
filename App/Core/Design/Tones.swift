@@ -57,5 +57,12 @@ extension ActivityType {
 
 extension PlaceType {
     var tone: PLTTone { return defaultActivity.tone }
-    var symbolName: String { return defaultActivity.symbolName }
+    var symbolName: String {
+        switch self {
+        case .domicile: return "house.fill"
+        case .sport: return "dumbbell.fill"
+        case .sortie: return "sparkles"
+        default: return defaultActivity.symbolName
+        }
+    }
 }

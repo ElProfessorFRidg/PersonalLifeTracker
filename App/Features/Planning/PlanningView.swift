@@ -51,7 +51,7 @@ struct PlanningView: View {
         let nextEmpty: Bool = weekShifts(nextStart).isEmpty
 
         return PLTScreen(title: "Planning") {
-            weekHeader(hasShifts: !current.isEmpty, hasImported: current.contains(where: { $0.sourceRaw == "photo" }))
+            weekHeader(hasShifts: !current.isEmpty, hasImported: current.contains(where: { $0.sourceRaw == "photo" || $0.sourceRaw == "text" }))
 
             if isCurrentWeek && nextEmpty {
                 PLTBanner(kind: .info,
@@ -77,6 +77,8 @@ struct PlanningView: View {
                 }
             }
 
+            PlannedWorkReviewSection(week: weekStart)
+
             PLTSectionHeader(title: "Jour par jour")
             PLTCard {
                 ForEach(days, id: \.self) { day in
@@ -93,11 +95,19 @@ struct PlanningView: View {
             ToolbarItemGroup(placement: .topBarTrailing) {
                 if modules.isActive("planning_ocr") {
                     NavigationLink {
-                        PlanningImportView()
+                        PlanningImportView(week: weekStart)
                     } label: {
-                        Image(systemName: "camera")
+                        Image(systemName: "square.and.arrow.down")
                     }
-                    .accessibilityLabel("Importer une photo de planning")
+                    .accessibilityLabel("Importer un planning")
+                }
+                if modules.isActive("weekly_review"), weekStart <= Date() {
+                    NavigationLink {
+                        WeeklyReviewView(week: weekStart)
+                    } label: {
+                        Image(systemName: "checklist")
+                    }
+                    .accessibilityLabel("Revoir la semaine")
                 }
                 Menu {
                     Button("Ajouter un créneau") { showAdd = true }

@@ -15,6 +15,14 @@ Les sept workflows utilisent des noms anglais classiques : CI, PR Checks, Build 
 
 Workflow pull-request.yml modifié : après tests et archive réussis, publication d'une pré-release Latest Build (PR #N) avec lien IPA fixe pr-N-latest/PersonalLifeTracker.ipa, tag actualisé sur le commit source et résumé de téléchargement. Publication limitée aux PR du dépôt ; les forks gardent les artefacts sans permission d'écriture. Un échec de build conserve le dernier IPA publié. NON TESTÉ en Actions pour cette modification ; lien disponible après première publication réussie.
 
+## Compatibilité des IPA de PR du 2026-11-22
+
+Le workflow pull-request.yml produit les IPA en version 0.0.1 comme les bêtas publiées. Le numéro de build reste celui du run GitHub Actions, et l’identifiant de bundle reste identique au projet. Remplacement via AltStore sur appareil NON TESTÉ.
+
+## Tests ciblés de la préversion
+
+Les workflows `_build-test.yml` et `pull-request.yml` permettent à la branche de préversion de la PR #2 d’exécuter les tests du module des heures manquantes. Les autres builds utilisent la suite complète par défaut.
+
 ## Phases
 
 | ID | Titre | Étape | Statut | Preuve | Note |
@@ -39,17 +47,17 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 
 | ID | Titre | Étape | Statut | Preuve | Note |
 |---|---|---|---|---|---|
-| module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | NON COMMENCÉ |  |  |
-| module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | CLVisit, regroupement local, confirmation et exclusion des lieux connus ; notes/place_discovery.md. Tests iOS et terrain NON TESTÉS pour cette modification. |
+| module:planning_ocr | Planning par photo, alerte de planning tardif | 7 | CODÉ NON TESTÉ |  | Import local photo avec vérification manuelle. Alerte de retard non raccordée. Vérification iOS dans la PR #2. |
+| module:place_discovery | Découverte automatique des lieux | 10 (avancée à la demande) | CODÉ NON TESTÉ |  | Arrivées et départs CLVisit rapprochés, liste de suggestions, catégories et adresses via Plans à la demande. Régressions ajoutées. Détails et état des vérifications dans notes/place_discovery.md. |
 | module:employment | Employeurs, contrats, fin de contrat | 5 | TESTS AUTO OK | https://github.com/ElProfessorFRidg/PersonalLifeTracker/actions/runs/43956320212 | Logique testée en CI. Écrans jamais vus, rien vérifié sur iPhone. Détail et limites : notes/employment.md. Rappels de fin de contrat calculés mais pas envoyés. |
 | module:pay | Salaire, paie, conventions, primes, historique des taux | 5 (base), 6 (conventions, primes) | EN COURS |  | Base de l'étape 5 testée en CI (heures, brut et net estimés, historique des taux, export). SMIC 12,02 NON VÉRIFIÉ. Conventions et primes (étape 6) pas faites. |
 | module:school_calendar | Calendrier scolaire, vacances, jours fériés | 9 | NON COMMENCÉ |  |  |
 | module:notes | Notes de journée | 9 | NON COMMENCÉ |  |  |
 | module:search | Recherche globale | 10 | NON COMMENCÉ |  |  |
-| module:weekly_review | Revue de la semaine | 10 | NON COMMENCÉ |  |  |
+| module:weekly_review | Revue de la semaine | 10 | CODÉ NON TESTÉ |  | File de sessions terminées à vérifier dans Accueil et Planning. Notification dominicale non implémentée. Vérification iOS dans la PR #2. |
 | module:recaps | Bilans mensuels et annuels | 10 | NON COMMENCÉ |  |  |
 | module:live_activity_widgets | Live Activity, widgets, App Intents, contrôles, galerie de widgets | 8 (base, contrôles), 10 (galerie) | NON COMMENCÉ |  |  |
-| module:missing_hours | Détection d'heures manquantes | 10 | NON COMMENCÉ |  |  |
+| module:missing_hours | Détection d'heures manquantes | 10 | CODÉ NON TESTÉ |  | Détection de trous du planning saisi, revue, motifs et saisie préremplie. Rappels automatiques et estimation par contrat non raccordés. |
 | module:contract_hours | Équilibrage des heures du contrat, compteurs, repos compensateur, alerte de quota | 6 | NON COMMENCÉ |  |  |
 | module:pattern_detection | Détection de motifs de planning | 10 | NON COMMENCÉ |  |  |
 | module:schedule_archive | Historique des plannings | 10 | NON COMMENCÉ |  |  |
@@ -123,7 +131,7 @@ Workflow pull-request.yml modifié : après tests et archive réussis, publicati
 | module:low_period_alert | Anticipation des périodes creuses | 11 | NON COMMENCÉ |  |  |
 | module:vacation_prep | Prêt à partir en vacances | 11 | NON COMMENCÉ |  |  |
 | module:team_swaps | Équipe et échanges malins | 11 | NON COMMENCÉ |  |  |
-| module:planning_text | Planning par texte | 10 | NON COMMENCÉ |  |  |
+| module:planning_text | Planning par texte | 10 | CODÉ NON TESTÉ |  | Collage d’une semaine datée, un jour par ligne, relecture et correction. Feuille de partage et apprentissage non implémentés. Vérification iOS dans la PR #2. |
 | module:live_earnings | Compteur de gains en direct | 11 | NON COMMENCÉ |  |  |
 | module:true_hourly_rate | Vrai taux horaire | 11 | NON COMMENCÉ |  |  |
 | module:notice_check | Délai de prévenance | 11 | NON COMMENCÉ |  |  |

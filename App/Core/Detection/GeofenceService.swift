@@ -29,6 +29,8 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
     @ObservationIgnored private var monitoringMessage: String?
     @ObservationIgnored private var lastRefreshDate: Date?
     @ObservationIgnored private var activeObserver: NSObjectProtocol?
+    @ObservationIgnored private var savedMixedVisits: [UUID: OpenMixedVisit] = [:]
+    private static let mixedVisitsKey = "plt.geofence.openMixedVisits"
 
     init(container: ModelContainer, notifier: DetectionNotifier, manager: CLLocationManager = CLLocationManager()) {
         self.discovery = PlaceDiscovery(container: container)
@@ -63,9 +65,14 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         activeObserver = NotificationCenter.default.addObserver(forName: UIApplication.didBecomeActiveNotification,
                                                                object: nil, queue: OperationQueue.main) { [weak self] _ in
             Task { @MainActor in
-                self?.refreshMonitoredPlaces()
+                self?.refreshMonitoredPlaces(checkExisting: true)
                 self?.tick()
             }
+        }
+        if let data = UserDefaults.standard.data(forKey: Self.mixedVisitsKey),
+           let visits = try? JSONDecoder().decode([UUID: OpenMixedVisit].self, from: data) {
+            savedMixedVisits = visits
+            engine.restoreMixedVisits(visits, places: fetchPlaces().map(detectionPlace), now: Date())
         }
         applyAuthorization(manager.authorizationStatus, shouldLog: false)
         refreshMonitoredPlaces()
@@ -122,7 +129,7 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
     }
 
     /// Réenregistre les régions : à appeler quand les lieux changent. Idempotent.
-    func refreshMonitoredPlaces() {
+    func refreshMonitoredPlaces(checkExisting: Bool = false) {
         discovery.refresh()
         lastRefreshDate = Date()
         let status: CLAuthorizationStatus = manager.authorizationStatus
@@ -131,6 +138,10 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         let allowed: Bool = (status == .authorizedAlways || status == .authorizedWhenInUse)
         if !allowed {
             stopAllRegions()
+            engine = DetectionEngine()
+            persistMixedVisits()
+            updateTracking()
+            scheduleTick()
             isMonitoring = false
             monitoredPlaceUIDs = []
             return
@@ -146,6 +157,11 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         updateLastError()
 
         let places: [Place] = fetchPlaces()
+        let mixedIDs = Set(places.lazy.filter { $0.type == .courses && $0.alsoWorksHere }.map(\.uid))
+        for uid in engine.openMixedVisits.keys where !mixedIDs.contains(uid) {
+            engine.discardMixedVisit(for: uid)
+        }
+        persistMixedVisits()
         var candidates: [RegionCandidate] = []
         for p in places {
             candidates.append(RegionCandidate(uid: p.uid, latitude: p.latitude, longitude: p.longitude))
@@ -181,13 +197,13 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
                abs(old.radius - radius) < 0.5,
                abs(old.center.latitude - center.latitude) < 0.000001,
                abs(old.center.longitude - center.longitude) < 0.000001 {
+                if checkExisting { manager.requestState(for: old) }
                 continue
             }
             let region = CLCircularRegion(center: center, radius: radius, identifier: uid.uuidString)
             region.notifyOnEntry = true
             region.notifyOnExit = true
             manager.startMonitoring(for: region)
-            manager.requestState(for: region)
         }
 
         let changed: Bool = Set(monitoredPlaceUIDs) != Set(selected)
@@ -208,12 +224,30 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
 
     // MARK: Événements
 
-    private func regionEntered(identifier: String, date: Date, accuracy: Double?) {
+    private func regionEntered(identifier: String, date: Date, fix: RegionFix?, fromState: Bool = false) {
         lastEventDate = date
         guard let uid = UUID(uuidString: identifier), let place = fetchPlace(uid: uid) else { return }
         let dp: DetectionPlace = detectionPlace(place)
-        log(.regionEntered, place: dp, detail: "Entrée dans la zone", date: date, accuracy: accuracy)
-        feed(.entered(place: dp, date: date, accuracy: accuracy))
+        if let fix, rejectsEntry(for: place, fix: fix) {
+            log(.entryRejected, place: dp, detail: "La position récente est en dehors du lieu ou indique un domicile enregistré.",
+                date: date, accuracy: fix.accuracy)
+            return
+        }
+        if !fromState {
+            log(.regionEntered, place: dp, detail: "Entrée dans la zone", date: date, accuracy: fix?.accuracy)
+        }
+        feed(.entered(place: dp, date: date, accuracy: fix?.accuracy))
+    }
+
+    private func rejectsEntry(for place: Place, fix: RegionFix) -> Bool {
+        let zone = PlaceRules.Zone(name: place.name, latitude: place.latitude, longitude: place.longitude, radius: place.radius)
+        if fix.clearlyOutside(zone) { return true }
+        guard place.type == .taf || place.type == .cours || (place.type == .courses && place.alsoWorksHere) else { return false }
+        return fetchPlaces().contains { other in
+            guard other.type == .domicile else { return false }
+            let home = PlaceRules.Zone(name: other.name, latitude: other.latitude, longitude: other.longitude, radius: other.radius)
+            return fix.favorsHome(home, over: zone)
+        }
     }
 
     private func regionExited(identifier: String, date: Date, accuracy: Double?) {
@@ -222,13 +256,6 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         let dp: DetectionPlace = detectionPlace(place)
         log(.regionExited, place: dp, detail: "Sortie de la zone", date: date, accuracy: accuracy)
         feed(.exited(place: dp, date: date))
-    }
-
-    /// État initial d'une zone (demandé à l'enregistrement) : "dedans" sans session en cours vaut une entrée à cet instant.
-    private func regionStateInside(identifier: String, date: Date, accuracy: Double?) {
-        guard let uid = UUID(uuidString: identifier), let place = fetchPlace(uid: uid) else { return }
-        let dp: DetectionPlace = detectionPlace(place)
-        feed(.entered(place: dp, date: date, accuracy: accuracy))
     }
 
     func tick() {
@@ -246,11 +273,26 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         engine.syncRunningSession(isRunning: running != nil, place: runningPlace)
         let decisions: [DetectionDecision] = engine.handle(input)
         apply(decisions)
+        persistMixedVisits()
         updateTracking()
         scheduleTick()
     }
 
+    private func persistMixedVisits() {
+        let visits = engine.openMixedVisits
+        guard visits != savedMixedVisits else { return }
+        let defaults = UserDefaults.standard
+        if visits.isEmpty {
+            defaults.removeObject(forKey: Self.mixedVisitsKey)
+        } else if let data = try? JSONEncoder().encode(visits) {
+            defaults.set(data, forKey: Self.mixedVisitsKey)
+        }
+        savedMixedVisits = visits
+    }
+
     private func updateTracking() {
+        manager.desiredAccuracy = engine.placesAwaitingDeparture.isEmpty
+            ? kCLLocationAccuracyHundredMeters : kCLLocationAccuracyNearestTenMeters
         let status: CLAuthorizationStatus = manager.authorizationStatus
         let allowed: Bool = (status == .authorizedAlways || status == .authorizedWhenInUse)
         let wants: Bool = engine.hasPendingWork && allowed
@@ -291,7 +333,7 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
             case .askConfirmation(let place, let bound, let date):
                 askConfirmation(place: place, bound: bound, date: date, session: touched)
             case .noteVisit(let place, let entered):
-                log(.arrivalConfirmed, place: place, detail: "Lieu de courses : visite notée, aucune session comptée", date: entered)
+                log(.visitNoted, place: place, detail: "Arrivée observée dans la zone", date: entered)
             case .skipBecauseSessionRunning(let place, let date):
                 log(.ignoredShortVisit, place: place, detail: "Ignoré : une session est déjà en cours", date: date)
             case .departureCancelled(let place, let date):
@@ -336,35 +378,57 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
     /// Courses sûres (score au-dessus de 75) : visite notée, aucune session. Sinon une session déjà terminée est créée,
     /// non confirmée, avec le classement provisoire ou "inconnu" à confirmer.
     private func classifyDualUseVisit(place: DetectionPlace, entered: Date, exited: Date) {
-        guard let model = fetchPlace(uid: place.uid) else {
+        guard let model = fetchPlace(uid: place.uid), model.type == .courses, model.alsoWorksHere else {
             log(.monitoringFailed, place: place, detail: "Lieu introuvable pour classer la visite", date: exited)
             return
         }
-        let seconds: TimeInterval = max(0, exited.timeIntervalSince(entered))
+        let calendar = Calendar.current
+        let seconds = exited.timeIntervalSince(entered)
+        guard seconds >= DetectionEngine.minimumDwellSeconds else { return }
         let visit = VisitContext(placeKey: model.uid.uuidString, placeType: model.type, alsoWorksHere: model.alsoWorksHere,
-                                 start: entered, durationSeconds: seconds, plannedShifts: [])
+                                 start: entered, durationSeconds: seconds,
+                                 plannedShifts: workShifts(for: model, at: entered, calendar: calendar))
         let result: ClassificationResult = VisitClassifier.classify(visit, habits: HabitStore.shared.model,
-                                                                    now: exited, calendar: Calendar.current)
+                                                                    now: exited, calendar: calendar)
         if result.activity == .shopping && !result.needsConfirmation {
             log(.arrivalConfirmed, place: place, detail: "Visite classée courses, aucune session comptée. \(result.reason)", date: exited)
             return
         }
         let context: ModelContext = container.mainContext
-        let service = SessionService(context: context)
-        let running: WorkSession? = (try? service.runningSession()) ?? nil
-        if running != nil {
-            log(.ignoredShortVisit, place: place, detail: "Visite non classée en session : une session est en cours. \(result.reason)", date: exited)
-            return
-        }
-        let session = WorkSession(activity: result.activity, start: entered, end: exited, place: model,
-                                  source: .gps, isConfirmed: result.level == .automatic)
-        context.insert(session)
         do {
-            try context.save()
+            let candidates = try context.fetch(FetchDescriptor<WorkSession>(predicate: #Predicate<WorkSession> { $0.startDate < exited }))
+            if candidates.contains(where: { ($0.endDate ?? .distantFuture) > entered }) {
+                log(.ignoredShortVisit, place: place, detail: "Visite non comptée : une autre session couvre déjà tout ou partie de ce créneau. \(result.reason)", date: exited)
+                return
+            }
+            let session = WorkSession(activity: result.activity, start: entered, end: exited, place: model,
+                                      source: .gps, isConfirmed: result.level == .automatic)
+            context.insert(session)
+            do { try context.save() }
+            catch {
+                context.delete(session)
+                throw error
+            }
             log(.sessionStarted, place: place, detail: "Visite classée \(result.activity.title), score \(result.confidence). \(result.reason)", date: exited)
         } catch {
             log(.monitoringFailed, place: place, detail: "Session de visite impossible à enregistrer : \(error)", date: exited)
         }
+    }
+
+    private func workShifts(for place: Place, at date: Date, calendar: Calendar) -> [VisitPlannedShift] {
+        let from = PlanningRules.weekStart(for: date, calendar: calendar)
+        let to = PlanningRules.shiftWeek(from, by: 1, calendar: calendar)
+        let work = ActivityType.work.rawValue
+        let descriptor = FetchDescriptor<PlannedShift>(predicate: #Predicate<PlannedShift> { shift in
+            shift.activityRaw == work && shift.start < to && shift.end > from
+        })
+        let shifts = (try? container.mainContext.fetch(descriptor)) ?? []
+        let otherWorkplaces = fetchPlaces().contains { other in
+            other.uid != place.uid && (other.type == .taf || (other.type == .courses && other.alsoWorksHere))
+        }
+        return shifts.filter { shift in
+            shift.placeUID == place.uid || (shift.placeUID == nil && shift.employerUID == nil && !otherWorkplaces)
+        }.map { VisitPlannedShift(start: $0.start, end: $0.end) }
     }
 
     private func stopSession(place: DetectionPlace, date: Date) -> WorkSession? {
@@ -424,8 +488,18 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
         log(.monitoringFailed, detail: "\(identifier ?? "zone") : \(message)")
     }
 
-    private func handleLocationUpdate(date: Date) {
-        tick()
+    private func handleLocationUpdate(date: Date, fix: RegionFix?) {
+        if let fix {
+            for place in engine.placesAwaitingDeparture {
+                guard let model = fetchPlace(uid: place.uid) else { continue }
+                let zone = PlaceRules.Zone(name: model.name, latitude: model.latitude,
+                                           longitude: model.longitude, radius: model.radius)
+                if fix.clearlyInside(zone), !rejectsEntry(for: model, fix: fix) {
+                    feed(.presenceVerified(place: place, date: fix.timestamp))
+                }
+            }
+        }
+        feed(.tick(date: date))
         let total: Int = fetchPlaces().count
         if total > RegionSelection.maxRegions {
             let last: Date = lastRefreshDate ?? Date.distantPast
@@ -437,39 +511,42 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
 
     // MARK: CLLocationManagerDelegate (hors acteur principal : on récupère des valeurs simples puis on y revient)
 
+    nonisolated private func recentFix(from manager: CLLocationManager, now: Date) -> RegionFix? {
+        guard let location = manager.location else { return nil }
+        let fix = RegionFix(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude,
+                            accuracy: location.horizontalAccuracy, timestamp: location.timestamp)
+        return fix.isRecent(at: now) ? fix : nil
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didStartMonitoringFor region: CLRegion) {
+        manager.requestState(for: region)
+    }
+
     nonisolated func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         let identifier: String = region.identifier
         let now: Date = Date()
-        var accuracy: Double? = nil
-        if let loc = manager.location, loc.horizontalAccuracy >= 0 { accuracy = loc.horizontalAccuracy }
-        let acc: Double? = accuracy
+        let fix = recentFix(from: manager, now: now)
         Task { @MainActor [weak self] in
-            self?.regionEntered(identifier: identifier, date: now, accuracy: acc)
+            self?.regionEntered(identifier: identifier, date: now, fix: fix)
         }
     }
 
     nonisolated func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         let identifier: String = region.identifier
         let now: Date = Date()
-        var accuracy: Double? = nil
-        if let loc = manager.location, loc.horizontalAccuracy >= 0 { accuracy = loc.horizontalAccuracy }
-        let acc: Double? = accuracy
+        let accuracy = recentFix(from: manager, now: now)?.accuracy
         Task { @MainActor [weak self] in
-            self?.regionExited(identifier: identifier, date: now, accuracy: acc)
+            self?.regionExited(identifier: identifier, date: now, accuracy: accuracy)
         }
     }
 
     nonisolated func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
+        guard state == .inside else { return }
         let identifier: String = region.identifier
         let now: Date = Date()
-        var accuracy: Double? = nil
-        if let loc = manager.location, loc.horizontalAccuracy >= 0 { accuracy = loc.horizontalAccuracy }
-        let acc: Double? = accuracy
-        let isInside: Bool = (state == .inside)
+        let fix = recentFix(from: manager, now: now)
         Task { @MainActor [weak self] in
-            if isInside {
-                self?.regionStateInside(identifier: identifier, date: now, accuracy: acc)
-            }
+            self?.regionEntered(identifier: identifier, date: now, fix: fix, fromState: true)
         }
     }
 
@@ -495,8 +572,9 @@ final class GeofenceService: NSObject, CLLocationManagerDelegate {
 
     nonisolated func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let now: Date = Date()
+        let fix = recentFix(from: manager, now: now)
         Task { @MainActor [weak self] in
-            self?.handleLocationUpdate(date: now)
+            self?.handleLocationUpdate(date: now, fix: fix)
         }
     }
 

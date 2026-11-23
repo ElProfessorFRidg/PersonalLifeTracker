@@ -68,10 +68,10 @@ struct MainTabView: View {
     @Environment(GeofenceService.self) private var geofence
     @Query private var places: [Place]
 
-    /// Signature des lieux surveillés : dès qu'un lieu est ajouté, supprimé, déplacé ou change de rayon, on réenregistre les zones.
+    /// Signature des lieux surveillés : dès qu'un lieu est ajouté, supprimé, déplacé ou reclassé, on réenregistre les zones.
     private var placesSignature: String {
         return places
-            .map { (place: Place) -> String in "\(place.uid.uuidString)|\(place.latitude)|\(place.longitude)|\(place.radius)" }
+            .map { (place: Place) -> String in "\(place.uid.uuidString)|\(place.latitude)|\(place.longitude)|\(place.radius)|\(place.typeRaw)|\(place.alsoWorksHere)" }
             .sorted()
             .joined(separator: ";")
     }
@@ -85,7 +85,7 @@ struct MainTabView: View {
 
     private var tabs: some View {
         TabView(selection: $selection) {
-            NavigationStack { AccueilView() }
+            NavigationStack { AccueilView(onReviewPlaces: { selection = .lieux }) }
                 .tabItem { Label("Accueil", systemImage: "house") }
                 .tag(AppTab.accueil)
             NavigationStack { PlanningView() }

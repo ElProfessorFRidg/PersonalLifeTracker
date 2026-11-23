@@ -5,6 +5,10 @@ on:
       build_ipa:
         type: boolean
         default: false
+      test_classes:
+        description: "Optional space-separated XCTest classes for a focused preview"
+        type: string
+        default: ""
       version:
         description: "App version in x.y.z format (without a suffix)"
         type: string
@@ -35,12 +39,23 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
       - name: Run simulator tests
+        env:
+          PLT_TEST_CLASSES: ${{ inputs.test_classes }}
         run: |
           UDID=$(scripts/pick_simulator.sh)
           set -o pipefail
+          scoped_args=()
+          if [[ -n "$PLT_TEST_CLASSES" ]]; then
+            read -r -a classes <<< "$PLT_TEST_CLASSES"
+            for name in "${classes[@]}"; do
+              [[ "$name" =~ ^[A-Za-z][A-Za-z0-9_]*Tests$ ]] || exit 1
+              scoped_args+=("-only-testing:UnitTests/$name")
+            done
+            scoped_args+=(-parallel-testing-enabled NO)
+          fi
           xcodebuild test -project PersonalLifeTracker.xcodeproj -scheme PersonalLifeTracker \
             -destination "id=$UDID" -resultBundlePath build/tests.xcresult \
-            CODE_SIGNING_ALLOWED=NO | tail -80
+            CODE_SIGNING_ALLOWED=NO "${scoped_args[@]}" | tail -80
       - name: Summarize test results
         if: always()
         run: |

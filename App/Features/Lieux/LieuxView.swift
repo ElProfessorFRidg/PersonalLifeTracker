@@ -2,55 +2,54 @@ import SwiftUI
 import SwiftData
 import UIKit
 
-/// Onglet Lieux (écran `lieux`).
 struct LieuxView: View {
     @Environment(GeofenceService.self) private var geofence
     @Environment(ModuleStore.self) private var modules
     @Environment(\.palette) private var palette
+    @Environment(\.openURL) private var openURL
+    @Environment(\.scenePhase) private var scenePhase
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @Query(sort: \Place.name) private var places: [Place]
-    @State private var showsAdd: Bool = false
-    @State private var locationDenied: Bool = false
+    @AppStorage("plt.discovery.automaticMapsLookup") private var automaticMapsLookup = false
+    @State private var showsAdd = false
+    @State private var configureCurrentWorkplace = false
+    @State private var permissions = PermissionRequester()
+    @State private var isRequestingLocation = false
+    @State private var locationDenied = false
+    @State private var selectedSuggestion: DiscoveredPlace?
 
     var body: some View {
+        let discovery = geofence.discovery
+        let discoveryActive = modules.isActive("place_discovery")
+        let suggestions = discoveryActive ? discovery.suggestions(excluding: places) : []
+        let lookupIDs = automaticMapsLookup ? suggestions.map(\.id).sorted { $0.uuidString < $1.uuidString } : []
+
         PLTScreen(title: "Lieux") {
             if locationDenied {
                 PLTBanner(kind: .error,
-                          title: "Je peux pas te localiser",
-                          message: "La localisation est refusée pour l'app. Tes lieux sont gardés, mais je ne note plus tes arrivées. Tu peux toujours ajouter tes heures à la main.",
+                          title: "Localisation désactivée",
+                          message: "Réactive la localisation pour détecter tes arrivées dans les lieux enregistrés et trouver de nouveaux lieux.",
                           actionTitle: "Ouvrir les réglages iOS",
-                          action: { openSettings() })
+                          action: openSettings)
             }
-            if modules.isActive("place_discovery") {
-                if let error = geofence.discovery.error {
-                    Text(error).foregroundStyle(.red)
-                }
-                if !geofence.discovery.isMonitoring {
-                    Text("Découverte : autorise la localisation Toujours.")
-                        .font(.footnote)
-                }
-                ForEach(suggestions) { candidate in
-                    DiscoveredPlaceCard(candidate: candidate, discovery: geofence.discovery)
-                }
-                if geofence.discovery.candidates.contains(where: { $0.dismissed }) {
-                    Button("Revoir les lieux ignorés") { geofence.discovery.restoreSuggestions() }
+            if !places.contains(where: { $0.type == .taf || ($0.type == .courses && $0.alsoWorksHere) }) {
+                PLTBanner(kind: .info, title: "Configure ton lieu de travail",
+                          message: "Si tu y es, utilise ta position et vérifie l’épingle. Tu peux l’enregistrer dès ton premier service.",
+                          actionTitle: "Enregistrer mon travail ici") {
+                    configureCurrentWorkplace = true
+                    showsAdd = true
                 }
             }
-            if places.isEmpty {
-                PLTCard {
-                    PLTEmptyState(symbol: "mappin.and.ellipse",
-                                  title: "Aucun lieu pour l'instant.",
-                                  message: modules.isActive("place_discovery") ? "Les lieux réguliers apparaîtront ici." : "Ajoute un lieu pour démarrer.",
-                                  actionTitle: "Ajouter un lieu",
-                                  action: { showsAdd = true })
-                }
-            } else {
-                placesSection
+            if discoveryActive {
+                discoverySection(suggestions)
             }
-            explanationSection
+            savedPlacesSection
         }
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.22), value: suggestions.map(\.id))
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
+                    configureCurrentWorkplace = false
                     showsAdd = true
                 } label: {
                     Image(systemName: "plus")
@@ -60,73 +59,181 @@ struct LieuxView: View {
             }
         }
         .sheet(isPresented: $showsAdd) {
-            LieuAjoutView()
+            LieuAjoutView(locateOnOpen: configureCurrentWorkplace, initialType: configureCurrentWorkplace ? .taf : nil)
         }
-        .onAppear {
-            locationDenied = LocationOnce.isDenied()
+        .sheet(item: $selectedSuggestion) { candidate in
+            DiscoveredPlaceCard(candidate: candidate, discovery: discovery)
         }
-    }
-
-    private var suggestions: [DiscoveredPlace] {
-        geofence.discovery.candidates.filter { candidate in
-            candidate.isReady && !candidate.dismissed && !places.contains {
-                PlaceDiscoveryRules.distance(candidate.latitude, candidate.longitude,
-                                             $0.latitude, $0.longitude) <= max(100, $0.radius)
+        .task(id: lookupIDs) {
+            guard automaticMapsLookup else { return }
+            let pendingLookups = suggestions.filter { $0.context == nil }.prefix(5)
+            for candidate in pendingLookups {
+                guard !Task.isCancelled else { return }
+                await discovery.enrich(candidate)
+            }
+        }
+        .onChange(of: scenePhase, initial: true) { _, phase in
+            if phase == .active {
+                locationDenied = LocationOnce.isDenied()
+                discovery.refresh()
             }
         }
     }
 
-    private var placesSection: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Tes lieux")
-            PLTListGroup {
-                ForEach(places) { place in
-                    NavigationLink {
-                        LieuDetailView(place: place)
-                    } label: {
-                        PLTRow(symbol: place.type.symbolName,
-                               tone: place.type.tone,
-                               title: place.name,
-                               subtitle: subtitle(for: place),
-                               showsChevron: true,
-                               showsSeparator: place.id != places.last?.id)
-                    }
-                    .buttonStyle(.plain)
-                }
-            }
-            Text("Touche un lieu pour le modifier ou voir ses stats du mois.")
-                .font(.footnote)
-                .foregroundStyle(palette.textSecondary)
-        }
-    }
+    private func discoverySection(_ suggestions: [DiscoveredPlace]) -> some View {
+        let discovery = geofence.discovery
 
-    private var explanationSection: some View {
-        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
-            PLTSectionHeader(title: "Comment ça compte")
+        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            PLTSectionHeader(title: "Lieux à vérifier")
+            if let error = discovery.error {
+                PLTBanner(kind: .error, title: "Découverte des lieux", message: error)
+            }
+            if discovery.needsPermissionRequest {
+                PLTBanner(kind: .info,
+                          title: "Active la découverte de lieux",
+                          message: "Autorise la localisation pour repérer tes arrêts suffisamment longs et te les proposer ici.",
+                          actionTitle: isRequestingLocation ? nil : "Autoriser la localisation",
+                          action: isRequestingLocation ? nil : requestLocation)
+            } else if !locationDenied && !discovery.canMonitorVisits {
+                PLTBanner(kind: .warning,
+                          title: "Découverte en pause",
+                          message: "Choisis « Toujours » dans Réglages iOS > Life Tracker > Localisation. La découverte pourra reprendre lorsque l'app est en arrière-plan.",
+                          actionTitle: "Ouvrir les réglages iOS",
+                          action: openSettings)
+            } else if !locationDenied && discovery.canMonitorVisits && !discovery.hasPreciseLocation {
+                PLTBanner(kind: .warning,
+                          title: "Position approximative",
+                          message: "Active « Position exacte » pour aider Life Tracker à distinguer les lieux proches.",
+                          actionTitle: "Ouvrir les réglages iOS",
+                          action: openSettings)
+            }
+
             PLTCard {
-                HStack(spacing: Theme.Spacing.s) {
-                    PLTChip("Taf", kind: .work)
-                    PLTChip("Cours", kind: .study)
-                    PLTChip("Courses", kind: .errand)
+                Toggle("Identifier les lieux avec Plans", isOn: $automaticMapsLookup)
+                    .tint(palette.accent)
+                    .frame(minHeight: 44)
+                Text("Plans reçoit la position des arrêts à vérifier pour rechercher une adresse ou un établissement proche.")
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
+            }
+
+            if discovery.isMonitoring && discovery.hasRecentArrivalAwaitingDeparture() {
+                PLTBanner(kind: .info, title: "Arrivée reçue",
+                          message: "iOS a transmis une arrivée. La durée sera disponible après réception du départ.")
+            }
+
+            if suggestions.isEmpty {
+                if discovery.isMonitoring {
+                    PLTCard {
+                        Label("Aucun nouveau lieu à vérifier", systemImage: "location.magnifyingglass")
+                            .font(.subheadline.weight(.semibold))
+                        Text("Tes arrêts assez longs ou répétés apparaîtront ici. iOS peut les transmettre avec du retard.")
+                            .font(.subheadline)
+                            .foregroundStyle(palette.textSecondary)
+                    }
                 }
-                Text("Taf et cours comptent dans tes heures. Les courses sont notées mais jamais comptées, pour pas gonfler ta paie par erreur.")
+            } else {
+                Text("Ouvre un lieu pour vérifier l'adresse, les passages repérés et l'activité proposée.")
                     .font(.subheadline)
                     .foregroundStyle(palette.textSecondary)
+
+                PLTListGroup {
+                    ForEach(suggestions) { candidate in
+                        suggestionRow(candidate, lastID: suggestions.last?.id)
+                    }
+                }
+            }
+
+            if discovery.hasIgnoredSuggestions(excluding: places) {
+                Button("Revoir les lieux ignorés") {
+                    discovery.restoreSuggestions()
+                }
+                .font(.subheadline)
+                .frame(minHeight: 44)
+            }
+        }
+    }
+
+    private func suggestionRow(_ candidate: DiscoveredPlace, lastID: UUID?) -> some View {
+        let discovery = geofence.discovery
+        let type = discovery.recommendation(for: candidate)?.type
+        let count = discovery.visitCount(for: candidate)
+        let visits = count == 1 ? "1 passage" : "\(count) passages"
+        let lastDate = candidate.arrivals.max()
+        let recentVisit = lastDate.map { date in
+            "\(PlaceFormat.dayLabel(date, now: Date(), calendar: .current)) à \(Formatting.clock(date, calendar: .current))"
+        }
+        let title = candidate.context?.name ?? candidate.context?.address ?? recentVisit ?? "Arrêt repéré"
+        let address = candidate.context?.name == nil ? nil : candidate.context?.address
+        let subtitle = [address, type.map { "\($0.title) possible" }, visits]
+            .compactMap { $0 }
+            .joined(separator: " · ")
+
+        return PLTRow(symbol: type?.symbolName ?? "mappin",
+                      tone: type?.tone ?? .accent,
+                      title: title,
+                      subtitle: subtitle,
+                      showsChevron: true,
+                      showsSeparator: candidate.id != lastID,
+                      action: { selectedSuggestion = candidate })
+    }
+
+    private var savedPlacesSection: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            PLTSectionHeader(title: "Tes lieux")
+            if places.isEmpty {
+                PLTCard {
+                    PLTEmptyState(symbol: "mappin.and.ellipse",
+                                  title: "Aucun lieu enregistré",
+                                  message: "Ajoute un lieu de travail, de cours ou de sortie pour le retrouver ici.",
+                                  actionTitle: "Ajouter un lieu",
+                                  action: {
+                                      configureCurrentWorkplace = false
+                                      showsAdd = true
+                                  })
+                }
+            } else {
+                PLTListGroup {
+                    ForEach(places) { place in
+                        NavigationLink {
+                            LieuDetailView(place: place)
+                        } label: {
+                            PLTRow(symbol: place.type.symbolName,
+                                   tone: place.type.tone,
+                                   title: place.name,
+                                   subtitle: subtitle(for: place),
+                                   showsChevron: true,
+                                   showsSeparator: place.id != places.last?.id)
+                        }
+                        .buttonStyle(.plain)
+                    }
+                }
             }
         }
     }
 
     private func subtitle(for place: Place) -> String {
-        let radius: Int = Int(place.radius.rounded())
-        let counted: String = (place.type != .taf && place.type != .cours) ? ", pas compté" : ""
-        let last: Date? = place.sessions.map { $0.startDate }.max()
-        let lastText: String = PlaceFormat.lastVisit(last, now: Date(), calendar: Calendar.current)
-        return "\(place.type.title), rayon \(radius) m\(counted)\n\(lastText)"
+        let category = place.alsoWorksHere && place.type == .courses ? "Courses et travail" : place.type.title
+        let location = place.address.isEmpty ? nil : place.address
+        let last = place.sessions.map(\.startDate).max().map {
+            PlaceFormat.lastVisit($0, now: Date(), calendar: .current)
+        }
+        return [category, location, last].compactMap { $0 }.joined(separator: "\n")
+    }
+
+    private func requestLocation() {
+        isRequestingLocation = true
+        Task { @MainActor in
+            await permissions.requestLocationAccess()
+            locationDenied = LocationOnce.isDenied()
+            geofence.discovery.refresh()
+            isRequestingLocation = false
+        }
     }
 
     private func openSettings() {
         if let url = URL(string: UIApplication.openSettingsURLString) {
-            UIApplication.shared.open(url)
+            openURL(url)
         }
     }
 }

@@ -35,6 +35,76 @@ final class SwiftDataModelsTests: XCTestCase {
         XCTAssertEqual(places[0].sessions.count, 1)
     }
 
+    func testUpgradingEachLegacyDiskSchemaKeepsPlacesAndHistory() throws {
+        // beta.1 did not use SwiftData. These are the exact model sets from the later beta tags.
+        let schemas: [(String, [any PersistentModel.Type])] = [
+            ("beta.2", [Place.self, WorkSession.self]),
+            ("beta.3", [Place.self, WorkSession.self, DetectionEvent.self]),
+            ("beta.4", [Place.self, WorkSession.self, DetectionEvent.self, PlaceSample.self,
+                        Employer.self, Contract.self, PayRate.self])
+        ]
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString, isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        let placeID = UUID()
+        let sessionID = UUID()
+        let start = nov16(17, 56)
+        let end = nov16(22, 3)
+
+        for (version, models) in schemas {
+            let storeURL = directory.appendingPathComponent(version + ".store")
+            // Release the legacy container before reopening its unchanged store URL.
+            do {
+                let legacySchema = Schema(models)
+                let configuration = ModelConfiguration(schema: legacySchema, url: storeURL)
+                let legacyContainer = try ModelContainer(for: legacySchema, configurations: [configuration])
+                let legacyContext = ModelContext(legacyContainer)
+                let place = Place(name: "Supérette du Canal", type: .courses, latitude: 48.8566, longitude: 2.3522,
+                                  radius: 85, address: "12 rue du Canal", alsoWorksHere: true)
+                place.uid = placeID
+                let session = WorkSession(activity: .work, start: start, end: end, place: place,
+                                          source: .gps, isConfirmed: true, note: "caisse")
+                session.uid = sessionID
+                legacyContext.insert(place)
+                legacyContext.insert(session)
+                if version != "beta.2" {
+                    legacyContext.insert(DetectionEvent(kind: .arrivalConfirmed, date: start, placeName: place.name,
+                                                        placeUID: placeID, detail: "Arrivée confirmée"))
+                }
+                try legacyContext.save()
+            }
+
+            let updated = try AppModelContainer.make(storeURL: storeURL)
+            let context = ModelContext(updated)
+            let places = try context.fetch(FetchDescriptor<Place>())
+            let sessions = try context.fetch(FetchDescriptor<WorkSession>())
+            let events = try context.fetch(FetchDescriptor<DetectionEvent>())
+            XCTAssertEqual(places.count, 1, version)
+            XCTAssertEqual(sessions.count, 1, version)
+            let place = try XCTUnwrap(places.first, version)
+            let session = try XCTUnwrap(sessions.first, version)
+            XCTAssertEqual(place.uid, placeID, version)
+            XCTAssertEqual(place.address, "12 rue du Canal", version)
+            XCTAssertEqual(place.type, .courses, version)
+            XCTAssertEqual(place.radius, 85, version)
+            XCTAssertTrue(place.alsoWorksHere, version)
+            XCTAssertEqual(place.sessions.map(\.uid), [sessionID], version)
+            XCTAssertEqual(session.uid, sessionID, version)
+            XCTAssertEqual(session.place?.uid, placeID, version)
+            XCTAssertEqual(session.activity, .work, version)
+            XCTAssertEqual(session.startDate, start, version)
+            XCTAssertEqual(session.endDate, end, version)
+            XCTAssertEqual(session.note, "caisse", version)
+            if version == "beta.2" {
+                XCTAssertTrue(events.isEmpty, version)
+            } else {
+                XCTAssertEqual(events.count, 1, version)
+                XCTAssertEqual(events.first?.kind, .arrivalConfirmed, version)
+                XCTAssertEqual(events.first?.placeUID, placeID, version)
+            }
+        }
+    }
+
     func testChosenTimesArePersisted() throws {
         let container = try AppModelContainer.make(inMemory: true)
         let context = ModelContext(container)
@@ -75,7 +145,8 @@ final class SwiftDataModelsTests: XCTestCase {
     func testUnknownStoredRawValuesFallBackSafely() {
         let place = Place(name: "X", type: .cours)
         place.typeRaw = "inconnu"
-        XCTAssertEqual(place.type, .taf)
+        XCTAssertEqual(place.type, .autre)
+        XCTAssertFalse(DetectionPlace(uid: place.uid, name: place.name, type: place.type).createsSessions)
         let s = WorkSession(activity: .work, start: nov16(9, 0))
         s.activityRaw = "inconnu"
         XCTAssertEqual(s.activity, .unknown)

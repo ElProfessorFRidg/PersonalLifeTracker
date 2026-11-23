@@ -1,43 +1,60 @@
 import SwiftUI
 import SwiftData
+import OSLog
 
 @main
 struct PersonalLifeTrackerApp: App {
-    private let container: ModelContainer
+    private struct OpenStore {
+        let container: ModelContainer
+        let geofence: GeofenceService
+    }
+
+    @State private var store: OpenStore?
     @State private var settings: AppSettings = AppSettings()
     @State private var moduleStore: ModuleStore = ModuleStore()
-    @State private var geofence: GeofenceService
 
     /// Garde les services en vie même si aucune scène n'existe (relance en arrière-plan par un événement de région).
     private static var retainedServices: [AnyObject] = []
+    private static let logger = Logger(subsystem: "io.github.elprofessorfridg.personallifetracker", category: "Persistence")
 
     init() {
-        let built = AppModelContainer.makeForApp()
-        self.container = built.container
-        let builtContainer: ModelContainer = built.container
-        var created: GeofenceService? = nil
-        MainActor.assumeIsolated {
-            let notifier = DetectionNotifier(container: builtContainer)
-            let service = GeofenceService(container: builtContainer, notifier: notifier)
-            notifier.install()
-            service.start()
-            PersonalLifeTrackerApp.retainedServices.append(notifier)
-            PersonalLifeTrackerApp.retainedServices.append(service)
-            created = service
+        _store = State(initialValue: MainActor.assumeIsolated { Self.openStore() })
+    }
+
+    @MainActor
+    private static func openStore() -> OpenStore? {
+        do {
+            let container = try AppModelContainer.make()
+            let notifier = DetectionNotifier(container: container)
+            let geofence = GeofenceService(container: container, notifier: notifier)
+            geofence.start()
+            retainedServices.append(notifier)
+            retainedServices.append(geofence)
+            return OpenStore(container: container, geofence: geofence)
+        } catch {
+            logger.error("Ouverture de la base locale impossible : \(error.localizedDescription, privacy: .private)")
+            return nil
         }
-        guard let service = created else {
-            fatalError("GeofenceService non créé")
-        }
-        self._geofence = State(initialValue: service)
     }
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(settings)
-                .environment(moduleStore)
-                .environment(geofence)
-                .modelContainer(container)
+            if let store {
+                RootView()
+                    .environment(settings)
+                    .environment(moduleStore)
+                    .environment(store.geofence)
+                    .modelContainer(store.container)
+            } else {
+                ContentUnavailableView {
+                    Label("Historique indisponible", systemImage: "externaldrive.badge.exclamationmark")
+                } description: {
+                    Text("Life Tracker n’a pas pu ouvrir sa base locale. Réessaie pour retrouver tes lieux et tes sessions.")
+                } actions: {
+                    Button("Réessayer") { store = Self.openStore() }
+                        .buttonStyle(.borderedProminent)
+                }
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ final class ClassificationTests: XCTestCase {
     private let placeKey: String = "lieu-intermarche"
 
     /// Visite dans un lieu de courses où l'on travaille aussi, arrivée le lundi 16 novembre 2026 à 11:00 UTC.
-    private func dual(seconds: TimeInterval?, start: Date = nov16(11, 0), shifts: [PlannedShift] = []) -> VisitContext {
+    private func dual(seconds: TimeInterval?, start: Date = nov16(11, 0), shifts: [VisitPlannedShift] = []) -> VisitContext {
         return VisitContext(placeKey: placeKey, placeType: .courses, alsoWorksHere: true, start: start,
                             durationSeconds: seconds, plannedShifts: shifts)
     }
@@ -59,7 +59,7 @@ final class ClassificationTests: XCTestCase {
         for i in 0..<3 {
             learn(&habits, "w\(i)", isWork: true)
         }
-        let shift = PlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
         let visit = VisitContext(placeKey: placeKey, placeType: .courses, alsoWorksHere: false, start: nov16(11, 0),
                                  durationSeconds: 5 * 3600, plannedShifts: [shift])
         let result = classify(visit, habits: habits)
@@ -125,7 +125,7 @@ final class ClassificationTests: XCTestCase {
 
     func testScoreExactlyFortyFromPlanningIsProvisionalWork() {
         // Durée ambiguë (0 point) et arrivée dans un créneau (40 points) : 40, donc provisoire et non "inconnu".
-        let shift = PlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
         let result = classify(dual(seconds: 1500, shifts: [shift]))
         XCTAssertEqual(result.confidence, 40)
         XCTAssertEqual(result.activity, .work)
@@ -134,7 +134,7 @@ final class ClassificationTests: XCTestCase {
 
     func testLongVisitInsideShiftIsAutomaticWork() {
         // 50 (durée) + 40 (planning) = 90, au-dessus de 75 : automatique, sans question.
-        let shift = PlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
         let result = classify(dual(seconds: 3 * 3600, shifts: [shift]))
         XCTAssertEqual(result.confidence, 90)
         XCTAssertEqual(result.activity, .work)
@@ -144,7 +144,7 @@ final class ClassificationTests: XCTestCase {
 
     func testLongVisitWhenPlanningSaysOtherwiseDropsToUnknown() {
         // 50 (durée) - 15 (créneaux prévus ailleurs) = 35, sous 40 : inconnu avec confirmation.
-        let shift = PlannedShift(start: nov16(14, 0), end: nov16(18, 0))
+        let shift = VisitPlannedShift(start: nov16(14, 0), end: nov16(18, 0))
         let result = classify(dual(seconds: 3 * 3600, start: nov16(8, 0), shifts: [shift]))
         XCTAssertEqual(result.confidence, 35)
         XCTAssertEqual(result.activity, .unknown)
@@ -153,7 +153,7 @@ final class ClassificationTests: XCTestCase {
 
     func testPlanningToleranceBoundary() {
         // Le créneau commence à 11:30 : arriver à 11:00 pile est encore dans la tolérance de 30 min, 10:59:59 non.
-        let shift = PlannedShift(start: nov16(11, 30), end: nov16(16, 0))
+        let shift = VisitPlannedShift(start: nov16(11, 30), end: nov16(16, 0))
         let inside = classify(dual(seconds: 1500, start: nov16(11, 0), shifts: [shift]))
         XCTAssertEqual(inside.confidence, 40)
         XCTAssertEqual(inside.activity, .work)
@@ -163,7 +163,7 @@ final class ClassificationTests: XCTestCase {
     }
 
     func testPlanningEndBoundary() {
-        let shift = PlannedShift(start: nov16(8, 0), end: nov16(11, 0))
+        let shift = VisitPlannedShift(start: nov16(8, 0), end: nov16(11, 0))
         let atEnd = classify(dual(seconds: 1500, start: nov16(11, 0), shifts: [shift]))
         XCTAssertEqual(atEnd.confidence, 40)
         let afterEnd = classify(dual(seconds: 1500, start: nov16(11, 0, 1), shifts: [shift]))
@@ -226,6 +226,24 @@ final class ClassificationTests: XCTestCase {
         let after = classify(dual(seconds: 3 * 3600), habits: habits)
         XCTAssertEqual(after.activity, .shopping)
         XCTAssertEqual(after.level, .automatic)
+    }
+
+    func testQuickShoppingDuringUsualShiftDoesNotBecomeWork() {
+        var habits = HabitModel()
+        for index in 0..<3 { learn(&habits, "work-\(index)", isWork: true) }
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let result = classify(dual(seconds: 15 * 60, shifts: [shift]), habits: habits)
+        XCTAssertEqual(result.activity, .unknown)
+        XCTAssertTrue(result.needsConfirmation)
+    }
+
+    func testLongPlannedShiftConflictingWithShoppingHabitNeedsReview() {
+        var habits = HabitModel()
+        for index in 0..<3 { learn(&habits, "shopping-\(index)", isWork: false) }
+        let shift = VisitPlannedShift(start: nov16(10, 30), end: nov16(16, 0))
+        let result = classify(dual(seconds: 4 * 3600, shifts: [shift]), habits: habits)
+        XCTAssertEqual(result.activity, .work)
+        XCTAssertEqual(result.level, .provisional)
     }
 
     func testNewAnswersCanFlipALearnedRuleBack() {

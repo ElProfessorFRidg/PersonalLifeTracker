@@ -1,4 +1,5 @@
 import XCTest
+@testable import PersonalLifeTracker
 
 final class PlanningRulesTests: XCTestCase {
     private let utc: Calendar = TestCalendar.utc

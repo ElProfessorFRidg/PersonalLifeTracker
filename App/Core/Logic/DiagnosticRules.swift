@@ -304,6 +304,10 @@ enum DiagnosticRules {
             return name.isEmpty ? "Sortie d'une zone" : "Sortie de la zone : \(name)"
         case "arrivalConfirmed":
             return name.isEmpty ? "Arrivée confirmée" : "Arrivée confirmée : \(name)"
+        case "visitNoted":
+            return name.isEmpty ? "Visite notée" : "Visite notée : \(name)"
+        case "entryRejected":
+            return name.isEmpty ? "Entrée écartée : position contradictoire" : "Entrée écartée : \(name)"
         case "departureConfirmed":
             return name.isEmpty ? "Départ confirmé" : "Départ confirmé : \(name)"
         case "sessionStarted":
@@ -329,7 +333,7 @@ enum DiagnosticRules {
 
     static func family(forKind rawKind: String) -> DiagEventFamily {
         switch rawKind {
-        case "regionEntered", "regionExited", "arrivalConfirmed", "departureConfirmed",
+        case "regionEntered", "regionExited", "arrivalConfirmed", "visitNoted", "entryRejected", "departureConfirmed",
              "sessionStarted", "sessionStopped", "ignoredShortVisit":
             return .arrivalsAndDepartures
         case "monitoringFailed", "authorizationChanged":

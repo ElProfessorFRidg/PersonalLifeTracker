@@ -7,6 +7,39 @@ struct RegionCandidate: Equatable {
     let longitude: Double
 }
 
+/// Position exploitable au moment d'un événement de région, sans dépendance à Core Location.
+struct RegionFix: Sendable {
+    let latitude: Double
+    let longitude: Double
+    let accuracy: Double
+    let timestamp: Date
+
+    func isRecent(at date: Date) -> Bool {
+        let age = date.timeIntervalSince(timestamp)
+        return age >= -2 && age <= 10 && accuracy.isFinite && accuracy >= 0
+            && PlaceRules.isValidCoordinate(latitude: latitude, longitude: longitude)
+    }
+
+    func clearlyOutside(_ zone: PlaceRules.Zone) -> Bool {
+        accuracy <= 30 && distance(to: zone) > zone.radius + accuracy + 20
+    }
+
+    func clearlyInside(_ zone: PlaceRules.Zone) -> Bool {
+        accuracy <= 30 && distance(to: zone) + accuracy + 15 <= zone.radius
+    }
+
+    func favorsHome(_ home: PlaceRules.Zone, over workplace: PlaceRules.Zone) -> Bool {
+        let metersToHome = distance(to: home)
+        return accuracy <= 30 && metersToHome + accuracy <= min(home.radius, 45)
+            && distance(to: workplace) - metersToHome > 2 * accuracy + 20
+    }
+
+    private func distance(to zone: PlaceRules.Zone) -> Double {
+        PlaceRules.distanceMeters(latitude1: latitude, longitude1: longitude,
+                                  latitude2: zone.latitude, longitude2: zone.longitude)
+    }
+}
+
 /// Choix des lieux à surveiller : iOS limite à 20 régions par app (section 8).
 enum RegionSelection {
     static let maxRegions: Int = 20

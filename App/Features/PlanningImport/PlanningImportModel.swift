@@ -56,6 +56,8 @@ final class PlanningImportModel {
     var phase: PlanningImportPhase = .idle
     var progress: Double = 0
     var image: UIImage? = nil
+    private(set) var messageWeek: Date?
+    private(set) var skippedMessageLines: [String] = []
     var notice: String? = nil
     var errorMessage: String? = nil
     var drafts: [PlanningShiftDraft] = []
@@ -80,8 +82,10 @@ final class PlanningImportModel {
 
     // MARK: - Lecture
 
-    func start(image: UIImage, names: [String], notice: String? = nil) {
+    func start(image: UIImage, names: [String], notice: String? = nil, triesOtherOrientations: Bool = true) {
         readTask?.cancel()
+        messageWeek = nil
+        skippedMessageLines = []
         self.image = image
         self.names = names
         self.notice = notice
@@ -105,12 +109,72 @@ final class PlanningImportModel {
                     }
                 }
                 if Task.isCancelled { return }
-                self?.finishReading(found)
+                guard let self else { return }
+                let initial = ScheduleTextParser.parse(lines: found, options: self.orientationOptions)
+                if triesOtherOrientations && (initial.rowNames.isEmpty || (cgImage.height > cgImage.width && initial.shifts.isEmpty)) {
+                    let orientations: [UIImage.Orientation] = [.left, .right]
+                    var bestLines = found
+                    var bestImage = image
+                    var best = initial
+                    for orientation in orientations {
+                        if Task.isCancelled { return }
+                        let rotated = UIImage(cgImage: cgImage, scale: 1, orientation: orientation)
+                        guard let upright = ScheduleOCR.normalizedImage(rotated),
+                              let candidateLines = try? await ScheduleOCR.recognizeLines(in: upright) else { continue }
+                        let candidate = ScheduleTextParser.parse(lines: candidateLines, options: self.orientationOptions)
+                        if self.orientationRank(candidate) > self.orientationRank(best) {
+                            best = candidate
+                            bestLines = candidateLines
+                            bestImage = UIImage(cgImage: upright)
+                        }
+                        if best.shifts.count >= 2, best.unreadable.isEmpty { break }
+                    }
+                    if Task.isCancelled { return }
+                    self.image = bestImage
+                    self.finishReading(bestLines)
+                } else {
+                    self.finishReading(found)
+                }
             } catch {
                 if Task.isCancelled { return }
                 self?.failReading()
             }
         }
+    }
+
+    private var orientationOptions: ScheduleParseOptions {
+        ScheduleParseOptions(names: names, referenceDate: Date(), calendar: PlanningSupport.calendar)
+    }
+
+    private func orientationRank(_ result: ScheduleParseResult) -> Int {
+        guard !result.rowNames.isEmpty else { return 0 }
+        let matchingRow = result.chosenRowIndex == nil ? 0 : 1000
+        return matchingRow + min(40, result.rowNames.count) + result.shifts.count * 100
+    }
+
+    func rotatePhoto() {
+        guard let image, let normalized = ScheduleOCR.normalizedImage(image) else { return }
+        let rotated = UIImage(cgImage: normalized, scale: 1, orientation: .right)
+        start(image: rotated, names: names, notice: notice, triesOtherOrientations: false)
+    }
+
+    func readMessage(_ text: String, week: Date) {
+        reset()
+        let calendar = PlanningSupport.calendar
+        let result = PlanningMessageParser.read(text, week: week, calendar: calendar)
+        messageWeek = PlanningRules.weekStart(for: week, calendar: calendar)
+        skippedMessageLines = result.skippedLines
+        drafts = result.entries.flatMap { entry in
+            entry.ranges.map { range in
+                PlanningShiftDraft(id: UUID(), day: entry.day,
+                                   startMinutes: range.startMinutes, endMinutes: range.endMinutes,
+                                   confidence: range.crossesMidnight ? 0.5 : 1,
+                                   reason: range.crossesMidnight ? "Cette plage finit le lendemain. Vérifie les deux heures." : nil,
+                                   isResolved: false, wasEdited: false)
+            }
+        }.sorted { ($0.day, $0.startMinutes ?? 0) < ($1.day, $1.startMinutes ?? 0) }
+        lineConfirmed = true
+        phase = .result
     }
 
     func cancelReading() {
@@ -123,6 +187,8 @@ final class PlanningImportModel {
         readTask?.cancel()
         readTask = nil
         image = nil
+        messageWeek = nil
+        skippedMessageLines = []
         notice = nil
         errorMessage = nil
         parse = nil
@@ -282,32 +348,39 @@ final class PlanningImportModel {
     /// Crée les créneaux prévus (source "photo"). Les créneaux identiques déjà présents ne sont pas doublés.
     func keep(in context: ModelContext) {
         if !canKeep { return }
-        let calendar = Calendar.current
-        var existing: [PlannedShift] = []
+        let calendar = PlanningSupport.calendar
+        var inserted: [PlannedShift] = []
         do {
-            existing = try context.fetch(FetchDescriptor<PlannedShift>())
-        } catch {
-            existing = []
-        }
-        var added = 0
-        var skipped = 0
-        for draft in drafts {
-            guard let s = draft.startMinutes, let e = draft.endMinutes else { continue }
-            let start = ScheduleTextParser.date(day: draft.day, minutes: s, calendar: calendar)
-            let end = ScheduleTextParser.date(day: draft.day, minutes: e, calendar: calendar)
-            if existing.contains(where: { $0.start == start && $0.end == end }) {
-                skipped += 1
-                continue
+            var existing = try context.fetch(FetchDescriptor<PlannedShift>())
+            var additions: [PlannedShift] = []
+            var skipped = 0
+            for draft in drafts {
+                guard let s = draft.startMinutes, let e = draft.endMinutes else { continue }
+                let start = ScheduleTextParser.date(day: draft.day, minutes: s, calendar: calendar)
+                let end = ScheduleTextParser.date(day: draft.day, minutes: e, calendar: calendar)
+                if existing.contains(where: { $0.start == start && $0.end == end && $0.activity == .work }) {
+                    skipped += 1
+                    continue
+                }
+                if end <= start || existing.contains(where: { $0.activity == .work && $0.start < end && $0.end > start }) {
+                    errorMessage = "Deux créneaux de travail se chevauchent. Vérifie les horaires avant d’enregistrer."
+                    return
+                }
+                let shift = PlannedShift(start: start, end: end, activity: .work,
+                                         source: messageWeek == nil ? "photo" : "text")
+                additions.append(shift)
+                existing.append(shift)
             }
-            context.insert(PlannedShift(start: start, end: end, activity: .work, source: "photo"))
-            added += 1
-        }
-        do {
+            for shift in additions {
+                context.insert(shift)
+                inserted.append(shift)
+            }
             try context.save()
             errorMessage = nil
-            phase = .saved(count: added, skipped: skipped)
+            phase = .saved(count: inserted.count, skipped: skipped)
         } catch {
-            errorMessage = "Je n'ai pas pu enregistrer les créneaux. Rien n'a changé, tu peux réessayer."
+            for shift in inserted { context.delete(shift) }
+            errorMessage = "Je n'ai pas pu enregistrer les créneaux. Réessaie dans un instant."
         }
     }
 }

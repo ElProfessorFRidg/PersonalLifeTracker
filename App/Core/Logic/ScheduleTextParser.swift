@@ -785,10 +785,40 @@ enum ScheduleTextParser {
             }
             let name = nameLines.map { $0.text.trimmingCharacters(in: .whitespaces) }.joined(separator: " ")
             if name.contains("=") { continue }
-            rows.append(GridRow(name: name, cells: cells, lastY: cluster.meanY, lines: cluster.lines))
+            if !isTransposed, var previous = rows.last, cells.isEmpty != previous.cells.isEmpty,
+               cluster.meanY - previous.lastY <= tolerance * 2.0 {
+                // Le prénom et le nom peuvent être imprimés sur deux lignes dans la même case.
+                previous.name += " " + name
+                previous.lastY = cluster.meanY
+                previous.lines.append(contentsOf: cluster.lines)
+                if !cells.isEmpty { previous.cells = cells }
+                rows[rows.count - 1] = previous
+            } else {
+                rows.append(GridRow(name: name, cells: cells, lastY: cluster.meanY, lines: cluster.lines))
+            }
         }
         if rows.isEmpty { return nil }
         return Grid(columns: columns, rows: rows, pitch: pitch, layoutUncertain: uncertain, strayCount: stray, isTransposed: isTransposed)
+    }
+
+    private static func numberedWeek(in text: String, calendar: Calendar) -> Date? {
+        let pattern = #"\bsemaine\s+(\d{1,2})\s*/\s*(\d{4})\b"#
+        guard let regex = try? NSRegularExpression(pattern: pattern, options: [.caseInsensitive]),
+              let match = regex.firstMatch(in: text, range: NSRange(text.startIndex..<text.endIndex, in: text)),
+              let weekRange = Range(match.range(at: 1), in: text),
+              let yearRange = Range(match.range(at: 2), in: text),
+              let week = Int(text[weekRange]), (1...53).contains(week),
+              let year = Int(text[yearRange]) else { return nil }
+        var iso = Calendar(identifier: .iso8601)
+        iso.timeZone = calendar.timeZone
+        var components = DateComponents()
+        components.yearForWeekOfYear = year
+        components.weekOfYear = week
+        components.weekday = 2
+        guard let monday = iso.date(from: components),
+              iso.component(.weekOfYear, from: monday) == week,
+              iso.component(.yearForWeekOfYear, from: monday) == year else { return nil }
+        return monday
     }
 
     // MARK: - Analyse
@@ -857,7 +887,11 @@ enum ScheduleTextParser {
         if let t = title {
             titleStart = resolveDay(day: t.day, month: t.startMonth, year: t.year, near: refDay, calendar: cal)
         }
-        let anchor = titleStart ?? refDay
+        let weekFromNumber = clean.lazy.compactMap { numberedWeek(in: $0.text, calendar: cal) }.first
+        let anchor = titleStart ?? weekFromNumber ?? refDay
+        if clean.contains(where: { tokens($0.text).joined(separator: " ") == "non publiee" }) {
+            result.warnings.append("La photo indique « Non publiée ». Vérifie que les horaires sont définitifs.")
+        }
         let daysToNextMonday = 7 - weekdayIndex(refDay, cal)
         let nextMonday = cal.date(byAdding: .day, value: daysToNextMonday + 7 * options.guessedWeekOffset, to: refDay) ?? refDay
         var columnDates: [Date] = []
@@ -869,7 +903,7 @@ enum ScheduleTextParser {
                 found = searchDate(day: d, month: column.month, weekday: column.weekday, anchor: anchor, calendar: cal)
                 if found == nil { headerMismatch = true }
             }
-            if found == nil, let start = titleStart {
+            if found == nil, let start = titleStart ?? weekFromNumber {
                 found = firstDate(onOrAfter: start, weekday: column.weekday, calendar: cal)
             }
             if found == nil {
@@ -918,69 +952,88 @@ enum ScheduleTextParser {
             }
         }
 
+        let splitDayColumns = clean.lazy.filter { tokens($0.text).joined(separator: " ") == "matin" }.prefix(2).count == 2
+            && clean.contains { tokens($0.text).joined(separator: " ") == "apres midi" }
         for (k, column) in grid.columns.enumerated() {
             let day = columnDates[k]
             let cellLines: [OCRTextLine] = (row.cells[k] ?? []).sorted { a, b in
                 if abs(a.midY - b.midY) > 0.0001 { return a.midY < b.midY }
                 return a.midX < b.midX
             }
-            let text = cellLines.map { $0.text }.joined(separator: " ")
-            let content = parseCell(text)
-            let ocrConfidence = cellLines.map { $0.confidence }.min() ?? 1.0
-            var maxOffset = 0.0
-            for line in cellLines {
-                maxOffset = max(maxOffset, abs(line.midX - column.midX) / grid.pitch)
-            }
-            switch content {
-            case .empty:
-                result.emptyCellCount += 1
-            case .rest(let kind):
-                result.restDays.append(ParsedRestDay(day: day, kind: kind))
-            case .unreadable:
-                result.unreadable.append(UnreadableCell(day: day, rawText: text))
-            case .shifts(let ranges):
-                for range in ranges {
-                    var confidence = ocrConfidence
-                    var reasons: [String] = []
-                    if guessed {
-                        confidence = min(confidence, 0.5)
-                        reasons.append("Les dates ne sont pas sur la photo, vérifie le jour.")
-                    }
-                    if grid.layoutUncertain {
-                        confidence = min(confidence, 0.5)
-                        reasons.append("Les colonnes de la photo sont dans un ordre bizarre.")
-                    }
-                    if range.durationMinutes > 720 {
-                        confidence *= 0.6
-                        reasons.append("Plus de 12 h d'affilée, regarde la photo avant de garder.")
-                    }
-                    if range.durationMinutes < 60 {
-                        confidence *= 0.6
-                        reasons.append("Moins d'une heure, regarde la photo avant de garder.")
-                    }
-                    if range.crossesMidnight {
-                        confidence *= 0.8
-                        reasons.append("La fin tombe le lendemain, vérifie.")
-                    }
-                    if fuzzyName {
-                        confidence *= 0.65
-                        reasons.append("Le nom de la ligne est écrit un peu différemment du tien.")
-                    }
-                    if maxOffset > 0.35 {
-                        confidence *= 0.85
-                        reasons.append("Le texte est entre deux colonnes.")
-                    }
-                    if ocrConfidence < 0.8 {
-                        reasons.append("La lecture de cette case est peu nette.")
-                    }
-                    result.shifts.append(ParsedShift(day: day,
-                                                     startMinutes: range.startMinutes,
-                                                     endMinutes: range.endMinutes,
-                                                     confidence: min(1.0, max(0.0, confidence)),
-                                                     reason: reasons.first,
-                                                     rawText: text,
-                                                     crossesMidnight: range.crossesMidnight))
+            var groups = [cellLines]
+            if splitDayColumns && parseCell(cellLines.map(\.text).joined(separator: " ")) == .unreadable {
+                let morning = cellLines.filter { $0.midX < column.midX - grid.pitch * 0.08 }
+                let afternoon = cellLines.filter { $0.midX > column.midX + grid.pitch * 0.08 }
+                if !morning.isEmpty && !afternoon.isEmpty && morning.count + afternoon.count == cellLines.count {
+                    groups = [morning, afternoon]
                 }
+            }
+            let shiftsBefore = result.shifts.count
+            let unreadableBefore = result.unreadable.count
+            for group in groups {
+                let text = group.map { $0.text }.joined(separator: " ")
+                let content = parseCell(text)
+                let ocrConfidence = group.map { $0.confidence }.min() ?? 1.0
+                var maxOffset = 0.0
+                for line in group {
+                    maxOffset = max(maxOffset, abs(line.midX - column.midX) / grid.pitch)
+                }
+                switch content {
+                case .empty:
+                    result.emptyCellCount += 1
+                case .rest(let kind):
+                    if !result.restDays.contains(where: { $0.day == day }) {
+                        result.restDays.append(ParsedRestDay(day: day, kind: kind))
+                    }
+                case .unreadable:
+                    result.unreadable.append(UnreadableCell(day: day, rawText: text))
+                case .shifts(let ranges):
+                    for range in ranges {
+                        var confidence = ocrConfidence
+                        var reasons: [String] = []
+                        if guessed {
+                            confidence = min(confidence, 0.5)
+                            reasons.append("Les dates ne sont pas sur la photo, vérifie le jour.")
+                        }
+                        if grid.layoutUncertain {
+                            confidence = min(confidence, 0.5)
+                            reasons.append("Les colonnes de la photo sont dans un ordre bizarre.")
+                        }
+                        if range.durationMinutes > 720 {
+                            confidence *= 0.6
+                            reasons.append("Plus de 12 h d'affilée, regarde la photo avant de garder.")
+                        }
+                        if range.durationMinutes < 60 {
+                            confidence *= 0.6
+                            reasons.append("Moins d'une heure, regarde la photo avant de garder.")
+                        }
+                        if range.crossesMidnight {
+                            confidence *= 0.85
+                            reasons.append("La fin tombe le lendemain, vérifie.")
+                        }
+                        if fuzzyName {
+                            confidence *= 0.65
+                            reasons.append("Le nom de la ligne est écrit un peu différemment du tien.")
+                        }
+                        if maxOffset > 0.35 {
+                            confidence *= 0.85
+                            reasons.append("Le texte est entre deux colonnes.")
+                        }
+                        if ocrConfidence < 0.8 {
+                            reasons.append("La lecture de cette case est peu nette.")
+                        }
+                        result.shifts.append(ParsedShift(day: day,
+                                                         startMinutes: range.startMinutes,
+                                                         endMinutes: range.endMinutes,
+                                                         confidence: min(1.0, max(0.0, confidence)),
+                                                         reason: reasons.first,
+                                                         rawText: text,
+                                                         crossesMidnight: range.crossesMidnight))
+                    }
+                }
+            }
+            if result.shifts.count > shiftsBefore || result.unreadable.count > unreadableBefore {
+                result.restDays.removeAll { $0.day == day }
             }
         }
         result.shifts.sort { a, b in

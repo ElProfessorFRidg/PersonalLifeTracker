@@ -39,7 +39,7 @@ final class Place {
     }
 
     var type: PlaceType {
-        get { return PlaceType(rawValue: typeRaw) ?? .taf }
+        get { return PlaceType(rawValue: typeRaw) ?? .autre }
         set { typeRaw = newValue.rawValue }
     }
 }

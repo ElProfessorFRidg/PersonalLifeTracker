@@ -13,6 +13,7 @@ struct LieuDetailView: View {
     @Environment(ModuleStore.self) private var modules
     @Environment(UndoCenter.self) private var undoCenter: UndoCenter?
     @Query(sort: \Place.name) private var allPlaces: [Place]
+    @Query private var visitEvents: [DetectionEvent]
 
     @State private var nameDraft: String
     @State private var camera: MapCameraPosition
@@ -23,6 +24,12 @@ struct LieuDetailView: View {
         self.place = place
         _nameDraft = State(initialValue: place.name)
         _camera = State(initialValue: LieuDetailView.cameraPosition(for: place))
+        let uid: UUID? = place.uid
+        let arrivalKind = DetectionEventKind.arrivalConfirmed.rawValue
+        let visitKind = DetectionEventKind.visitNoted.rawValue
+        _visitEvents = Query(filter: #Predicate<DetectionEvent> {
+            $0.placeUID == uid && ($0.kindRaw == visitKind || $0.kindRaw == arrivalKind)
+        }, sort: [SortDescriptor(\DetectionEvent.date, order: .reverse)])
     }
 
     private static func cameraPosition(for place: Place) -> MapCameraPosition {
@@ -96,6 +103,12 @@ struct LieuDetailView: View {
     private var content: some View {
         PLTScreen(title: place.name) {
             mapThumbnail
+            if !place.address.isEmpty {
+                Label(place.address, systemImage: "mappin")
+                    .font(.subheadline)
+                    .foregroundStyle(palette.textSecondary)
+                    .textSelection(.enabled)
+            }
             if let warning = PlaceRules.overlapWarning(names: overlapNames) {
                 PLTBanner(kind: .warning, title: "Zones qui se touchent", message: warning)
             }
@@ -104,6 +117,9 @@ struct LieuDetailView: View {
                 CalibrationCard(place: place)
             }
             statsSection
+            if place.type != .taf && place.type != .cours {
+                loggedVisitsSection
+            }
             sessionsSection
             deleteSection
         }
@@ -167,16 +183,14 @@ struct LieuDetailView: View {
                 }
                 .pickerStyle(.menu)
                 .frame(minHeight: 44)
-                if place.type != .taf && place.type != .cours {
-                    Text("Ce lieu ne compte pas dans tes heures de travail ou de cours.")
-                        .font(.footnote)
-                        .foregroundStyle(palette.textSecondary)
-                    if place.type == .courses {
-                        Toggle("J'y travaille aussi", isOn: alsoWorksBinding)
-                            .frame(minHeight: 44)
-                            .tint(palette.accent)
-                    }
+                if place.type == .courses {
+                    Toggle("J'y travaille aussi", isOn: alsoWorksBinding)
+                        .frame(minHeight: 44)
+                        .tint(palette.accent)
                 }
+                Text(place.type.usageDescription(alsoWorksHere: place.alsoWorksHere))
+                    .font(.footnote)
+                    .foregroundStyle(palette.textSecondary)
             }
             VStack(alignment: .leading, spacing: Theme.Spacing.s) {
                 HStack {
@@ -225,14 +239,54 @@ struct LieuDetailView: View {
             PLTSectionHeader(title: "Ce mois-ci")
             HStack(spacing: Theme.Spacing.s) {
                 if place.type != .taf && place.type != .cours {
-                    StatTile(label: "Visites", value: "\(stats.visits)", note: lastText, tone: place.type.tone)
-                    StatTile(label: "Temps passé", value: Formatting.duration(seconds: stats.seconds),
-                             note: "Pas compté dans tes heures", tone: place.type.tone)
+                    StatTile(label: "Passages GPS", value: "\(loggedVisitsThisMonth.count)",
+                             note: PlaceFormat.lastVisit(loggedVisits.first?.date, now: Date(), calendar: .current),
+                             tone: place.type.tone)
+                    StatTile(label: "Temps en session", value: Formatting.duration(seconds: stats.seconds),
+                             note: "Sessions enregistrées", tone: place.type.tone)
                 } else {
                     StatTile(label: "Heures", value: Formatting.duration(seconds: stats.seconds),
                              note: stats.hasProvisional ? "Provisoire, il reste un doute à régler" : settings.calculationBase.title,
                              tone: place.type.tone)
                     StatTile(label: "Visites", value: "\(stats.visits)", note: lastText, tone: place.type.tone)
+                }
+            }
+        }
+    }
+
+    private var loggedVisits: [DetectionEvent] {
+        visitEvents.filter {
+            if $0.kind == .visitNoted { return true }
+            // Older builds distinguished arrivals and later classifications by their journal text.
+            return $0.detail.hasPrefix("Visite notée") || $0.detail.hasPrefix("Lieu de courses : visite notée")
+        }
+    }
+
+    private var loggedVisitsThisMonth: [DetectionEvent] {
+        guard let month = Calendar.current.dateInterval(of: .month, for: Date()) else { return [] }
+        return loggedVisits.filter { $0.date >= month.start && $0.date < month.end }
+    }
+
+    private var loggedVisitsSection: some View {
+        let recent = loggedVisits.prefix(5)
+
+        return VStack(alignment: .leading, spacing: Theme.Spacing.s) {
+            PLTSectionHeader(title: "Derniers passages détectés")
+            if recent.isEmpty {
+                PLTCard {
+                    Text("Aucun passage détecté pour l'instant.")
+                        .font(.subheadline)
+                        .foregroundStyle(palette.textSecondary)
+                }
+            } else {
+                PLTListGroup {
+                    ForEach(recent) { visit in
+                        PLTRow(symbol: place.type.symbolName,
+                               tone: place.type.tone,
+                               title: PlaceFormat.dayLabel(visit.date, now: Date(), calendar: .current),
+                               value: Formatting.clock(visit.date, calendar: .current),
+                               showsSeparator: visit.id != recent.last?.id)
+                    }
                 }
             }
         }
@@ -246,7 +300,7 @@ struct LieuDetailView: View {
             PLTSectionHeader(title: "Dernières sessions")
             if recent.isEmpty {
                 PLTCard {
-                    Text("Pas encore de session ici. Dès que t'y arrives, je note tout.")
+                    Text("Pas encore de session enregistrée ici.")
                         .font(.subheadline)
                         .foregroundStyle(palette.textSecondary)
                 }
