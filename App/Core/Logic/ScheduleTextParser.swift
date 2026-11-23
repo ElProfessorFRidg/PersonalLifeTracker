@@ -1008,7 +1008,8 @@ enum ScheduleTextParser {
                             reasons.append("Moins d'une heure, regarde la photo avant de garder.")
                         }
                         if range.crossesMidnight {
-                            confidence *= 0.85
+                            // 0,8 (et non 0,85) : à 0,85 pile le créneau passait en confiance haute alors qu'on demande de vérifier.
+                            confidence *= 0.8
                             reasons.append("La fin tombe le lendemain, vérifie.")
                         }
                         if fuzzyName {

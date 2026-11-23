@@ -158,6 +158,8 @@ final class ModuleRegistryTests: XCTestCase {
         let iso = makeIsolatedDefaults()
         defer { UserDefaults.standard.removePersistentDomain(forName: iso.name) }
         iso.defaults.set(["notes", "module_disparu"], forKey: ModuleStore.defaultsKey)
+        // Installation déjà passée par la version qui mémorise les modules connus : rien n'est « nouveau ».
+        iso.defaults.set(ModuleRegistry.all.map { $0.id }, forKey: ModuleStore.seenKey)
         let store = ModuleStore(defaults: iso.defaults)
         XCTAssertEqual(store.enabledIDs, ["core", "notes"])
     }
